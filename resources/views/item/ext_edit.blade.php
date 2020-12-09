@@ -1,0 +1,925 @@
+@extends('layouts.app')
+
+@section('content')
+    <?php
+    use App\Models\Link;
+    use App\Models\Item;
+    use \App\Http\Controllers\BaseController;
+    use \App\Http\Controllers\ItemController;
+    use \App\Http\Controllers\LinkController;
+    use \App\Http\Controllers\StepController;
+    $update = isset($item);
+    ?>
+    <script>
+
+        function browse(base_id, link_id) {
+            // Нужно, используется в browser.blade.php
+            //alert(base_id + " " + link_id);
+            window.item_id = document.getElementById(link_id);
+            window.item_code = document.getElementById('code' + link_id);
+            window.item_name = document.getElementById('name' + link_id);
+            open('{{route('item.browser', '')}}' + '/' + base_id + '/1/1', 'browse', 'width=800, height=800');
+        };
+    </script>
+    <h3 class="display-5 text-center">
+        @if (!$update)
+            {{trans('main.new_record')}}
+        @else
+            {{trans('main.edit_record')}}
+        @endif
+        <span class="text-info">-</span> <span class="text-success">{{$base->info()}} ({{trans('main.item')}})</span>
+    </h3>
+    <br>
+    {{--    https://qastack.ru/programming/1191113/how-to-ensure-a-select-form-field-is-submitted-when-it-is-disabled--}}
+    <form
+        action="{{$update ? route('item.ext_update', $item):route('item.ext_store', ['base' => $base, 'heading' => $heading])}}"
+        method="POST"
+        enctype=multipart/form-data
+        @if($par_link)
+        onsubmit=on_submit()
+        @endif
+        name="form">
+        @csrf
+
+        @if ($update)
+            @method('PUT')
+        @endif
+        <input type="hidden" name="base_id" value="{{$base->id}}">
+        {{--        код--}}
+        @if($base->is_code_needed == true)
+            <div class="form-group row">
+                <div class="col-sm-3 text-right">
+                    <label for="code" class="col-form-label">{{trans('main.code')}}
+                        <span
+                            class="text-danger">*</span></label>
+                </div>
+                <div class="col-sm-2">
+                    <input type={{$base->is_code_number == true?"number":"text"}}
+                        name="code"
+                           id="code" ;
+                           class="form-control @error('code') is-invalid @enderror"
+                           placeholder=""
+                           value="{{old('code') ?? ($item->code ?? ($base->is_code_number == true?($update ?"0":$code_new):""))}}"
+                           {{$base->is_code_number == true?" step = 0":""}}
+                           @if($base->is_code_number == true  && $base->is_limit_sign_code == true)
+                           min="0" max="{{$base->number_format()}}"
+                        @endif
+                    >
+                    @error('code')
+                    <div class="invalid-feedback">
+                        {{$message}}
+                    </div>
+                    @enderror
+                </div>
+                <div class="col-sm-7">
+                </div>
+            </div>
+        @else
+            <input type="hidden" name="code" value="{{$update ? $item->code: $code_uniqid}}">
+        @endif
+        {{--        если тип корректировки поля - число--}}
+        @if($base->type_is_number())
+            <div class="form-group row">
+                <div class="col-sm-3 text-right">
+                    <label for="name_lang_0" class="col-form-label">{{$base->name()}}
+                        <span
+                            class="text-danger">*</span></label>
+                </div>
+                <div class="col-sm-2">
+                    <input type="number"
+                           name="name_lang_0"
+                           id="name_lang_0" ;
+                           class="form-control @error('name_lang_0') is-invalid @enderror"
+                           placeholder=""
+                           value="{{old('name_lang_0') ?? ($item['name_lang_0'] ?? '') }}"
+                           step="{{$base->digits_num_format()}}">
+                    @error('name_lang_0')
+                    <div class="invalid-feedback">
+                        {{$message}}
+                    </div>
+                    @enderror
+                </div>
+                <div class="col-sm-7">
+                </div>
+            </div>
+            {{--                            если тип корректировки поля - дата--}}
+        @elseif($base->type_is_date())
+            <div class="form-group row">
+                <div class="col-sm-3 text-right">
+                    <label for="name_lang_0" class="col-form-label">{{$base->name()}}
+                        <span
+                            class="text-danger">*</span></label>
+                </div>
+                <div class="col-sm-2">
+                    <input type="date"
+                           name="name_lang_0"
+                           id="name_lang_0" ;
+                           class="form-control @error('name_lang_0') is-invalid @enderror"
+                           placeholder=""
+                           текущая дата
+                           value="{{old('name_lang_0') ?? ($item['name_lang_0'] ?? date('Y-m-d')) }}">
+                    @error('name_lang_0')
+                    <div class="invalid-feedback">
+                        {{$message}}
+                    </div>
+                    @enderror
+                </div>
+                <div class="col-sm-7">
+                </div>
+            </div>
+            {{--                            если тип корректировки поля - логический--}}
+        @elseif($base->type_is_boolean())
+            <div class="form-group row">
+                <div class="col-sm-3 text-right">
+                    <label class="form-label" for="name_lang_0">{{$base->name()}}</label>
+                </div>
+                <div class="col-sm-7">
+                    <input class="form-check-input @error('name_lang_0') is-invalid @enderror"
+                           type="checkbox"
+                           name="name_lang_0"
+                           id="name_lang_0"
+                           placeholder=""
+                           @if ((old('name_lang_0') ?? ($item['name_lang_0'] ?? false)) ==  true)
+                           checked
+                        @endif
+                    >
+                    @error('name_lang_0')
+                    <div class="invalid-feedback">
+                        {{$message}}
+                    </div>
+                    @enderror
+                </div>
+                <div class="col-sm-2">
+                </div>
+            </div>
+
+            {{--                            если тип корректировки поля - строка или список--}}
+        @else
+            @if($base->is_calcname_lst == false)
+                <div class="form-group row">
+                    @foreach (session('glo_menu_save') as $key=>$value)
+                        @if(($base->is_one_value_lst_str == true && $key == 0) || ($base->is_one_value_lst_str == false))
+                            <div class="col-sm-3 text-right">
+                                <label for="name_lang_{{$key}}" class="col-form-label">{{trans('main.name')}}
+                                    @if($base->is_one_value_lst_str == false)
+                                        ({{trans('main.' . $value)}})
+                                    @endif<span
+                                        class="text-danger">*</span></label>
+                            </div>
+                            <div class="col-sm-7">
+                                <input type="text"
+                                       name="name_lang_{{$key}}"
+                                       id="name_lang_{{$key}}"
+                                       class="form-control @error('name_lang_' . $key) is-invalid @enderror"
+                                       placeholder=""
+                                       value="{{ old('name_lang_' . $key) ?? ($item['name_lang_' . $key] ?? '') }}">
+                                {{--                            <div class="invalid-feedback">--}}
+                                {{--                                Не заполнена строка!--}}
+                                {{--                            </div>--}}
+                                @error('name_lang_' . $key)
+                                <div class="text-danger">
+                                    {{$message}}
+                                </div>
+                                @enderror
+                                {{--                            <div class="text-danger">--}}
+                                {{--                                session('errors') передается командой в контроллере "return--}}
+                                {{--                                redirect()->back()->withInput()->withErrors(...)"--}}
+                                {{--                                {{session('errors')!=null ? session('errors')->first('"name_lang_' . $key): ''}}--}}
+                                {{--                            </div>--}}
+                            </div>
+                            <div class="col-sm-2">
+                            </div>
+                        @endif
+                    @endforeach
+                </div>
+            @endif
+        @endif
+
+        @foreach($array_calc as $key=>$value)
+            <?php
+            $link = Link::find($key);
+            $result = ItemController::get_items_for_link($link);
+            $items = $result['result_parent_base_items'];
+            $code_find = null;
+            if ($value != null) {
+                $item_find = Item::findOrFail($value);
+                $code_find = $item_find->code;
+            }
+            ?>
+            {{--                            проверка для вычисляемых полей--}}
+            @if($link->parent_is_parent_related == true)
+                <div class="form-group row">
+                    <div class="col-sm-3 text-right">
+                        <label for="calc{{$key}}" class="form-label">
+                            {{$result['result_parent_label']}}
+                        </label>
+                    </div>
+                    <div class="col-sm-7">
+                                <span class="form-label text-success"
+                                      name="calc{{$key}}"
+                                      id="link{{$key}}"></span>
+                    </div>
+                    <div class="col-sm-2">
+                    </div>
+                </div>
+            @else
+                @if($link->parent_base->is_code_needed==true && $link->parent_is_enter_refer==true)
+                    <div class="form-group row">
+                        <div class="col-sm-3 text-right">
+                            <label for="{{$key}}" class="col-form-label">{{$result['result_parent_label']}}
+                                ({{mb_strtolower(trans('main.code'))}})
+                                <span
+                                    class="text-danger">*</span></label>
+                        </div>
+
+                        <div class="col-sm-2">
+                            <input name="{{$key}}" id="{{$key}}" type="hidden" value="{{old($key) ?? $value ?? "0"}}">
+                            <input type={{$link->parent_base->is_code_number == true?"number":"text"}}
+                                name="code{{$key}}"
+                                   id="code{{$key}}"
+                                   class="form-control @error($key) is-invalid @enderror"
+                                   placeholder=""
+
+                                   {{--                                       value="{{old('code{{$key}}') ?? ($item->code ?? ($base->is_code_number == true?($update ?"0":$code_new):""))}}"--}}
+                                   value="{{old('code'.$key) ?? $code_find??''}}"
+                                   {{--                                       {{$link->parent_base->is_code_number == true?" step = 0":""}}--}}
+                                   {{--                                       @if($link->parent_base->is_code_number == true  && $link->parent_base->is_limit_sign_code == true)--}}
+                                   {{--                                       min="0" max="{{$link->parent_base->number_format()}}"--}}
+                                   {{--                                       @endif--}}
+                                   @if($par_link)
+                                   @if ($key == $par_link->id)
+                                   disabled
+                                @endif
+                                @endif
+                            >
+                            @error($key)
+                            <div class="invalid-feedback">
+                                {{--                            <div class="text-danger">--}}
+                                {{$message}}
+                            </div>
+                            @enderror
+                        </div>
+                        {{--                            <div class="text-danger">--}}
+                        {{--                                //session('errors') передается командой в контроллере "return--}}
+                        {{--                                //redirect()->back()->withInput()->withErrors(...)"--}}
+                        {{--                                {{session('errors')!=null ? session('errors')->first($key): ''}}--}}
+                        {{--                            </div>--}}
+                        <div class="col-sm-1">
+                            <input type="button" value="..." title="{{trans('main.select_from_refer')}}"
+                                   onclick="browse('{{$link->parent_base_id}}','{{$key}}')">
+                        </div>
+                        <div class="col-sm-6">
+                                <span class="form-label text-success"
+                                      name="name{{$key}}"
+                                      id="name{{$key}}"></span>
+                        </div>
+
+                        {{--                                <span class="form-label text-success"--}}
+                        {{--                                      name="calc{{$key}}"--}}
+                        {{--                                      id="calc{{$key}}" >1111111111111111111111111111</span>--}}
+                        {{--                        </div>--}}
+
+                    </div>
+
+                    {{--                                если тип корректировки поля - число--}}
+                @elseif($link->parent_base->type_is_number())
+                    <div class="form-group row">
+                        <div class="col-sm-3 text-right">
+                            <label for="{{$key}}" class="col-form-label">{{$result['result_parent_label']}}
+                                <span
+                                    class="text-danger">*</span></label>
+                        </div>
+                        <div class="col-sm-2">
+                            <input type="number"
+                                   name="{{$key}}"
+                                   id="link{{$key}}"
+                                   class="form-control @error($key) is-invalid @enderror"
+                                   placeholder=""
+                                   value="{{(old($key)) ?? (($value != null) ? Item::find($value)->name() : '0')}}"
+                                   step="{{$link->parent_base->digits_num_format()}}"
+
+                                   @if($par_link || $link->parent_is_nc_viewonly==true)
+                                   @if($par_link)
+                                   @if ($key == $par_link->id)
+                                   disabled
+                                   @endif
+                                   @else
+                                   {{--                                   тут использовать readonly (при disabled (здесь) - это поле не обновляется)--}}
+                                   {{--                                   также при disabled работают строки (ниже):--}}
+                                   {{--                                   parent_base_id_work = document.getElementById('link{{$key}}').disabled = true;--}}
+                                   {{--                                   parent_base_id_work = document.getElementById('link{{$key}}').disabled = false;--}}
+                                   readonly
+                                @endif
+                                @endif
+                            >
+                            @error($key)
+                            <div class="invalid-feedback">
+                                {{--                            <div class="text-danger">--}}
+                                {{$message}}
+                            </div>
+                            @enderror
+                            {{--                            <div class="text-danger">--}}
+                            {{--                                //session('errors') передается командой в контроллере "return--}}
+                            {{--                                //redirect()->back()->withInput()->withErrors(...)"--}}
+                            {{--                                {{session('errors')!=null ? session('errors')->first($key): ''}}--}}
+                            {{--                            </div>--}}
+                        </div>
+                        @if($link->parent_is_numcalc == true)
+                            <div class="col-sm-1">
+                                <input type="button" value="..." title="{{trans('main.calculate')}}"
+                                       name="button_nc{{$key}}"
+                                       id="button_nc{{$key}}"
+                                >
+                            </div>
+                            <div class="col-sm-6">
+                                <span class="form-label text-danger"
+                                      name="name{{$key}}"
+                                      id="name{{$key}}"></span>
+                            </div>
+                        @else
+                            <div class="col-sm-7">
+                            </div>
+                        @endif
+                    </div>
+
+                    {{--                                если тип корректировки поля - дата--}}
+                @elseif($link->parent_base->type_is_date())
+                    <div class="form-group row">
+                        <div class="col-sm-3 text-right">
+                            <label for="{{$key}}" class="col-form-label">{{$result['result_parent_label']}}
+                                <span
+                                    class="text-danger">*</span></label>
+                        </div>
+                        <div class="col-sm-2">
+                            <input type="date"
+                                   name="{{$key}}"
+                                   id="link{{$key}}"
+                                   class="form-control @error($key) is-invalid @enderror"
+                                   placeholder=""
+                                   value="{{(old($key)) ?? (($value != null) ? Item::find($value)->name_lang_0 : date('Y-m-d'))}}"
+                                   @if($par_link)
+                                   @if ($key == $par_link->id)
+                                   disabled
+                                @endif
+                                @endif
+                            >
+                            @error($key)
+                            <div class="text-danger">
+                                {{$message}}
+                            </div>
+                            @enderror
+                            {{--                        <div class="text-danger">--}}
+                            {{--                            session('errors') передается командой в контроллере "return--}}
+                            {{--                            redirect()->back()->withInput()->withErrors(...)"--}}
+                            {{--                            {{session('errors')!=null ? session('errors')->first($key): ''}}--}}
+                            {{--                        </div>--}}
+                        </div>
+                        <div class="col-sm-7">
+                        </div>
+                    </div>
+
+                    {{--                                если тип корректировки поля - логический--}}
+                @elseif($link->parent_base->type_is_boolean())
+                    {{--                        https://mdbootstrap.com/docs/jquery/forms/basic/--}}
+                    <div class="form-group row">
+                        <div class="col-sm-3 text-right">
+                            <label class="form-label" for="{{$key}}">{{$result['result_parent_label']}}</label>
+                        </div>
+                        <div class="col-sm-7">
+                            <input class="@error($key) is-invalid @enderror"
+                                   type="checkbox"
+                                   name="{{$key}}"
+                                   id="link{{$key}}"
+                                   placeholder=""
+                                   @if ((boolean)((old($key)) ?? (($value != null) ? Item::find($value)->name_lang_0 : '0')) == true)
+                                   checked
+                                   @endif
+                                   @if($par_link)
+                                   @if ($key == $par_link->id)
+                                   disabled
+                                @endif
+                                @endif
+                            >
+                            @error($key)
+                            <div class="invalid-feedback">
+                                {{$message}}
+                            </div>
+                            @enderror
+                        </div>
+                        <div class="col-sm-2">
+                        </div>
+                    </div>
+
+                    {{--                                если тип корректировки поля - строка--}}
+                @elseif($link->parent_base->type_is_string())
+                    <fieldset id="link{{$key}}"
+                              @if($par_link)
+                              @if ($key == $par_link->id)
+                              disabled
+                        @endif
+                        @endif
+                    >
+                        <div class="form-group row">
+                            @foreach (session('glo_menu_save') as $lang_key=>$lang_value)
+                                <?php
+                                // для первого (нулевого) языка $input_name = $key
+                                // для последующих языков $input_name = $key . '_' . $lang_key;
+                                // это же правило используется в ItemController.php
+                                // $input_name = $key . ($lang_key == 0) ? '' : '_' . $lang_key;  // так не работает, дает '' в результате
+                                $input_name = ($lang_key == 0) ? $key : $key . '_' . $lang_key;  // такой вариант работает
+                                ?>
+                                @if(($link->parent_base->is_one_value_lst_str == true && $lang_key == 0)
+                                    || ($link->parent_base->is_one_value_lst_str == false))
+                                    <div class="col-sm-3 text-right">
+                                        <label for="{{$input_name}}"
+                                               class="col-form-label">{{$result['result_parent_label']}}
+                                            @if($link->parent_base->is_one_value_lst_str == false)
+                                                ({{trans('main.' . $lang_value)}})
+                                            @endif
+                                            <span
+                                                class="text-danger">*</span></label>
+                                    </div>
+                                    <div class="col-sm-7">
+                                        <input type="text"
+                                               name="{{$input_name}}"
+                                               link{{$input_name}}
+                                               id="link{{$input_name}}"
+                                               class="form-control @error($input_name) is-invalid @enderror"
+                                               placeholder=""
+                                               value="{{(old($input_name)) ?? (($value != null) ? Item::find($value)['name_lang_'.$lang_key] : '')}}
+                                                   "
+                                        >
+                                        @error($input_name)
+                                        <div class="invalid-feedback">
+                                            {{--                                    <div class="text-danger">--}}
+                                            {{$message}}
+                                        </div>
+                                        @enderror
+                                        {{--                                                            <div class="text-danger">--}}
+                                        {{--                                                                 session('errors') передается командой в контроллере "return redirect()->back()->withInput()->withErrors(...)"--}}
+                                        {{--                                                                {{session('errors')!=null ? session('errors')->first($input_name): ''}}--}}
+                                        {{--                                                            </div>--}}
+
+                                    </div>
+                                    <div class="col-sm-2">
+                                    </div>
+                                @endif
+                            @endforeach
+                        </div>
+                    </fieldset>
+                    {{--                                если тип корректировки поля - список--}}
+                @elseif($link->parent_base->type_is_list())
+                    <div class="form-group row">
+                        <div class="col-sm-3 text-right">
+                            <label for="{{$key}}" class="col-form-label">{{$result['result_parent_label']}}
+                                <span class="text-danger">*{{$value !=null ? "" : "~"}}</span></label>
+                        </div>
+                        <div class="col-sm-7">
+                            <select class="form-control"
+                                    name="{{$key}}"
+                                    id="link{{$key}}"
+                                    class="form-control @error($key) is-invalid @enderror"
+                                    @if($par_link)
+                                    @if ($key == $par_link->id)
+                                    disabled
+                                @endif
+                                @endif
+                            >
+                                @if ((count($items) == 0)))
+                                <option value='0'>Нет информации по "{{$result['result_parent_base_name']}}"!
+                                </option>
+                                @else
+                                    @foreach ($items as $item_work)
+                                        <option value="{{$item_work->id}}"
+                                                @if (((old($key)) ?? (($value != null) ? $value : 0)) == $item_work->id)
+                                                selected
+                                            @endif
+                                        >{{$item_work->name()}}
+                                        </option>
+                                    @endforeach
+                                @endif
+                            </select>
+                            @error($key)
+                            <div class="text-danger">
+                                {{$message}}
+                            </div>
+                            @enderror
+                            {{--                                                                                        <div class="text-danger">--}}
+                            {{--                                                                                             session('errors') передается командой в контроллере "return redirect()->back()->withInput()->withErrors(...)"--}}
+                            {{--                                                                                            {{session('errors')!=null ? session('errors')->first($key): ''}}--}}
+                            {{--                                                                                        </div>--}}
+                        </div>
+                        <div class="col-sm-2">
+                        </div>
+                    </div>
+                @endif
+            @endif
+        @endforeach
+
+        <br>
+        <div class="row text-center">
+            <div class="col-sm-5 text-right">
+                <button type="submit" class="btn btn-primary">
+                    @if (!$update)
+                        {{trans('main.add')}}
+                    @else
+                        {{trans('main.save')}}
+                    @endif
+                </button>
+            </div>
+            <div class="col-sm-2">
+            </div>
+            <div class="col-sm-5 text-left">
+                <a class="btn btn-success" href="{{session('links')}}">{{trans('main.cancel')}}</a>
+            </div>
+        </div>
+    </form>
+    <?php
+    $functions = array();
+    $functs_numcalc = array();
+    // В этом массиве хранятся функции, которые выводят наименования вычисляемых полей
+    // ($link->parent_is_parent_related == true)
+    // в зависимости от поля, где вводится код какого-то справочника
+    $functs_parent_refer = array();
+    ?>
+    {{--<script>--}}
+    {{--    window.onload = function () {--}}
+    {{--        // массив функций нужен, что при window.onload запустить обработчики всех полей--}}
+    {{--        alert('onload');--}}
+    {{--                        @foreach($functions as $value)--}}
+    {{--                            {{$value}}(true);--}}
+    {{--                        @endforeach--}}
+
+    {{--            on_parent_refer();--}}
+
+    {{--            // Не нужно вызывать функцию on_calc(),--}}
+    {{--            // это связано с разрешенной корректировкой вычисляемых полей ($link->parent_is_nc_viewonly)--}}
+    {{--            // on_numcalc();--}}
+    {{--            @foreach($array_disabled as $key=>$value)--}}
+    {{--            parent_base_id_work = document.getElementById('link{{$key}}').disabled = true;--}}
+    {{--            document.getElementById('link{{$key}}').disabled = true;--}}
+    {{--            @endforeach--}}
+    {{--        --}}
+    {{--    }--}}
+    {{--</script>--}}
+
+    @foreach($array_calc as $key=>$value)
+        <?php
+        // похожие строки ниже
+        $const_link_id_start = null;
+        $const_link_start = null;
+        $link_start_child = null;
+        $link_result_child = null;
+        $link_parent = null;
+        $lres = null;
+        $link = Link::find($key);
+        if ($link) {
+            // эта проверка не нужна
+            //if (!array_key_exists($key, $array_disabled)) {
+            //          проверка на фильтруемые поля
+            if ($link->parent_is_child_related == true) {
+                $lres = LinkController::get_link_ids_from_calc_link($link);
+                $const_link_id_start = $lres['const_link_id_start'];
+                $const_link_start = $lres['const_link_start'];
+                $link_start_child = Link::find($link->parent_child_related_start_link_id);
+                $link_result_child = Link::find($link->parent_child_related_result_link_id);
+                $prefix = '1_';
+            }
+            //}
+            //          проверка на вычисляемые поля
+            if ($link->parent_is_parent_related == true) {
+                $lres = LinkController::get_link_ids_from_calc_link($link);
+                $const_link_id_start = $lres['const_link_id_start'];
+                $const_link_start = $lres['const_link_start'];
+                $link_parent = Link::find($link->parent_parent_related_start_link_id);
+                $prefix = '2_';
+            }
+        }
+        ?>
+        @if($link_start_child && $link_result_child)
+
+            <script>
+                var child_base_id{{$prefix}}{{$link->id}} = document.getElementById('link{{$link_start_child->id}}');
+                var parent_base_id{{$prefix}}{{$link->id}} = document.getElementById('link{{$link->id}}');
+
+                <?php
+                $functions[count($functions)] = "link_id_changeOption_" . $prefix . $link->id;
+                ?>
+                // async - await нужно, https://tproger.ru/translations/understanding-async-await-in-javascript/
+                async function link_id_changeOption_{{$prefix}}{{$link->id}}(first) {
+                    if (parent_base_id{{$prefix}}{{$link->id}}.options[parent_base_id{{$prefix}}{{$link->id}}.selectedIndex].value == 0) {
+                        child_base_id{{$prefix}}{{$link->id}}.innerHTML = "<option value='0'>{{trans('main.no_information') . '!'}}</option>";
+                        document.getElementById('link{{$link_start_child->id}}').dispatchEvent(new Event('change'));
+                    } else {
+                        await axios.get('/item/get_child_items_from_parent_item/'
+                            + '{{$link_start_child->parent_base_id}}'
+                            + '/' + parent_base_id{{$prefix}}{{$link->id}}.options[parent_base_id{{$prefix}}{{$link->id}}.selectedIndex].value
+                            + '/{{$link_result_child->id}}'
+                        ).then(function (res) {
+                                child_base_id{{$prefix}}{{$link->id}}.innerHTML = res.data['result_items_name_options'];
+                                for (let i = 0; i < child_base_id{{$prefix}}{{$link->id}}.length; i++) {
+                                    if (child_base_id{{$prefix}}{{$link->id}}[i].value ==
+                                        {{old($link_start_child->id) ?? (($array_calc[$link_start_child->id] != null) ? $array_calc[$link_start_child->id] : 0)}}) {
+                                        // установить selected на true
+                                        child_base_id{{$prefix}}{{$link->id}}[i].selected = true;
+                                    }
+
+                                }
+                            }
+                        );
+                    }
+                    // http://javascript.ru/forum/events/76761-programmno-vyzvat-sobytie-change.html#post503465
+                    // вызываем состояние "элемент изменился", в связи с этим запустятся функции - обработчики "change"
+                    document.getElementById('link{{$link_start_child->id}}').dispatchEvent(new Event('change'));
+                }
+
+                parent_base_id{{$prefix}}{{$link->id}}.addEventListener("change", link_id_changeOption_{{$prefix}}{{$link->id}});
+
+            </script>
+        @endif
+        @if($link_parent)
+            <script>
+                    @if($const_link_start->parent_base->is_code_needed==true && $const_link_start->parent_is_enter_refer==true)
+
+                var child_base_id{{$prefix}}{{$link->id}} = document.getElementById('{{$const_link_id_start}}');
+                var child_code_id{{$prefix}}{{$link->id}} = document.getElementById('code{{$const_link_id_start}}');
+                var parent_base_id{{$prefix}}{{$link->id}} = document.getElementById('link{{$link->id}}');
+
+                <?php
+                //                $functs_parent_refer[count($functs_parent_refer)] = "link_id_change_" . $prefix . $link->id;
+                //           $functions[count($functions)] = "link_id_change_" . $prefix . $link->id;
+                ?>
+                function link_id_change_{{$prefix}}{{$link->id}}(first = false) {
+                    //alert('{{$link->id}} - {{$link_parent->id}} - {{$const_link_id_start}} - {{$const_link_start->parent_base->is_code_needed}} - {{$const_link_start->parent_is_enter_refer}}');
+                    //alert(child_base_id{{$prefix}}{{$link->id}}.value);
+                    if (child_base_id{{$prefix}}{{$link->id}}.value == 0) {
+                        parent_base_id{{$prefix}}{{$link->id}}.innerHTML = "{{trans('main.no_information') . '!'}}";
+                    } else {
+                        axios.get('/item/get_parent_item_from_calc_child_item/'
+                            + child_base_id{{$prefix}}{{$link->id}}.value
+                            + '/{{$link->id}}'
+                            + '/0'
+                        ).then(function (res) {
+                                parent_base_id{{$prefix}}{{$link->id}}.innerHTML = res.data['result_item_name'];
+                                //alert('---->'+res.data['result_item_name'])
+                                @if($link->parent_is_nc_parameter == true)
+                                on_numcalc();
+                                @endif
+                            }
+                        );
+                    }
+                }
+
+                //11111111111111111111111111111
+                child_code_id{{$prefix}}{{$link->id}}.addEventListener("change", link_id_change_{{$prefix}}{{$link->id}});
+
+                    @elseif($const_link_start->parent_base->type_is_list())
+                var child_base_id{{$prefix}}{{$link->id}} = document.getElementById('link{{$const_link_id_start}}');
+                var parent_base_id{{$prefix}}{{$link->id}} = document.getElementById('link{{$link->id}}');
+
+                <?php
+                $functions[count($functions)] = "link_id_changeOption_" . $prefix . $link->id;
+                ?>
+                function link_id_changeOption_{{$prefix}}{{$link->id}}(first = false) {
+//                    alert(child_base_id{{$prefix}}{{$link->id}}.options[child_base_id{{$prefix}}{{$link->id}}.selectedIndex].value);
+                    if (child_base_id{{$prefix}}{{$link->id}}.options[child_base_id{{$prefix}}{{$link->id}}.selectedIndex].value == 0) {
+                        parent_base_id{{$prefix}}{{$link->id}}.innerHTML = "{{trans('main.no_information') . '!'}}";
+                    } else {
+                        axios.get('/item/get_parent_item_from_calc_child_item/'
+                            + child_base_id{{$prefix}}{{$link->id}}.options[child_base_id{{$prefix}}{{$link->id}}.selectedIndex].value
+                            + '/{{$link->id}}'
+                            + '/0'
+                        ).then(function (res) {
+                                parent_base_id{{$prefix}}{{$link->id}}.innerHTML = res.data['result_item_name'];
+                                @if($link->parent_is_nc_parameter == true)
+                                on_numcalc();
+                                @endif
+
+                            }
+                        );
+                    }
+                }
+
+                child_base_id{{$prefix}}{{$link->id}}.addEventListener("change", link_id_changeOption_{{$prefix}}{{$link->id}});
+
+                @endif
+            </script>
+        @endif
+        <?php
+        $prefix = '3_';
+        ?>
+        {{--        Вводить как справочник--}}
+        @if($link->parent_is_enter_refer==true)
+            <script>
+                //alert({{count($array_calc)}});
+                var code_{{$prefix}}{{$link->id}} = document.getElementById('code{{$link->id}}');
+                var name_{{$prefix}}{{$link->id}} = document.getElementById('name{{$link->id}}');
+                var key_{{$prefix}}{{$link->id}} = document.getElementById('{{$link->id}}');
+                {{--                @if($link->parent_base->is_code_needed == true  && $link->parent_base->is_code_number == true  && $link->parent_base->is_limit_sign_code == true--}}
+                {{--&& $link->parent_base->is_code_zeros == true  && $link->parent_base->significance_code > 0)--}}
+                @if($link->parent_base->is_code_needed == true  && $link->parent_base->is_code_number == true)
+                <?php
+                $functions[count($functions)] = "code_input_" . $prefix . $link->id;
+                ?>
+                // async - await нужно, https://tproger.ru/translations/understanding-async-await-in-javascript/
+                async function code_input_{{$prefix}}{{$link->id}}(first) {
+                    //alert(code_{{$prefix}}{{$link->id}}.value);
+                    await axios.get('/item/item_from_base_code/'
+                        + '{{$link->parent_base_id}}'
+                        + '/' + code_{{$prefix}}{{$link->id}}.value
+                    ).then(function (res) {
+                            name_{{$prefix}}{{$link->id}}.innerHTML = res.data['item_name'];
+                            key_{{$prefix}}{{$link->id}}.value = res.data['item_id'];
+                        }
+                    );
+                    // Команда нужна!
+                    document.getElementById('code{{$link->id}}').dispatchEvent(new Event('change'));
+                    on_parent_refer();
+                    {{-- http://javascript.ru/forum/events/76761-programmno-vyzvat-sobytie-change.html#post503465--}}
+                    {{-- вызываем состояние "элемент изменился", в связи с этим запустятся функции - обработчики "change"--}}
+                    {{--document.getElementById('code{{$link->id}}').dispatchEvent(new Event('change'));--}}
+                }
+
+                code_{{$prefix}}{{$link->id}}.addEventListener("input", code_input_{{$prefix}}{{$link->id}});
+                //code_{{$prefix}}{{$link->id}}.addEventListener("change", code_change_{{$prefix}}{{$link->id}});
+
+                @if($link->parent_base->is_limit_sign_code == true && $link->parent_base->is_code_zeros == true  && $link->parent_base->significance_code > 0)
+                <?php
+                $functions[count($functions)] = "code_change_" . $prefix . $link->id;
+                ?>
+                function code_change_{{$prefix}}{{$link->id}}(first) {
+                    numStr = code_{{$prefix}}{{$link->id}}.value;
+                    numDigits = {{$link->parent_base->significance_code}};
+                    code_{{$prefix}}{{$link->id}}.value = numDigits >= numStr.length ? Array.apply(null, {length: numDigits - numStr.length + 1}).join("0") + numStr : numStr.substring(0, numDigits);
+                    // http://javascript.ru/forum/events/76761-programmno-vyzvat-sobytie-change.html#post503465
+                    // вызываем состояние "элемент изменился", в связи с этим запустятся функции - обработчики "change"
+                    code_{{$prefix}}{{$link->id}}.dispatchEvent(new Event('input'));
+                }
+
+                code_{{$prefix}}{{$link->id}}.addEventListener("change", code_change_{{$prefix}}{{$link->id}});
+
+                @endif
+                @endif
+
+            </script>
+        @endif
+        <?php
+        $prefix = '4_';
+        ?>
+        {{--        Расчитывать значение числового поля--}}
+        @if($link->parent_is_nc_parameter==true)
+            <script>
+                var nc_parameter_{{$prefix}}{{$link->id}} = document.getElementById('link{{$link->id}}');
+            </script>
+        @endif
+
+
+
+    @endforeach
+
+    <script>
+
+            @foreach($array_calc as $key=>$value)
+            <?php
+            $link = Link::find($key);
+            $prefix = '5_';
+            ?>
+
+
+
+            @if($link->parent_is_numcalc==true && $link->parent_is_nc_screencalc==true)
+        var button_nc_{{$prefix}}{{$link->id}} = document.getElementById('button_nc{{$link->id}}');
+        var numcalc_{{$prefix}}{{$link->id}} = document.getElementById('link{{$link->id}}');
+        var name_{{$prefix}}{{$link->id}} = document.getElementById('name{{$link->id}}');
+
+
+        <?php
+        $functs_numcalc[count($functs_numcalc)] = "button_nc_click_" . $prefix . $link->id;
+        ?>
+
+        function button_nc_click_{{$prefix}}{{$link->id}}() {
+            var x, y, result, error_message;
+            x = 0;
+            y = 0;
+            z = 0;
+            error_message = "";
+            error_nodata = "Нет данных";
+            error_div0 = "Деление на 0";
+            {{StepController::steps_javascript_code($link)}}
+
+                numcalc_{{$prefix}}{{$link->id}}.value = x;
+            name_{{$prefix}}{{$link->id}}.innerHTML = error_message;
+        }
+
+        button_nc_{{$prefix}}{{$link->id}}.addEventListener("click", button_nc_click_{{$prefix}}{{$link->id}});
+            {{--    button_nc_{{$prefix}}{{$link->id}}.addEventListener("click", on_numcalc);--}}
+            @endif
+
+
+
+
+            @endforeach
+            {{--                @if($link->parent_base->is_code_needed==true && $link->parent_is_enter_refer==true)--}}
+            @if($base->is_code_number == true  && $base->is_limit_sign_code == true
+                && $base->is_code_zeros == true  && $base->significance_code > 0)
+        var code_el = document.getElementById('code');
+
+        <?php
+            $functions[count($functions)] = "code_change";
+            ?>
+            numBaseDigits = {{$base->significance_code}};
+
+        function code_change(first) {
+            numStr = code_el.value;
+
+            code_el.value = numBaseDigits >= numStr.length ? Array.apply(null, {length: numBaseDigits - numStr.length + 1}).join("0") + numStr : numStr.substring(0, numBaseDigits);
+
+        }
+
+        code_el.addEventListener("change", code_change);
+
+            @endif
+
+
+
+
+
+        var child_base_id_work = 0;
+        var parent_base_id_work = 0;
+
+        function on_numcalc() {
+            @foreach($functs_numcalc as $value)
+                {{$value}}();
+
+            @endforeach
+        }
+
+        function on_parent_refer() {
+            @foreach($functs_parent_refer as $value)
+                {{$value}}();
+            @endforeach
+        }
+
+
+        function on_submit() {
+
+            @foreach($array_disabled as $key=>$value)
+            {{--parent_base_id_work = document.getElementById('link{{$key}}').disabled = false;--}}
+            document.getElementById('link{{$key}}').disabled = false;
+            @endforeach
+
+        }
+
+        function round(a, b) {
+            return Math.round(a * Math.pow(10, b)) / Math.pow(10, b);
+        }
+
+
+            @foreach($array_calc as $key=>$value)
+            <?php
+            $link = Link::find($key);
+            $prefix = '6_';
+            ?>
+
+
+            @if($link->parent_is_nc_parameter == true && $link->parent_is_numcalc == false
+                    && $link->parent_is_nc_viewonly == false && $link->parent_is_parent_related == false)
+            {{--            @if($link->parent_is_nc_parameter == true && $link->parent_is_nc_viewonly == false)--}}
+            {{--            @if($link->parent_is_nc_parameter == true)--}}
+
+        var numrecalc_{{$prefix}}{{$link->id}} = document.getElementById('link{{$link->id}}');
+
+        numrecalc_{{$prefix}}{{$link->id}}.addEventListener("change", on_numcalc);
+
+
+        @endif
+
+
+
+        @endforeach
+    </script>
+    <script>
+        window.onload = function () {
+            // массив функций нужен, что при window.onload запустить обработчики всех полей
+            //alert('onload');
+            @foreach($functions as $value)
+                {{$value}}(true);
+            @endforeach
+
+            //on_parent_refer();
+
+            // Не нужно вызывать функцию on_calc(),
+            // это связано с разрешенной корректировкой вычисляемых полей ($link->parent_is_nc_viewonly)
+            // on_numcalc();
+            @foreach($array_disabled as $key=>$value)
+                parent_base_id_work = document.getElementById('link{{$key}}').disabled = true;
+            document.getElementById('link{{$key}}').disabled = true;
+            @endforeach
+        };
+
+
+    </script>
+
+
+
+@endsection
