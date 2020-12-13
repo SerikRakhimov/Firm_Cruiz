@@ -12,6 +12,7 @@ class BaseController extends Controller
 
     protected function rules()
     {
+        // sun
 //        return [
 //            'name_lang_0' => ['required', 'max:255', 'unique_with: bases, name_lang_0'],
 //            'names_lang_0' => ['required', 'max:255', 'unique_with: bases, names_lang_0'],
