@@ -26,10 +26,10 @@ class CreateItemsTable extends Migration
             $table->timestamps();
             $table->index('base_id');
             $table->unique(['base_id', 'code']);
-            $table->index('name_lang_0');
-            $table->index('name_lang_1');
-            $table->index('name_lang_2');
-            $table->index('name_lang_3');
+            //$table->index('name_lang_0');
+            //$table->index('name_lang_1');
+            //$table->index('name_lang_2');
+            //$table->index('name_lang_3');
 //          $table->unique(['base_id', 'name_lang_0']);
             $table->foreign('base_id')->references('id')->on('bases')->onDelete('cascade');
 

@@ -1,6 +1,14 @@
 <?php
 
+namespace App\Http\Controllers;
+
 use Illuminate\Support\Facades\Route;
+use Artisan;
+use App\Http\Controllers;
+use Session;
+use Hash;
+use Auth;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -320,6 +328,7 @@ Route::post('/store_full', 'MainController@store_full')
 //    ->middleware('auth');
 
 Auth::routes();
+//Route::auth();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
