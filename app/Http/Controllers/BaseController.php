@@ -14,6 +14,7 @@ class BaseController extends Controller
         //Artisan::call('migrate');
         Artisan::call('migrate', ['--path' => 'vendor/systeminc/laravel-admin/src/database/migrations']);
         //Artisan::call('migrate:refresh', ['--path' => 'database/migrations']);
+        // для настройки папки storage
         Artisan::call('storage:link');
     }
 
