@@ -10,7 +10,7 @@ use Artisan;
 
 class BaseController extends Controller
 {
-    function migr(){
+    static function migr(){
         //Artisan::call('migrate');
         Artisan::call('migrate', ['--path' => 'vendor/systeminc/laravel-admin/src/database/migrations']);
         //Artisan::call('migrate:refresh', ['--path' => 'database/migrations']);
