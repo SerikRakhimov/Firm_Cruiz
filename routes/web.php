@@ -33,7 +33,7 @@ use Auth;
 //}
 
 Route::get('/', function () {
-    BaseController::migr();
+    GlobalController::start_artisan();
     // массив "glo_menu_main" показывает, что четыре поля наименований хранятся в bases и items
     // ['1', '2', '3', '4'] - тут разницы нет, какие значения хранятся; главное, чтобы что-то хранилось
     $array =  ['1', '2', '3', '4'];
