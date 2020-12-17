@@ -6,7 +6,6 @@ use App\Models\Base;
 use App\Models\Link;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Artisan;
 
 class BaseController extends Controller
 {
@@ -27,7 +26,6 @@ class BaseController extends Controller
 
     function index()
     {
-        $this->migr();
         $bases = null;
         $index = array_search(session('locale'), session('glo_menu_save'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
