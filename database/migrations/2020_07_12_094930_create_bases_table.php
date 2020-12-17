@@ -15,7 +15,6 @@ class CreateBasesTable extends Migration
     {
         Schema::create('bases', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('module_id')->default(0);
             $table->string('name_lang_0',255)->default("");
             $table->string('name_lang_1',255)->default("");
             $table->string('name_lang_2',255)->default("");
@@ -54,8 +53,6 @@ class CreateBasesTable extends Migration
             $table->index('names_lang_2');
             $table->index('names_lang_3');
             $table->timestamps();
-            $table->index('module_id');
-            $table->foreign('module_id')->references('id')->on('modules')->onDelete('cascade');
 //          $table->unique("name_lang_0");
 //          $table->unique("names_lang_0");
         });
