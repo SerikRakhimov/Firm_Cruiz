@@ -87,6 +87,16 @@ Route::get('/setlocale/{locale}', function ($locale) {
 
 });
 
+// Templates
+
+Route::get('/template/index', 'TemplateController@index')
+    ->name('template.index')
+    ->middleware('auth');
+
+Route::get('/template/show/{template}', 'TemplateController@show')
+    ->name('template.show')
+    ->middleware('auth');
+
 // Bases
 
 Route::get('/base/index', 'BaseController@index')

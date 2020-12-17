@@ -48,6 +48,12 @@
                 <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
+                            <a class="nav-link" href="{{ route('template.index') }}">{{trans('main.templates')}}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('base.index') }}">{{trans('main.my_projects')}}</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="{{ route('base.index') }}">{{trans('main.bases')}}</a>
                         </li>
                         <li class="nav-item">
