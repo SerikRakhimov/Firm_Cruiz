@@ -36,7 +36,9 @@
         <button type="button" class="btn btn-dreamer" title="{{trans('main.return')}}" @include('layouts.previous_url')>
             <i class="fa fa-arrow-left"></i> {{trans('main.return')}}
         </button>
-
+        <button type="button" class="btn btn-primary btn-icon">
+            <span class="icon"><i class="fas fa-download"></i></span>Download
+        </button>
     @elseif($type_form == 'delete_question')
         <form action="{{route('template.delete', $template)}}" method="POST" id='delete-form'>
             @csrf
