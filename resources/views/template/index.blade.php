@@ -13,7 +13,7 @@
                 {{--                <a href="{{route('template.create')}}" title="{{trans('main.add')}}">--}}
                 {{--                    <img src="{{Storage::url('add_record.png')}}" width="15" height="15" alt="{{trans('main.add')}}">--}}
                 {{--                </a>--}}
-                <button type="button" class="btn btn-purple" title="{{trans('main.add')}}"
+                <button type="button" class="btn btn-purple btn-sm" title="{{trans('main.add')}}"
                         onclick="document.location='{{route('template.create')}}'">
                     <i class="fa fa-plus fa-fw"></i> {{trans('main.add')}}
                 </button>
