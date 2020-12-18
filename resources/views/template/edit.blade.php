@@ -2,7 +2,7 @@
 
 @section('content')
     <?php
-    $update = isset($base);
+    $update = isset($template);
     ?>
     <h3 class="display-5 text-center">
         @if (!$update)
@@ -14,7 +14,7 @@
     </h3>
     <br>
 
-    <form action="{{$update ? route('template.update',$base):route('template.store')}}" method="POST"
+    <form action="{{$update ? route('template.update',$template):route('template.store')}}" method="POST"
           enctype=multipart/form-data>
         @csrf
 
@@ -36,7 +36,7 @@
                            id="name_lang_{{$key}}"
                            class="form-control @error('name_lang_' . $key) is-invalid @enderror"
                            placeholder=""
-                           value="{{ old('name_lang_' . $key) ?? ($base['name_lang_' . $key] ?? '') }}">
+                           value="{{ old('name_lang_' . $key) ?? ($template['name_lang_' . $key] ?? '') }}">
                 </div>
                 @error('name_lang_' . $key)
                 <div class="text-danger">

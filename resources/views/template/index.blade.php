@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-    <button class="view123">Gold</button>
     <p>
     <div class="container-fluid">
         <div class="row">

@@ -81,7 +81,11 @@ class TemplateController extends Controller
 
         $this->set($request, $template);
 
-        return redirect()->back();
+        if ($request->session()->has('previous-url')) {
+            return redirect(session('previous-url'));;
+        } else {
+            return redirect()->back();
+        }
     }
 
     function set(Request $request, Template &$template)
@@ -104,9 +108,14 @@ class TemplateController extends Controller
         return view('template/show', ['type_form' => 'delete_question', 'template' => $template]);
     }
 
-    function delete(Template $template)
+    function delete(Request $request, Template $template)
     {
         $template->delete();
-        return redirect()->back();
+
+        if ($request->session()->has('previous-url')) {
+            return redirect(session('previous-url'));;
+        } else {
+            return redirect()->back();
+        }
     }
 }
