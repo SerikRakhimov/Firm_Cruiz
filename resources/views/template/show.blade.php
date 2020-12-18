@@ -34,11 +34,45 @@
                 <img src="{{Storage::url('delete_record.png')}}" width="15" height="15" alt="{{trans('main.delete')}}">
             </a>
         </p>
+        <i class="fas fa-download text-primary"></i>
+        <button type="button" class="btn btn-gold">
+            Download <i class="fas fa-download"></i>
+        </button>
+        <button type="button" class="btn btn-purple">
+            <i class="fas fa-download"></i> Download
+        </button>
+        <button type="button" class="btn btn-purple">
+            <i class="fas fa-plus"></i> Add
+        </button>
+        <button type="button" class="btn btn-purple">
+            <i class="fas fa-edit"></i> Edit
+        </button>
+        <button type="button" class="btn btn-purple">
+            <i class="fas fa-trash"></i> Delete
+        </button>
+        <button type="button" class="btn btn-purple">
+            <i class="fas fa-eye"></i> Show
+        </button>
+        <button type="button" class="btn btn-purple">
+            <i class="fas fa-link"></i> Links
+        </button>
+        <button type="button" class="btn btn-primary">
+            <i class="fas fa-horse"></i> Horse
+        </button>
         <div class="mb-3 btn-group btn-group-sm">
             <a class="btn btn-primary"
                 @include('layouts.previous_url')
             >{{trans('main.return')}}</a>
         </div>
+        <i class="fa fa-spinner fa-pulse fa-3x fa-fw text-success"></i>
+        <span class="sr-only">Загрузка...</span>
+        <a class="btn btn-danger" href="#">
+            <i class="fa fa-trash-o fa-lg"></i> Удалить</a>
+        <a class="btn btn-purple" href="#">
+            <i class="fa fa-plus"></i> Добавить</a>
+
+        <a class="btn btn-lg btn-success" href="#">
+            <i class="fa fa-flag fa-2x pull-left"></i> Font Awesome<br>Версия 4.7.0</a>
     @elseif($type_form == 'delete_question')
         <form action="{{route('template.delete', $template)}}" method="POST" id='delete-form'>
             @csrf
