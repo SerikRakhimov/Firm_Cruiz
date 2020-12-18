@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Base;
 use App\Models\Template;
 use Illuminate\Http\Request;
 
@@ -11,11 +10,6 @@ class TemplateController extends Controller
 {
     protected function rules()
     {
-        // sun
-//        return [
-//            'name_lang_0' => ['required', 'max:255', 'unique_with: bases, name_lang_0'],
-//            'names_lang_0' => ['required', 'max:255', 'unique_with: bases, names_lang_0'],
-//        ];
         return [
             'name_lang_0' => ['required', 'max:255'],
         ];
@@ -41,11 +35,78 @@ class TemplateController extends Controller
                     break;
             }
         }
+        session(['previous-url' => request()->url()]);
         return view('template/index', ['templates' => $templates->paginate(60)]);
     }
 
     function show(Template $template)
     {
         return view('template/show', ['type_form' => 'show', 'template' => $template]);
+    }
+
+
+    function create()
+    {
+
+        return view('template/edit');
+    }
+
+    function store(Request $request)
+    {
+        $request->validate($this->rules());
+
+        // установка часового пояса нужно для сохранения времени
+        date_default_timezone_set('Asia/Almaty');
+
+        $template = new Template($request->except('_token', '_method'));
+
+        $this->set($request, $template);
+        //https://laravel.demiart.ru/laravel-sessions/
+        if ($request->session()->has('previous-url')) {
+            return redirect(session('previous-url'));;
+        } else {
+            return redirect()->back();
+        }
+    }
+
+    function update(Request $request, Template $template)
+    {
+        if (!($template->name_lang_0 == $request->name_lang_0)) {
+            $request->validate($this->rules());
+        }
+
+        $data = $request->except('_token', '_method');
+
+        $template->fill($data);
+
+        $this->set($request, $template);
+
+        return redirect()->back();
+    }
+
+    function set(Request $request, Template &$template)
+    {
+        $template->name_lang_0 = $request->name_lang_0;
+        $template->name_lang_1 = isset($request->name_lang_1) ? $request->name_lang_1 : "";
+        $template->name_lang_2 = isset($request->name_lang_2) ? $request->name_lang_2 : "";
+        $template->name_lang_3 = isset($request->name_lang_3) ? $request->name_lang_3 : "";
+
+        $template->save();
+    }
+
+    function edit(Template $template)
+    {
+        return view('template/edit', ['template' => $template]);
+    }
+
+    function delete_question(Template $template)
+    {
+        return view('template/show', ['type_form' => 'delete_question', 'template' => $template]);
+    }
+
+    function delete(Template $template)
+    {
+        $template->delete();
+        return redirect()->back();
     }
 }

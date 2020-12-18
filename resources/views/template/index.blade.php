@@ -8,7 +8,7 @@
                 <h3>{{trans('main.templates')}}</h3>
             </div>
             <div class="col-1 text-left">
-                <a href="{{route('base.create')}}" title="{{trans('main.add')}}">
+                <a href="{{route('template.create')}}" title="{{trans('main.add')}}">
                     <img src="{{Storage::url('add_record.png')}}" width="15" height="15" alt="{{trans('main.add')}}">
                 </a>
             </div>
@@ -31,7 +31,9 @@
         <tbody>
         <?php
         $i = $templates->firstItem() - 1;
+        $url = session('previous-url');
         ?>
+        <h1>{{$url}}</h1>
         @foreach($templates as $template)
             <?php
             $i++;

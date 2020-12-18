@@ -88,13 +88,36 @@ Route::get('/setlocale/{locale}', function ($locale) {
 });
 
 // Templates
-
 Route::get('/template/index', 'TemplateController@index')
     ->name('template.index')
     ->middleware('auth');
 
 Route::get('/template/show/{template}', 'TemplateController@show')
     ->name('template.show')
+    ->middleware('auth');
+
+Route::get('/template/create', 'TemplateController@create')
+    ->name('template.create')
+    ->middleware('auth');
+
+Route::get('/template/edit/{template}', 'TemplateController@edit')
+    ->name('template.edit')
+    ->middleware('auth');
+
+Route::post('/template/store', 'TemplateController@store')
+    ->name('template.store')
+    ->middleware('auth');
+
+Route::put('/template/edit/{template}', 'TemplateController@update')
+    ->name('template.update')
+    ->middleware('auth');
+
+Route::get('/template/delete_question/{template}', 'TemplateController@delete_question')
+    ->name('template.delete_question')
+    ->middleware('auth');
+
+Route::delete('/template/delete/{template}', 'TemplateController@delete')
+    ->name('template.delete')
     ->middleware('auth');
 
 // Bases
