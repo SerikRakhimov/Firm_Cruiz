@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+    <button class="view123">Gold</button>
     <p>
     <div class="container-fluid">
         <div class="row">
@@ -31,9 +32,7 @@
         <tbody>
         <?php
         $i = $templates->firstItem() - 1;
-        $url = session('previous-url');
         ?>
-        <h1>{{$url}}</h1>
         @foreach($templates as $template)
             <?php
             $i++;

@@ -60,7 +60,9 @@
             <div class="col-sm-2">
             </div>
             <div class="col-sm-5 text-left">
-                <a class="btn btn-success" onclick="javascript:history.back();">{{trans('main.cancel')}}</a>
+                <a class="btn btn-success"
+                    @include('layouts.previous_url')
+                >{{trans('main.cancel')}}</a>
             </div>
         </div>
 
