@@ -4,5 +4,6 @@
 
 <!-- Styles -->
 <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-{{--https://programfiles.info/bootstrap/kak-dobavit-ikonki-v-bootstrap-4/--}}
+
+<!-- https://programfiles.info/bootstrap/kak-dobavit-ikonki-v-bootstrap-4/ -->
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">

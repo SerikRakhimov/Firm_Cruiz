@@ -49,20 +49,24 @@
         <br>
         <div class="row text-center">
             <div class="col-sm-5 text-right">
-                <button type="submit" class="btn btn-primary">
+                <button type="submit" class="btn btn-dreamer"
                     @if (!$update)
-                        {{trans('main.add')}}
+                    title="{{trans('main.add')}}">
+                    <i class="fa fa-save"></i> {{trans('main.add')}}
                     @else
-                        {{trans('main.save')}}
+                        title="{{trans('main.save')}}">
+                        <i class="fa fa-save"></i> {{trans('main.save')}}
                     @endif
                 </button>
             </div>
             <div class="col-sm-2">
             </div>
             <div class="col-sm-5 text-left">
-                <a class="btn btn-success"
-                    @include('layouts.previous_url')
-                >{{trans('main.cancel')}}</a>
+            <button type="button" class="btn btn-dreamer" title="{{trans('main.cancel')}}"
+                @include('layouts.previous_url')
+            >
+                <i class="fa fa-arrow-left"></i> {{trans('main.cancel')}}
+            </button>
             </div>
         </div>
 

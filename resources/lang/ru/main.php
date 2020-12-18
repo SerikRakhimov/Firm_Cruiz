@@ -65,6 +65,8 @@ return [
     'project' => 'Проект',
     'my_projects' => 'Мои проекты',
     'my_project' => 'Мой проект',
+    'tasks' => 'Задачи',
+    'task' => 'Задача',
     'date_created' => 'Дата создания',
     'date_updated' => 'Дата корректировки',
     'format_date' => 'd.m.Y',

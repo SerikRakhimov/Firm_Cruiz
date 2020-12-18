@@ -5,15 +5,10 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-6 text-left align-top">
-                <h3>{{trans('main.templates')}}</h3><span>&nbsp;</span>
+                <h3>{{trans('main.templates')}}</h3>
             </div>
-{{--            <div class="col-1">--}}
-{{--            </div>--}}
             <div class="col-6 text-right">
-                {{--                <a href="{{route('template.create')}}" title="{{trans('main.add')}}">--}}
-                {{--                    <img src="{{Storage::url('add_record.png')}}" width="15" height="15" alt="{{trans('main.add')}}">--}}
-                {{--                </a>--}}
-                <button type="button" class="btn btn-purple" title="{{trans('main.add')}}"
+                <button type="button" class="btn btn-dreamer" title="{{trans('main.add')}}"
                         onclick="document.location='{{route('template.create')}}'">
                     <i class="fa fa-plus fa-fw"></i> {{trans('main.add')}}
                 </button>

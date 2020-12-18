@@ -18,6 +18,25 @@
     box-shadow: 0 0 0 3px purple;
 }
 /*
+Dreamer
+*/
+.btn-dreamer{
+    background-color: #5f7a91;
+    color:white;
+    border-color: #588391;
+}
+.btn-dreamer:hover{
+    background-color: #546c91;
+    color:white;
+    border-color: #5f7a91;
+}
+.btn-dreamer:active, .btn-dreamer:focus{
+    background-color: #546c91;
+    color:white;
+    border-color: #5f7a91;
+    box-shadow: 0 0 0 3px #5f7a91;
+}
+/*
 Кнопка с шоколадным цветом
 */
 .btn-chocolate{
