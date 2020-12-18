@@ -1,117 +1,135 @@
 /*
 Пурпурная кнопка
 */
-.btn-purple{
+.btn-purple {
     background-color: purple;
-    color:white;
+    color: white;
     border-color: #730073;
 }
-.btn-purple:hover{
+
+.btn-purple:hover {
     background-color: #660066;
-    color:white;
+    color: white;
     border-color: purple;
 }
-.btn-purple:active, .btn-purple:focus{
+
+.btn-purple:active, .btn-purple:focus {
     background-color: #660066;
-    color:white;
+    color: white;
     border-color: purple;
     box-shadow: 0 0 0 3px purple;
 }
+
 /*
 Dreamer
 */
-.btn-dreamer{
+.btn-dreamer {
     background-color: #5f7a91;
-    color:white;
+    color: white;
     border-color: #588391;
 }
-.btn-dreamer:hover{
+
+.btn-dreamer:hover {
     background-color: #546c91;
-    color:white;
+    color: white;
     border-color: #5f7a91;
 }
-.btn-dreamer:active, .btn-dreamer:focus{
+
+.btn-dreamer:active, .btn-dreamer:focus {
     background-color: #546c91;
-    color:white;
+    color: white;
     border-color: #5f7a91;
     box-shadow: 0 0 0 3px #5f7a91;
 }
+
 /*
 Кнопка с шоколадным цветом
 */
-.btn-chocolate{
+.btn-chocolate {
     background-color: #d2691e;
-    color:white;
+    color: white;
     border-color: #d0631e;
 }
-.btn-chocolate:hover{
+
+.btn-chocolate:hover {
     background-color: #d05c1e;
-    color:white;
+    color: white;
     border-color: #d2691e;
 }
-.btn-chocolate:active, .btn-chocolate:focus{
+
+.btn-chocolate:active, .btn-chocolate:focus {
     background-color: #d05c1e;
-    color:white;
+    color: white;
     border-color: #d2691e;
     box-shadow: 0 0 0 3px #d2691e;
 }
+
 /*
 Кнопка с золотым цветом
 */
-.btn-gold{
+.btn-gold {
     background-color: #ffd700;
     color: white;
     border-color: #d0c334;
 }
-.btn-gold:hover{
+
+.btn-gold:hover {
     background-color: #ffbd00;
     color: white;
     border-color: #ffd700;
 }
-.btn-gold:active, .btn-gold:focus{
+
+.btn-gold:active, .btn-gold:focus {
     background-color: #ffbd00;
     color: white;
     border-color: #ffd700;
     box-shadow: 0 0 0 3px #ffd700;
 }
+
 /*
 Темно-серая кнопка
 */
-.btn-black{
+.btn-black {
     background-color: #696969;
     color: white;
     border-color: #292929;
 }
-.btn-black:hover{
+
+.btn-black:hover {
     background-color: #3b3b3b;
     color: white;
     border-color: #696969;
 }
-.btn-black:active, .btn-black:focus{
+
+.btn-black:active, .btn-black:focus {
     background-color: #3b3b3b;
     color: white;
     border-color: #696969;
     box-shadow: 0 0 0 3px #696969;
 }
+
 /*
 Светло-зеленая кнопка
 */
-.btn-littlegreen{
+.btn-littlegreen {
     background-color: #35691a;
     color: white;
     border-color: #3B8264;
 }
-.btn-littlegreen:hover{
+
+.btn-littlegreen:hover {
     background-color: #137916;
     color: white;
     border-color: #696969;
 }
-.btn-littlegreen:active, .btn-littlegreen:focus{
+
+.btn-littlegreen:active, .btn-littlegreen:focus {
     background-color: #137916;
     color: white;
     border-color: #35691a;
     box-shadow: 0 0 0 3px #35691a;
 }
+
 /*
 .btn-primary{
     background-color: purple;
@@ -144,29 +162,38 @@ Dreamer
 /*    padding: 10px 20px;*/
 /*}*/
 
-a, a:visited, a:hover{
-    color: 	#833029;
+a, a:visited, a:hover {
+    color: #833029;
 }
-h1, h2, h3, h4, h5, h6{
+
+h1, h2, h3, h4, h5, h6 {
     color: #f79a1c;
 }
+
 table {
     font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
     font-size: 14px;
     text-align: left;
-    background:	#fafafa;
+    background: #fafafa;
 }
+
 th {
     color: #45160f;
 }
+
 td {
-    color: #833029	;
+    color: #833029;
+}
+
+.text-title {
+    color: red;
 }
 
 .btn-icon {
-     padding-top: 0;
-     padding-bottom: 0;
- }
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
 .btn > .icon {
     position: relative;
     left: -.75rem;
@@ -180,38 +207,70 @@ td {
     list-style: none;
     padding: 0;
 }
+
 .border li {
     font-family: "Trebuchet MS", "Lucida Sans";
     padding: 7px 20px;
     margin-bottom: 10px;
     border-radius: 5px;
     border-left: 10px solid #f05d22;
-    box-shadow: 2px -2px 5px 0 rgba(0,0,0,.1),
-    -2px -2px 5px 0 rgba(0,0,0,.1),
-    2px 2px 5px 0 rgba(0,0,0,.1),
-    -2px 2px 5px 0 rgba(0,0,0,.1);
+    box-shadow: 2px -2px 5px 0 rgba(0, 0, 0, .1),
+    -2px -2px 5px 0 rgba(0, 0, 0, .1),
+    2px 2px 5px 0 rgba(0, 0, 0, .1),
+    -2px 2px 5px 0 rgba(0, 0, 0, .1);
     font-size: 20px;
     letter-spacing: 2px;
     transition: 0.3s all linear;
 }
-.border li:nth-child(2){border-color: #8bc63e;}
-.border li:nth-child(3){border-color: #fcba30;}
-.border li:nth-child(4){border-color: #1ccfc9;}
-.border li:nth-child(5){border-color: #493224;}
-.border li:hover {border-left: 10px solid transparent;}
-.border li:nth-child(1):hover {border-right: 10px solid #f05d22;}
-.border li:nth-child(2):hover {border-right: 10px solid #8bc63e;}
-.border li:nth-child(3):hover {border-right: 10px solid #fcba30;}
-.border li:nth-child(4):hover {border-right: 10px solid #1ccfc9;}
-.border li:nth-child(5):hover {border-right: 10px solid #493224;}
+
+.border li:nth-child(2) {
+    border-color: #8bc63e;
+}
+
+.border li:nth-child(3) {
+    border-color: #fcba30;
+}
+
+.border li:nth-child(4) {
+    border-color: #1ccfc9;
+}
+
+.border li:nth-child(5) {
+    border-color: #493224;
+}
+
+.border li:hover {
+    border-left: 10px solid transparent;
+}
+
+.border li:nth-child(1):hover {
+    border-right: 10px solid #f05d22;
+}
+
+.border li:nth-child(2):hover {
+    border-right: 10px solid #8bc63e;
+}
+
+.border li:nth-child(3):hover {
+    border-right: 10px solid #fcba30;
+}
+
+.border li:nth-child(4):hover {
+    border-right: 10px solid #1ccfc9;
+}
+
+.border li:nth-child(5):hover {
+    border-right: 10px solid #493224;
+}
 
 .square {
     margin: 0;
     counter-reset: li;
     list-style: none;
-    background:#E8E8E8;
+    background: #E8E8E8;
     padding: 10px;
 }
+
 .square li {
     position: relative;
     margin: 0 0 10px 2em;
@@ -219,7 +278,11 @@ td {
     border-top: 2px solid #787A77;
     transition: .3s linear;
 }
-.square li:last-child {margin-bottom: 0;}
+
+.square li:last-child {
+    margin-bottom: 0;
+}
+
 .square li:before {
     content: counter(li);
     counter-increment: li;
@@ -240,7 +303,11 @@ td {
     text-align: center;
     transition: .3s linear;
 }
-.square li:hover {border-top: 2px solid #389F70;}
+
+.square li:hover {
+    border-top: 2px solid #389F70;
+}
+
 .square li:hover:before {
     border: 2px solid #389F70;
     background: #98EABA;
@@ -267,9 +334,10 @@ td {
 /*    border-radius: 3px;*/
 /*    box-shadow: 2px 2px 0 0 #ccc;*/
 /*}*/
-.width100 ul{
+.width100 ul {
     width: 100%;
 }
-.width100 li{
+
+.width100 li {
     width: 100%;
 }
