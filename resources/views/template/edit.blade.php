@@ -25,12 +25,12 @@
         {{--    в единственном числе--}}
         <div class="form-group row">
             @foreach (session('glo_menu_save') as $key=>$value)
-                <div class="col-sm-3 text-right">
+                <div class="col-3 text-right">
                     <label for="name_lang_{{$key}}" class="col-form-label">{{trans('main.name')}}
                         ({{trans('main.' . $value)}})<span
                             class="text-danger">*</span></label>
                 </div>
-                <div class="col-sm-7">
+                <div class="col-7">
                     <input type="text"
                            name="name_lang_{{$key}}"
                            id="name_lang_{{$key}}"
