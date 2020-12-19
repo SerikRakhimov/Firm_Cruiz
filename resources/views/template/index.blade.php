@@ -16,6 +16,17 @@
         </div>
     </div>
     </p>
+    <div class="row">
+        <div class="col-6 text-left align-top">
+            <h3>{{trans('main.templates')}}</h3>
+        </div>
+        <div class="col-6 text-right">
+            <button type="button" class="btn btn-dreamer" title="{{trans('main.add')}}"
+                    onclick="document.location='{{route('template.create')}}'">
+                <i class="fa fa-plus fa-fw"></i> {{trans('main.add')}}
+            </button>
+        </div>
+    </div>
     <table class="table table-sm table-bordered table-hover">
         <caption>{{trans('main.select_record_for_work')}}</caption>
         <thead>
