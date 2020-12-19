@@ -69,9 +69,9 @@
                 </button>
             </div>
         </div>
-        <div class="container">
+        <div class="container-fluid">
             <div class="row text-center no-gutters">
-                <div class="col">
+                <div class="col-auto">
                     <button type="submit" class="btn btn-dreamer"
                             @if (!$update)
                             title="{{trans('main.add')}}">
@@ -82,7 +82,7 @@
                         @endif
                     </button>
                 </div>
-                <div class="col">
+                <div class="col-auto">
                     <button type="button" class="btn btn-dreamer" title="{{trans('main.cancel')}}"
                         @include('layouts.previous_url')
                     >
