@@ -30,7 +30,7 @@
                 <button type="button" class="btn btn-dreamer" title="{{trans('main.add')}}"
                         onclick="document.location='{{route('template.create')}}'">
 {{--                    <i class="fa fa-plus fa-fw"></i>--}}
-                    {{trans('main.add')}}
+                    {{trans('main.add')}} ghghghghg
                 </button>
             </div>
         </div>
