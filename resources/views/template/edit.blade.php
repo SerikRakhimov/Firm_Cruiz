@@ -69,7 +69,7 @@
                 </button>
             </div>
         </div>
-        <div class="container-fluid">
+        <div class="container">
             <div class="row text-center no-gutters">
                 <div class="col">
                     <button type="submit" class="btn btn-dreamer"
