@@ -82,6 +82,8 @@
                         @endif
                     </button>
                 </div>
+                <div class="col">
+                </div>
                 <div class="col-auto text-center">
                     <button type="button" class="btn btn-dreamer" title="{{trans('main.cancel')}}"
                         @include('layouts.previous_url')
