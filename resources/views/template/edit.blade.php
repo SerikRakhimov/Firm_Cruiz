@@ -70,7 +70,7 @@
             </div>
         </div>
 
-        <div class="row text-center">
+        <div class="row text-center no-gutters">
             <div class="col-6">
                 <button type="submit" class="btn btn-dreamer"
                         @if (!$update)
