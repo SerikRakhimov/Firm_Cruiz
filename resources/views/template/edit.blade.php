@@ -82,7 +82,7 @@
                         @endif
                     </button>
                 </div>
-                <div class="col">
+                <div class="col-auto">
                 </div>
                 <div class="col-auto text-left">
                     <button type="button" class="btn btn-dreamer" title="{{trans('main.cancel')}}"
