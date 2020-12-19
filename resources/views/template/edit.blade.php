@@ -48,7 +48,7 @@
 
         <br>
         <div class="row text-center">
-            <div class="col-5-auto text-right">
+            <div class="col-5 text-right">
                 <button type="submit" class="btn btn-dreamer"
                         @if (!$update)
                         title="{{trans('main.add')}}">
@@ -61,7 +61,7 @@
             </div>
             <div class="col-2">
             </div>
-            <div class="col-5-auto text-left">
+            <div class="col-5 text-left">
                 <button type="button" class="btn btn-dreamer" title="{{trans('main.cancel')}}"
                     @include('layouts.previous_url')
                 >
@@ -72,7 +72,7 @@
         <div class="container-fluid">
             <div class="row  no-gutters">
                 <div class="col-auto">
-                    <button type="submit" class="btn btn-dreamer"
+                    <button type="submit" class="btn btn-sm btn-dreamer"
                             @if (!$update)
                             title="{{trans('main.add')}}">
                         <i class="fa fa-save"></i> {{trans('main.add')}}
@@ -86,7 +86,7 @@
                     &nbsp;
                 </div>
                 <div class="col-auto">
-                    <button type="button" class="btn btn-dreamer" title="{{trans('main.cancel')}}"
+                    <button type="button" class="btn btn-sm btn-dreamer" title="{{trans('main.cancel')}}"
                         @include('layouts.previous_url')
                     >
                         <i class="fa fa-arrow-left"></i> {{trans('main.cancel')}}
