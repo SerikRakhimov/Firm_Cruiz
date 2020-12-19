@@ -4,10 +4,12 @@
     <p>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-6 text-left align-top">
+            <div class="col-5 text-left align-top">
                 <h3>{{trans('main.templates')}}</h3>
             </div>
-            <div class="col-6 text-right">
+            <div class="col-2">
+            </div>
+            <div class="col-5 text-right">
                 <button type="button" class="btn btn-dreamer" title="{{trans('main.add')}}"
                         onclick="document.location='{{route('template.create')}}'">
                     {{--                    <i class="fa fa-plus fa-fw"></i>--}}
@@ -19,10 +21,12 @@
     </p>
     <div class="container">
         <div class="row">
-            <div class="col-6 text-left align-top">
+            <div class="col-5 text-left align-top">
                 <h3>{{trans('main.templates')}}</h3>
             </div>
-            <div class="col-6 text-right">
+            <div class="col-2">
+            </div>
+            <div class="col-5 text-right">
                 <button type="button" class="btn btn-dreamer" title="{{trans('main.add')}}"
                         onclick="document.location='{{route('template.create')}}'">
 {{--                    <i class="fa fa-plus fa-fw"></i>--}}
