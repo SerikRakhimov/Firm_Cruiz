@@ -124,7 +124,7 @@
         </div>
     </nav>
 
-    <main class="py-4 w-95 mx-auto">
+    <main class="py-4 w-75 mx-auto">
 {{--        <div class="mx-auto" style="width: 1200px;">--}}
         @yield('content')
 {{--        </div>--}}
