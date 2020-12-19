@@ -70,7 +70,7 @@
             </div>
         </div>
         <div class="container-fluid">
-            <div class="row  no-gutters text-center">
+            <div class="row  no-gutters">
                 <div class="col-auto">
                     <button type="submit" class="btn btn-dreamer"
                             @if (!$update)
