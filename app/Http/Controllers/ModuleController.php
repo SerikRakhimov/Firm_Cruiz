@@ -112,7 +112,8 @@ class ModuleController extends Controller
     function delete_question(Module $module)
     {
         $task = Task::findOrFail($module->task_id);
-        return view('module/show', ['type_form' => 'delete_question', 'task' => $task, 'module' => $module]);
+        $template = Template::findOrFail($task->template_id);
+        return view('module/show', ['type_form' => 'delete_question', 'template' => $template, 'task' => $task, 'module' => $module]);
     }
 
     function delete(Request $request, Module $module)

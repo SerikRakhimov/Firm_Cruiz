@@ -1,16 +1,20 @@
 @extends('layouts.app')
 
 @section('content')
-    <p>
+    @include('layouts.module.show_name',['template'=>$template, 'task'=>$task, 'module'=>$module])
     <div class="container-fluid">
         <div class="row">
-            <div class="col text-left align-top">
+            <div class="col-5 text-center">
                 <h3>{{trans('main.bases')}}</h3>
             </div>
-            <div class="col-1 text-left">
-                <a href="{{route('base.create')}}" title = "{{trans('main.add')}}">
-                    <img src="{{Storage::url('add_record.png')}}" width="15" height="15" alt = "{{trans('main.add')}}">
-                </a>
+            <div class="col-2">
+            </div>
+            <div class="col-5 text-right">
+                <button type="button" class="btn btn-dreamer" title="{{trans('main.add')}}"
+                        onclick="document.location='{{route('base.create', ['module'=>$module])}}'">
+                    {{--                    <i class="fa fa-plus fa-fw d-none d-sm-block "></i>--}}
+                    {{trans('main.add')}}
+                </button>
             </div>
         </div>
     </div>

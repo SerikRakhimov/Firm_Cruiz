@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Base;
 use App\Models\Link;
+use App\Models\Template;
+use App\Models\Task;
+use App\Models\Module;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -24,29 +27,32 @@ class BaseController extends Controller
         ];
     }
 
-    function index()
+    function index(Module $module)
     {
-        $bases = null;
+        $task = Task::findOrFail($module->task_id);
+        $template = Template::findOrFail($task->template_id);
+        $bases = Base::where('module_id', $module->id);
         $index = array_search(session('locale'), session('glo_menu_save'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
             switch ($index) {
                 case 0:
                     //$bases = Base::all()->sortBy('name_lang_0');
-                    $bases = Base::orderBy('name_lang_0');
+                    $bases = $bases->orderBy('name_lang_0');
                     break;
                 case 1:
                     //$bases = Base::all()->sortBy(function($row){return $row->name_lang_1 . $row->name_lang_0;});
-                    $bases = Base::orderBy('name_lang_1')->orderBy('name_lang_0');
+                    $bases = $bases->orderBy('name_lang_1')->orderBy('name_lang_0');
                     break;
                 case 2:
-                    $bases = Base::orderBy('name_lang_2')->orderBy('name_lang_0');
+                    $bases = $bases->orderBy('name_lang_2')->orderBy('name_lang_0');
                     break;
                 case 3:
-                    $bases = Base::orderBy('name_lang_3')->orderBy('name_lang_0');
+                    $bases = $bases->orderBy('name_lang_3')->orderBy('name_lang_0');
                     break;
             }
         }
-        return view('base/index', ['bases' => $bases->paginate(60)]);
+        session(['bases_previous_url' => request()->url()]);
+        return view('base/index', ['template' => $template, 'task' => $task, 'module' => $module, 'bases' => $bases->paginate(60)]);
     }
 
     function show(Base $base)
@@ -54,9 +60,11 @@ class BaseController extends Controller
         return view('base/show', ['type_form' => 'show', 'base' => $base]);
     }
 
-    function create()
+    function create(Module $module)
     {
-        return view('base/edit', ['types' => Base::get_types()]);
+        $task = Task::findOrFail($module->task_id);
+        $template = Template::findOrFail($task->template_id);
+        return view('base/edit', ['template' => $template, 'task' => $task, 'module' => $module, 'types' => Base::get_types()]);
     }
 
     function store(Request $request)
@@ -67,6 +75,7 @@ class BaseController extends Controller
         date_default_timezone_set('Asia/Almaty');
 
         $base = new Base($request->except('_token', '_method'));
+        $base->module_id = $request->module_id;
 
         $base->name_lang_0 = $request->name_lang_0;
         $base->name_lang_1 = isset($request->name_lang_1) ? $request->name_lang_1 : "";
@@ -201,7 +210,12 @@ class BaseController extends Controller
 
         $base->save();
 
-        return redirect()->route('base.index');
+        if ($request->session()->has('bases_previous_url')) {
+            return redirect(session('bases_previous_url'));;
+        } else {
+            return redirect()->back();
+        }
+
     }
 
     function update(Request $request, Base $base)

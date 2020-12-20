@@ -32,7 +32,8 @@
             </button>
         </p>
         <p>
-            <button type="button" class="btn btn-dreamer" title="{{trans('main.bases')}}">
+            <button type="button" class="btn btn-dreamer" title="{{trans('main.bases')}}"
+                    onclick="document.location='{{route('base.index', $module)}}'">
                 {{--            <i class="fas fa-modules"></i>--}}
                 {{trans('main.bases')}}
             </button>

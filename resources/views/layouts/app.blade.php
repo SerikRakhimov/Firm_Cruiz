@@ -51,11 +51,11 @@
                             <a class="nav-link" href="{{ route('template.index') }}">{{trans('main.templates')}}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('base.index') }}">{{trans('main.my_projects')}}</a>
+                            <a class="nav-link" href="#">{{trans('main.my_projects')}}</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('base.index') }}">{{trans('main.bases')}}</a>
-                        </li>
+                        {{--                        <li class="nav-item">--}}
+                        {{--                            <a class="nav-link" href="{{ route('base.index') }}">{{trans('main.bases')}}</a>--}}
+                        {{--                        </li>--}}
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('item.index') }}">{{trans('main.items')}}</a>
                         </li>
@@ -65,20 +65,20 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('main.index') }}">{{trans('main.mains')}}</a>
                         </li>
-{{--                        <li class="nav-item">--}}
-{{--                            <a class="nav-link" href="{{ route('order.index_archive_user') }}">Мой архив</a>--}}
-{{--                        </li>--}}
+                        {{--                        <li class="nav-item">--}}
+                        {{--                            <a class="nav-link" href="{{ route('order.index_archive_user') }}">Мой архив</a>--}}
+                        {{--                        </li>--}}
                     </ul>
                 @if(Auth::user()->isAdmin())
-{{--                    <!-- Right Side Of Navbar -->--}}
-{{--                        <ul class="navbar-nav ml-auto">--}}
-{{--                            <li class="nav-item">--}}
-{{--                                <a class="nav-link" href="{{ route('order.index_job_admin') }}"><span class="badge badge-primary">Перевод</span></a>--}}
-{{--                            </li>--}}
-{{--                            <li class="nav-item">--}}
-{{--                                <a class="nav-link" href="{{ route('order.index_archive_admin') }}"><span class="badge badge-primary">Архив</span></a>--}}
-{{--                            </li>--}}
-{{--                        </ul>--}}
+                    {{--                    <!-- Right Side Of Navbar -->--}}
+                    {{--                        <ul class="navbar-nav ml-auto">--}}
+                    {{--                            <li class="nav-item">--}}
+                    {{--                                <a class="nav-link" href="{{ route('order.index_job_admin') }}"><span class="badge badge-primary">Перевод</span></a>--}}
+                    {{--                            </li>--}}
+                    {{--                            <li class="nav-item">--}}
+                    {{--                                <a class="nav-link" href="{{ route('order.index_archive_admin') }}"><span class="badge badge-primary">Архив</span></a>--}}
+                    {{--                            </li>--}}
+                    {{--                        </ul>--}}
                 @endif
             @endauth
 
@@ -125,16 +125,22 @@
     </nav>
 
     <main class="py-4 w-75 mx-auto">
-{{--        <div class="mx-auto" style="width: 1200px;">--}}
+        {{--        <div class="mx-auto" style="width: 1200px;">--}}
         @yield('content')
-{{--        </div>--}}
+        {{--        </div>--}}
     </main>
 </div>
 <!-- Ajax -->
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <!-- JS, Popper.js, and jQuery -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
 </body>
 </html>

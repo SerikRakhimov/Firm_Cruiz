@@ -4,15 +4,13 @@
     <?php
     $update = isset($base);
     ?>
-    <h3 class="display-5 text-center">
-        @if (!$update)
-            {{trans('main.new_record')}}
-        @else
-            {{trans('main.edit_record')}}
-        @endif
-        <span class="text-info">-</span> <span class="text-success">{{trans('main.base')}}</span>
-    </h3>
-    <br>
+
+    <p>
+        @include('layouts.module.show_name', ['module'=>$module])
+    </p>
+    <p>
+        @include('layouts.edit_title', ['update'=>$update, 'table_name'=>trans('main.base')])
+    </p>
 
     <form action="{{$update ? route('base.update',$base):route('base.store')}}" method="POST"
           enctype=multipart/form-data>
@@ -21,6 +19,7 @@
         @if ($update)
             @method('PUT')
         @endif
+        <input type="hidden" name="module_id" value="{{$module->id}}">
 
         {{--    в единственном числе--}}
         <div class="form-group row">
@@ -489,23 +488,35 @@
         </div>
 
         <br>
-        <div class="row text-center">
-            <div class="col-sm-5 text-right">
-                <button type="submit" class="btn btn-primary">
-                    @if (!$update)
+
+        <div class="container-fluid">
+            <div class="row text-center">
+                <div class="col-5 text-right">
+                    <button type="submit" class="btn btn-dreamer"
+                            @if (!$update)
+                            title="{{trans('main.add')}}">
+                        {{--                    <i class="fa fa-save"></i>--}}
                         {{trans('main.add')}}
-                    @else
-                        {{trans('main.save')}}
-                    @endif
-                </button>
-            </div>
-            <div class="col-sm-2">
-            </div>
-            <div class="col-sm-5 text-left">
-                <a class="btn btn-success" href="{{ route('base.index') }}">{{trans('main.cancel')}}</a>
+                        @else
+                            title="{{trans('main.save')}}">
+                            {{--                        <i class="fa fa-save"></i>--}}
+                            {{trans('main.save')}}
+                        @endif
+                    </button>
+                </div>
+                <div class="col-2">
+                </div>
+                <div class="col-5 text-left">
+                    <button type="button" class="btn btn-dreamer" title="{{trans('main.cancel')}}"
+                        @include('layouts.base.previous_url')
+                    >
+                        {{--                    <i class="fa fa-arrow-left"></i>--}}
+                        {{trans('main.cancel')}}
+                    </button>
+                </div>
             </div>
         </div>
-        </div>
+
     </form>
     <script>
         //var vartype = form.vartype;  // так не работает
