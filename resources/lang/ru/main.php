@@ -30,7 +30,7 @@ return [
     'new_record' => 'Новая запись',
     'edit_record' => 'Корректировка записи',
     'delete_record_question' => 'Удалить запись',
-    'view_record' => 'Просмотр записи',
+    'viewing_record' => 'Просмотр записи',
     'select' => 'Выбор',
     'select_record_for_work' => 'Выберите запись для работы',
     'return' => 'Назад',

@@ -30,7 +30,7 @@ return [
     'new_record' => 'Жаңа жазба',
     'edit_record' => 'Жазбаны өңдеу',
     'delete_record_question' => 'Жазбаны жою керек пе',
-    'view_record' => 'Жазбаны қарау',
+    'viewing_record' => 'Жазбаны қарау',
     'select' => 'Таңдау',
     'select_record_for_work' => 'Жұмыс үшін жазбаны таңдаңыз',
     'return' => 'Артқа',

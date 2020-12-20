@@ -30,7 +30,7 @@ return [
     'new_record' => 'New record',
     'edit_record' => 'Editing a record',
     'delete_record_question' => 'Delete record',
-    'view_record' => 'View record',
+    'viewing_record' => 'Viewing record',
     'select' => 'Select',
     'select_record_for_work' => 'Select an entry to work with',
     'return' => 'Return',
