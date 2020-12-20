@@ -6,16 +6,9 @@
     use App\Http\Controllers\BaseController;
     use Illuminate\Support\Facades\Request;
     ?>
-
-    <h3 class="display-5">
-        @if ($type_form == 'show')
-            {{trans('main.viewing_record')}}
-        @elseif($type_form == 'delete_question')
-            {{trans('main.delete_record_question')}}?
-        @endif
-        <span class="text-info">-</span> <span class="text-success">{{trans('main.template')}}</span>
-    </h3>
-    <br>
+    <p>
+        @include('layouts.show_title', ['type_form'=>$type_form, 'table_name'=>trans('main.template')])
+    </p>
 
     <p>Id: <b>{{$template->id}}</b></p>
 
@@ -45,9 +38,9 @@
             </button>
 
             <button type="button" class="btn btn-dreamer"
-                    title="{{trans('main.return')}}" @include('layouts.previous_url')>
+                    title="{{trans('main.cancel')}}" @include('layouts.template.previous_url')>
                 {{--            <i class="fa fa-arrow-left"></i>--}}
-                {{trans('main.return')}}
+                {{trans('main.cancel')}}
             </button>
         </p>
     @elseif($type_form == 'delete_question')
@@ -60,7 +53,7 @@
                     {{trans('main.delete')}}
                 </button>
                 <button type="button" class="btn btn-dreamer"
-                        title="{{trans('main.cancel')}}" @include('layouts.previous_url')>
+                        title="{{trans('main.cancel')}}" @include('layouts.template.previous_url')>
                     {{--                <i class="fa fa-arrow-left"></i>--}}
                     {{trans('main.cancel')}}
                 </button>

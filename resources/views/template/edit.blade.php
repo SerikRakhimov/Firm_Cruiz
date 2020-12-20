@@ -66,7 +66,7 @@
                 </div>
                 <div class="col-5 text-left">
                     <button type="button" class="btn btn-dreamer" title="{{trans('main.cancel')}}"
-                        @include('layouts.previous_url')
+                        @include('layouts.template.previous_url')
                     >
                         {{--                    <i class="fa fa-arrow-left"></i>--}}
                         {{trans('main.cancel')}}

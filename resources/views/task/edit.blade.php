@@ -2,25 +2,22 @@
 
 @section('content')
     <?php
-    $update = isset($template);
+    $update = isset($task);
     ?>
-    <h3 class="display-5 text-center">
-        @if (!$update)
-            {{trans('main.new_record')}}
-        @else
-            {{trans('main.edit_record')}}
-        @endif
-        <span class="text-info">-</span> <span class="text-success">{{trans('main.template')}}</span>
-    </h3>
-    <br>
-
-    <form action="{{$update ? route('template.update',$template):route('template.store')}}" method="POST"
+    <p>
+        @include('layouts.template.show_name', ['template'=>$template])
+    </p>
+    <p>
+        @include('layouts.edit_title', ['update'=>$update, 'table_name'=>trans('main.task')])
+    </p>
+    <form action="{{$update ? route('task.update',$task):route('task.store')}}" method="POST"
           enctype=multipart/form-data>
         @csrf
 
         @if ($update)
             @method('PUT')
         @endif
+        <input type="hidden" name="template_id" value="{{$template->id}}">
 
         {{--    в единственном числе--}}
         <div class="form-group row">
@@ -36,7 +33,7 @@
                            id="name_lang_{{$key}}"
                            class="form-control @error('name_lang_' . $key) is-invalid @enderror"
                            placeholder=""
-                           value="{{ old('name_lang_' . $key) ?? ($template['name_lang_' . $key] ?? '') }}">
+                           value="{{ old('name_lang_' . $key) ?? ($task['name_lang_' . $key] ?? '') }}">
                 </div>
                 @error('name_lang_' . $key)
                 <div class="text-danger">
@@ -66,7 +63,7 @@
                 </div>
                 <div class="col-5 text-left">
                     <button type="button" class="btn btn-dreamer" title="{{trans('main.cancel')}}"
-                        @include('layouts.previous_url')
+                        @include('layouts.task.previous_url')
                     >
                         {{--                    <i class="fa fa-arrow-left"></i>--}}
                         {{trans('main.cancel')}}

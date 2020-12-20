@@ -129,7 +129,7 @@ Route::get('/task/show/{task}', 'TaskController@show')
     ->name('task.show')
     ->middleware('auth');
 
-Route::get('/task/create', 'TaskController@create')
+Route::get('/task/create/{template}', 'TaskController@create')
     ->name('task.create')
     ->middleware('auth');
 

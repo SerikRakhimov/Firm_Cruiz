@@ -35,20 +35,20 @@ class TaskController extends Controller
                     break;
             }
         }
-        session(['previous-url' => request()->url()]);
+        session(['tasks_previous_url' => request()->url()]);
         return view('task/index', ['template' => $template, 'tasks' => $tasks->paginate(60)]);
     }
 
     function show(Task $task)
     {
-        return view('task/show', ['type_form' => 'show', 'task' => $task]);
+        $template = Template::findOrFail($task->template_id);
+        return view('task/show', ['type_form' => 'show', 'template' => $template, 'task' => $task]);
     }
 
 
-    function create()
+    function create(Template $template)
     {
-
-        return view('task/edit');
+        return view('task/edit', ['template'=>$template]);
     }
 
     function store(Request $request)
@@ -59,11 +59,12 @@ class TaskController extends Controller
         date_default_timezone_set('Asia/Almaty');
 
         $task = new Task($request->except('_token', '_method'));
+        $task->template_id = $request->template_id;
 
         $this->set($request, $task);
         //https://laravel.demiart.ru/laravel-sessions/
-        if ($request->session()->has('previous-url')) {
-            return redirect(session('previous-url'));;
+        if ($request->session()->has('tasks_previous_url')) {
+            return redirect(session('tasks_previous_url'));;
         } else {
             return redirect()->back();
         }
@@ -81,8 +82,8 @@ class TaskController extends Controller
 
         $this->set($request, $task);
 
-        if ($request->session()->has('previous-url')) {
-            return redirect(session('previous-url'));;
+        if ($request->session()->has('tasks_previous_url')) {
+            return redirect(session('tasks_previous_url'));;
         } else {
             return redirect()->back();
         }
@@ -100,20 +101,22 @@ class TaskController extends Controller
 
     function edit(Task $task)
     {
-        return view('task/edit', ['task' => $task]);
+        $template = Template::findOrFail($task->template_id);
+        return view('task/edit', ['template' => $template, 'task' => $task]);
     }
 
     function delete_question(Task $task)
     {
-        return view('task/show', ['type_form' => 'delete_question', 'task' => $task]);
+        $template = Template::findOrFail($task->template_id);
+        return view('task/show', ['type_form' => 'delete_question', 'template' => $template, 'task' => $task]);
     }
 
     function delete(Request $request, Task $task)
     {
         $task->delete();
 
-        if ($request->session()->has('previous-url')) {
-            return redirect(session('previous-url'));;
+        if ($request->session()->has('tasks_previous_url')) {
+            return redirect(session('tasks_previous_url'));;
         } else {
             return redirect()->back();
         }

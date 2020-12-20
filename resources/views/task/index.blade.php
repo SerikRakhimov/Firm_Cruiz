@@ -2,14 +2,8 @@
 
 @section('content')
     <p>
+    @include('layouts.template.show_name',['template'=>$template])
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-5 text-center">
-                <h4>{{$template->name()}}</h4>
-            </div>
-            <div class="col-2">
-            </div>
-        </div>
         <div class="row">
             <div class="col-5 text-center">
                 <h3>{{trans('main.tasks')}}</h3>
@@ -18,7 +12,7 @@
             </div>
             <div class="col-5 text-right">
                 <button type="button" class="btn btn-dreamer" title="{{trans('main.add')}}"
-                        onclick="document.location='{{route('task.create')}}'">
+                        onclick="document.location='{{route('task.create', ['template'=>$template])}}'">
                     {{--                    <i class="fa fa-plus fa-fw d-none d-sm-block "></i>--}}
                     {{trans('main.add')}}
                 </button>
