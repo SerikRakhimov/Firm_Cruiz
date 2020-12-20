@@ -38,8 +38,7 @@
             </button>
         </p>
         <p>
-            <button type="button" class="btn btn-dreamer" title="{{trans('main.tasks')}}"
-                    onclick="document.location='{{route('task.index', $template)}}'">
+            <button type="button" class="btn btn-dreamer" title="{{trans('main.tasks')}}">
                 {{--            <i class="fas fa-tasks"></i>--}}
                 {{trans('main.tasks')}}
             </button>

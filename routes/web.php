@@ -120,6 +120,39 @@ Route::delete('/template/delete/{template}', 'TemplateController@delete')
     ->name('template.delete')
     ->middleware('auth');
 
+// Tasks
+Route::get('/task/index/{template}', 'TaskController@index')
+    ->name('task.index')
+    ->middleware('auth');
+
+Route::get('/task/show/{task}', 'TaskController@show')
+    ->name('task.show')
+    ->middleware('auth');
+
+Route::get('/task/create', 'TaskController@create')
+    ->name('task.create')
+    ->middleware('auth');
+
+Route::get('/task/edit/{task}', 'TaskController@edit')
+    ->name('task.edit')
+    ->middleware('auth');
+
+Route::post('/task/store', 'TaskController@store')
+    ->name('task.store')
+    ->middleware('auth');
+
+Route::put('/task/edit/{task}', 'TaskController@update')
+    ->name('task.update')
+    ->middleware('auth');
+
+Route::get('/task/delete_question/{task}', 'TaskController@delete_question')
+    ->name('task.delete_question')
+    ->middleware('auth');
+
+Route::delete('/task/delete/{task}', 'TaskController@delete')
+    ->name('task.delete')
+    ->middleware('auth');
+
 // Bases
 
 Route::get('/base/index', 'BaseController@index')
