@@ -7,45 +7,44 @@
     use Illuminate\Support\Facades\Request;
     ?>
     <p>
-        @include('layouts.template.show_name', ['template'=>$template])
-        @include('layouts.show_title', ['type_form'=>$type_form, 'table_name'=>trans('main.task')])
+        @include('layouts.task.show_name', ['task'=>$task])
+        @include('layouts.show_title', ['type_form'=>$type_form, 'table_name'=>trans('main.module')])
     </p>
 
-    <p>Id: <b>{{$task->id}}</b></p>
+    <p>Id: <b>{{$module->id}}</b></p>
 
     @foreach (session('glo_menu_save') as $key=>$value)
-        <p>{{trans('main.name')}} ({{trans('main.' . $value)}}): <b>{{$task['name_lang_' . $key]}}</b></p>
+        <p>{{trans('main.name')}} ({{trans('main.' . $value)}}): <b>{{$module['name_lang_' . $key]}}</b></p>
     @endforeach
 
     @if ($type_form == 'show')
         <p>
             <button type="button" class="btn btn-dreamer"
-                    onclick="document.location='{{route('task.edit',$task)}}'" title="{{trans('main.edit')}}">
+                    onclick="document.location='{{route('module.edit',$module)}}'" title="{{trans('main.edit')}}">
                 {{--            <i class="fas fa-edit"></i>--}}
                 {{trans('main.edit')}}
             </button>
             <button type="button" class="btn btn-dreamer"
-                    onclick="document.location='{{route('task.delete_question',$task)}}'"
+                    onclick="document.location='{{route('module.delete_question',$module)}}'"
                     title="{{trans('main.delete')}}">
                 {{--            <i class="fas fa-trash"></i>--}}
                 {{trans('main.delete')}}
             </button>
         </p>
         <p>
-            <button type="button" class="btn btn-dreamer" title="{{trans('main.modules')}}"
-                    onclick="document.location='{{route('module.index', $task)}}'">
-                {{--            <i class="fas fa-tasks"></i>--}}
-                {{trans('main.modules')}}
+            <button type="button" class="btn btn-dreamer" title="{{trans('main.bases')}}">
+                {{--            <i class="fas fa-modules"></i>--}}
+                {{trans('main.bases')}}
             </button>
 
             <button type="button" class="btn btn-dreamer"
-                    title="{{trans('main.cancel')}}" @include('layouts.task.previous_url')>
+                    title="{{trans('main.cancel')}}" @include('layouts.module.previous_url')>
                 {{--            <i class="fa fa-arrow-left"></i>--}}
                 {{trans('main.cancel')}}
             </button>
         </p>
     @elseif($type_form == 'delete_question')
-        <form action="{{route('task.delete', $task)}}" method="POST" id='delete-form'>
+        <form action="{{route('module.delete', $module)}}" method="POST" id='delete-form'>
             @csrf
             @method('DELETE')
             <p>
@@ -54,7 +53,7 @@
                     {{trans('main.delete')}}
                 </button>
                 <button type="button" class="btn btn-dreamer"
-                        title="{{trans('main.cancel')}}" @include('layouts.task.previous_url')>
+                        title="{{trans('main.cancel')}}" @include('layouts.module.previous_url')>
                     {{--                <i class="fa fa-arrow-left"></i>--}}
                     {{trans('main.cancel')}}
                 </button>

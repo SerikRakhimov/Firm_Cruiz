@@ -67,6 +67,8 @@ return [
     'my_project' => 'My project',
     'tasks' => 'Tasks',
     'task' => 'Task',
+    'modules' => 'Moduls',
+    'module' => 'Module',
     'date_created' => 'Creation date',
     'date_updated' => 'Date of change',
     'format_date' => 'd.m.Y',

@@ -67,6 +67,8 @@ return [
     'my_project' => 'Менің жобам',
     'tasks' => 'Тапсырмалар',
     'task' => 'Тапсырма',
+    'modules' => 'Модульдер',
+    'module' => 'Модуль',
     'date_created' => 'Жасалған күні',
     'date_updated' => 'Өзгерту күні',
     'format_date' => 'd.m.Y',

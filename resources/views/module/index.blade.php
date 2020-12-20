@@ -2,17 +2,18 @@
 
 @section('content')
     <p>
+    @include('layouts.task.show_name',['template'=>$template, 'task'=>$task])
     <div class="container-fluid">
         <div class="row">
             <div class="col-5 text-center">
-                <h3>{{trans('main.templates')}}</h3>
+                <h3>{{trans('main.modules')}}</h3>
             </div>
             <div class="col-2">
             </div>
             <div class="col-5 text-right">
                 <button type="button" class="btn btn-dreamer" title="{{trans('main.add')}}"
-                        onclick="document.location='{{route('template.create')}}'">
-{{--                    <i class="fa fa-plus fa-fw d-none d-sm-block "></i>--}}
+                        onclick="document.location='{{route('module.create', ['task'=>$task])}}'">
+                    {{--                    <i class="fa fa-plus fa-fw d-none d-sm-block "></i>--}}
                     {{trans('main.add')}}
                 </button>
             </div>
@@ -29,26 +30,26 @@
         </thead>
         <tbody>
         <?php
-        $i = $templates->firstItem() - 1;
+        $i = $modules->firstItem() - 1;
         ?>
-        @foreach($templates as $template)
+        @foreach($modules as $module)
             <?php
             $i++;
             ?>
             <tr>
                 {{--                <th scope="row">{{$i}}</th>--}}
                 <td class="text-center">
-                    <a href="{{route('template.show',$template)}}" title="{{trans('main.show')}}">
+                    <a href="{{route('module.show',$module)}}" title="{{trans('main.show')}}">
                         {{$i}}
                     </a></td>
                 <td class="text-left">
-                    <a href="{{route('template.show',$template)}}" title="{{trans('main.show')}}">
-                        {{$template->name()}}
+                    <a href="{{route('module.show',$module)}}" title="{{trans('main.show')}}">
+                        {{$module->name()}}
                     </a>
                 </td>
         @endforeach
         </tbody>
     </table>
-    {{$templates->links()}}
+    {{$modules->links()}}
 @endsection
 

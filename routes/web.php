@@ -153,8 +153,40 @@ Route::delete('/task/delete/{task}', 'TaskController@delete')
     ->name('task.delete')
     ->middleware('auth');
 
-// Bases
+// Modules
+Route::get('/module/index/{task}', 'ModuleController@index')
+    ->name('module.index')
+    ->middleware('auth');
 
+Route::get('/module/show/{module}', 'ModuleController@show')
+    ->name('module.show')
+    ->middleware('auth');
+
+Route::get('/module/create/{task}', 'ModuleController@create')
+    ->name('module.create')
+    ->middleware('auth');
+
+Route::get('/module/edit/{module}', 'ModuleController@edit')
+    ->name('module.edit')
+    ->middleware('auth');
+
+Route::post('/module/store', 'ModuleController@store')
+    ->name('module.store')
+    ->middleware('auth');
+
+Route::put('/module/edit/{module}', 'ModuleController@update')
+    ->name('module.update')
+    ->middleware('auth');
+
+Route::get('/module/delete_question/{module}', 'ModuleController@delete_question')
+    ->name('module.delete_question')
+    ->middleware('auth');
+
+Route::delete('/module/delete/{module}', 'ModuleController@delete')
+    ->name('module.delete')
+    ->middleware('auth');
+
+// Bases
 Route::get('/base/index', 'BaseController@index')
     ->name('base.index')
     ->middleware('auth');
