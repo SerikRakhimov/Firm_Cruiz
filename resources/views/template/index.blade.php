@@ -12,7 +12,7 @@
             <div class="col-5 text-right">
                 <button type="button" class="btn btn-dreamer" title="{{trans('main.add')}}"
                         onclick="document.location='{{route('template.create')}}'">
-{{--                    <i class="fa fa-plus fa-fw d-none d-sm-block "></i>--}}
+                    {{--                    <i class="fa fa-plus fa-fw d-none d-sm-block "></i>--}}
                     {{trans('main.add')}}
                 </button>
             </div>
@@ -25,6 +25,7 @@
         <tr>
             <th class="text-center">#</th>
             <th class="text-left">{{trans('main.name')}}</th>
+            <th class="text-left"></th>
         </tr>
         </thead>
         <tbody>
@@ -45,6 +46,13 @@
                     <a href="{{route('template.show',$template)}}" title="{{trans('main.show')}}">
                         {{$template->name()}}
                     </a>
+                </td>
+                <td class="text-left">
+                    <button type="button" class="btn btn-dreamer" title="{{trans('main.tasks')}}"
+                            onclick="document.location='{{route('task.index', $template)}}'">
+                        {{--            <i class="fas fa-tasks"></i>--}}
+                        {{trans('main.tasks')}}
+                    </button>
                 </td>
         @endforeach
         </tbody>
