@@ -25,7 +25,6 @@
         <tr>
             <th class="text-center">#</th>
             <th class="text-left">{{trans('main.name')}}</th>
-            <th class="text-left"></th>
         </tr>
         </thead>
         <tbody>
@@ -46,13 +45,6 @@
                     <a href="{{route('template.show',$template)}}" title="{{trans('main.show')}}">
                         {{$template->name()}}
                     </a>
-                </td>
-                <td class="text-left">
-                    <button type="button" class="btn btn-dreamer" title="{{trans('main.tasks')}}"
-                            onclick="document.location='{{route('task.index', $template)}}'">
-                        {{--            <i class="fas fa-tasks"></i>--}}
-                        {{trans('main.tasks')}}
-                    </button>
                 </td>
         @endforeach
         </tbody>
