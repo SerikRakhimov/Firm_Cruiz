@@ -360,6 +360,7 @@ class BaseController extends Controller
         };
 
         $base->save();
+
         $template = Template::findOrFail($base->template_id);
         return redirect()->route('base.index', ['template' => $template] );
     }
@@ -377,8 +378,12 @@ class BaseController extends Controller
 
     function delete(Base $base)
     {
+        // сначала эта команда
+        $template = Template::findOrFail($base->template_id);
+        // потом эта команда
         $base->delete();
-        return redirect()->route('base.index');
+
+        return redirect()->route('base.index', ['template' => $template] );
     }
 
 //    // Вариант 1
