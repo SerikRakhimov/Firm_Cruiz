@@ -20,26 +20,31 @@
         <p>
             <button type="button" class="btn btn-dreamer"
                     onclick="document.location='{{route('template.edit',$template)}}'" title="{{trans('main.edit')}}">
-                {{--            <i class="fas fa-edit"></i>--}}
+{{--                            <i class="fas fa-edit"></i>--}}
                 {{trans('main.edit')}}
             </button>
             <button type="button" class="btn btn-dreamer"
                     onclick="document.location='{{route('template.delete_question',$template)}}'"
                     title="{{trans('main.delete')}}">
-                {{--            <i class="fas fa-trash"></i>--}}
+{{--                            <i class="fas fa-trash"></i>--}}
                 {{trans('main.delete')}}
             </button>
         </p>
         <p>
             <button type="button" class="btn btn-dreamer" title="{{trans('main.bases')}}"
                     onclick="document.location='{{route('base.index', $template)}}'">
-                {{--            <i class="fas fa-tasks"></i>--}}
+{{--                            <i class="fas fa-tasks"></i>--}}
                 {{trans('main.bases')}}
+            </button>
+            <button type="button" class="btn btn-dreamer" title="{{trans('main.projects')}}"
+                    onclick="document.location='{{route('project.index', $template)}}'">
+{{--                            <i class="fas fa-tasks"></i>--}}
+                {{trans('main.projects')}}
             </button>
 
             <button type="button" class="btn btn-dreamer"
                     title="{{trans('main.cancel')}}" @include('layouts.template.previous_url')>
-                {{--            <i class="fa fa-arrow-left"></i>--}}
+{{--                            <i class="fa fa-arrow-left"></i>--}}
                 {{trans('main.cancel')}}
             </button>
         </p>

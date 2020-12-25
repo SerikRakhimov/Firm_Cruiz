@@ -121,37 +121,37 @@ Route::delete('/template/delete/{template}', 'TemplateController@delete')
     ->name('template.delete')
     ->middleware('auth');
 
-// Tasks
-Route::get('/task/index/{template}', 'TaskController@index')
-    ->name('task.index')
+// Projects
+Route::get('/project/index/{template}', 'ProjectController@index')
+    ->name('project.index')
     ->middleware('auth');
 
-Route::get('/task/show/{task}', 'TaskController@show')
-    ->name('task.show')
+Route::get('/project/show/{project}', 'ProjectController@show')
+    ->name('project.show')
     ->middleware('auth');
 
-Route::get('/task/create/{template}', 'TaskController@create')
-    ->name('task.create')
+Route::get('/project/create/{template}', 'ProjectController@create')
+    ->name('project.create')
     ->middleware('auth');
 
-Route::get('/task/edit/{task}', 'TaskController@edit')
-    ->name('task.edit')
+Route::get('/project/edit/{project}', 'ProjectController@edit')
+    ->name('project.edit')
     ->middleware('auth');
 
-Route::post('/task/store', 'TaskController@store')
-    ->name('task.store')
+Route::post('/project/store', 'ProjectController@store')
+    ->name('project.store')
     ->middleware('auth');
 
-Route::put('/task/edit/{task}', 'TaskController@update')
-    ->name('task.update')
+Route::put('/project/edit/{project}', 'ProjectController@update')
+    ->name('project.update')
     ->middleware('auth');
 
-Route::get('/task/delete_question/{task}', 'TaskController@delete_question')
-    ->name('task.delete_question')
+Route::get('/project/delete_question/{project}', 'ProjectController@delete_question')
+    ->name('project.delete_question')
     ->middleware('auth');
 
-Route::delete('/task/delete/{task}', 'TaskController@delete')
-    ->name('task.delete')
+Route::delete('/project/delete/{project}', 'ProjectController@delete')
+    ->name('project.delete')
     ->middleware('auth');
 
 // Modules
