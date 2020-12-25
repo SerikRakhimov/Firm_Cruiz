@@ -27,11 +27,9 @@ class BaseController extends Controller
         ];
     }
 
-    function index(Module $module)
+    function index(Template $template)
     {
-        $task = Task::findOrFail($module->task_id);
-        $template = Template::findOrFail($task->template_id);
-        $bases = Base::where('module_id', $module->id);
+        $bases = Base::where('template_id', $template->id);
         $index = array_search(session('locale'), session('glo_menu_save'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
             switch ($index) {
@@ -52,7 +50,7 @@ class BaseController extends Controller
             }
         }
         session(['bases_previous_url' => request()->url()]);
-        return view('base/index', ['template' => $template, 'task' => $task, 'module' => $module, 'bases' => $bases->paginate(60)]);
+        return view('base/index', ['template' => $template, 'bases' => $bases->paginate(60)]);
     }
 
     function show(Base $base)
@@ -60,11 +58,9 @@ class BaseController extends Controller
         return view('base/show', ['type_form' => 'show', 'base' => $base]);
     }
 
-    function create(Module $module)
+    function create(Template $template)
     {
-        $task = Task::findOrFail($module->task_id);
-        $template = Template::findOrFail($task->template_id);
-        return view('base/edit', ['template' => $template, 'task' => $task, 'module' => $module, 'types' => Base::get_types()]);
+        return view('base/edit', ['template' => $template, 'types' => Base::get_types()]);
     }
 
     function store(Request $request)
@@ -75,7 +71,7 @@ class BaseController extends Controller
         date_default_timezone_set('Asia/Almaty');
 
         $base = new Base($request->except('_token', '_method'));
-        $base->module_id = $request->module_id;
+        $base->template_id = $request->template_id;
 
         $base->name_lang_0 = $request->name_lang_0;
         $base->name_lang_1 = isset($request->name_lang_1) ? $request->name_lang_1 : "";
@@ -364,13 +360,14 @@ class BaseController extends Controller
         };
 
         $base->save();
-
-        return redirect()->route('base.index');
+        $template = Template::findOrFail($base->template_id);
+        return redirect()->route('base.index', ['template' => $template] );
     }
 
     function edit(Base $base)
     {
-        return view('base/edit', ['base' => $base, 'types' => Base::get_types()]);
+        $template = Template::findOrFail($base->template_id);
+        return view('base/edit', ['template' => $template, 'base' => $base, 'types' => Base::get_types()]);
     }
 
     function delete_question(Base $base)

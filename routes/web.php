@@ -187,7 +187,7 @@ Route::delete('/module/delete/{module}', 'ModuleController@delete')
     ->middleware('auth');
 
 // Bases
-Route::get('/base/index/{module}', 'BaseController@index')
+Route::get('/base/index/{template}', 'BaseController@index')
     ->name('base.index')
     ->middleware('auth');
 
@@ -195,7 +195,7 @@ Route::get('/base/show/{base}', 'BaseController@show')
     ->name('base.show')
     ->middleware('auth');
 
-Route::get('/base/create/{module}', 'BaseController@create')
+Route::get('/base/create/{template}', 'BaseController@create')
     ->name('base.create')
     ->middleware('auth');
 

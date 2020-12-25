@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    @include('layouts.module.show_name',['template'=>$template, 'task'=>$task, 'module'=>$module])
+@include('layouts.template.show_name',['template'=>$template])
     <div class="container-fluid">
         <div class="row">
             <div class="col-5 text-center">
@@ -11,7 +11,7 @@
             </div>
             <div class="col-5 text-right">
                 <button type="button" class="btn btn-dreamer" title="{{trans('main.add')}}"
-                        onclick="document.location='{{route('base.create', ['module'=>$module])}}'">
+                        onclick="document.location='{{route('base.create', ['template'=>$template])}}'">
                     {{--                    <i class="fa fa-plus fa-fw d-none d-sm-block "></i>--}}
                     {{trans('main.add')}}
                 </button>

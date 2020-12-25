@@ -6,7 +6,7 @@
     ?>
 
     <p>
-        @include('layouts.module.show_name', ['module'=>$module])
+        @include('layouts.template.show_name', ['template'=>$template])
     </p>
     <p>
         @include('layouts.edit_title', ['update'=>$update, 'table_name'=>trans('main.base')])
@@ -19,7 +19,7 @@
         @if ($update)
             @method('PUT')
         @endif
-        <input type="hidden" name="module_id" value="{{$module->id}}">
+        <input type="hidden" name="template_id" value="{{$template->id}}">
 
         {{--    в единственном числе--}}
         <div class="form-group row">

@@ -25,7 +25,7 @@
         <tr>
             <th class="text-center">#</th>
             <th class="text-left">{{trans('main.name')}}</th>
-            <th class="text-center">{{trans('main.tasks')}}</th>
+            <th class="text-center">{{trans('main.bases')}}</th>
         </tr>
         </thead>
         <tbody>
@@ -48,8 +48,8 @@
                     </a>
                 </td>
                 <td class="text-center">
-                    <a href="{{route('task.index', $template)}}" title = "{{trans('main.view')}}">
-                        <img src="{{Storage::url('view_record.png')}}" width="15" height="15" alt = "{{trans('main.view')}}">
+                    <a href="{{route('base.index', $template)}}" title = "{{trans('main.bases')}}">
+                        <img src="{{Storage::url('view_record.png')}}" width="15" height="15" alt = "{{trans('main.bases')}}">
                     </a>
                 </td>
         @endforeach

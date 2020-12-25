@@ -31,10 +31,10 @@
             </button>
         </p>
         <p>
-            <button type="button" class="btn btn-dreamer" title="{{trans('main.tasks')}}"
-                    onclick="document.location='{{route('task.index', $template)}}'">
+            <button type="button" class="btn btn-dreamer" title="{{trans('main.bases')}}"
+                    onclick="document.location='{{route('base.index', $template)}}'">
                 {{--            <i class="fas fa-tasks"></i>--}}
-                {{trans('main.tasks')}}
+                {{trans('main.bases')}}
             </button>
 
             <button type="button" class="btn btn-dreamer"

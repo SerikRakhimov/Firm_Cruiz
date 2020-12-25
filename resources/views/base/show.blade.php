@@ -65,15 +65,23 @@
     ?>
 
     @if ($type_form == 'show')
-        <div class="mb-3 btn-group btn-group-sm">
-            <a class="btn btn-primary" href="{{ route('base.index') }}">{{trans('main.return')}}</a>
-        </div>
+        <button type="button" class="btn btn-dreamer" title="{{trans('main.return')}}"
+            @include('layouts.base.previous_url')
+        >
+            {{--                    <i class="fa fa-arrow-left"></i>--}}
+            {{trans('main.return')}}
+        </button>
     @elseif($type_form == 'delete_question')
         <form action="{{route('base.delete', $base)}}" method="POST" id='delete-form'>
             @csrf
             @method('DELETE')
             <button type="submit" class="btn btn-primary">{{trans('main.delete')}}</button>
-            <a class="btn btn-success" href="{{ route('base.index') }}">{{trans('main.cancel')}}</a>
+            <button type="button" class="btn btn-dreamer" title="{{trans('main.cancel')}}"
+                @include('layouts.base.previous_url')
+            >
+                {{--                    <i class="fa fa-arrow-left"></i>--}}
+                {{trans('main.cancel')}}
+            </button>
         </form>
     @endif
 
