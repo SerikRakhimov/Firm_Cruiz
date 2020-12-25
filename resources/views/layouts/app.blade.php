@@ -48,37 +48,34 @@
                 <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('template.index') }}">{{trans('main.templates')}}</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link" href="#">{{trans('main.my_projects')}}</a>
                         </li>
                         {{--                        <li class="nav-item">--}}
                         {{--                            <a class="nav-link" href="{{ route('base.index') }}">{{trans('main.bases')}}</a>--}}
                         {{--                        </li>--}}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('item.index') }}">{{trans('main.items')}}</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('link.index') }}">{{trans('main.links')}}</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('main.index') }}">{{trans('main.mains')}}</a>
-                        </li>
+{{--                        <li class="nav-item">--}}
+{{--                            <a class="nav-link" href="{{ route('item.index') }}">{{trans('main.items')}}</a>--}}
+{{--                        </li>--}}
+{{--                        <li class="nav-item">--}}
+{{--                            <a class="nav-link" href="{{ route('link.index') }}">{{trans('main.links')}}</a>--}}
+{{--                        </li>--}}
+{{--                        <li class="nav-item">--}}
+{{--                            <a class="nav-link" href="{{ route('main.index') }}">{{trans('main.mains')}}</a>--}}
+{{--                        </li>--}}
                         {{--                        <li class="nav-item">--}}
                         {{--                            <a class="nav-link" href="{{ route('order.index_archive_user') }}">Мой архив</a>--}}
                         {{--                        </li>--}}
                     </ul>
                 @if(Auth::user()->isAdmin())
-                    {{--                    <!-- Right Side Of Navbar -->--}}
-                    {{--                        <ul class="navbar-nav ml-auto">--}}
-                    {{--                            <li class="nav-item">--}}
-                    {{--                                <a class="nav-link" href="{{ route('order.index_job_admin') }}"><span class="badge badge-primary">Перевод</span></a>--}}
-                    {{--                            </li>--}}
-                    {{--                            <li class="nav-item">--}}
-                    {{--                                <a class="nav-link" href="{{ route('order.index_archive_admin') }}"><span class="badge badge-primary">Архив</span></a>--}}
-                    {{--                            </li>--}}
-                    {{--                        </ul>--}}
+                                        <!-- Right Side Of Navbar -->
+                                            <ul class="navbar-nav ml-auto">
+                                                <li class="nav-item">
+                                                    <a class="nav-link" href="{{ route('template.index') }}">{{trans('main.templates')}}</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" href="#">{{trans('main.users')}}</a>
+                                                </li>
+                                            </ul>
                 @endif
             @endauth
 
