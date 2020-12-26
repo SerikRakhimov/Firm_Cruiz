@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use http\Env\Response;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -65,11 +66,10 @@ class UserController extends Controller
 
     function set(Request $request, User &$user)
     {
-        $user->name_lang_0 = $request->name_lang_0;
-        $user->name_lang_1 = isset($request->name_lang_1) ? $request->name_lang_1 : "";
-        $user->name_lang_2 = isset($request->name_lang_2) ? $request->name_lang_2 : "";
-        $user->name_lang_3 = isset($request->name_lang_3) ? $request->name_lang_3 : "";
-
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+        $user->is_admin = false;
         $user->save();
     }
 
@@ -80,7 +80,11 @@ class UserController extends Controller
 
     function delete_question(User $user)
     {
-        return view('user/show', ['type_form' => 'delete_question', 'user' => $user]);
+        if ($user->isAdmin() == true) {
+            abort(404);
+        } else {
+            return view('user/show', ['type_form' => 'delete_question', 'user' => $user]);
+        }
     }
 
     function delete(Request $request, User $user)

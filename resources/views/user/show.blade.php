@@ -7,54 +7,45 @@
     use Illuminate\Support\Facades\Request;
     ?>
     <p>
-        @include('layouts.show_title', ['type_form'=>$type_form, 'table_name'=>trans('main.template')])
+        @include('layouts.show_title', ['type_form'=>$type_form, 'table_name'=>trans('main.user')])
     </p>
 
-    <p>Id: <b>{{$template->id}}</b></p>
+    <p>Id: <b>{{$user->id}}</b></p>
 
-    @foreach (session('glo_menu_save') as $key=>$value)
-        <p>{{trans('main.name')}} ({{trans('main.' . $value)}}): <b>{{$template['name_lang_' . $key]}}</b></p>
-    @endforeach
+    <p>{{trans('main.name')}}: <b>{{$user->name}}</b></p>
+    <p>{{trans('main.e-mail')}}: <b>{{$user->email}}</b></p>
 
     @if ($type_form == 'show')
         <p>
             <button type="button" class="btn btn-dreamer"
-                    onclick="document.location='{{route('template.edit',$template)}}'" title="{{trans('main.edit')}}">
-{{--                            <i class="fas fa-edit"></i>--}}
+                    onclick="document.location='{{route('user.edit',$user)}}'" title="{{trans('main.edit')}}">
+                {{--                            <i class="fas fa-edit"></i>--}}
                 {{trans('main.edit')}}
             </button>
-            <button type="button" class="btn btn-dreamer"
-                    onclick="document.location='{{route('template.delete_question',$template)}}'"
-                    title="{{trans('main.delete')}}">
-{{--                            <i class="fas fa-trash"></i>--}}
-                {{trans('main.delete')}}
-            </button>
+            @if($user->isAdmin() == false)
+                <button type="button" class="btn btn-dreamer"
+                        onclick="document.location='{{route('user.delete_question',$user)}}'"
+                        title="{{trans('main.delete')}}">
+                    {{--                            <i class="fas fa-trash"></i>--}}
+                    {{trans('main.delete')}}
+                </button>
+            @endif
         </p>
         <p>
-            <button type="button" class="btn btn-dreamer" title="{{trans('main.bases')}}"
-                    onclick="document.location='{{route('base.index', $template)}}'">
-                {{--                            <i class="fas fa-tasks"></i>--}}
-                {{trans('main.bases')}}
-            </button>
-            <button type="button" class="btn btn-dreamer" title="{{trans('main.roles')}}"
-                    onclick="document.location='{{route('role.index', $template)}}'">
-                {{--                            <i class="fas fa-tasks"></i>--}}
-                {{trans('main.roles')}}
-            </button>
             <button type="button" class="btn btn-dreamer" title="{{trans('main.projects')}}"
-                    onclick="document.location='{{route('project.index', $template)}}'">
-{{--                            <i class="fas fa-tasks"></i>--}}
+                    onclick="document.location='{{route('project.index', $user)}}'">
+                {{--                            <i class="fas fa-tasks"></i>--}}
                 {{trans('main.projects')}}
             </button>
 
             <button type="button" class="btn btn-dreamer"
-                    title="{{trans('main.cancel')}}" @include('layouts.template.previous_url')>
-{{--                            <i class="fa fa-arrow-left"></i>--}}
+                    title="{{trans('main.cancel')}}" @include('layouts.user.previous_url')>
+                {{--                            <i class="fa fa-arrow-left"></i>--}}
                 {{trans('main.cancel')}}
             </button>
         </p>
     @elseif($type_form == 'delete_question')
-        <form action="{{route('template.delete', $template)}}" method="POST" id='delete-form'>
+        <form action="{{route('user.delete', $user)}}" method="POST" id='delete-form'>
             @csrf
             @method('DELETE')
             <p>
@@ -63,7 +54,7 @@
                     {{trans('main.delete')}}
                 </button>
                 <button type="button" class="btn btn-dreamer"
-                        title="{{trans('main.cancel')}}" @include('layouts.template.previous_url')>
+                        title="{{trans('main.cancel')}}" @include('layouts.user.previous_url')>
                     {{--                <i class="fa fa-arrow-left"></i>--}}
                     {{trans('main.cancel')}}
                 </button>

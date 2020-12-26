@@ -2,7 +2,7 @@
 
 @section('content')
     <?php
-    $update = isset($template);
+    $update = isset($user);
     ?>
     <h3 class="display-5 text-center">
         @if (!$update)
@@ -10,11 +10,11 @@
         @else
             {{trans('main.edit_record')}}
         @endif
-        <span class="text-info">-</span> <span class="text-success">{{trans('main.template')}}</span>
+        <span class="text-info">-</span> <span class="text-success">{{trans('main.user')}}</span>
     </h3>
     <br>
 
-    <form action="{{$update ? route('template.update',$template):route('template.store')}}" method="POST"
+    <form action="{{$update ? route('user.update',$user):route('user.store')}}" method="POST"
           enctype=multipart/form-data>
         @csrf
 
@@ -22,30 +22,82 @@
             @method('PUT')
         @endif
 
-        {{--    в единственном числе--}}
         <div class="form-group row">
-            @foreach (session('glo_menu_save') as $key=>$value)
                 <div class="col-3 text-right">
-                    <label for="name_lang_{{$key}}" class="col-form-label">{{trans('main.name')}}
-                        ({{trans('main.' . $value)}})<span
+                    <label for="name" class="col-form-label">{{trans('main.name')}}
+                        <span
                             class="text-danger">*</span></label>
                 </div>
                 <div class="col-7">
                     <input type="text"
-                           name="name_lang_{{$key}}"
-                           id="name_lang_{{$key}}"
-                           class="form-control @error('name_lang_' . $key) is-invalid @enderror"
+                           name="name"
+                           class="form-control @error('name') is-invalid @enderror"
                            placeholder=""
-                           value="{{ old('name_lang_' . $key) ?? ($template['name_lang_' . $key] ?? '') }}">
+                           value="{{ old('name') ?? ($user->name ?? '') }}">
                 </div>
-                @error('name_lang_' . $key)
+                @error('name')
                 <div class="text-danger">
                     {{$message}}
                 </div>
                 @enderror
-            @endforeach
         </div>
-
+        <div class="form-group row">
+            <div class="col-3 text-right">
+                <label for="email" class="col-form-label">{{trans('main.email')}}
+                    <span
+                        class="text-danger">*</span></label>
+            </div>
+            <div class="col-7">
+                <input type="text"
+                       email="email"
+                       class="form-control @error('email') is-invalid @enderror"
+                       placeholder=""
+                       value="{{ old('email') ?? ($user->email ?? '') }}">
+            </div>
+            @error('email')
+            <div class="text-danger">
+                {{$message}}
+            </div>
+            @enderror
+        </div>
+        <div class="form-group row">
+            <div class="col-3 text-right">
+                <label for="password" class="col-form-label">{{trans('main.password')}}
+                    <span
+                        class="text-danger">*</span></label>
+            </div>
+            <div class="col-7">
+                <input type="text"
+                       password="password"
+                       class="form-control @error('password') is-invalid @enderror"
+                       placeholder=""
+                       value="{{ old('password') ?? ($user->password ?? '') }}">
+            </div>
+            @error('password')
+            <div class="text-danger">
+                {{$message}}
+            </div>
+            @enderror
+        </div>
+        <div class="form-group row">
+            <div class="col-3 text-right">
+                <label for="confirm_password" class="col-form-label">{{trans('main.confirm_password')}}
+                    <span
+                        class="text-danger">*</span></label>
+            </div>
+            <div class="col-7">
+                <input type="text"
+                       confirm_password="confirm_password"
+                       class="form-control @error('confirm_password') is-invalid @enderror"
+                       placeholder=""
+                       value="{{ old('confirm_password') ?? ($user->confirm_password ?? '') }}">
+            </div>
+            @error('confirm_password')
+            <div class="text-danger">
+                {{$message}}
+            </div>
+            @enderror
+        </div>
         <br>
         <div class="container-fluid">
             <div class="row text-center">
@@ -66,7 +118,7 @@
                 </div>
                 <div class="col-5 text-left">
                     <button type="button" class="btn btn-dreamer" title="{{trans('main.cancel')}}"
-                        @include('layouts.template.previous_url')
+                        @include('layouts.user.previous_url')
                     >
                         {{--                    <i class="fa fa-arrow-left"></i>--}}
                         {{trans('main.cancel')}}

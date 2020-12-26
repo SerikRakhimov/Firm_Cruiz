@@ -29,7 +29,6 @@
             <th class="text-center">#</th>
             <th class="text-left">{{trans('main.name')}}</th>
             <th class="text-left">{{trans('main.e-mail')}}</th>
-            <th class="text-left">{{trans('main.admin')}}</th>
             <th class="text-center">{{trans('main.projects')}}</th>
         </tr>
         </thead>
@@ -55,11 +54,6 @@
                 <td class="text-left">
                     <a href="{{route('user.show',$user)}}" title="{{trans('main.show')}}">
                         {{$user->email}}
-                    </a>
-                </td>
-                <td class="text-left">
-                    <a href="{{route('user.show',$user)}}" title="{{trans('main.show')}}">
-                        {{GlobalController::name_is_boolean($user->is_admin)}}
                     </a>
                 </td>
                 <td class="text-center">
