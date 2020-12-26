@@ -33,8 +33,13 @@
         <p>
             <button type="button" class="btn btn-dreamer" title="{{trans('main.bases')}}"
                     onclick="document.location='{{route('base.index', $template)}}'">
-{{--                            <i class="fas fa-tasks"></i>--}}
+                {{--                            <i class="fas fa-tasks"></i>--}}
                 {{trans('main.bases')}}
+            </button>
+            <button type="button" class="btn btn-dreamer" title="{{trans('main.roles')}}"
+                    onclick="document.location='{{route('role.index', $template)}}'">
+                {{--                            <i class="fas fa-tasks"></i>--}}
+                {{trans('main.roles')}}
             </button>
             <button type="button" class="btn btn-dreamer" title="{{trans('main.projects')}}"
                     onclick="document.location='{{route('project.index', $template)}}'">

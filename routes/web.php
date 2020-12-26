@@ -121,6 +121,39 @@ Route::delete('/template/delete/{template}', 'TemplateController@delete')
     ->name('template.delete')
     ->middleware('auth');
 
+// Roles
+Route::get('/role/index/{template}', 'RoleController@index')
+    ->name('role.index')
+    ->middleware('auth');
+
+Route::get('/role/show/{role}', 'RoleController@show')
+    ->name('role.show')
+    ->middleware('auth');
+
+Route::get('/role/create/{template}', 'RoleController@create')
+    ->name('role.create')
+    ->middleware('auth');
+
+Route::get('/role/edit/{role}', 'RoleController@edit')
+    ->name('role.edit')
+    ->middleware('auth');
+
+Route::post('/role/store', 'RoleController@store')
+    ->name('role.store')
+    ->middleware('auth');
+
+Route::put('/role/edit/{role}', 'RoleController@update')
+    ->name('role.update')
+    ->middleware('auth');
+
+Route::get('/role/delete_question/{role}', 'RoleController@delete_question')
+    ->name('role.delete_question')
+    ->middleware('auth');
+
+Route::delete('/role/delete/{role}', 'RoleController@delete')
+    ->name('role.delete')
+    ->middleware('auth');
+
 // Projects
 Route::get('/project/index/{template}', 'ProjectController@index')
     ->name('project.index')

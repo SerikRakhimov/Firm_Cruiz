@@ -14,4 +14,11 @@ class GlobalController extends Controller
         // для настройки папки storage
         Artisan::call('storage:link');
     }
+
+    static function name_is_boolean($value)
+    {
+        return $value == true ? html_entity_decode('	&#9745;')
+            : ($value == false ? html_entity_decode('&#65794;') : trans('main.empty'));
+    }
+
 }
