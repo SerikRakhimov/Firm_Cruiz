@@ -38,7 +38,7 @@ class User extends Authenticatable
     ];
 
     function isAdmin(): bool {
-        return $this->admin === 1;
+        return $this->is_admin == true;
     }
 
     function count() {

@@ -76,10 +76,10 @@
                                         <!-- Right Side Of Navbar -->
                                             <ul class="navbar-nav ml-auto">
                                                 <li class="nav-item">
-                                                    <a class="nav-link" href="{{ route('template.index') }}">{{trans('main.templates')}}</a>
+                                                    <a class="nav-link" href="{{route('template.index')}}">{{trans('main.templates')}}</a>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <a class="nav-link" href="#">{{trans('main.users')}}</a>
+                                                    <a class="nav-link" href="{{route('user.index')}}">{{trans('main.users')}}</a>
                                                 </li>
                                             </ul>
                 @endif
@@ -105,9 +105,8 @@
                                 {{ Auth::user()->name }}<span class="caret"></span>
                             </a>
                             @if(Auth::user()->isAdmin())
-                                <span class="badge badge-primary">администратор - переводчик</span>
+                                <span class="badge badge-primary">{{trans('main.admin')}}</span>
                             @endif
-
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="{{ route('logout') }}"
                                    onclick="event.preventDefault();

@@ -60,7 +60,7 @@ Route::get('/', function () {
         $user->name = 'admin';
         $user->email = 'admin@online.kz';
         $user->password = Hash::make('admin');
-        $user->admin = 1;
+        $user->is_admin = true;
         $user->save();
     }
     if (Auth::check()) {
@@ -119,6 +119,39 @@ Route::get('/template/delete_question/{template}', 'TemplateController@delete_qu
 
 Route::delete('/template/delete/{template}', 'TemplateController@delete')
     ->name('template.delete')
+    ->middleware('auth');
+
+// Users
+Route::get('/user/index', 'UserController@index')
+    ->name('user.index')
+    ->middleware('auth');
+
+Route::get('/user/show/{user}', 'UserController@show')
+    ->name('user.show')
+    ->middleware('auth');
+
+Route::get('/user/create', 'UserController@create')
+    ->name('user.create')
+    ->middleware('auth');
+
+Route::get('/user/edit/{user}', 'UserController@edit')
+    ->name('user.edit')
+    ->middleware('auth');
+
+Route::post('/user/store', 'UserController@store')
+    ->name('user.store')
+    ->middleware('auth');
+
+Route::put('/user/edit/{user}', 'UserController@update')
+    ->name('user.update')
+    ->middleware('auth');
+
+Route::get('/user/delete_question/{user}', 'UserController@delete_question')
+    ->name('user.delete_question')
+    ->middleware('auth');
+
+Route::delete('/user/delete/{user}', 'UserController@delete')
+    ->name('user.delete')
     ->middleware('auth');
 
 // Roles

@@ -118,4 +118,5 @@ class TemplateController extends Controller
             return redirect()->back();
         }
     }
+
 }
