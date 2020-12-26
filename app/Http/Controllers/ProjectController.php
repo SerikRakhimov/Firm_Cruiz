@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use App\Models\Project;
 use App\Models\Template;
 use Illuminate\Http\Request;
@@ -49,7 +50,8 @@ class ProjectController extends Controller
 
     function create(Template $template)
     {
-        return view('project/edit', ['template'=>$template]);
+        $users = User::orderBy('name')->get();
+        return view('project/edit', ['template' => $template, 'users' => $users]);
     }
 
     function store(Request $request)
@@ -97,7 +99,8 @@ class ProjectController extends Controller
         $project->name_lang_2 = isset($request->name_lang_2) ? $request->name_lang_2 : "";
         $project->name_lang_3 = isset($request->name_lang_3) ? $request->name_lang_3 : "";
 
-        $project->user_id = Auth::user()->id;
+        $project->user_id = $request->user_id;
+        //$project->user_id = Auth::user()->id;
 
         $project->save();
     }
@@ -105,7 +108,8 @@ class ProjectController extends Controller
     function edit(Project $project)
     {
         $template = Template::findOrFail($project->template_id);
-        return view('project/edit', ['template' => $template, 'project' => $project]);
+        $users = User::orderBy('name')->get();
+        return view('project/edit', ['template' => $template, 'project' => $project, 'users' => $users]);
     }
 
     function delete_question(Project $project)

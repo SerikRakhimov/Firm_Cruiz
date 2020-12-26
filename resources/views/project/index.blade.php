@@ -26,6 +26,7 @@
         <tr>
             <th class="text-center">#</th>
             <th class="text-left">{{trans('main.name')}}</th>
+            <th class="text-left">{{trans('main.user')}}</th>
         </tr>
         </thead>
         <tbody>
@@ -37,7 +38,6 @@
             $i++;
             ?>
             <tr>
-                {{--                <th scope="row">{{$i}}</th>--}}
                 <td class="text-center">
                     <a href="{{route('project.show',$project)}}" title="{{trans('main.show')}}">
                         {{$i}}
@@ -47,7 +47,11 @@
                         {{$project->name()}}
                     </a>
                 </td>
-
+                <td class="text-left">
+                    <a href="{{route('project.show',$project)}}" title="{{trans('main.show')}}">
+                        {{$project->user->name}}
+                    </a>
+                </td>
         @endforeach
         </tbody>
     </table>

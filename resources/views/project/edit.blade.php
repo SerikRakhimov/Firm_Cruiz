@@ -42,6 +42,37 @@
             @endforeach
         </div>
 
+        <div class="form-group row">
+            <div class="col-sm-3 text-right">
+                <label for="user_id" class="col-form-label">{{trans('main.user')}}<span
+                        class="text-danger">*</span></label>
+            </div>
+            <div class="col-sm-7">
+                <select class="form-control"
+                        name="user_id"
+                        id="user_id"
+                        class="@error('user_id') is-invalid @enderror">
+                    @foreach ($users as $user)
+                        <option value="{{$user->id}}"
+                                @if ($update)
+                                            "(int) 0" нужно
+                                @if ((old('user_id') ?? ($key ?? (int) 0)) ==  $project->user_id)
+                                selected
+                            @endif
+                            @endif
+                        >{{$user->name}}</option>
+                    @endforeach
+                </select>
+                @error('user_id')
+                <div class="text-danger">
+                    {{$message}}
+                </div>
+                @enderror
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div>
+
         <br>
         <div class="container-fluid">
             <div class="row text-center">

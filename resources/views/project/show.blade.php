@@ -5,6 +5,7 @@
     <?php
     use App\Http\Controllers\BaseController;
     use Illuminate\Support\Facades\Request;
+    use App\User;
     ?>
     <p>
         @include('layouts.template.show_name', ['template'=>$template])
@@ -16,7 +17,7 @@
     @foreach (session('glo_menu_save') as $key=>$value)
         <p>{{trans('main.name')}} ({{trans('main.' . $value)}}): <b>{{$project['name_lang_' . $key]}}</b></p>
     @endforeach
-    <p>{{trans('main.user')}}: <b>{{$project->user->id}}</b></p>
+    <p>{{trans('main.user')}}: <b>{{$project->user->name}}</b></p>
 
     @if ($type_form == 'show')
         <p>

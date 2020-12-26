@@ -50,6 +50,12 @@
                         <li class="nav-item">
                             <a class="nav-link" href="#">{{trans('main.my_projects')}}</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">{{trans('main.my_subscriptions')}}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">{{trans('main.all_projects')}}</a>
+                        </li>
                         {{--                        <li class="nav-item">--}}
                         {{--                            <a class="nav-link" href="{{ route('base.index') }}">{{trans('main.bases')}}</a>--}}
                         {{--                        </li>--}}

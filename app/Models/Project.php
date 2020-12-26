@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\User;
 
 class Project extends Model
 {
@@ -12,6 +13,7 @@ class Project extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
     function name()
     {
         $result = "";  // нужно, не удалять
