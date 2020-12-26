@@ -43,7 +43,7 @@
         </div>
         <div class="form-group row">
             <div class="col-3 text-right">
-                <label for="email" class="col-form-label">{{trans('main.email')}}
+                <label for="email" class="col-form-label">{{trans('main.e-mail')}}
                     <span
                         class="text-danger">*</span></label>
             </div>

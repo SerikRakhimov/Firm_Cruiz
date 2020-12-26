@@ -133,4 +133,6 @@ return [
     'is_default_for_external'=>'Default role for external users',
     'admin'=>'Admin',
     'e-mail'=>'E-Mail',
+    'password'=>'Password',
+    'confirm_password'=>'Confirm password',
 ];
