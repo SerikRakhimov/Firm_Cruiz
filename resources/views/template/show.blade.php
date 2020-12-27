@@ -33,17 +33,17 @@
         <p>
             <button type="button" class="btn btn-dreamer mb-1 mb-sm-0" title="{{trans('main.bases')}}"
                     onclick="document.location='{{route('base.index', $template)}}'">
-                                            <i class="fas fa-tasks"></i>
+                                            <i class="fas fa-scroll"></i>
                 {{trans('main.bases')}}
             </button>
             <button type="button" class="btn btn-dreamer  mb-1 mb-sm-0" title="{{trans('main.roles')}}"
                     onclick="document.location='{{route('role.index', $template)}}'">
-                                            <i class="fas fa-tasks"></i>
+                                            <i class="fas fa-user-circle"></i>
                 {{trans('main.roles')}}
             </button>
             <button type="button" class="btn btn-dreamer mb-1 mb-sm-0" title="{{trans('main.projects')}}"
                     onclick="document.location='{{route('project.index', $template)}}'">
-                            <i class="fas fa-tasks"></i>
+                            <i class="fas fa-project-diagram"></i>
                 {{trans('main.projects')}}
             </button>
 
