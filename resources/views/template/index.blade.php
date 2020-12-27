@@ -12,7 +12,7 @@
             <div class="col-5 text-right">
                 <button type="button" class="btn btn-dreamer" title="{{trans('main.add')}}"
                         onclick="document.location='{{route('template.create')}}'">
-                    {{--                    <i class="fa fa-plus fa-fw d-none d-sm-block "></i>--}}
+                                        <i class="fa fa-plus fa-fw d-none d-sm-block "></i>
                     {{trans('main.add')}}
                 </button>
             </div>
