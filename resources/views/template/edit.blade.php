@@ -49,17 +49,17 @@
         <br>
         <div class="container-fluid">
             <div class="row text-center">
-                <div class="col-5 text-right">
+                <div class="col-7 text-right">
                     <button type="submit" class="btn btn-dreamer"
                             @if (!$update)
                             title="{{trans('main.add')}}"><i class="fa fa-save d-none d-sm-block"></i>&nbsp;{{trans('main.add')}}
                         @else
-                            title="{{trans('main.save')}}"><i class="fa fa-save .d-none .d-sm-block"></i>&nbsp;{{trans('main.save')}}
+                            title="{{trans('main.save')}}"><i class="fa fa-save d-none d-sm-block"></i>&nbsp;{{trans('main.save')}}
                         @endif
                     </button>
                 </div>
-                <div class="col-2">
-                </div>
+{{--                <div class="col-2">--}}
+{{--                </div>--}}
                 <div class="col-5 text-left">
                     <button type="button" class="btn btn-dreamer" title="{{trans('main.cancel')}}"
                         @include('layouts.template.previous_url')
