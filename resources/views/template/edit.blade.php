@@ -54,7 +54,7 @@
                             @if (!$update)
                             title="{{trans('main.add')}}"><i class="fa fa-save d-none d-sm-block"></i>&nbsp;{{trans('main.add')}}
                         @else
-                            title="{{trans('main.save')}}"><i class="fa fa-save d-none d-sm-block"></i>&nbsp;{{trans('main.save')}}
+                            title="{{trans('main.save')}}"><i class="fa fa-save d-none-sm-block"></i>&nbsp;{{trans('main.save')}}
                         @endif
                     </button>
                 </div>
