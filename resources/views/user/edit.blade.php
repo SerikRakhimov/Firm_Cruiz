@@ -68,7 +68,7 @@
             </div>
             <div class="col-7">
                 <input type="text"
-                       password="password"
+                       name="password"
                        class="form-control @error('password') is-invalid @enderror"
                        placeholder=""
                        value="{{ old('password') ?? ($user->password ?? '') }}">
@@ -87,7 +87,7 @@
             </div>
             <div class="col-7">
                 <input type="text"
-                       confirm_password="confirm_password"
+                       name="confirm_password"
                        class="form-control @error('confirm_password') is-invalid @enderror"
                        placeholder=""
                        value="{{ old('confirm_password') ?? ($user->confirm_password ?? '') }}">
