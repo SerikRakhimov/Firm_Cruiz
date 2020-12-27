@@ -60,7 +60,7 @@
                                 selected
                             @endif
                             @endif
-                        >{{$user->name}}</option>
+                        >{{$user->name}}, {{$user->email}}</option>
                     @endforeach
                 </select>
                 @error('user_id')
