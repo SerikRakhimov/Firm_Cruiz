@@ -17,68 +17,42 @@
     @endforeach
 
     @if ($type_form == 'show')
-        <p class="mb-4 mb-sm-1">
-            <button type="button" class="btn btn-dreamer"
+        <p>
+            <button type="button" class="btn btn-dreamer  mb-4 mb-sm-1"
                     onclick="document.location='{{route('template.edit',$template)}}'" title="{{trans('main.edit')}}">
 {{--                            <i class="fas fa-edit"></i>--}}
                 {{trans('main.edit')}}
             </button>
-            <button type="button" class="btn btn-dreamer"
+            <button type="button" class="btn btn-dreamer mb-4 mb-sm-1"
                     onclick="document.location='{{route('template.delete_question',$template)}}'"
                     title="{{trans('main.delete')}}">
 {{--                            <i class="fas fa-trash"></i>--}}
                 {{trans('main.delete')}}
             </button>
         </p>
-        <p class="mb-4 mb-sm-1">
-            <button type="button" class="btn btn-dreamer" title="{{trans('main.bases')}}"
+        <p>
+            <button type="button" class="btn btn-dreamer mb-4 mb-sm-1" title="{{trans('main.bases')}}"
                     onclick="document.location='{{route('base.index', $template)}}'">
                 {{--                            <i class="fas fa-tasks"></i>--}}
                 {{trans('main.bases')}}
             </button>
-            <button type="button" class="btn btn-dreamer" title="{{trans('main.roles')}}"
+            <button type="button" class="btn btn-dreamer  mb-4 mb-sm-1" title="{{trans('main.roles')}}"
                     onclick="document.location='{{route('role.index', $template)}}'">
                 {{--                            <i class="fas fa-tasks"></i>--}}
                 {{trans('main.roles')}}
             </button>
-            <button type="button" class="btn btn-dreamer" title="{{trans('main.projects')}}"
+            <button type="button" class="btn btn-dreamer mb-4 mb-sm-1" title="{{trans('main.projects')}}"
                     onclick="document.location='{{route('project.index', $template)}}'">
 {{--                            <i class="fas fa-tasks"></i>--}}
                 {{trans('main.projects')}}
             </button>
 
-            <button type="button" class="btn btn-dreamer"
+            <button type="button" class="btn btn-dreamer mb-4 mb-sm-1"
                     title="{{trans('main.cancel')}}" @include('layouts.template.previous_url')>
 {{--                            <i class="fa fa-arrow-left"></i>--}}
                 {{trans('main.cancel')}}
             </button>
         </p>
-        <div class="container">
-            <div class="row">
-                <!-- Первый блок -->
-                <div class="col ml-auto mt-3">
-                    <button type="button" class="btn btn-dreamer"
-                            onclick="document.location='{{route('template.edit',$template)}}'" title="{{trans('main.edit')}}">
-                        {{--                            <i class="fas fa-edit"></i>--}}
-                        {{trans('main.edit')}}
-                    </button>
-                </div>
-                <!-- Второй блок -->
-                <div class="col ml-auto mt-3">
-                    <button type="button" class="btn btn-dreamer"
-                            onclick="document.location='{{route('template.delete_question',$template)}}'"
-                            title="{{trans('main.delete')}}">
-                        {{--                            <i class="fas fa-trash"></i>--}}
-                        {{trans('main.delete')}}
-                    </button>
-                </div>
-            </div>
-        </div>
-        <div class="btn-group" role="group" aria-label="Basic example">
-            <button type="button" class="btn btn-secondary mr-3">Left</button>
-            <button type="button" class="btn btn-secondary mr-3">Middle</button>
-            <button type="button" class="btn btn-secondary mr-3">Right</button>
-        </div>
     @elseif($type_form == 'delete_question')
         <form action="{{route('template.delete', $template)}}" method="POST" id='delete-form'>
             @csrf
