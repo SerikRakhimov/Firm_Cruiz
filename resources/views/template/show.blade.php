@@ -17,7 +17,7 @@
     @endforeach
 
     @if ($type_form == 'show')
-        <p style="margin: 3px">
+        <p class="mb-1">
             <button type="button" class="btn btn-dreamer"
                     onclick="document.location='{{route('template.edit',$template)}}'" title="{{trans('main.edit')}}">
 {{--                            <i class="fas fa-edit"></i>--}}
@@ -30,7 +30,7 @@
                 {{trans('main.delete')}}
             </button>
         </p>
-        <p style="margin: 3px">
+        <p class="mb-1">
             <button type="button" class="btn btn-dreamer" title="{{trans('main.bases')}}"
                     onclick="document.location='{{route('base.index', $template)}}'">
                 {{--                            <i class="fas fa-tasks"></i>--}}
@@ -53,6 +53,32 @@
                 {{trans('main.cancel')}}
             </button>
         </p>
+        <div class="container">
+            <div class="row">
+                <!-- Первый блок -->
+                <div class="col ml-auto mt-3">
+                    <button type="button" class="btn btn-dreamer"
+                            onclick="document.location='{{route('template.edit',$template)}}'" title="{{trans('main.edit')}}">
+                        {{--                            <i class="fas fa-edit"></i>--}}
+                        {{trans('main.edit')}}
+                    </button>
+                </div>
+                <!-- Второй блок -->
+                <div class="col ml-auto mt-3">
+                    <button type="button" class="btn btn-dreamer"
+                            onclick="document.location='{{route('template.delete_question',$template)}}'"
+                            title="{{trans('main.delete')}}">
+                        {{--                            <i class="fas fa-trash"></i>--}}
+                        {{trans('main.delete')}}
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="btn-group" role="group" aria-label="Basic example">
+            <button type="button" class="btn btn-secondary mr-3">Left</button>
+            <button type="button" class="btn btn-secondary mr-3">Middle</button>
+            <button type="button" class="btn btn-secondary mr-3">Right</button>
+        </div>
     @elseif($type_form == 'delete_question')
         <form action="{{route('template.delete', $template)}}" method="POST" id='delete-form'>
             @csrf
