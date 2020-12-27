@@ -5,9 +5,16 @@ namespace App\Http\Controllers;
 use App\User;
 use http\Env\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    protected function rules()
+    {
+        return [
+            'name' => ['required', 'max:50'],
+        ];
+    }
 
     function index()
     {

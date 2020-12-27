@@ -49,7 +49,7 @@
             </div>
             <div class="col-7">
                 <input type="text"
-                       email="email"
+                       name="email"
                        class="form-control @error('email') is-invalid @enderror"
                        placeholder=""
                        value="{{ old('email') ?? ($user->email ?? '') }}">
