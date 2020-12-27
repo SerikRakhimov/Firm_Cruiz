@@ -17,7 +17,7 @@
     @endforeach
 
     @if ($type_form == 'show')
-        <p>
+        <p style="margin-top: 3px">
             <button type="button" class="btn btn-dreamer"
                     onclick="document.location='{{route('template.edit',$template)}}'" title="{{trans('main.edit')}}">
 {{--                            <i class="fas fa-edit"></i>--}}
@@ -30,7 +30,7 @@
                 {{trans('main.delete')}}
             </button>
         </p>
-        <p>
+        <p style="margin-top: 3px">
             <button type="button" class="btn btn-dreamer" title="{{trans('main.bases')}}"
                     onclick="document.location='{{route('base.index', $template)}}'">
                 {{--                            <i class="fas fa-tasks"></i>--}}
