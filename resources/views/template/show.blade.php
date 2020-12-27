@@ -18,12 +18,12 @@
 
     @if ($type_form == 'show')
         <p>
-            <button type="button" class="btn btn-dreamer  mb-4 mb-sm-1"
+            <button type="button" class="btn btn-dreamer  mb-1 mb-sm-0"
                     onclick="document.location='{{route('template.edit',$template)}}'" title="{{trans('main.edit')}}">
 {{--                            <i class="fas fa-edit"></i>--}}
                 {{trans('main.edit')}}
             </button>
-            <button type="button" class="btn btn-dreamer mb-4 mb-sm-1"
+            <button type="button" class="btn btn-dreamer mb-1 mb-sm-0"
                     onclick="document.location='{{route('template.delete_question',$template)}}'"
                     title="{{trans('main.delete')}}">
 {{--                            <i class="fas fa-trash"></i>--}}
@@ -31,23 +31,23 @@
             </button>
         </p>
         <p>
-            <button type="button" class="btn btn-dreamer mb-4 mb-sm-1" title="{{trans('main.bases')}}"
+            <button type="button" class="btn btn-dreamer mb-1 mb-sm-0" title="{{trans('main.bases')}}"
                     onclick="document.location='{{route('base.index', $template)}}'">
                 {{--                            <i class="fas fa-tasks"></i>--}}
                 {{trans('main.bases')}}
             </button>
-            <button type="button" class="btn btn-dreamer  mb-4 mb-sm-1" title="{{trans('main.roles')}}"
+            <button type="button" class="btn btn-dreamer  mb-1 mb-sm-0" title="{{trans('main.roles')}}"
                     onclick="document.location='{{route('role.index', $template)}}'">
                 {{--                            <i class="fas fa-tasks"></i>--}}
                 {{trans('main.roles')}}
             </button>
-            <button type="button" class="btn btn-dreamer mb-4 mb-sm-1" title="{{trans('main.projects')}}"
+            <button type="button" class="btn btn-dreamer mb-1 mb-sm-0" title="{{trans('main.projects')}}"
                     onclick="document.location='{{route('project.index', $template)}}'">
 {{--                            <i class="fas fa-tasks"></i>--}}
                 {{trans('main.projects')}}
             </button>
 
-            <button type="button" class="btn btn-dreamer mb-4 mb-sm-1"
+            <button type="button" class="btn btn-dreamer mb-1 mb-sm-0"
                     title="{{trans('main.cancel')}}" @include('layouts.template.previous_url')>
 {{--                            <i class="fa fa-arrow-left"></i>--}}
                 {{trans('main.cancel')}}
