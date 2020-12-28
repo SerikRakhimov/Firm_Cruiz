@@ -11,6 +11,7 @@
             </div>
             <div class="col-5 text-right">
                 <button type="button" class="btn btn-dreamer" title="{{trans('main.add')}}"
+{{--                        "d-inline" нужно, чтобы иконка и текст были на одной линии--}}
                         onclick="document.location='{{route('template.create')}}'"><i class="fa fa-plus d-inline"></i>&nbsp;{{trans('main.add')}}
                 </button>
             </div>

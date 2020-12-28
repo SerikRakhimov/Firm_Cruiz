@@ -134,5 +134,6 @@ return [
     'admin'=>'Admin',
     'e-mail'=>'E-Mail',
     'password'=>'Password',
+    'change_password'=>'Change password',
     'confirm_password'=>'Confirm password',
 ];

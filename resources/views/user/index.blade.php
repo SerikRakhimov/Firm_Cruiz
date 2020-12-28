@@ -15,7 +15,7 @@
             <div class="col-5 text-right">
                 <button type="button" class="btn btn-dreamer" title="{{trans('main.add')}}"
                         onclick="document.location='{{route('user.create')}}'">
-                    {{--                    <i class="fa fa-plus fa-fw d-none d-sm-block "></i>--}}
+                                        <i class="fa fa-plus fa-fw d-inline"></i>
                     {{trans('main.add')}}
                 </button>
             </div>
@@ -58,8 +58,9 @@
                 </td>
                 <td class="text-center">
                     <a href="{{route('project.index', $user)}}" title="{{trans('main.projects')}}">
-                        <img src="{{Storage::url('view_record.png')}}" width="15" height="15"
-                             alt="{{trans('main.projects')}}">
+{{--                        <img src="{{Storage::url('view_record.png')}}" width="15" height="15"--}}
+{{--                             alt="{{trans('main.projects')}}">--}}
+                        <i class="fas fa-project-diagram"></i>
                     </a>
                 </td>
 

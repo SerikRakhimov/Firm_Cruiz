@@ -138,6 +138,10 @@ Route::get('/user/edit/{user}', 'UserController@edit')
     ->name('user.edit')
     ->middleware('auth');
 
+Route::get('/user/change_password/{user}', 'UserController@change_password')
+    ->name('user.change_password')
+    ->middleware('auth');
+
 Route::post('/user/store', 'UserController@store')
     ->name('user.store')
     ->middleware('auth');

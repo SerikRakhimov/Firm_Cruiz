@@ -31,6 +31,7 @@
             </button>
         </p>
         <p>
+{{--            "mb-1 mb-sm-0" нужно чтобы на маленьких экранах кнопки не слипались (margin-botton - 1px) --}}
             <button type="button" class="btn btn-dreamer mb-1 mb-sm-0" title="{{trans('main.bases')}}"
                     onclick="document.location='{{route('base.index', $template)}}'">
                                             <i class="fas fa-scroll"></i>

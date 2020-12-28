@@ -12,7 +12,32 @@ class UserController extends Controller
     protected function rules()
     {
         return [
-            'name' => ['required', 'max:50'],
+            'name' => 'required|unique:users,name',
+            'email' => 'required|unique:users,email',
+            'password' => 'min:8',
+            'confirm_password' => 'min:8|same:password'
+        ];
+    }
+
+    protected function name_rules()
+    {
+        return [
+            'name' => 'required|unique:users,name'
+        ];
+    }
+
+    protected function email_rules()
+    {
+        return [
+            'email' => 'required|unique:users,email'
+        ];
+    }
+
+    protected function password_rules()
+    {
+        return [
+            'password' => 'min:8',
+            'confirm_password' => 'min:8|same:password'
         ];
     }
 
@@ -54,8 +79,14 @@ class UserController extends Controller
 
     function update(Request $request, User $user)
     {
-        if (!($user->name_lang_0 == $request->name_lang_0)) {
-            $request->validate($this->rules());
+        if ($user->name != $request->name) {
+            $request->validate($this->name_rules());
+        }
+        if ($user->email != $request->email) {
+            $request->validate($this->email_rules());
+        }
+        if ($user->password != $request->password) {
+            $request->validate($this->password_rules());
         }
 
         $data = $request->except('_token', '_method');
@@ -82,7 +113,12 @@ class UserController extends Controller
 
     function edit(User $user)
     {
-        return view('user/edit', ['user' => $user]);
+        return view('user/edit', ['user' => $user, 'change_password' => false]);
+    }
+
+    function change_password(User $user)
+    {
+        return view('user/edit', ['user' => $user, 'change_password' => true]);
     }
 
     function delete_question(User $user)

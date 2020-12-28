@@ -3,6 +3,11 @@
 @section('content')
     <?php
     $update = isset($user);
+    $edit_change_password = false;
+    if (isset($change_password)) {
+        $edit_change_password = $change_password;
+    }
+
     ?>
     <h3 class="display-5 text-center">
         @if (!$update)
@@ -23,23 +28,27 @@
         @endif
 
         <div class="form-group row">
-                <div class="col-3 text-right">
-                    <label for="name" class="col-form-label">{{trans('main.name')}}
-                        <span
-                            class="text-danger">*</span></label>
-                </div>
-                <div class="col-7">
-                    <input type="text"
-                           name="name"
-                           class="form-control @error('name') is-invalid @enderror"
-                           placeholder=""
-                           value="{{ old('name') ?? ($user->name ?? '') }}">
-                </div>
-                @error('name')
-                <div class="text-danger">
-                    {{$message}}
-                </div>
-                @enderror
+            <div class="col-3 text-right">
+                <label for="name" class="col-form-label">{{trans('main.name')}}
+                    <span
+                        class="text-danger">*</span></label>
+            </div>
+            <div class="col-7">
+                <input type="text"
+                       name="name"
+                       class="form-control @error('name') is-invalid @enderror"
+                       placeholder=""
+                       value="{{ old('name') ?? ($user->name ?? '') }}"
+                       @if(($update && $edit_change_password))
+                       readonly
+                    @endif
+                >
+            </div>
+            @error('name')
+            <div class="text-danger">
+                {{$message}}
+            </div>
+            @enderror
         </div>
         <div class="form-group row">
             <div class="col-3 text-right">
@@ -52,7 +61,11 @@
                        name="email"
                        class="form-control @error('email') is-invalid @enderror"
                        placeholder=""
-                       value="{{ old('email') ?? ($user->email ?? '') }}">
+                       value="{{ old('email') ?? ($user->email ?? '') }}"
+                       @if(($update && $edit_change_password))
+                       readonly
+                    @endif
+                >
             </div>
             @error('email')
             <div class="text-danger">
@@ -60,44 +73,49 @@
             </div>
             @enderror
         </div>
-        <div class="form-group row">
-            <div class="col-3 text-right">
-                <label for="password" class="col-form-label">{{trans('main.password')}}
-                    <span
-                        class="text-danger">*</span></label>
+
+        @if(($update && !$edit_change_password))
+            <input type="hidden" name="password" value="{{$user->password}}">
+        @else
+            <div class="form-group row">
+                <div class="col-3 text-right">
+                    <label for="password" class="col-form-label">{{trans('main.password')}}
+                        <span
+                            class="text-danger">*</span></label>
+                </div>
+                <div class="col-7">
+                    <input type="password"
+                           name="password"
+                           class="form-control @error('password') is-invalid @enderror"
+                           placeholder=""
+                           value="{{ old('password') ?? '' }}">
+                </div>
+                @error('password')
+                <div class="text-danger">
+                    {{$message}}
+                </div>
+                @enderror
             </div>
-            <div class="col-7">
-                <input type="text"
-                       name="password"
-                       class="form-control @error('password') is-invalid @enderror"
-                       placeholder=""
-                       value="{{ old('password') ?? ($user->password ?? '') }}">
+            <div class="form-group row">
+                <div class="col-3 text-right">
+                    <label for="confirm_password" class="col-form-label">{{trans('main.confirm_password')}}
+                        <span
+                            class="text-danger">*</span></label>
+                </div>
+                <div class="col-7">
+                    <input type="password"
+                           name="confirm_password"
+                           class="form-control @error('confirm_password') is-invalid @enderror"
+                           placeholder=""
+                           value="{{ old('confirm_password') ?? ($user->confirm_password ?? '') }}">
+                </div>
+                @error('confirm_password')
+                <div class="text-danger">
+                    {{$message}}
+                </div>
+                @enderror
             </div>
-            @error('password')
-            <div class="text-danger">
-                {{$message}}
-            </div>
-            @enderror
-        </div>
-        <div class="form-group row">
-            <div class="col-3 text-right">
-                <label for="confirm_password" class="col-form-label">{{trans('main.confirm_password')}}
-                    <span
-                        class="text-danger">*</span></label>
-            </div>
-            <div class="col-7">
-                <input type="text"
-                       name="confirm_password"
-                       class="form-control @error('confirm_password') is-invalid @enderror"
-                       placeholder=""
-                       value="{{ old('confirm_password') ?? ($user->confirm_password ?? '') }}">
-            </div>
-            @error('confirm_password')
-            <div class="text-danger">
-                {{$message}}
-            </div>
-            @enderror
-        </div>
+        @endif
         <br>
         <div class="container-fluid">
             <div class="row text-center">
