@@ -57,7 +57,7 @@
                         class="text-danger">*</span></label>
             </div>
             <div class="col-7">
-                <input type="text"
+                <input type="email"
                        name="email"
                        class="form-control @error('email') is-invalid @enderror"
                        placeholder=""
