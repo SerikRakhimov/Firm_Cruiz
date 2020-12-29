@@ -57,7 +57,7 @@
                     </a>
                 </td>
                 <td class="text-center">
-                    <a href="{{route('project.index', $user)}}" title="{{trans('main.projects')}}">
+                    <a href="{{route('project.index_user', $user)}}" title="{{trans('main.projects')}}">
 {{--                        <img src="{{Storage::url('view_record.png')}}" width="15" height="15"--}}
 {{--                             alt="{{trans('main.projects')}}">--}}
                         <i class="fas fa-project-diagram"></i>

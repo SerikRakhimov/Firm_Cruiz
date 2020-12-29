@@ -79,9 +79,6 @@
                                 <a class="nav-link" href="{{route('template.index')}}">{{trans('main.templates')}}</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">{{trans('main.projects')}}</a>
-                            </li>
-                            <li class="nav-item">
                                 <a class="nav-link" href="{{route('user.index')}}">{{trans('main.users')}}</a>
                             </li>
                         </ul>

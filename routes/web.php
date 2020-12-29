@@ -192,20 +192,32 @@ Route::delete('/role/delete/{role}', 'RoleController@delete')
     ->middleware('auth');
 
 // Projects
-Route::get('/project/index/{template}', 'ProjectController@index')
-    ->name('project.index')
+Route::get('/project/index_template/{template}', 'ProjectController@index_template')
+    ->name('project.index_template')
     ->middleware('auth');
 
-Route::get('/project/show/{project}', 'ProjectController@show')
-    ->name('project.show')
+Route::get('/project/index_user/{user}', 'ProjectController@index_user')
+    ->name('project.index_user')
+    ->middleware('auth');
+
+Route::get('/project/show_template/{project}', 'ProjectController@show_template')
+    ->name('project.show_template')
+    ->middleware('auth');
+
+Route::get('/project/show_user/{project}', 'ProjectController@show_user')
+    ->name('project.show_user')
     ->middleware('auth');
 
 Route::get('/project/create/{template}', 'ProjectController@create')
     ->name('project.create')
     ->middleware('auth');
 
-Route::get('/project/edit/{project}', 'ProjectController@edit')
-    ->name('project.edit')
+Route::get('/project/edit_template/{project}', 'ProjectController@edit_template')
+    ->name('project.edit_template')
+    ->middleware('auth');
+
+Route::get('/project/edit_user/{project}', 'ProjectController@edit_user')
+    ->name('project.edit_user')
     ->middleware('auth');
 
 Route::post('/project/store', 'ProjectController@store')

@@ -44,4 +44,8 @@ class User extends Authenticatable
     function count() {
         return $this->count;
     }
+    function name() {
+        return $this->name;
+    }
+
 }

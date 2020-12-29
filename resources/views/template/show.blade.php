@@ -43,7 +43,7 @@
                 {{trans('main.roles')}}
             </button>
             <button type="button" class="btn btn-dreamer mb-1 mb-sm-0" title="{{trans('main.projects')}}"
-                    onclick="document.location='{{route('project.index', $template)}}'">
+                    onclick="document.location='{{route('project.index_template', $template)}}'">
                             <i class="fas fa-project-diagram"></i>
                 {{trans('main.projects')}}
             </button>

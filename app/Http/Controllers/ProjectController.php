@@ -17,7 +17,7 @@ class ProjectController extends Controller
         ];
     }
 
-    function index(Template $template)
+    function index_template(Template $template)
     {
         $projects = Project::where('template_id', $template->id);
         $index = array_search(session('locale'), session('glo_menu_save'));
@@ -41,12 +41,41 @@ class ProjectController extends Controller
         return view('project/index', ['template' => $template, 'projects' => $projects->paginate(60)]);
     }
 
-    function show(Project $project)
+    function index_user(User $user)
+    {
+        $projects = Project::where('user_id', $user->id);
+        $index = array_search(session('locale'), session('glo_menu_save'));
+        if ($index !== false) {   // '!==' использовать, '!=' не использовать
+            switch ($index) {
+                case 0:
+                    $projects = $projects->orderBy('name_lang_0');
+                    break;
+                case 1:
+                    $projects = $projects->orderBy('name_lang_1')->orderBy('name_lang_0');
+                    break;
+                case 2:
+                    $projects = $projects->orderBy('name_lang_2')->orderBy('name_lang_0');
+                    break;
+                case 3:
+                    $projects = $projects->orderBy('name_lang_3')->orderBy('name_lang_0');
+                    break;
+            }
+        }
+        session(['projects_previous_url' => request()->url()]);
+        return view('project/index', ['user' => $user, 'projects' => $projects->paginate(60)]);
+    }
+
+    function show_template(Project $project)
     {
         $template = Template::findOrFail($project->template_id);
         return view('project/show', ['type_form' => 'show', 'template' => $template, 'project' => $project]);
     }
 
+    function show_user(Project $project)
+    {
+        $user = User::findOrFail($project->user_id);
+        return view('project/show', ['type_form' => 'show', 'user' => $user, 'project' => $project]);
+    }
 
     function create(Template $template)
     {
@@ -105,11 +134,18 @@ class ProjectController extends Controller
         $project->save();
     }
 
-    function edit(Project $project)
+    function edit_template(Project $project)
     {
         $template = Template::findOrFail($project->template_id);
         $users = User::orderBy('name')->get();
         return view('project/edit', ['template' => $template, 'project' => $project, 'users' => $users]);
+    }
+
+    function edit_user(Project $project)
+    {
+        $user = User::findOrFail($project->user_id);
+        $templates = Template::get();
+        return view('project/edit', ['user' => $user, 'project' => $project, 'templates' => $templates]);
     }
 
     function delete_question(Project $project)
