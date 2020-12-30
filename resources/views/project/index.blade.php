@@ -5,10 +5,10 @@
     $is_template = isset($template);
     $is_user = isset($user);
     $project_show = "";
-    if($is_template == true){
+    if ($is_template == true) {
         $project_show = "project.show_template";
     }
-    if($is_user == true){
+    if ($is_user == true) {
         $project_show = "project.show_user";
     }
     ?>
@@ -27,11 +27,19 @@
             <div class="col-2">
             </div>
             <div class="col-5 text-right">
-                {{--                <button type="button" class="btn btn-dreamer" title="{{trans('main.add')}}"--}}
-                {{--                        onclick="document.location='{{route('project.create', ['template'=>$template])}}'">--}}
-                {{--                    <i class="fa fa-plus d-inline"></i>--}}
-                {{--                    {{trans('main.add')}}--}}
-                {{--                </button>--}}
+                <button type="button" class="btn btn-dreamer" title="{{trans('main.add')}}"
+                        onclick="document.location=
+                        @if($is_template)
+                            '{{route('project.create_template', ['template'=>$template])}}'
+                            ">
+                    @endif
+                    @if($is_user)
+                        '{{route('project.create_user', ['user'=>$user])}}'
+                        ">
+                    @endif
+                    <i class="fa fa-plus d-inline"></i>
+                    {{trans('main.add')}}
+                </button>
             </div>
         </div>
     </div>

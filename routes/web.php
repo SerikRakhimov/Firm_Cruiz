@@ -208,8 +208,12 @@ Route::get('/project/show_user/{project}', 'ProjectController@show_user')
     ->name('project.show_user')
     ->middleware('auth');
 
-Route::get('/project/create/{template}', 'ProjectController@create')
-    ->name('project.create')
+Route::get('/project/create_template/{template}', 'ProjectController@create_template')
+    ->name('project.create_template')
+    ->middleware('auth');
+
+Route::get('/project/create_user/{user}', 'ProjectController@create_user')
+    ->name('project.create_user')
     ->middleware('auth');
 
 Route::get('/project/edit_template/{project}', 'ProjectController@edit_template')

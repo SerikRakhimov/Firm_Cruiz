@@ -77,10 +77,16 @@ class ProjectController extends Controller
         return view('project/show', ['type_form' => 'show', 'user' => $user, 'project' => $project]);
     }
 
-    function create(Template $template)
+    function create_template(Template $template)
     {
         $users = User::orderBy('name')->get();
         return view('project/edit', ['template' => $template, 'users' => $users]);
+    }
+
+    function create_user(User $user)
+    {
+        $templates = Template::get();
+        return view('project/edit', ['user' => $user, 'templates' => $templates]);
     }
 
     function store(Request $request)
@@ -123,13 +129,13 @@ class ProjectController extends Controller
 
     function set(Request $request, Project &$project)
     {
+        $project->template_id = $request->template_id;
+        $project->user_id = $request->user_id;
+
         $project->name_lang_0 = $request->name_lang_0;
         $project->name_lang_1 = isset($request->name_lang_1) ? $request->name_lang_1 : "";
         $project->name_lang_2 = isset($request->name_lang_2) ? $request->name_lang_2 : "";
         $project->name_lang_3 = isset($request->name_lang_3) ? $request->name_lang_3 : "";
-
-        $project->user_id = $request->user_id;
-        //$project->user_id = Auth::user()->id;
 
         $project->save();
     }
