@@ -1278,7 +1278,7 @@ class PHP_Token_NAMESPACE extends PHP_TokenWithScope
         $tokens    = $this->tokenStream->tokens();
         $namespace = (string) $tokens[$this->id + 2];
 
-        for ($i = $this->id + 3;; $i += 2) {
+        for ($i = $this->id + 3; $i += 2) {
             if (isset($tokens[$i]) &&
                 $tokens[$i] instanceof PHP_Token_NS_SEPARATOR) {
                 $namespace .= '\\' . $tokens[$i + 1];

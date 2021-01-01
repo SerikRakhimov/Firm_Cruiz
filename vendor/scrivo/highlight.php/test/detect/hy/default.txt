@@ -6,7 +6,7 @@
 (import hy.core)
 
 
-;; absolute path for Hy core
+; absolute path for Hy core
 (setv *core-path* (os.path.dirname hy.core.--file--))
 
 

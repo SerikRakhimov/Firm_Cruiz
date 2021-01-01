@@ -75,6 +75,8 @@ return [
     'user' => 'Пайдаланушы',
     'roles' => 'Рөлдер',
     'role' => 'Рөлі',
+    'accesses' => 'Қатынастар',
+    'access' => 'Қатынасу',
     'date_created' => 'Жасалған күні',
     'date_updated' => 'Өзгерту күні',
     'format_date' => 'd.m.Y',

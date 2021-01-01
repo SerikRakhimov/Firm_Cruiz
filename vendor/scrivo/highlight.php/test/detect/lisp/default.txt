@@ -8,7 +8,7 @@
    (or (parse-integer (prompt-read "Rating") :junk-allowed t) 0)
   (if x (format t "yes") (format t "no" nil) ;and here comment
   )
-  ;; second line comment
+  ; second line comment
   '(+ 1 2)
   (defvar *lines*)                ; list of all lines
   (position-if-not #'sys::whitespacep line :start beg))

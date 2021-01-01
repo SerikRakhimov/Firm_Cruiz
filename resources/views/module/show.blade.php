@@ -40,7 +40,7 @@
 
             <button type="button" class="btn btn-dreamer"
                     title="{{trans('main.cancel')}}" @include('layouts.module.previous_url')>
-                {{--            <i class="fa fa-arrow-left"></i>--}}
+                {{--            <i class="fas fa-arrow-left"></i>--}}
                 {{trans('main.cancel')}}
             </button>
         </p>
@@ -50,12 +50,12 @@
             @method('DELETE')
             <p>
                 <button type="submit" class="btn btn-danger" title="{{trans('main.delete')}}">
-                    {{--                <i class="fa fa-trash"></i>--}}
+                    {{--                <i class="fas fa-trash"></i>--}}
                     {{trans('main.delete')}}
                 </button>
                 <button type="button" class="btn btn-dreamer"
                         title="{{trans('main.cancel')}}" @include('layouts.module.previous_url')>
-                    {{--                <i class="fa fa-arrow-left"></i>--}}
+                    {{--                <i class="fas fa-arrow-left"></i>--}}
                     {{trans('main.cancel')}}
                 </button>
             </p>

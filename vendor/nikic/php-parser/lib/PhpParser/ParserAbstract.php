@@ -194,7 +194,7 @@ abstract class ParserAbstract implements Parser
 
         $this->errorState = 0;
 
-        for (;;) {
+        for (;) {
             //$this->traceNewState($state, $symbol);
 
             if ($this->actionBase[$state] === 0) {
@@ -271,7 +271,7 @@ abstract class ParserAbstract implements Parser
                 }
             }
 
-            for (;;) {
+            for (;) {
                 if ($rule === 0) {
                     /* accept */
                     //$this->traceAccept();

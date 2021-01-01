@@ -75,6 +75,8 @@ return [
     'user' => 'User',
     'roles' => 'Roles',
     'role' => 'Role',
+    'accesses' => 'Accesses',
+    'access' => 'Access',
     'date_created' => 'Creation date',
     'date_updated' => 'Date of change',
     'format_date' => 'd.m.Y',

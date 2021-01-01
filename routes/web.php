@@ -191,6 +191,7 @@ Route::delete('/role/delete/{role}', 'RoleController@delete')
     ->name('role.delete')
     ->middleware('auth');
 
+
 // Projects
 Route::get('/project/index_template/{template}', 'ProjectController@index_template')
     ->name('project.index_template')
@@ -238,6 +239,63 @@ Route::get('/project/delete_question/{project}', 'ProjectController@delete_quest
 
 Route::delete('/project/delete/{project}', 'ProjectController@delete')
     ->name('project.delete')
+    ->middleware('auth');
+
+// Accesses
+Route::get('/access/index_project/{project}', 'AccessController@index_project')
+    ->name('access.index_project')
+    ->middleware('auth');
+
+Route::get('/access/index_user/{user}', 'AccessController@index_user')
+    ->name('access.index_user')
+    ->middleware('auth');
+
+Route::get('/access/index_role/{role}', 'AccessController@index_role')
+    ->name('access.index_role')
+    ->middleware('auth');
+
+Route::get('/access/show_template/{access}', 'AccessController@show_template')
+    ->name('access.show_template')
+    ->middleware('auth');
+
+Route::get('/access/show_user/{access}', 'AccessController@show_user')
+    ->name('access.show_user')
+    ->middleware('auth');
+
+Route::get('/access/create_project/{project}', 'AccessController@create_project')
+    ->name('access.create_project')
+    ->middleware('auth');
+
+Route::get('/access/create_user/{user}', 'AccessController@create_user')
+    ->name('access.create_user')
+    ->middleware('auth');
+
+Route::get('/role/create_project/{project}', 'AccessController@create_project')
+    ->name('role.create_project')
+    ->middleware('auth');
+
+Route::get('/access/edit_template/{access}', 'AccessController@edit_template')
+    ->name('access.edit_template')
+    ->middleware('auth');
+
+Route::get('/access/edit_user/{access}', 'AccessController@edit_user')
+    ->name('access.edit_user')
+    ->middleware('auth');
+
+Route::post('/access/store', 'AccessController@store')
+    ->name('access.store')
+    ->middleware('auth');
+
+Route::put('/access/edit/{access}', 'AccessController@update')
+    ->name('access.update')
+    ->middleware('auth');
+
+Route::get('/access/delete_question/{access}', 'AccessController@delete_question')
+    ->name('access.delete_question')
+    ->middleware('auth');
+
+Route::delete('/access/delete/{access}', 'AccessController@delete')
+    ->name('access.delete')
     ->middleware('auth');
 
 // Modules

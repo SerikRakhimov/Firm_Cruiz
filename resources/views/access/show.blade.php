@@ -6,19 +6,19 @@
     use App\Http\Controllers\BaseController;
     use Illuminate\Support\Facades\Request;
     use App\User;
-    $is_template = isset($template);
+    $is_project = isset($project);
     $is_user = isset($user);
     $project_edit = "";
-    if($is_template == true){
-        $project_edit = "project.edit_template";
+    if($is_project == true){
+        $project_edit = "project.edit_project";
     }
     if($is_user == true){
         $project_edit = "project.edit_user";
     }
     ?>
     <p>
-        @if($is_template)
-            @include('layouts.template.show_name',['template'=>$template])
+        @if($is_project)
+            @include('layouts.project.show_name',['project'=>$project])
         @endif
         @if($is_user)
             @include('layouts.user.show_name',['user'=>$user])
@@ -28,8 +28,8 @@
 
     <p>Id: <b>{{$project->id}}</b></p>
 
-    @if(!$is_template)
-        <p>{{trans('main.template')}}: <b>{{$project->template->name()}}</b></p>
+    @if(!$is_project)
+        <p>{{trans('main.project')}}: <b>{{$project->project->name()}}</b></p>
     @endif
     @foreach (session('glo_menu_save') as $key=>$value)
         <p>{{trans('main.name')}} ({{trans('main.' . $value)}}): <b>{{$project['name_lang_' . $key]}}</b></p>
@@ -54,7 +54,7 @@
         </p>
         <p>
             <button type="button" class="btn btn-dreamer" title="{{trans('main.accesses')}}"
-                    onclick="document.location='{{route('access.index_project', $project)}}'">
+                    onclick="document.location='{{route('module.index', $project)}}'">
                             <i class="fas fa-universal-access"></i>
                 {{trans('main.accesses')}}
             </button>

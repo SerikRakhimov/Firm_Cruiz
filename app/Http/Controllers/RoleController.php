@@ -64,7 +64,7 @@ class RoleController extends Controller
         $this->set($request, $role);
         //https://laravel.demiart.ru/laravel-sessions/
         if ($request->session()->has('roles_previous_url')) {
-            return redirect(session('roles_previous_url'));;
+            return redirect(session('roles_previous_url'));
         } else {
             return redirect()->back();
         }
@@ -83,7 +83,7 @@ class RoleController extends Controller
         $this->set($request, $role);
 
         if ($request->session()->has('roles_previous_url')) {
-            return redirect(session('roles_previous_url'));;
+            return redirect(session('roles_previous_url'));
         } else {
             return redirect()->back();
         }
@@ -118,7 +118,7 @@ class RoleController extends Controller
         $role->delete();
 
         if ($request->session()->has('roles_previous_url')) {
-            return redirect(session('roles_previous_url'));;
+            return redirect(session('roles_previous_url'));
         } else {
             return redirect()->back();
         }

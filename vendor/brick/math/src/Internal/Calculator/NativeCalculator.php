@@ -282,7 +282,7 @@ class NativeCalculator extends Calculator
 
         $decreased = false;
 
-        for (;;) {
+        for (;) {
             $nx = $this->divQ($this->add($x, $this->divQ($n, $x)), '2');
 
             if ($x === $nx || $this->cmp($nx, $x) > 0 && $decreased) {
@@ -311,7 +311,7 @@ class NativeCalculator extends Calculator
         $carry = 0;
         $result = '';
 
-        for ($i = $length - $this->maxDigits;; $i -= $this->maxDigits) {
+        for ($i = $length - $this->maxDigits; $i -= $this->maxDigits) {
             $blockLength = $this->maxDigits;
 
             if ($i < 0) {
@@ -381,7 +381,7 @@ class NativeCalculator extends Calculator
 
         $complement = 10 ** $this->maxDigits;
 
-        for ($i = $length - $this->maxDigits;; $i -= $this->maxDigits) {
+        for ($i = $length - $this->maxDigits; $i -= $this->maxDigits) {
             $blockLength = $this->maxDigits;
 
             if ($i < 0) {
@@ -445,7 +445,7 @@ class NativeCalculator extends Calculator
 
         $result = '0';
 
-        for ($i = $x - $maxDigits;; $i -= $maxDigits) {
+        for ($i = $x - $maxDigits; $i -= $maxDigits) {
             $blockALength = $maxDigits;
 
             if ($i < 0) {
@@ -458,7 +458,7 @@ class NativeCalculator extends Calculator
             $line = '';
             $carry = 0;
 
-            for ($j = $y - $maxDigits;; $j -= $maxDigits) {
+            for ($j = $y - $maxDigits; $j -= $maxDigits) {
                 $blockBLength = $maxDigits;
 
                 if ($j < 0) {
@@ -526,7 +526,7 @@ class NativeCalculator extends Calculator
         $r = $a; // remainder
         $z = $y; // focus length, always $y or $y+1
 
-        for (;;) {
+        for (;) {
             $focus = \substr($a, 0, $z);
 
             $cmp = $this->doCmp($focus, $b);

@@ -71,7 +71,7 @@ class UserController extends Controller
         $this->set($request, $user);
         //https://laravel.demiart.ru/laravel-sessions/
         if ($request->session()->has('users_previous_url')) {
-            return redirect(session('users_previous_url'));;
+            return redirect(session('users_previous_url'));
         } else {
             return redirect()->back();
         }
@@ -96,7 +96,7 @@ class UserController extends Controller
         $this->set($request, $user);
 
         if ($request->session()->has('users_previous_url')) {
-            return redirect(session('users_previous_url'));;
+            return redirect(session('users_previous_url'));
         } else {
             return redirect()->back();
         }
@@ -135,7 +135,7 @@ class UserController extends Controller
         $user->delete();
 
         if ($request->session()->has('users_previous_url')) {
-            return redirect(session('users_previous_url'));;
+            return redirect(session('users_previous_url'));
         } else {
             return redirect()->back();
         }

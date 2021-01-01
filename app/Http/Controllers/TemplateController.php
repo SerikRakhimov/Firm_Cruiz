@@ -63,7 +63,7 @@ class TemplateController extends Controller
         $this->set($request, $template);
         //https://laravel.demiart.ru/laravel-sessions/
         if ($request->session()->has('templates_previous_url')) {
-            return redirect(session('templates_previous_url'));;
+            return redirect(session('templates_previous_url'));
         } else {
             return redirect()->back();
         }
@@ -82,7 +82,7 @@ class TemplateController extends Controller
         $this->set($request, $template);
 
         if ($request->session()->has('templates_previous_url')) {
-            return redirect(session('templates_previous_url'));;
+            return redirect(session('templates_previous_url'));
         } else {
             return redirect()->back();
         }
@@ -113,7 +113,7 @@ class TemplateController extends Controller
         $template->delete();
 
         if ($request->session()->has('templates_previous_url')) {
-            return redirect(session('templates_previous_url'));;
+            return redirect(session('templates_previous_url'));
         } else {
             return redirect()->back();
         }

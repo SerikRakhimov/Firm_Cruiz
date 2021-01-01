@@ -75,6 +75,8 @@ return [
     'user' => 'Пользователь',
     'roles' => 'Роли',
     'role' => 'Роль',
+    'accesses' => 'Доступы',
+    'access' => 'Доступ',
     'date_created' => 'Дата создания',
     'date_updated' => 'Дата корректировки',
     'format_date' => 'd.m.Y',

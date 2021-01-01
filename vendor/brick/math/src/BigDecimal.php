@@ -297,7 +297,7 @@ final class BigDecimal extends BigNumber
         $calculator = Calculator::get();
 
         foreach ([5, 2] as $prime) {
-            for (;;) {
+            for (;) {
                 $lastDigit = (int) $d[-1];
 
                 if ($lastDigit % $prime !== 0) {

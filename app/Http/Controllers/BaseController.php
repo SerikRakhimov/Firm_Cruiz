@@ -207,7 +207,7 @@ class BaseController extends Controller
         $base->save();
 
         if ($request->session()->has('bases_previous_url')) {
-            return redirect(session('bases_previous_url'));;
+            return redirect(session('bases_previous_url'));
         } else {
             return redirect()->back();
         }

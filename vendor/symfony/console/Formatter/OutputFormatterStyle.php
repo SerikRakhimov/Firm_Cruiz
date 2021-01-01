@@ -184,7 +184,7 @@ class OutputFormatterStyle implements OutputFormatterStyleInterface
         }
 
         if (null !== $this->href && $this->handlesHrefGracefully) {
-            $text = "\033]8;;$this->href\033\\$text\033]8;;\033\\";
+            $text = "\033]8;$this->href\033\\$text\033]8;\033\\";
         }
 
         if (0 === \count($setCodes)) {

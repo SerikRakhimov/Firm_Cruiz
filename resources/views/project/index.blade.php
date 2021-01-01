@@ -37,7 +37,7 @@
                         '{{route('project.create_user', ['user'=>$user])}}'
                         ">
                     @endif
-                    <i class="fa fa-plus d-inline"></i>
+                    <i class="fas fa-plus d-inline"></i>
                     {{trans('main.add')}}
                 </button>
             </div>

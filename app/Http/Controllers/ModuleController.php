@@ -67,7 +67,7 @@ class ModuleController extends Controller
         $this->set($request, $module);
         //https://laravel.demiart.ru/laravel-sessions/
         if ($request->session()->has('modules_previous_url')) {
-            return redirect(session('modules_previous_url'));;
+            return redirect(session('modules_previous_url'));
         } else {
             return redirect()->back();
         }
@@ -86,7 +86,7 @@ class ModuleController extends Controller
         $this->set($request, $module);
 
         if ($request->session()->has('modules_previous_url')) {
-            return redirect(session('modules_previous_url'));;
+            return redirect(session('modules_previous_url'));
         } else {
             return redirect()->back();
         }
@@ -121,7 +121,7 @@ class ModuleController extends Controller
         $module->delete();
 
         if ($request->session()->has('modules_previous_url')) {
-            return redirect(session('modules_previous_url'));;
+            return redirect(session('modules_previous_url'));
         } else {
             return redirect()->back();
         }

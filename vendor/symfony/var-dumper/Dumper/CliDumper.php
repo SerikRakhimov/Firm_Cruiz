@@ -482,13 +482,13 @@ class CliDumper extends AbstractDumper
         if ($this->colors && $this->handlesHrefGracefully) {
             if (isset($attr['file']) && $href = $this->getSourceLink($attr['file'], isset($attr['line']) ? $attr['line'] : 0)) {
                 if ('note' === $style) {
-                    $value .= "\033]8;;{$href}\033\\^\033]8;;\033\\";
+                    $value .= "\033]8;{$href}\033\\^\033]8;\033\\";
                 } else {
                     $attr['href'] = $href;
                 }
             }
             if (isset($attr['href'])) {
-                $value = "\033]8;;{$attr['href']}\033\\{$value}\033]8;;\033\\";
+                $value = "\033]8;{$attr['href']}\033\\{$value}\033]8;\033\\";
             }
         } elseif ($attr['if_links'] ?? false) {
             return '';

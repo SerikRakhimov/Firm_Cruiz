@@ -3,7 +3,7 @@
 
 (<span class="hljs-name">definterface</span> Foo (<span class="hljs-name">foo</span> []))
 
-<span class="hljs-comment">;; annotation on type</span>
+<span class="hljs-comment">; annotation on type</span>
 (<span class="hljs-name"><span class="hljs-builtin-name">deftype</span></span> <span class="hljs-comment">^{Deprecated true
            Retention RetentionPolicy/RUNTIME
            javax.annotation.processing.SupportedOptions [<span class="hljs-string">"foo"</span> <span class="hljs-string">"bar"</span> <span class="hljs-string">"baz"</span>]
@@ -11,7 +11,7 @@
            WebServiceRefs [(<span class="hljs-name">WebServiceRef</span> {<span class="hljs-symbol">:name</span> <span class="hljs-string">"fred"</span> <span class="hljs-symbol">:type</span> String})
                            (<span class="hljs-name">WebServiceRef</span> {<span class="hljs-symbol">:name</span> <span class="hljs-string">"ethel"</span> <span class="hljs-symbol">:mappedName</span> <span class="hljs-string">"lucy"</span>})]}</span>
   Bar [<span class="hljs-comment">^int</span> a
-       <span class="hljs-comment">;; on field</span>
+       <span class="hljs-comment">; on field</span>
        <span class="hljs-comment">^{:tag int
          Deprecated true
          Retention RetentionPolicy/RUNTIME
@@ -20,7 +20,7 @@
          WebServiceRefs [(<span class="hljs-name">WebServiceRef</span> {<span class="hljs-symbol">:name</span> <span class="hljs-string">"fred"</span> <span class="hljs-symbol">:type</span> String})
                          (<span class="hljs-name">WebServiceRef</span> {<span class="hljs-symbol">:name</span> <span class="hljs-string">"ethel"</span> <span class="hljs-symbol">:mappedName</span> <span class="hljs-string">"lucy"</span>})]}</span>
        b]
-  <span class="hljs-comment">;; on method</span>
+  <span class="hljs-comment">; on method</span>
   Foo (<span class="hljs-comment">^{Deprecated true
          Retention RetentionPolicy/RUNTIME
          javax.annotation.processing.SupportedOptions [<span class="hljs-string">"foo"</span> <span class="hljs-string">"bar"</span> <span class="hljs-string">"baz"</span>]

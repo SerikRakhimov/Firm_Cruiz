@@ -53,10 +53,10 @@
                     <button type="submit" class="btn btn-dreamer"
                             @if (!$update)
 {{--                            d-inline нужно, чтобы на маленьких экранах иконка и текст кнопки были на одной линии--}}
-{{--                            этот вариант убирает иконку на мобильных телефонах: title="{{trans('main.add')}}"><i class="fa fa-save d-none d-sm-inline"></i>&nbsp;{{trans('main.add')}}--}}
-                        title="{{trans('main.add')}}"><i class="fa fa-save d-inline"></i>&nbsp;{{trans('main.add')}}
+{{--                            этот вариант убирает иконку на мобильных телефонах: title="{{trans('main.add')}}"><i class="fas fa-save d-none d-sm-inline"></i>&nbsp;{{trans('main.add')}}--}}
+                        title="{{trans('main.add')}}"><i class="fas fa-save d-inline"></i>&nbsp;{{trans('main.add')}}
                         @else
-                            title="{{trans('main.save')}}"><i class="fa fa-save d-inline"></i>&nbsp;{{trans('main.save')}}
+                            title="{{trans('main.save')}}"><i class="fas fa-save d-inline"></i>&nbsp;{{trans('main.save')}}
                         @endif
                     </button>
                 </div>
@@ -65,7 +65,7 @@
                 <div class="col-5 text-left">
                     <button type="button" class="btn btn-dreamer" title="{{trans('main.cancel')}}"
                         @include('layouts.template.previous_url')
-                    ><i class="fa fa-arrow-left d-inline"></i>&nbsp;{{trans('main.cancel')}}
+                    ><i class="fas fa-arrow-left d-inline"></i>&nbsp;{{trans('main.cancel')}}
                     </button>
                 </div>
             </div>

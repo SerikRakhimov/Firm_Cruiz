@@ -64,7 +64,7 @@ class TaskController extends Controller
         $this->set($request, $task);
         //https://laravel.demiart.ru/laravel-sessions/
         if ($request->session()->has('tasks_previous_url')) {
-            return redirect(session('tasks_previous_url'));;
+            return redirect(session('tasks_previous_url'));
         } else {
             return redirect()->back();
         }
@@ -83,7 +83,7 @@ class TaskController extends Controller
         $this->set($request, $task);
 
         if ($request->session()->has('tasks_previous_url')) {
-            return redirect(session('tasks_previous_url'));;
+            return redirect(session('tasks_previous_url'));
         } else {
             return redirect()->back();
         }
@@ -116,7 +116,7 @@ class TaskController extends Controller
         $task->delete();
 
         if ($request->session()->has('tasks_previous_url')) {
-            return redirect(session('tasks_previous_url'));;
+            return redirect(session('tasks_previous_url'));
         } else {
             return redirect()->back();
         }

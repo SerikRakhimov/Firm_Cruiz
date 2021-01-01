@@ -1,4 +1,4 @@
-;; Calculation of Hofstadter's male and female sequences as a list of pairs
+; Calculation of Hofstadter's male and female sequences as a list of pairs
 
 (define (hofstadter-male-female n)
 (letrec ((female (lambda (n)

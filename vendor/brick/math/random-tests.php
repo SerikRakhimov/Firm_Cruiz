@@ -29,7 +29,7 @@ use Brick\Math\Internal\Calculator;
 
     public function __invoke() : void
     {
-        for (;;) {
+        for (;) {
             $a = $this->generateRandomNumber();
             $b = $this->generateRandomNumber();
             $c = $this->generateRandomNumber();

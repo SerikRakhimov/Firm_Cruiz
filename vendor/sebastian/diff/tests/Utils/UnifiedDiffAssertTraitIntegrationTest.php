@@ -89,7 +89,7 @@ final class UnifiedDiffAssertTraitIntegrationTest extends TestCase
         $dir       = \realpath(__DIR__ . '/../fixtures/UnifiedDiffAssertTraitIntegrationTest');
         $dirLength = \strlen($dir);
 
-        for ($i = 1;; ++$i) {
+        for ($i = 1; ++$i) {
             $fromFile = \sprintf('%s/%d_a.txt', $dir, $i);
             $toFile   = \sprintf('%s/%d_b.txt', $dir, $i);
 

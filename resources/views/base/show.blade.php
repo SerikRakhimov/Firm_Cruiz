@@ -68,7 +68,7 @@
         <button type="button" class="btn btn-dreamer" title="{{trans('main.return')}}"
             @include('layouts.base.previous_url')
         >
-            {{--                    <i class="fa fa-arrow-left"></i>--}}
+            {{--                    <i class="fas fa-arrow-left"></i>--}}
             {{trans('main.return')}}
         </button>
     @elseif($type_form == 'delete_question')
@@ -79,7 +79,7 @@
             <button type="button" class="btn btn-dreamer" title="{{trans('main.cancel')}}"
                 @include('layouts.base.previous_url')
             >
-                {{--                    <i class="fa fa-arrow-left"></i>--}}
+                {{--                    <i class="fas fa-arrow-left"></i>--}}
                 {{trans('main.cancel')}}
             </button>
         </form>

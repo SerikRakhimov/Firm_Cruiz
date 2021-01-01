@@ -102,7 +102,7 @@ class ProjectController extends Controller
         $this->set($request, $project);
         //https://laravel.demiart.ru/laravel-sessions/
         if ($request->session()->has('projects_previous_url')) {
-            return redirect(session('projects_previous_url'));;
+            return redirect(session('projects_previous_url'));
         } else {
             return redirect()->back();
         }
@@ -121,7 +121,7 @@ class ProjectController extends Controller
         $this->set($request, $project);
 
         if ($request->session()->has('projects_previous_url')) {
-            return redirect(session('projects_previous_url'));;
+            return redirect(session('projects_previous_url'));
         } else {
             return redirect()->back();
         }
@@ -165,7 +165,7 @@ class ProjectController extends Controller
         $project->delete();
 
         if ($request->session()->has('projects_previous_url')) {
-            return redirect(session('projects_previous_url'));;
+            return redirect(session('projects_previous_url'));
         } else {
             return redirect()->back();
         }
