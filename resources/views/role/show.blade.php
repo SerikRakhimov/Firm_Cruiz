@@ -36,7 +36,7 @@
         </p>
         <p>
             <button type="button" class="btn btn-dreamer" title="{{trans('main.accesses')}}"
-{{--                    onclick="document.location='{{route('module.index', $project)}}'"--}}
+                    onclick="document.location='{{route('access.index_role', $role)}}'"
             >
                 <i class="fas fa-universal-access"></i>
                 {{trans('main.accesses')}}

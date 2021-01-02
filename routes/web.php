@@ -254,12 +254,16 @@ Route::get('/access/index_role/{role}', 'AccessController@index_role')
     ->name('access.index_role')
     ->middleware('auth');
 
-Route::get('/access/show_template/{access}', 'AccessController@show_template')
-    ->name('access.show_template')
+Route::get('/access/show_project/{access}', 'AccessController@show_project')
+    ->name('access.show_project')
     ->middleware('auth');
 
 Route::get('/access/show_user/{access}', 'AccessController@show_user')
     ->name('access.show_user')
+    ->middleware('auth');
+
+Route::get('/access/show_role/{access}', 'AccessController@show_role')
+    ->name('access.show_role')
     ->middleware('auth');
 
 Route::get('/access/create_project/{project}', 'AccessController@create_project')
@@ -270,8 +274,8 @@ Route::get('/access/create_user/{user}', 'AccessController@create_user')
     ->name('access.create_user')
     ->middleware('auth');
 
-Route::get('/role/create_project/{project}', 'AccessController@create_project')
-    ->name('role.create_project')
+Route::get('/role/create_role/{role}', 'AccessController@create_role')
+    ->name('access.create_role')
     ->middleware('auth');
 
 Route::get('/access/edit_template/{access}', 'AccessController@edit_template')

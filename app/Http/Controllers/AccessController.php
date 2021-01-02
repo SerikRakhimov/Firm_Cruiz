@@ -47,16 +47,31 @@ class AccessController extends Controller
         return view('access/show', ['type_form' => 'show', 'user' => $user, 'access' => $access]);
     }
 
+    function show_role(Access $access)
+    {
+        $role = User::findOrFail($access->role_id);
+        return view('access/show', ['type_form' => 'show', 'role' => $role, 'access' => $access]);
+    }
+
     function create_project(Project $project)
     {
         $users = User::orderBy('name')->get();
-        return view('access/edit', ['project' => $project, 'users' => $users]);
+        $roles = Role::orderBy('name_lang_0')->get();
+        return view('access/edit', ['project' => $project, 'users' => $users, 'roles' => $roles]);
     }
 
     function create_user(User $user)
     {
         $projects = Project::get();
-        return view('access/edit', ['user' => $user, 'projects' => $projects]);
+        $roles = Role::orderBy('name_lang_0')->get();
+        return view('access/edit', ['user' => $user, 'projects' => $projects, 'roles' => $roles]);
+    }
+
+    function create_role(Role $role)
+    {
+        $projects = Project::get();
+        $users = User::orderBy('name')->get();
+        return view('access/edit', ['role' => $role, 'projects' => $projects, 'users' => $users]);
     }
 
     function store(Request $request)
@@ -64,10 +79,9 @@ class AccessController extends Controller
         // установка часового пояса нужно для сохранения времени
         date_default_timezone_set('Asia/Almaty');
 
-        $accesses = new Access($request->except('_token', '_method'));
-        $access->project_id = $request->project_id;
+        $access = new Access($request->except('_token', '_method'));
 
-        $this->set($request, $accesses);
+        $this->set($request, $access);
         //https://laravel.demiart.ru/laravel-sessions/
         if ($request->session()->has('accesses_previous_url')) {
             return redirect(session('accesses_previous_url'));
@@ -83,7 +97,7 @@ class AccessController extends Controller
 
         $access->fill($data);
 
-        $this->set($request, $accesses);
+        $this->set($request, $access);
 
         if ($request->session()->has('accesses_previous_url')) {
             return redirect(session('accesses_previous_url'));
@@ -105,14 +119,24 @@ class AccessController extends Controller
     {
         $project = Project::findOrFail($access->project_id);
         $users = User::orderBy('name')->get();
-        return view('access/edit', ['project' => $project, 'access' => $access, 'users' => $users]);
+        $roles = Role::orderBy('name_lang_0')->get();
+        return view('access/edit', ['project' => $project, 'access' => $access, 'users' => $users, 'roles' => $roles]);
     }
 
     function edit_user(Access $access)
     {
         $user = User::findOrFail($access->user_id);
         $projects = Project::get();
-        return view('access/edit', ['user' => $user, 'access' => $access, 'projects' => $projects]);
+        $roles = Role::orderBy('name_lang_0')->get();
+        return view('access/edit', ['user' => $user, 'access' => $access, 'projects' => $projects, 'roles' => $roles]);
+    }
+
+    function edit_role(Access $access)
+    {
+        $role = Role::findOrFail($access->role_id);
+        $projects = Project::get();
+        $users = User::orderBy('name')->get();
+        return view('access/edit', ['role' => $role, 'access' => $access, 'projects' => $projects, 'users' => $users]);
     }
 
     function delete_question(Access $access)

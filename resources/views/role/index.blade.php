@@ -55,6 +55,7 @@
                         {{GlobalController::name_is_boolean($role->is_default_for_external)}}
                     </a>
                 </td>
+            </tr>
         @endforeach
         </tbody>
     </table>

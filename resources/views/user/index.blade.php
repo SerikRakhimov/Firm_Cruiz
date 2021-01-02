@@ -63,7 +63,7 @@
                         <i class="fas fa-project-diagram"></i>
                     </a>
                 </td>
-
+            </tr>
         @endforeach
         </tbody>
     </table>

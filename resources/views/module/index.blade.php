@@ -47,6 +47,7 @@
                         {{$module->name()}}
                     </a>
                 </td>
+            </tr>
         @endforeach
         </tbody>
     </table>

@@ -97,7 +97,7 @@ class ProjectController extends Controller
         date_default_timezone_set('Asia/Almaty');
 
         $project = new Project($request->except('_token', '_method'));
-        $project->template_id = $request->template_id;
+        //$project->template_id = $request->template_id;
 
         $this->set($request, $project);
         //https://laravel.demiart.ru/laravel-sessions/

@@ -2,6 +2,7 @@
 
 @section('content')
     <?php
+    use App\User;
     $is_project = isset($project);
     $is_user = isset($user);
     $is_role = isset($role);
@@ -29,7 +30,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-5 text-center">
-                <h3>{{trans('main.accesss')}}</h3>
+                <h3>{{trans('main.accesses')}}</h3>
             </div>
             <div class="col-2">
             </div>
@@ -73,9 +74,9 @@
         </thead>
         <tbody>
         <?php
-        $i = $accesss->firstItem() - 1;
+        $i = $accesses->firstItem() - 1;
         ?>
-        @foreach($accesss as $access)
+        @foreach($accesses as $access)
             <?php
             $i++;
             ?>
@@ -101,13 +102,14 @@
                 @if(!$is_role)
                     <td class="text-left">
                         <a href="{{route($access_show, $access)}}" title="{{trans('main.show')}}">
-                            {{$access->role->name}}
+                            {{$access->role->name()}}
                         </a>
                     </td>
             @endif
+            </tr>
         @endforeach
         </tbody>
     </table>
-    {{$accesss->links()}}
+    {{$accesses->links()}}
 @endsection
 

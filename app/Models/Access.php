@@ -3,11 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\User;
 
 class Access extends Model
 {
-    //protected $fillable = ['project_id', 'user_id', 'role_id'];
-
+    protected $fillable = ['project_id', 'user_id', 'role_id'];
 
     function project()
     {
