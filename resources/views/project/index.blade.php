@@ -56,6 +56,7 @@
             @if(!$is_user)
                 <th class="text-left">{{trans('main.user')}}</th>
             @endif
+            <th class="text-center">{{trans('main.accesses')}}</th>
         </tr>
         </thead>
         <tbody>
@@ -90,6 +91,11 @@
                         </a>
                     </td>
             @endif
+                <td class="text-center">
+                    <a href="{{route('access.index_project', $project)}}" title="{{trans('main.accesses')}}">
+                        <i class="fas fa-universal-access"></i>
+                    </a>
+                </td>
             </tr>
         @endforeach
         </tbody>

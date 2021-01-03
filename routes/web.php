@@ -278,12 +278,16 @@ Route::get('/role/create_role/{role}', 'AccessController@create_role')
     ->name('access.create_role')
     ->middleware('auth');
 
-Route::get('/access/edit_template/{access}', 'AccessController@edit_template')
-    ->name('access.edit_template')
+Route::get('/access/edit_project/{access}', 'AccessController@edit_project')
+    ->name('access.edit_project')
     ->middleware('auth');
 
 Route::get('/access/edit_user/{access}', 'AccessController@edit_user')
     ->name('access.edit_user')
+    ->middleware('auth');
+
+Route::get('/access/edit_role/{access}', 'AccessController@edit_role')
+    ->name('access.edit_role')
     ->middleware('auth');
 
 Route::post('/access/store', 'AccessController@store')

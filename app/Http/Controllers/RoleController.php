@@ -123,4 +123,5 @@ class RoleController extends Controller
             return redirect()->back();
         }
     }
+
 }

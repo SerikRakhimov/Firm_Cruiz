@@ -18,15 +18,15 @@
     }
     ?>
     <p>
-{{--    @if($is_project)--}}
-{{--        @include('layouts.project.show_name',['project'=>$project])--}}
-{{--    @endif--}}
-{{--    @if($is_user)--}}
-{{--        @include('layouts.user.show_name',['user'=>$user])--}}
-{{--    @endif--}}
-{{--    @if($is_role)--}}
-{{--        @include('layouts.role.show_name',['role'=>$role])--}}
-{{--    @endif--}}
+    @if($is_project)
+        @include('layouts.project.show_name',['project'=>$project])
+    @endif
+    @if($is_user)
+        @include('layouts.user.show_name',['user'=>$user])
+    @endif
+    @if($is_role)
+        @include('layouts.role.show_name',['role'=>$role])
+    @endif
     <div class="container-fluid">
         <div class="row">
             <div class="col-5 text-center">

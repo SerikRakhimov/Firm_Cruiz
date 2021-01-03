@@ -30,6 +30,7 @@
             <th class="text-center">#</th>
             <th class="text-left">{{trans('main.name')}}</th>
             <th class="text-left">{{trans('main.default')}}</th>
+            <th class="text-center">{{trans('main.accesses')}}</th>
         </tr>
         </thead>
         <tbody>
@@ -53,6 +54,11 @@
                 <td class="text-left">
                     <a href="{{route('role.show',$role)}}" title="{{trans('main.show')}}">
                         {{GlobalController::name_is_boolean($role->is_default_for_external)}}
+                    </a>
+                </td>
+                <td class="text-center">
+                    <a href="{{route('access.index_role', $role)}}" title="{{trans('main.accesses')}}">
+                        <i class="fas fa-user-circle"></i>
                     </a>
                 </td>
             </tr>

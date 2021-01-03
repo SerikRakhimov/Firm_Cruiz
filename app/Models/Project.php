@@ -29,7 +29,8 @@ class Project extends Model
         }
         if ($result == "") {
             $result = $this->name_lang_0;
-        }
+        };
+        $result = $result . ' (' . $this->user->name . ')';
         return $result;
     }
 

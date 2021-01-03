@@ -138,4 +138,5 @@ return [
     'password'=>'Құпия сөз',
     'change_password'=>'Құпия сөзді ауыстыру',
     'confirm_password'=>'Құпия сөзді қайта енгізу',
+    'uniqueness_of_fields_violated'=>'Өрістердің бірегейлігі бұзылды',
 ];

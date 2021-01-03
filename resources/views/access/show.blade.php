@@ -22,8 +22,8 @@
     }
     ?>
     <p>
-        @if($is_access)
-            @include('layouts.access.show_name',['access'=>$access])
+        @if($is_project)
+            @include('layouts.project.show_name',['project'=>$project])
         @endif
         @if($is_user)
             @include('layouts.user.show_name',['user'=>$user])
@@ -61,11 +61,6 @@
             </button>
         </p>
         <p>
-            <button type="button" class="btn btn-dreamer" title="{{trans('main.accesses')}}"
-                    onclick="document.location='{{route('module.index', $access)}}'">
-                <i class="fas fa-universal-access"></i>
-                {{trans('main.accesses')}}
-            </button>
             <button type="button" class="btn btn-dreamer"
                     title="{{trans('main.cancel')}}" @include('layouts.access.previous_url')>
                 <i class="fas fa-arrow-left"></i>

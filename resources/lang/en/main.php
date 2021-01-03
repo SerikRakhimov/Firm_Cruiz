@@ -138,4 +138,5 @@ return [
     'password'=>'Password',
     'change_password'=>'Change password',
     'confirm_password'=>'Confirm password',
+    'uniqueness_of_fields_violated'=>'Uniqueness of fields violated',
 ];

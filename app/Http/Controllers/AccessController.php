@@ -7,9 +7,19 @@ use App\Models\Project;
 use App\Models\Role;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use App\Rules\IsUniqueAccess;
 
 class AccessController extends Controller
 {
+    protected function rules(Request $request)
+    {
+        return [
+            'project_id' => ['required', new IsUniqueAccess($request)],
+            'user_id' => ['required', new IsUniqueAccess($request)],
+            'role_id' => ['required', new IsUniqueAccess($request)],
+        ];
+    }
 
     function index_project(Project $project)
     {
@@ -49,14 +59,14 @@ class AccessController extends Controller
 
     function show_role(Access $access)
     {
-        $role = User::findOrFail($access->role_id);
+        $role = Role::findOrFail($access->role_id);
         return view('access/show', ['type_form' => 'show', 'role' => $role, 'access' => $access]);
     }
 
     function create_project(Project $project)
     {
         $users = User::orderBy('name')->get();
-        $roles = Role::orderBy('name_lang_0')->get();
+        $roles = Role::where('template_id', $project->template_id)->orderBy('name_lang_0')->get();
         return view('access/edit', ['project' => $project, 'users' => $users, 'roles' => $roles]);
     }
 
@@ -69,13 +79,15 @@ class AccessController extends Controller
 
     function create_role(Role $role)
     {
-        $projects = Project::get();
+        $projects = Project::where('template_id', $role->template_id)->get();
         $users = User::orderBy('name')->get();
         return view('access/edit', ['role' => $role, 'projects' => $projects, 'users' => $users]);
     }
 
     function store(Request $request)
     {
+        $request->validate($this->rules($request));
+
         // установка часового пояса нужно для сохранения времени
         date_default_timezone_set('Asia/Almaty');
 
@@ -92,6 +104,9 @@ class AccessController extends Controller
 
     function update(Request $request, Access $access)
     {
+        if (!(($access->template_id == $request->template_id) &&($access->user_id == $request->user_id) &&($access->role_id == $request->role_id))) {
+            $request->validate($this->rules($request));
+        }
 
         $data = $request->except('_token', '_method');
 
@@ -119,7 +134,7 @@ class AccessController extends Controller
     {
         $project = Project::findOrFail($access->project_id);
         $users = User::orderBy('name')->get();
-        $roles = Role::orderBy('name_lang_0')->get();
+        $roles = Role::where('template_id', $project->template_id)->orderBy('name_lang_0')->get();
         return view('access/edit', ['project' => $project, 'access' => $access, 'users' => $users, 'roles' => $roles]);
     }
 
@@ -134,7 +149,7 @@ class AccessController extends Controller
     function edit_role(Access $access)
     {
         $role = Role::findOrFail($access->role_id);
-        $projects = Project::get();
+        $projects = Project::where('template_id', $role->template_id)->get();
         $users = User::orderBy('name')->get();
         return view('access/edit', ['role' => $role, 'access' => $access, 'projects' => $projects, 'users' => $users]);
     }

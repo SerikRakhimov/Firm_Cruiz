@@ -8,18 +8,18 @@
     $is_role = isset($role);
     ?>
     <p>
-        {{--        @if($is_project)--}}
-        {{--            @include('layouts.project.show_name',['project'=>$project])--}}
-        {{--        @endif--}}
-        {{--        @if($is_user)--}}
-        {{--            @include('layouts.user.show_name',['user'=>$user])--}}
-        {{--        @endif--}}
-        {{--        @if($is_role)--}}
-        {{--            @include('layouts.role.show_name',['role'=>$role])--}}
-        {{--        @endif--}}
+        @if($is_project)
+            @include('layouts.project.show_name',['project'=>$project])
+        @endif
+        @if($is_user)
+            @include('layouts.user.show_name',['user'=>$user])
+        @endif
+        @if($is_role)
+            @include('layouts.role.show_name',['role'=>$role])
+        @endif
     </p>
     <p>
-        @include('layouts.edit_title', ['update'=>$update, 'table_name'=>trans('main.project')])
+        @include('layouts.edit_title', ['update'=>$update, 'table_name'=>trans('main.access')])
     </p>
     <form action="{{$update ? route('access.update', $access):route('access.store')}}" method="POST"
           enctype=multipart/form-data>
@@ -44,7 +44,7 @@
                         @foreach ($projects as $project)
                             <option value="{{$project->id}}"
                                     @if ($update)
-                                    @if ((old('project_id') ?? ($key ?? (int) 0)) ==  $project->project_id)
+                                    @if ((old('project_id') ?? ($access->project_id ?? (int) 0)) ==  $project->id)
                                     selected
                                 @endif
                                 @endif
@@ -78,7 +78,7 @@
                         @foreach ($users as $user)
                             <option value="{{$user->id}}"
                                     @if ($update)
-                                    @if ((old('user_id') ?? ($project->user_id ?? (int) 0)) ==  $user->id)
+                                    @if ((old('user_id') ?? ($access->user_id ?? (int) 0)) ==  $user->id)
                                     selected
                                 @endif
                                 @endif
@@ -111,7 +111,7 @@
                         @foreach ($roles as $role)
                             <option value="{{$role->id}}"
                                     @if ($update)
-                                    @if ((old('role_id') ?? ($project->role_id ?? (int) 0)) ==  $role->id)
+                                    @if ((old('role_id') ?? ($access->role_id ?? (int) 0)) ==  $role->id)
                                     selected
                                 @endif
                                 @endif
@@ -149,7 +149,7 @@
                 </div>
                 <div class="col-5 text-left">
                     <button type="button" class="btn btn-dreamer" title="{{trans('main.cancel')}}"
-                        @include('layouts.project.previous_url')
+                        @include('layouts.access.previous_url')
                     >
                         <i class="fas fa-arrow-left"></i>
                         {{trans('main.cancel')}}

@@ -13,7 +13,7 @@ class UserController extends Controller
     {
         return [
             'name' => 'required|unique:users,name',
-            'email' => 'required|unique:users,email',
+            'email' => 'required|email|unique:users,email',
             'password' => 'min:8',
             'confirm_password' => 'min:8|same:password'
         ];

@@ -138,4 +138,5 @@ return [
     'password'=>'Пароль',
     'change_password'=>'Сменить пароль',
     'confirm_password'=>'Повторный ввод пароля',
+    'uniqueness_of_fields_violated'=>'Уникальность полей нарушена',
 ];
