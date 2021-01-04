@@ -18,22 +18,11 @@ class RoleController extends Controller
     function index(Template $template)
     {
         $roles = Role::where('template_id', $template->id);
+        $name = "";  // нужно, не удалять
         $index = array_search(session('locale'), session('glo_menu_save'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
-            switch ($index) {
-                case 0:
-                    $roles = $roles->orderBy('name_lang_0');
-                    break;
-                case 1:
-                    $roles = $roles->orderBy('name_lang_1')->orderBy('name_lang_0');
-                    break;
-                case 2:
-                    $roles = $roles->orderBy('name_lang_2')->orderBy('name_lang_0');
-                    break;
-                case 3:
-                    $roles = $roles->orderBy('name_lang_3')->orderBy('name_lang_0');
-                    break;
-            }
+            $name = 'name_lang_' . $index;
+            $roles = $roles->orderBy($name);
         }
         session(['roles_previous_url' => request()->url()]);
         return view('role/index', ['template' => $template, 'roles' => $roles->paginate(60)]);

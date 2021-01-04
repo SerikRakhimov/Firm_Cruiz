@@ -20,22 +20,11 @@ class ProjectController extends Controller
     function index_template(Template $template)
     {
         $projects = Project::where('template_id', $template->id);
+        $name = "";  // нужно, не удалять
         $index = array_search(session('locale'), session('glo_menu_save'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
-            switch ($index) {
-                case 0:
-                    $projects = $projects->orderBy('name_lang_0');
-                    break;
-                case 1:
-                    $projects = $projects->orderBy('name_lang_1')->orderBy('name_lang_0');
-                    break;
-                case 2:
-                    $projects = $projects->orderBy('name_lang_2')->orderBy('name_lang_0');
-                    break;
-                case 3:
-                    $projects = $projects->orderBy('name_lang_3')->orderBy('name_lang_0');
-                    break;
-            }
+            $name = 'name_lang_' . $index;
+            $projects = $projects->orderBy($name);
         }
         session(['projects_previous_url' => request()->url()]);
         return view('project/index', ['template' => $template, 'projects' => $projects->paginate(60)]);
@@ -44,22 +33,11 @@ class ProjectController extends Controller
     function index_user(User $user)
     {
         $projects = Project::where('user_id', $user->id);
+        $name = "";  // нужно, не удалять
         $index = array_search(session('locale'), session('glo_menu_save'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
-            switch ($index) {
-                case 0:
-                    $projects = $projects->orderBy('name_lang_0');
-                    break;
-                case 1:
-                    $projects = $projects->orderBy('name_lang_1')->orderBy('name_lang_0');
-                    break;
-                case 2:
-                    $projects = $projects->orderBy('name_lang_2')->orderBy('name_lang_0');
-                    break;
-                case 3:
-                    $projects = $projects->orderBy('name_lang_3')->orderBy('name_lang_0');
-                    break;
-            }
+            $name = 'name_lang_' . $index;
+            $projects = $projects->orderBy($name);
         }
         session(['projects_previous_url' => request()->url()]);
         return view('project/index', ['user' => $user, 'projects' => $projects->paginate(60)]);

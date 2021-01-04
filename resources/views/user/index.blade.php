@@ -30,6 +30,7 @@
             <th class="text-left">{{trans('main.name')}}</th>
             <th class="text-left">{{trans('main.e-mail')}}</th>
             <th class="text-center">{{trans('main.projects')}}</th>
+            <th class="text-center">{{trans('main.accesses')}}</th>
         </tr>
         </thead>
         <tbody>
@@ -58,9 +59,12 @@
                 </td>
                 <td class="text-center">
                     <a href="{{route('project.index_user', $user)}}" title="{{trans('main.projects')}}">
-{{--                        <img src="{{Storage::url('view_record.png')}}" width="15" height="15"--}}
-{{--                             alt="{{trans('main.projects')}}">--}}
                         <i class="fas fa-project-diagram"></i>
+                    </a>
+                </td>
+                <td class="text-center">
+                    <a href="{{route('access.index_user', $user)}}" title="{{trans('main.accesses')}}">
+                        <i class="fas fa-universal-access"></i>
                     </a>
                 </td>
             </tr>

@@ -306,6 +306,10 @@ Route::delete('/access/delete/{access}', 'AccessController@delete')
     ->name('access.delete')
     ->middleware('auth');
 
+Route::get('/access/get_roles_options_from_project/{project}', 'AccessController@get_roles_options_from_project')
+    ->name('access.get_roles_options_from_project')
+    ->middleware('auth');
+
 // Modules
 Route::get('/module/index/{task}', 'ModuleController@index')
     ->name('module.index')

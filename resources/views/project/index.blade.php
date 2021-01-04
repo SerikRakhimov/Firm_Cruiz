@@ -49,10 +49,10 @@
         <thead>
         <tr>
             <th class="text-center">#</th>
+            <th class="text-left">{{trans('main.name')}}</th>
             @if(!$is_template)
                 <th class="text-left">{{trans('main.template')}}</th>
             @endif
-            <th class="text-left">{{trans('main.name')}}</th>
             @if(!$is_user)
                 <th class="text-left">{{trans('main.user')}}</th>
             @endif
@@ -72,6 +72,11 @@
                     <a href="{{route($project_show, $project)}}" title="{{trans('main.show')}}">
                         {{$i}}
                     </a></td>
+                <td class="text-left">
+                    <a href="{{route($project_show, $project)}}" title="{{trans('main.show')}}">
+                        {{$project->name()}}
+                    </a>
+                </td>
                 @if(!$is_template)
                     <td class="text-left">
                         <a href="{{route($project_show, $project)}}" title="{{trans('main.show')}}">
@@ -79,18 +84,13 @@
                         </a>
                     </td>
                 @endif
-                <td class="text-left">
-                    <a href="{{route($project_show, $project)}}" title="{{trans('main.show')}}">
-                        {{$project->name()}}
-                    </a>
-                </td>
                 @if(!$is_user)
                     <td class="text-left">
                         <a href="{{route($project_show, $project)}}" title="{{trans('main.show')}}">
                             {{$project->user->name}}
                         </a>
                     </td>
-            @endif
+                @endif
                 <td class="text-center">
                     <a href="{{route('access.index_project', $project)}}" title="{{trans('main.accesses')}}">
                         <i class="fas fa-universal-access"></i>

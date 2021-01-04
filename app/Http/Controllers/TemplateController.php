@@ -19,21 +19,11 @@ class TemplateController extends Controller
     {
         $templates = null;
         $index = array_search(session('locale'), session('glo_menu_save'));
+        $name = "";  // нужно, не удалять
+        $index = array_search(session('locale'), session('glo_menu_save'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
-            switch ($index) {
-                case 0:
-                    $templates = Template::orderBy('name_lang_0');
-                    break;
-                case 1:
-                    $templates = Template::orderBy('name_lang_1')->orderBy('name_lang_0');
-                    break;
-                case 2:
-                    $templates = Template::orderBy('name_lang_2')->orderBy('name_lang_0');
-                    break;
-                case 3:
-                    $templates = Template::orderBy('name_lang_3')->orderBy('name_lang_0');
-                    break;
-            }
+            $name = 'name_lang_' . $index;
+            $templates  = Template::orderBy($name);
         }
         session(['templates_previous_url' => request()->url()]);
         return view('template/index', ['templates' => $templates->paginate(60)]);

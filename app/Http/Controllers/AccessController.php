@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Access;
 use App\Models\Project;
 use App\Models\Role;
+use App\Models\Template;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -171,5 +172,25 @@ class AccessController extends Controller
         }
     }
 
+    static function get_roles_options_from_project(Project $project)
+    {
+        $result_roles_options = "";
+        if ($project != null) {
+                $name = "";  // нужно, не удалять
+                $index = array_search(session('locale'), session('glo_menu_save'));
+                if ($index !== false) {   // '!==' использовать, '!=' не использовать
+                    $name = 'name_lang_' . $index;
+                }
+                // список roles по выбранному project/template
+                $result_roles = Role::where('template_id', $project->template_id)->orderBy($name)->get();
+                foreach ($result_roles as $role) {
+                    $result_roles_options = $result_roles_options . "<option value='" . $role->id . "'>" . $role->name() . "</option>";
+                }
+
+        }
+        return [
+            'result_roles_options' => $result_roles_options
+        ];
+    }
 
 }
