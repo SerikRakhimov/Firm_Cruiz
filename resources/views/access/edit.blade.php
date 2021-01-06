@@ -22,7 +22,7 @@
         @include('layouts.edit_title', ['update'=>$update, 'table_name'=>trans('main.access')])
     </p>
     <form action="{{$update ? route('access.update', $access):route('access.store')}}" method="POST"
-          enctype=multipart/form-data>
+          enctype=multipart/form-data name = "form">
         @csrf
 
         @if ($update)
@@ -158,4 +158,59 @@
             </div>
         </div>
     </form>
+
+    @if ($is_user)
+        <script>
+            var project_id = form.project_id;
+            var role_id = form.role_id;
+            var role_id_value = null;
+
+            function project_id_changeOption(first) {
+                axios.get('/access/get_roles_options_from_project/' + project_id.options[project_id.selectedIndex].value).then(function (res) {
+                    // если запуск функции не при загрузке страницы
+                    if (first != true) {
+                        // сохранить текущие значения
+                        var role_id_value = role_id.options[role_id.selectedIndex].value;
+                    }
+
+                    if (res.data['result_roles_options'] == "") {
+                        role_id.innerHTML = '<option value = "0">{{trans('main.no_information_on')}} "' + res.data['result_child_base_name'] + '"!</option>';
+                    } else {
+                        // заполнение select
+                        role_id.innerHTML = res.data['result_roles_options'];
+                    }
+
+                    // только если запуск функции при загрузке страницы
+                    if (first == true) {
+                        // нужно чтобы при первом вызове формы корректировки записи значения полей соответствовали значениям из базы данных
+                        @if ($update)  // при корректировке записи
+                        for (let i = 0; i < role_id.length; i++) {
+                            // если элемент списка = текущему значению из базы данных
+                            if (role_id[i].value == {{$access->role_id}}) {
+                                // установить selected на true
+                                role_id[i].selected = true;
+                            }
+                        }
+                        @endif
+                    } else {
+                        // нужно чтобы после обновления списка сохранить текущий выбор если соответствующий(child/parent) base не поменялся (при добавлении/корректировке записи)
+                        for (let i = 0; i < role_id.length; i++) {
+                            // если элемент списка = предыдущему(текущему) значению из базы данных
+                            if (role_id[i].value == role_id_value) {
+                                // установить selected на true
+                                role_id[i].selected = true;
+                            }
+                        }
+                    }
+                });
+            }
+
+            project_id.addEventListener("change", project_id_changeOption);
+
+            window.onload = function () {
+                project_id_changeOption(true);
+            };
+
+        </script>
+    @endif
 @endsection
