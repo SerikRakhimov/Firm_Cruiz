@@ -39,7 +39,7 @@
         <p>
             <button type="button" class="btn btn-dreamer mb-1 mb-sm-0" title="{{trans('main.projects')}}"
                     onclick="document.location='{{route('project.index_user', $user)}}'">
-                                            <i class="fas "></i>
+                                            <i class="fas fa-cube"></i>
                 {{trans('main.projects')}}
             </button>
             <button type="button" class="btn btn-dreamer" title="{{trans('main.accesses')}}"

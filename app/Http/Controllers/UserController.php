@@ -6,6 +6,7 @@ use App\User;
 use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -43,6 +44,10 @@ class UserController extends Controller
 
     function index()
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return null;
+        }
         $users = User::orderBy('name');
         session(['users_previous_url' => request()->url()]);
         return view('user/index', ['users' => $users->paginate(60)]);
