@@ -54,7 +54,7 @@
                 <th class="text-left">{{trans('main.template')}}</th>
             @endif
             @if(!$is_user)
-                <th class="text-left">{{trans('main.user')}}</th>
+                <th class="text-left">{{trans('main.author')}}</th>
             @endif
             <th class="text-center">{{trans('main.accesses')}}</th>
         </tr>

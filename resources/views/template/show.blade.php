@@ -32,23 +32,21 @@
         </p>
         <p>
 {{--            "mb-1 mb-sm-0" нужно чтобы на маленьких экранах кнопки не слипались (margin-botton - 1px) --}}
-            <button type="button" class="btn btn-dreamer mb-1 mb-sm-0" title="{{trans('main.bases')}}"
-                    onclick="document.location='{{route('base.index', $template)}}'">
-                                            <i class="fas fa-scroll"></i>
-                {{trans('main.bases')}}
+            <button type="button" class="btn btn-dreamer mb-1 mb-sm-0" title="{{trans('main.projects')}}"
+                    onclick="document.location='{{route('project.index_template', $template)}}'">
+                <i class="fas fa-cube"></i>
+                {{trans('main.projects')}}
             </button>
             <button type="button" class="btn btn-dreamer  mb-1 mb-sm-0" title="{{trans('main.roles')}}"
                     onclick="document.location='{{route('role.index', $template)}}'">
                 <i class="fas fa-user-circle"></i>
                 {{trans('main.roles')}}
             </button>
-            <button type="button" class="btn btn-dreamer mb-1 mb-sm-0" title="{{trans('main.projects')}}"
-                    onclick="document.location='{{route('project.index_template', $template)}}'">
-                <i class="fas fa-project-diagram"></i>
-                {{trans('main.projects')}}
+            <button type="button" class="btn btn-dreamer mb-1 mb-sm-0" title="{{trans('main.bases')}}"
+                    onclick="document.location='{{route('base.index', $template)}}'">
+                                            <i class="fas fa-atom"></i>
+                {{trans('main.bases')}}
             </button>
-
-
             <button type="button" class="btn btn-dreamer mb-1 mb-sm-0"
                     title="{{trans('main.cancel')}}" @include('layouts.template.previous_url')>
                             <i class="fas fa-arrow-left"></i>

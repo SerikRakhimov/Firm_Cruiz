@@ -24,9 +24,9 @@
         <tr>
             <th class="text-center">#</th>
             <th class="text-left">{{trans('main.name')}}</th>
-            <th class="text-center">{{trans('main.bases')}}</th>
-            <th class="text-center">{{trans('main.roles')}}</th>
             <th class="text-center">{{trans('main.projects')}}</th>
+            <th class="text-center">{{trans('main.roles')}}</th>
+            <th class="text-center">{{trans('main.bases')}}</th>
         </tr>
         </thead>
         <tbody>
@@ -49,8 +49,8 @@
                     </a>
                 </td>
                 <td class="text-center">
-                    <a href="{{route('base.index', $template)}}" title="{{trans('main.bases')}}">
-                        <i class="fas fa-scroll"></i>
+                    <a href="{{route('project.index_template', $template)}}" title="{{trans('main.projects')}}">
+                        <i class="fas fa-cube"></i>
                     </a>
                 </td>
                 <td class="text-center">
@@ -59,8 +59,8 @@
                     </a>
                 </td>
                 <td class="text-center">
-                    <a href="{{route('project.index_template', $template)}}" title="{{trans('main.projects')}}">
-                        <i class="fas fa-project-diagram"></i>
+                    <a href="{{route('base.index', $template)}}" title="{{trans('main.bases')}}">
+                        <i class="fas fa-atom"></i>
                     </a>
                 </td>
             </tr>

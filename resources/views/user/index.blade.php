@@ -59,7 +59,7 @@
                 </td>
                 <td class="text-center">
                     <a href="{{route('project.index_user', $user)}}" title="{{trans('main.projects')}}">
-                        <i class="fas fa-project-diagram"></i>
+                        <i class="fas "></i>
                     </a>
                 </td>
                 <td class="text-center">

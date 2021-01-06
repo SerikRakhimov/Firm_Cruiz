@@ -48,10 +48,10 @@
                 <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="#">{{trans('main.my_projects')}}</a>
+                            <a class="nav-link" href="{{route('project.index_user', Auth::user())}}">{{trans('main.projects')}}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">{{trans('main.my_subscriptions')}}</a>
+                            <a class="nav-link" href="{{route('access.index_user', Auth::user())}}">{{trans('main.accesses')}}</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">{{trans('main.all_projects')}}</a>

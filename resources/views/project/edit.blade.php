@@ -86,7 +86,7 @@
         @else
             <div class="form-group row">
                 <div class="col-sm-3 text-right">
-                    <label for="user_id" class="col-form-label">{{trans('main.user')}}<span
+                    <label for="user_id" class="col-form-label">{{trans('main.author')}}<span
                             class="text-danger">*</span></label>
                 </div>
                 <div class="col-sm-7">

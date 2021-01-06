@@ -35,7 +35,7 @@
         <p>{{trans('main.name')}} ({{trans('main.' . $value)}}): <b>{{$project['name_lang_' . $key]}}</b></p>
     @endforeach
     @if(!$is_user)
-        <p>{{trans('main.user')}}: <b>{{$project->user->name()}}</b></p>
+        <p>{{trans('main.author')}}: <b>{{$project->user->name()}}</b></p>
     @endif
 
     @if ($type_form == 'show')
