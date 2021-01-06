@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Template;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 
 class TemplateController extends Controller
@@ -23,7 +24,7 @@ class TemplateController extends Controller
         $index = array_search(session('locale'), session('glo_menu_save'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
             $name = 'name_lang_' . $index;
-            $templates  = Template::orderBy($name);
+            $templates = Template::orderBy($name);
         }
         session(['templates_previous_url' => request()->url()]);
         return view('template/index', ['templates' => $templates->paginate(60)]);
@@ -37,12 +38,19 @@ class TemplateController extends Controller
 
     function create()
     {
-
+        if (!
+        Auth::user()->isAdmin()) {
+            return null;
+        }
         return view('template/edit');
     }
 
     function store(Request $request)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return null;
+        }
         $request->validate($this->rules());
 
         // установка часового пояса нужно для сохранения времени
@@ -61,6 +69,10 @@ class TemplateController extends Controller
 
     function update(Request $request, Template $template)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return null;
+        }
         if (!($template->name_lang_0 == $request->name_lang_0)) {
             $request->validate($this->rules());
         }
@@ -90,17 +102,28 @@ class TemplateController extends Controller
 
     function edit(Template $template)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return null;
+        }
         return view('template/edit', ['template' => $template]);
     }
 
     function delete_question(Template $template)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return null;
+        }
         return view('template/show', ['type_form' => 'delete_question', 'template' => $template]);
     }
 
     function delete(Request $request, Template $template)
     {
-        $template->delete();
+        if (!
+        Auth::user()->isAdmin()) {
+            return null;
+        };
 
         if ($request->session()->has('templates_previous_url')) {
             return redirect(session('templates_previous_url'));
