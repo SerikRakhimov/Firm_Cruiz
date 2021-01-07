@@ -47,19 +47,22 @@
     @endif
 
     @if ($type_form == 'show')
-        <p>
-            <button type="button" class="btn btn-dreamer"
-                    onclick="document.location='{{route($access_edit,$access)}}'" title="{{trans('main.edit')}}">
-                <i class="fas fa-edit"></i>
-                {{trans('main.edit')}}
-            </button>
-            <button type="button" class="btn btn-dreamer"
-                    onclick="document.location='{{route('access.delete_question',$access)}}'"
-                    title="{{trans('main.delete')}}">
-                <i class="fas fa-trash"></i>
-                {{trans('main.delete')}}
-            </button>
-        </p>
+        @if (Auth::user()->isAdmin() ||(($is_role == false) && ($access->role->is_default_for_external == true)))
+            <p>
+                <button type="button" class="btn btn-dreamer"
+                        onclick="document.location='{{route($access_edit,$access)}}'"
+                        title="{{trans('main.edit')}}">
+                    <i class="fas fa-edit"></i>
+                    {{trans('main.edit')}}
+                </button>
+                <button type="button" class="btn btn-dreamer"
+                        onclick="document.location='{{route('access.delete_question',$access)}}'"
+                        title="{{trans('main.delete')}}">
+                    <i class="fas fa-trash"></i>
+                    {{trans('main.delete')}}
+                </button>
+            </p>
+        @endif
         <p>
             <button type="button" class="btn btn-dreamer"
                     title="{{trans('main.cancel')}}" @include('layouts.access.previous_url')>

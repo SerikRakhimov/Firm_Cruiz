@@ -44,8 +44,7 @@ class UserController extends Controller
 
     function index()
     {
-        if (!
-        Auth::user()->isAdmin()) {
+        if (!Auth::user()->isAdmin()) {
             return null;
         }
         $users = User::orderBy('name');

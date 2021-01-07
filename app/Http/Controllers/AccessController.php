@@ -8,6 +8,7 @@ use App\Models\Role;
 use App\Models\Template;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use App\Rules\IsUniqueAccess;
 
@@ -40,6 +41,10 @@ class AccessController extends Controller
 
     function index_role(Role $role)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return null;
+        }
         $accesses = Access::where('role_id', $role->id);
         $accesses = $accesses->orderBy('project_id')->orderBy('user_id')->orderBy('role_id');
         session(['accesses_previous_url' => request()->url()]);
@@ -105,7 +110,10 @@ class AccessController extends Controller
 
     function update(Request $request, Access $access)
     {
-        if (!(($access->template_id == $request->template_id) &&($access->user_id == $request->user_id) &&($access->role_id == $request->role_id))) {
+        if (!(Auth::user()->isAdmin() || ($access->role->is_default_for_external == true))) {
+            return null;
+        }
+        if (!(($access->template_id == $request->template_id) && ($access->user_id == $request->user_id) && ($access->role_id == $request->role_id))) {
             $request->validate($this->rules($request));
         }
 
@@ -133,22 +141,42 @@ class AccessController extends Controller
 
     function edit_project(Access $access)
     {
+        if (!(Auth::user()->isAdmin() || ($access->role->is_default_for_external == true))) {
+            return null;
+        }
         $project = Project::findOrFail($access->project_id);
         $users = User::orderBy('name')->get();
         $roles = Role::where('template_id', $project->template_id)->orderBy('name_lang_0')->get();
+
+        if (!Auth::user()->isAdmin()){
+            $roles = $roles->where('is_default_for_external', true);
+        }
+
         return view('access/edit', ['project' => $project, 'access' => $access, 'users' => $users, 'roles' => $roles]);
     }
 
     function edit_user(Access $access)
     {
+        if (!(Auth::user()->isAdmin() || ($access->role->is_default_for_external == true))) {
+            return null;
+        }
         $user = User::findOrFail($access->user_id);
         $projects = Project::get();
+
         $roles = Role::orderBy('name_lang_0')->get();
+
+        if (!Auth::user()->isAdmin()){
+            $roles = $roles->where('is_default_for_external', true);
+        }
+
         return view('access/edit', ['user' => $user, 'access' => $access, 'projects' => $projects, 'roles' => $roles]);
     }
 
     function edit_role(Access $access)
     {
+        if (!Auth::user()->isAdmin()) {
+            return null;
+        }
         $role = Role::findOrFail($access->role_id);
         $projects = Project::where('template_id', $role->template_id)->get();
         $users = User::orderBy('name')->get();
@@ -157,12 +185,18 @@ class AccessController extends Controller
 
     function delete_question(Access $access)
     {
+        if (!(Auth::user()->isAdmin() || ($access->role->is_default_for_external == true))) {
+            return null;
+        }
         $project = Project::findOrFail($access->project_id);
         return view('access/show', ['type_form' => 'delete_question', 'project' => $project, 'access' => $access]);
     }
 
     function delete(Request $request, Access $access)
     {
+        if (!(Auth::user()->isAdmin() || ($access->role->is_default_for_external == true))) {
+            return null;
+        }
         $access->delete();
 
         if ($request->session()->has('accesses_previous_url')) {
@@ -176,16 +210,16 @@ class AccessController extends Controller
     {
         $result_roles_options = "";
         if ($project != null) {
-                $name = "";  // нужно, не удалять
-                $index = array_search(session('locale'), session('glo_menu_save'));
-                if ($index !== false) {   // '!==' использовать, '!=' не использовать
-                    $name = 'name_lang_' . $index;
-                }
-                // список roles по выбранному project/template
-                $result_roles = Role::where('template_id', $project->template_id)->orderBy($name)->get();
-                foreach ($result_roles as $role) {
-                    $result_roles_options = $result_roles_options . "<option value='" . $role->id . "'>" . $role->name() . "</option>";
-                }
+            $name = "";  // нужно, не удалять
+            $index = array_search(session('locale'), session('glo_menu_save'));
+            if ($index !== false) {   // '!==' использовать, '!=' не использовать
+                $name = 'name_lang_' . $index;
+            }
+            // список roles по выбранному project/template
+            $result_roles = Role::where('template_id', $project->template_id)->orderBy($name)->get();
+            foreach ($result_roles as $role) {
+                $result_roles_options = $result_roles_options . "<option value='" . $role->id . "'>" . $role->name() . "</option>";
+            }
 
         }
         return [
