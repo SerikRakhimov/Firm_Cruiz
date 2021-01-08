@@ -310,6 +310,10 @@ Route::get('/access/get_roles_options_from_project/{project}', 'AccessController
     ->name('access.get_roles_options_from_project')
     ->middleware('auth');
 
+Route::get('/access/get_roles_options_from_user_project/{user}/{project}', 'AccessController@get_roles_options_from_user_project')
+    ->name('access.get_roles_options_from_user_project')
+    ->middleware('auth');
+
 // Modules
 Route::get('/module/index/{task}', 'ModuleController@index')
     ->name('module.index')

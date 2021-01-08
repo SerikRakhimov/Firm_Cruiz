@@ -51,6 +51,8 @@ return [
     'transaction_not_completed' =>'Деректер жоқ',
     'another_attitude' => 'Тағы бір көзқарас',
     'serial_number' => 'Нөмір',
+    'login' => 'Кіру',
+    'logout' => 'Шығу',
     'bases' => 'Негіздері',
     'base' => 'Негізі',
     'links' => 'Байланыстар',
@@ -139,5 +141,6 @@ return [
     'change_password'=>'Құпия сөзді ауыстыру',
     'confirm_password'=>'Құпия сөзді қайта енгізу',
     'uniqueness_of_fields_violated'=>'Өрістердің бірегейлігі бұзылды',
-    'author'=>'Автор',
+    'author'=>'Пайдаланушыны және жобаны таңдау',
+    'project_role_select'=>'Жоба мен рөлді таңдау',
 ];

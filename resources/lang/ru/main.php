@@ -51,6 +51,8 @@ return [
     'transaction_not_completed' =>'Транзакция не завершена',
     'another_attitude' => 'Другое отношение',
     'serial_number' => 'Номер',
+    'login' => 'Войти',
+    'logout' => 'Выйти',
     'bases' => 'Основы',
     'base' => 'Основа',
     'links' => 'Связи',
@@ -140,4 +142,5 @@ return [
     'confirm_password'=>'Повторный ввод пароля',
     'uniqueness_of_fields_violated'=>'Уникальность полей нарушена',
     'author'=>'Автор',
+    'project_role_select'=>'Выбор проекта и роли для входа',
 ];

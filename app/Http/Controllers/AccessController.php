@@ -148,7 +148,7 @@ class AccessController extends Controller
         $users = User::orderBy('name')->get();
         $roles = Role::where('template_id', $project->template_id)->orderBy('name_lang_0')->get();
 
-        if (!Auth::user()->isAdmin()){
+        if (!Auth::user()->isAdmin()) {
             $roles = $roles->where('is_default_for_external', true);
         }
 
@@ -219,6 +219,28 @@ class AccessController extends Controller
             }
             foreach ($result_roles as $role) {
                 $result_roles_options = $result_roles_options . "<option value='" . $role->id . "'>" . $role->name() . "</option>";
+            }
+
+        }
+        return [
+            'result_roles_options' => $result_roles_options
+        ];
+    }
+
+    static function get_roles_options_from_user_project(User $user, Project $project)
+    {
+        $result_roles_options = "";
+        if ($project != null) {
+            $name = "";  // нужно, не удалять
+            $index = array_search(session('locale'), session('glo_menu_save'));
+            if ($index !== false) {   // '!==' использовать, '!=' не использовать
+                $name = 'name_lang_' . $index;
+            }
+            // список access->role->id по переданным user/project
+            $accesses_roles = Access::select('role_id')->where('project_id', $project->id)->where('user_id', $user->id)->groupBy('role_id')->get();
+
+            foreach ($accesses_roles as $access_role) {
+                $result_roles_options = $result_roles_options . "<option value='" . $access_role->role_id . "'>" . $access_role->role->name() . "</option>";
             }
 
         }
