@@ -47,7 +47,7 @@
     @endif
 
     @if ($type_form == 'show')
-        @if (Auth::user()->isAdmin() ||(($is_role == false) && ($access->role->is_default_for_external == true)))
+        @if (Auth::user()->isAdmin() ||!(($is_user == true) && ($access->role->is_default_for_external == false)))
             <p>
                 <button type="button" class="btn btn-dreamer"
                         onclick="document.location='{{route($access_edit,$access)}}'"

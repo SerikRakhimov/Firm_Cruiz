@@ -42,47 +42,36 @@
                     aria-label="{{ __('Toggle navigation') }}">
                 <span class="navbar-toggler-icon"></span>
             </button>
-
+                (<span class="badge badge-success">{{trans('main.admin')}}</span>)
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
             @auth
                 <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{route('project.index_user', Auth::user())}}">{{trans('main.projects')}}</a>
+{{--                            <a class="nav-link" style="color: green"--}}
+{{--                            <a class="nav-link text-primary font-weight-bold"--}}
+                            <a class="nav-link text-primary"
+                               href="{{route('project.index_user', Auth::user())}}">{{trans('main.bases')}}</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{route('access.index_user', Auth::user())}}">{{trans('main.accesses')}}</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">{{trans('main.all_projects')}}</a>
-                        </li>
-                        {{--                        <li class="nav-item">--}}
-                        {{--                            <a class="nav-link" href="{{ route('base.index') }}">{{trans('main.bases')}}</a>--}}
-                        {{--                        </li>--}}
-                        {{--                        <li class="nav-item">--}}
-                        {{--                            <a class="nav-link" href="{{ route('item.index') }}">{{trans('main.items')}}</a>--}}
-                        {{--                        </li>--}}
-                        {{--                        <li class="nav-item">--}}
-                        {{--                            <a class="nav-link" href="{{ route('link.index') }}">{{trans('main.links')}}</a>--}}
-                        {{--                        </li>--}}
-                        {{--                        <li class="nav-item">--}}
-                        {{--                            <a class="nav-link" href="{{ route('main.index') }}">{{trans('main.mains')}}</a>--}}
-                        {{--                        </li>--}}
-                        {{--                        <li class="nav-item">--}}
-                        {{--                            <a class="nav-link" href="{{ route('order.index_archive_user') }}">Мой архив</a>--}}
-                        {{--                        </li>--}}
+{{--                        <li class="nav-item">--}}
+{{--                            <a class="nav-link"--}}
+{{--                               href="{{route('access.index_user', Auth::user())}}">{{trans('main.accesses')}}</a>--}}
+{{--                        </li>--}}
+{{--                        <li class="nav-item">--}}
+{{--                            <a class="nav-link" href="#">{{trans('main.all_projects')}}</a>--}}
+{{--                        </li>--}}
                     </ul>
-                @if(Auth::user()->isAdmin())
-                    <!-- Right Side Of Navbar -->
-                        <ul class="navbar-nav ml-auto">
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{route('template.index')}}">{{trans('main.templates')}}</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{route('user.index')}}">{{trans('main.users')}}</a>
-                            </li>
-                        </ul>
-                @endif
+{{--                @if(Auth::user()->isAdmin())--}}
+{{--                    <!-- Right Side Of Navbar -->--}}
+{{--                        <ul class="navbar-nav ml-auto">--}}
+{{--                            <li class="nav-item">--}}
+{{--                                <a class="nav-link" href="{{route('template.index')}}">{{trans('main.templates')}}</a>--}}
+{{--                            </li>--}}
+{{--                            <li class="nav-item">--}}
+{{--                                <a class="nav-link" href="{{route('user.index')}}">{{trans('main.users')}}</a>--}}
+{{--                            </li>--}}
+{{--                        </ul>--}}
+{{--                @endif--}}
             @endauth
 
 
@@ -118,6 +107,25 @@
                                       style="display: none;">
                                     @csrf
                                 </form>
+                                @auth
+                                    <a class="dropdown-item" href="{{route('project.index_user', Auth::user())}}">
+                                        {{trans('main.projects')}}
+                                    </a>
+                                    <a class="dropdown-item" href="{{route('access.index_user', Auth::user())}}">
+                                        {{trans('main.accesses')}}
+                                    </a>
+                                    <a class="dropdown-item" href="#">
+                                        {{trans('main.all_projects')}}
+                                    </a>
+                                    @if(Auth::user()->isAdmin())
+                                        <a class="dropdown-item" href="{{route('template.index')}}">
+                                            {{trans('main.templates')}}(<span class="badge badge-primary">{{trans('main.admin')}}</span>)
+                                        </a>
+                                        <a class="dropdown-item" href="{{route('user.index')}}">
+                                            {{trans('main.users')}}(<span class="badge badge-primary">{{trans('main.admin')}}</span>)
+                                        </a>
+                                    @endif
+                                @endauth
                             </div>
                         </li>
                     @endguest

@@ -141,9 +141,9 @@ class AccessController extends Controller
 
     function edit_project(Access $access)
     {
-        if (!(Auth::user()->isAdmin() || ($access->role->is_default_for_external == true))) {
-            return null;
-        }
+//        if (!(Auth::user()->isAdmin() ||!($access->role->is_default_for_external == false))) {
+//            return null;
+//        }
         $project = Project::findOrFail($access->project_id);
         $users = User::orderBy('name')->get();
         $roles = Role::where('template_id', $project->template_id)->orderBy('name_lang_0')->get();
@@ -157,26 +157,23 @@ class AccessController extends Controller
 
     function edit_user(Access $access)
     {
-        if (!(Auth::user()->isAdmin() || ($access->role->is_default_for_external == true))) {
-            return null;
-        }
+//            if (!(Auth::user()->isAdmin() ||!($access->role->is_default_for_external == false))){
+//            return null;
+//        }
         $user = User::findOrFail($access->user_id);
         $projects = Project::get();
 
-        $roles = Role::orderBy('name_lang_0')->get();
-
-        if (!Auth::user()->isAdmin()){
-            $roles = $roles->where('is_default_for_external', true);
-        }
+        // см. функцию get_roles_options_from_project() - в ней прописаны $roles для случая, если передан $user
+        $roles = Role::all();
 
         return view('access/edit', ['user' => $user, 'access' => $access, 'projects' => $projects, 'roles' => $roles]);
     }
 
     function edit_role(Access $access)
     {
-        if (!Auth::user()->isAdmin()) {
-            return null;
-        }
+//        if (!Auth::user()->isAdmin()) {
+//            return null;
+//        }
         $role = Role::findOrFail($access->role_id);
         $projects = Project::where('template_id', $role->template_id)->get();
         $users = User::orderBy('name')->get();
@@ -217,6 +214,9 @@ class AccessController extends Controller
             }
             // список roles по выбранному project/template
             $result_roles = Role::where('template_id', $project->template_id)->orderBy($name)->get();
+            if (!Auth::user()->isAdmin()) {
+                $result_roles = $result_roles->where('is_default_for_external', true);
+            }
             foreach ($result_roles as $role) {
                 $result_roles_options = $result_roles_options . "<option value='" . $role->id . "'>" . $role->name() . "</option>";
             }
