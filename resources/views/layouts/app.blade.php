@@ -2,6 +2,7 @@
 <?php
 use App\Http\Controllers\GlobalController;
 use Illuminate\Support\Facades\Session;
+use App\Models\Project;
 ?>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
@@ -52,8 +53,20 @@ use Illuminate\Support\Facades\Session;
                         <li class="nav-item">
                             {{--                            <a class="nav-link" style="color: green"--}}
                             {{--                            <a class="nav-link text-primary font-weight-bold"--}}
-                            <a class="nav-link text-primary"
-                               href="{{route('project.index_user', Auth::user())}}">{{trans('main.bases')}}</a>
+                            <?php
+                            $glo_project_id = 0;
+                            $project = null;
+                            if (Session::has('glo_project_id')) {
+                                $glo_project_id = session('glo_project_id');
+                                if ($glo_project_id != 0) {
+                                    $project = Project::findOrFail($glo_project_id);
+                                }
+                            }
+                            ?>
+                            @if($glo_project_id != 0)
+                                <a class="nav-link text-primary"
+                                   href="{{route('base.index', $project->template_id)}}}">{{trans('main.bases')}}</a>
+                            @endif
                         </li>
                         {{--                        <li class="nav-item">--}}
                         {{--                            <a class="nav-link"--}}
@@ -108,11 +121,11 @@ use Illuminate\Support\Facades\Session;
                                     @csrf
                                 </form>
                                 @auth
-                                    <a class="dropdown-item" href="{{route('project.index_user', Auth::user())}}">
-                                        {{trans('main.projects')}}
-                                    </a>
                                     <a class="dropdown-item" href="\home">
                                         {{trans('main.project_role_selection')}}
+                                    </a>
+                                    <a class="dropdown-item" href="{{route('project.index_user', Auth::user())}}">
+                                        {{trans('main.projects')}}
                                     </a>
                                     <a class="dropdown-item" href="{{route('access.index_user', Auth::user())}}">
                                         {{trans('main.accesses')}}

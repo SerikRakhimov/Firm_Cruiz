@@ -17,26 +17,37 @@
     @endforeach
 
     @if ($type_form == 'show')
+        @if(Auth::user()->isAdmin() == true)
+            <p>
+                <button type="button" class="btn btn-dreamer mb-1 mb-sm-0"
+                        onclick="document.location='{{route('template.edit',$template)}}'"
+                        title="{{trans('main.edit')}}">
+                    <i class="fas fa-edit"></i>
+                    {{trans('main.edit')}}
+                </button>
+                <button type="button" class="btn btn-dreamer mb-1 mb-sm-0"
+                        onclick="document.location='{{route('template.delete_question',$template)}}'"
+                        title="{{trans('main.delete')}}">
+                    <i class="fas fa-trash"></i>
+                    {{trans('main.delete')}}
+                </button>
+            </p>
+        @endif
         <p>
-            <button type="button" class="btn btn-dreamer mb-1 mb-sm-0"
-                    onclick="document.location='{{route('template.edit',$template)}}'" title="{{trans('main.edit')}}">
-                            <i class="fas fa-edit"></i>
-                {{trans('main.edit')}}
-            </button>
-            <button type="button" class="btn btn-dreamer mb-1 mb-sm-0"
-                    onclick="document.location='{{route('template.delete_question',$template)}}'"
-                    title="{{trans('main.delete')}}">
-                            <i class="fas fa-trash"></i>
-                {{trans('main.delete')}}
-            </button>
-        </p>
-        <p>
-{{--            "mb-1 mb-sm-0" нужно чтобы на маленьких экранах кнопки не слипались (margin-botton - 1px) --}}
+            @if(Auth::user()->isAdmin() == true)
+            {{--            "mb-1 mb-sm-0" нужно чтобы на маленьких экранах кнопки не слипались (margin-botton - 1px) --}}
             <button type="button" class="btn btn-dreamer mb-1 mb-sm-0" title="{{trans('main.projects')}}"
                     onclick="document.location='{{route('project.index_template', $template)}}'">
                 <i class="fas fa-cube"></i>
                 {{trans('main.projects')}}
             </button>
+                @else
+                <button type="button" class="btn btn-dreamer mb-1 mb-sm-0" title="{{trans('main.projects')}}"
+                        onclick="document.location='{{route('project.index_user', Auth::user())}}'">
+                    <i class="fas fa-cube"></i>
+                    {{trans('main.projects')}}
+                </button>
+            @endif
             <button type="button" class="btn btn-dreamer  mb-1 mb-sm-0" title="{{trans('main.roles')}}"
                     onclick="document.location='{{route('role.index', $template)}}'">
                 <i class="fas fa-user-circle"></i>
@@ -44,12 +55,12 @@
             </button>
             <button type="button" class="btn btn-dreamer mb-1 mb-sm-0" title="{{trans('main.bases')}}"
                     onclick="document.location='{{route('base.index', $template)}}'">
-                                            <i class="fas fa-atom"></i>
+                <i class="fas fa-atom"></i>
                 {{trans('main.bases')}}
             </button>
             <button type="button" class="btn btn-dreamer mb-1 mb-sm-0"
                     title="{{trans('main.cancel')}}" @include('layouts.template.previous_url')>
-                            <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-left"></i>
                 {{trans('main.cancel')}}
             </button>
         </p>
@@ -59,12 +70,12 @@
             @method('DELETE')
             <p>
                 <button type="submit" class="btn btn-danger" title="{{trans('main.delete')}}">
-                                    <i class="fas fa-trash"></i>
+                    <i class="fas fa-trash"></i>
                     {{trans('main.delete')}}
                 </button>
                 <button type="button" class="btn btn-dreamer"
                         title="{{trans('main.cancel')}}" @include('layouts.template.previous_url')>
-                                    <i class="fas fa-arrow-left"></i>
+                    <i class="fas fa-arrow-left"></i>
                     {{trans('main.cancel')}}
                 </button>
             </p>

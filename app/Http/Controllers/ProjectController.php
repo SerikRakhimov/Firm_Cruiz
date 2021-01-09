@@ -19,6 +19,9 @@ class ProjectController extends Controller
 
     function index_template(Template $template)
     {
+        if (!Auth::user()->isAdmin()) {
+            return null;
+        }
         $projects = Project::where('template_id', $template->id);
         $name = "";  // нужно, не удалять
         $index = array_search(session('locale'), session('glo_menu_save'));
