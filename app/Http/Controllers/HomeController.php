@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Session;
 use App\Models\Template;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Project;
 
 class HomeController extends Controller
 {
@@ -33,7 +34,7 @@ class HomeController extends Controller
     {
         Session::put('glo_project_id', $request->project_id);
         Session::put('glo_role_id', $request->role_id);
-        return redirect()->route('access.index_user', Auth::user());
+        return redirect()->route('base.index', GlobalController::glo_project_template_id());
     }
 
 }

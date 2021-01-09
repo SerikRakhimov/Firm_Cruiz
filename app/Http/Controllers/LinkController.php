@@ -61,7 +61,7 @@ class LinkController extends Controller
 
     function create()
     {
-        return view('link/edit', ['bases' => Base::all()]);
+        return view('link/edit', ['bases' => Base::where('template_id', GlobalController::glo_project_template_id())->get()]);
     }
 
     function store(Request $request)
@@ -293,7 +293,7 @@ class LinkController extends Controller
 
     function edit(Link $link)
     {
-        return view('link/edit', ['link' => $link, 'bases' => Base::all()]);
+        return view('link/edit', ['link' => $link, 'bases' => Base::where('template_id', GlobalController::glo_project_template_id())->get()]);
     }
 
     function delete_question(Link $link)

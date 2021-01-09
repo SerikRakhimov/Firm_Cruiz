@@ -8,6 +8,7 @@ use App\Models\Template;
 use App\Models\Task;
 use App\Models\Module;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class BaseController extends Controller
@@ -60,11 +61,17 @@ class BaseController extends Controller
 
     function create(Template $template)
     {
+        if (!Auth::user()->isAdmin()) {
+            return null;
+        }
         return view('base/edit', ['template' => $template, 'types' => Base::get_types()]);
     }
 
     function store(Request $request)
     {
+        if (!Auth::user()->isAdmin()) {
+            return null;
+        }
         $request->validate($this->rules());
 
         // установка часового пояса нужно для сохранения времени
@@ -216,6 +223,9 @@ class BaseController extends Controller
 
     function update(Request $request, Base $base)
     {
+        if (!Auth::user()->isAdmin()) {
+            return null;
+        }
         if (!(($base->name_lang_0 == $request->name_lang_0) && ($base->name_lang_0 == $request->name_lang_0))) {
             $request->validate($this->rules());
         }
@@ -367,17 +377,26 @@ class BaseController extends Controller
 
     function edit(Base $base)
     {
+        if (!Auth::user()->isAdmin()) {
+            return null;
+        }
         $template = Template::findOrFail($base->template_id);
         return view('base/edit', ['template' => $template, 'base' => $base, 'types' => Base::get_types()]);
     }
 
     function delete_question(Base $base)
     {
+        if (!Auth::user()->isAdmin()) {
+            return null;
+        }
         return view('base/show', ['type_form' => 'delete_question', 'base' => $base]);
     }
 
     function delete(Base $base)
     {
+        if (!Auth::user()->isAdmin()) {
+            return null;
+        }
         // сначала эта команда
         $template = Template::findOrFail($base->template_id);
         // потом эта команда

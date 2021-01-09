@@ -32,6 +32,18 @@ class GlobalController extends Controller
         return $result;
     }
 
+    static function glo_project_template_id()
+    {
+        $result = 0;
+        // если существует переменная в сессии
+        if (Session::has('glo_project_id')) {
+            $glo_project_id = session('glo_project_id');
+            if ($glo_project_id != 0) {
+                $result = Project::findOrFail($glo_project_id)->template_id;
+            }
+        }
+        return $result;
+    }
     static function glo_role_name()
     {
         $result = "";

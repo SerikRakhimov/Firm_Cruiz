@@ -54,18 +54,11 @@ use App\Models\Project;
                             {{--                            <a class="nav-link" style="color: green"--}}
                             {{--                            <a class="nav-link text-primary font-weight-bold"--}}
                             <?php
-                            $glo_project_id = 0;
-                            $project = null;
-                            if (Session::has('glo_project_id')) {
-                                $glo_project_id = session('glo_project_id');
-                                if ($glo_project_id != 0) {
-                                    $project = Project::findOrFail($glo_project_id);
-                                }
-                            }
+                            $glo_project_template_id = GlobalController::glo_project_template_id();
                             ?>
-                            @if($glo_project_id != 0)
+                            @if($glo_project_template_id != 0)
                                 <a class="nav-link text-primary"
-                                   href="{{route('base.index', $project->template_id)}}}">{{trans('main.bases')}}</a>
+                                   href="{{route('base.index', $glo_project_template_id)}}}">{{trans('main.bases')}}</a>
                             @endif
                         </li>
                         {{--                        <li class="nav-item">--}}
