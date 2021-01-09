@@ -45,7 +45,6 @@ use Illuminate\Support\Facades\Session;
             {{--                    aria-label="{{ __('Toggle navigation') }}">--}}
             {{--                <span class="navbar-toggler-icon"></span>--}}
             {{--            </button>--}}
-            (<span class="badge badge-success">{{GlobalController::glo_project_name()}}/{{GlobalController::glo_role_name()}}</span>)
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
             @auth
                 <!-- Left Side Of Navbar -->
@@ -140,6 +139,18 @@ use Illuminate\Support\Facades\Session;
         </div>
     </nav>
     <main class="py-4 w-75 mx-auto">
+        <p>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-6 text-left">
+                    <span class="badge badge-success">{{GlobalController::glo_project_name()}}</span>
+                </div>
+                <div class="col-6 text-right">
+                    <span class="badge badge-success">{{GlobalController::glo_role_name()}}</span>
+                </div>
+            </div>
+        </div>
+        </p>
         {{--        <div class="mx-auto" style="width: 1200px;">--}}
         @yield('content')
         {{--        </div>--}}
