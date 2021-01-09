@@ -142,5 +142,5 @@ return [
     'confirm_password'=>'Құпия сөзді қайта енгізу',
     'uniqueness_of_fields_violated'=>'Өрістердің бірегейлігі бұзылды',
     'author'=>'Пайдаланушыны және жобаны таңдау',
-    'project_role_select'=>'Жоба мен рөлді таңдау',
+    'project_role_selection'=>'Жоба мен рөлді таңдау',
 ];

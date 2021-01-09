@@ -142,5 +142,5 @@ return [
     'confirm_password'=>'Повторный ввод пароля',
     'uniqueness_of_fields_violated'=>'Уникальность полей нарушена',
     'author'=>'Автор',
-    'project_role_select'=>'Выбор проекта и роли для входа',
+    'project_role_selection'=>'Выбор проекта и роли',
 ];

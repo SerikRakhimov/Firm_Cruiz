@@ -142,5 +142,5 @@ return [
     'confirm_password'=>'Confirm password',
     'uniqueness_of_fields_violated'=>'Uniqueness of fields violated',
     'author'=>'Author',
-    'project_role_select'=>'Selecting a project and a role to login',
+    'project_role_selection'=>'Project and role selection',
 ];

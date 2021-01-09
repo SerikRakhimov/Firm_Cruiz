@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Project;
 use Illuminate\Support\Facades\Route;
 use Artisan;
 use App\Http\Controllers;
@@ -63,9 +64,11 @@ Route::get('/', function () {
         $user->is_admin = true;
         $user->save();
     }
+    Session::put('glo_project_id', 0);
+    Session::put('glo_role_id', 0);
     if (Auth::check()) {
-        return view('welcome');
-        //return view('home');
+        //return view('welcome');
+        return view('home');
         //return redirect()->route('order.index_job_user');
     } else {
         return redirect()->route('login');
@@ -87,6 +90,10 @@ Route::get('/setlocale/{locale}', function ($locale) {
     return redirect()->back()->withInput();                 # Редиректим его <s>взад</s> на ту же страницу
 
 });
+
+Route::post('/home/glo_store', 'HomeController@glo_store')
+    ->name('home.glo_store')
+    ->middleware('auth');
 
 // Templates
 Route::get('/template/index', 'TemplateController@index')

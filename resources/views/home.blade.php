@@ -39,17 +39,21 @@
     $is_role = isset($role);
     ?>
     <p>
+        @if(count($projects)==0)
+            <a class="dropdown-item" href="{{route('project.index_user', Auth::user())}}">
+                {{trans('main.projects')}}
+            </a>
+            <a class="dropdown-item" href="{{route('access.index_user', Auth::user())}}">
+                {{trans('main.accesses')}}
+            </a>
+    @endif
     <h3 class="display-5 text-center">
-        {{trans('main.project_role_select')}}
+        {{trans('main.project_role_selection')}}
     </h3>
     </p>
-    <form action="{{$update ? route('access.update', $access):route('access.store')}}" method="POST"
+    <form action="{{route('home.glo_store')}}" method="POST"
           enctype=multipart/form-data name="form">
         @csrf
-
-        @if ($update)
-            @method('PUT')
-        @endif
         @if($is_project)
             <input type="hidden" name="project_id" value="{{$project->id}}">
         @else

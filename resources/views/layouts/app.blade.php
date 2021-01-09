@@ -1,4 +1,8 @@
 <!doctype html>
+<?php
+use App\Http\Controllers\GlobalController;
+use Illuminate\Support\Facades\Session;
+?>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
@@ -23,7 +27,6 @@
 <div id="app">
     <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
         <div class="container">
-
             @foreach (session('glo_menu_lang') as $value)
                 <a class="navbar-brand" href="{{ url('/setlocale/' . $value) }}">
                     <span
@@ -37,44 +40,42 @@
             <a class="navbar-brand" href="{{ url('/') }}">
                 {{ config('app.name', 'Laravel') }}
             </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                    aria-controls="navbarSupportedContent" aria-expanded="false"
-                    aria-label="{{ __('Toggle navigation') }}">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-                (<span class="badge badge-success">{{trans('main.admin')}}</span>)
+            {{--            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"--}}
+            {{--                    aria-controls="navbarSupportedContent" aria-expanded="false"--}}
+            {{--                    aria-label="{{ __('Toggle navigation') }}">--}}
+            {{--                <span class="navbar-toggler-icon"></span>--}}
+            {{--            </button>--}}
+            (<span class="badge badge-success">{{GlobalController::glo_project_name()}}/{{GlobalController::glo_role_name()}}</span>)
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
             @auth
                 <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
-{{--                            <a class="nav-link" style="color: green"--}}
-{{--                            <a class="nav-link text-primary font-weight-bold"--}}
+                            {{--                            <a class="nav-link" style="color: green"--}}
+                            {{--                            <a class="nav-link text-primary font-weight-bold"--}}
                             <a class="nav-link text-primary"
                                href="{{route('project.index_user', Auth::user())}}">{{trans('main.bases')}}</a>
                         </li>
-{{--                        <li class="nav-item">--}}
-{{--                            <a class="nav-link"--}}
-{{--                               href="{{route('access.index_user', Auth::user())}}">{{trans('main.accesses')}}</a>--}}
-{{--                        </li>--}}
-{{--                        <li class="nav-item">--}}
-{{--                            <a class="nav-link" href="#">{{trans('main.all_projects')}}</a>--}}
-{{--                        </li>--}}
+                        {{--                        <li class="nav-item">--}}
+                        {{--                            <a class="nav-link"--}}
+                        {{--                               href="{{route('access.index_user', Auth::user())}}">{{trans('main.accesses')}}</a>--}}
+                        {{--                        </li>--}}
+                        {{--                        <li class="nav-item">--}}
+                        {{--                            <a class="nav-link" href="#">{{trans('main.all_projects')}}</a>--}}
+                        {{--                        </li>--}}
                     </ul>
-{{--                @if(Auth::user()->isAdmin())--}}
-{{--                    <!-- Right Side Of Navbar -->--}}
-{{--                        <ul class="navbar-nav ml-auto">--}}
-{{--                            <li class="nav-item">--}}
-{{--                                <a class="nav-link" href="{{route('template.index')}}">{{trans('main.templates')}}</a>--}}
-{{--                            </li>--}}
-{{--                            <li class="nav-item">--}}
-{{--                                <a class="nav-link" href="{{route('user.index')}}">{{trans('main.users')}}</a>--}}
-{{--                            </li>--}}
-{{--                        </ul>--}}
-{{--                @endif--}}
+                {{--                @if(Auth::user()->isAdmin())--}}
+                {{--                    <!-- Right Side Of Navbar -->--}}
+                {{--                        <ul class="navbar-nav ml-auto">--}}
+                {{--                            <li class="nav-item">--}}
+                {{--                                <a class="nav-link" href="{{route('template.index')}}">{{trans('main.templates')}}</a>--}}
+                {{--                            </li>--}}
+                {{--                            <li class="nav-item">--}}
+                {{--                                <a class="nav-link" href="{{route('user.index')}}">{{trans('main.users')}}</a>--}}
+                {{--                            </li>--}}
+                {{--                        </ul>--}}
+                {{--                @endif--}}
             @endauth
-
-
             <!-- Right Side Of Navbar -->
                 <ul class="navbar-nav ml-auto">
                     <!-- Authentication Links -->
@@ -111,6 +112,9 @@
                                     <a class="dropdown-item" href="{{route('project.index_user', Auth::user())}}">
                                         {{trans('main.projects')}}
                                     </a>
+                                    <a class="dropdown-item" href="\home">
+                                        {{trans('main.project_role_selection')}}
+                                    </a>
                                     <a class="dropdown-item" href="{{route('access.index_user', Auth::user())}}">
                                         {{trans('main.accesses')}}
                                     </a>
@@ -119,10 +123,12 @@
                                     </a>
                                     @if(Auth::user()->isAdmin())
                                         <a class="dropdown-item" href="{{route('template.index')}}">
-                                            {{trans('main.templates')}}(<span class="badge badge-primary">{{trans('main.admin')}}</span>)
+                                            {{trans('main.templates')}}(<span
+                                                class="badge badge-primary">{{trans('main.admin')}}</span>)
                                         </a>
                                         <a class="dropdown-item" href="{{route('user.index')}}">
-                                            {{trans('main.users')}}(<span class="badge badge-primary">{{trans('main.admin')}}</span>)
+                                            {{trans('main.users')}}(<span
+                                                class="badge badge-primary">{{trans('main.admin')}}</span>)
                                         </a>
                                     @endif
                                 @endauth
@@ -133,7 +139,6 @@
             </div>
         </div>
     </nav>
-
     <main class="py-4 w-75 mx-auto">
         {{--        <div class="mx-auto" style="width: 1200px;">--}}
         @yield('content')
