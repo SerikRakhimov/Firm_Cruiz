@@ -10,7 +10,7 @@
             <div class="col-2">
             </div>
             <div class="col-5 text-right">
-                @if (Auth::user()->isAdmin()))
+                @if (Auth::user()->isAdmin())
                 <button type="button" class="btn btn-dreamer" title="{{trans('main.add')}}"
                         {{--                        "d-inline" нужно, чтобы иконка и текст были на одной линии--}}
                         onclick="document.location='{{route('template.create')}}'"><i class="fas fa-plus d-inline"></i>&nbsp;{{trans('main.add')}}
