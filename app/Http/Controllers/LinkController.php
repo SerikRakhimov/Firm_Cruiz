@@ -50,7 +50,6 @@ class LinkController extends Controller
         $items = null;
         session(['links' => ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/' . request()->path()]);
         return view('link/base_index', ['base' => $base, 'links' => Link::where('child_base_id', $base->id)->orderBy('parent_base_number')->get()]);
-
     }
 
 
@@ -59,9 +58,9 @@ class LinkController extends Controller
         return view('link/show', ['type_form' => 'show', 'link' => $link]);
     }
 
-    function create()
+    function create(Base $base)
     {
-        return view('link/edit', ['bases' => Base::where('template_id', GlobalController::glo_project_template_id())->get()]);
+        return view('link/edit', ['bases' => Base::where('template_id', $base->template_id)->get()]);
     }
 
     function store(Request $request)
@@ -291,9 +290,9 @@ class LinkController extends Controller
         return redirect()->route('link.base_index', ['base' => $link->child_base, 'links' => Link::where('child_base_id', $link->child_base_id)->orderBy('parent_base_number')->get()]);
     }
 
-    function edit(Link $link)
+    function edit(Link $link, Base $base)
     {
-        return view('link/edit', ['link' => $link, 'bases' => Base::where('template_id', GlobalController::glo_project_template_id())->get()]);
+        return view('link/edit', ['link' => $link, 'bases' =>  Base::where('template_id', $base->template_id)->get()]);
     }
 
     function delete_question(Link $link)

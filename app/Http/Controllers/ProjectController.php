@@ -22,6 +22,7 @@ class ProjectController extends Controller
         if (!Auth::user()->isAdmin()) {
             return null;
         }
+        GlobalController::glo_project_role_setnull();
         $projects = Project::where('template_id', $template->id);
         $name = "";  // нужно, не удалять
         $index = array_search(session('locale'), session('glo_menu_save'));
@@ -35,6 +36,7 @@ class ProjectController extends Controller
 
     function index_user(User $user)
     {
+        GlobalController::glo_project_role_setnull();
         $projects = Project::where('user_id', $user->id);
         $name = "";  // нужно, не удалять
         $index = array_search(session('locale'), session('glo_menu_save'));

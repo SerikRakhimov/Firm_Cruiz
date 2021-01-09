@@ -6,10 +6,12 @@ use App\Models\Base;
 use App\Models\Item;
 use App\Models\Link;
 use App\Models\Main;
+use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use phpDocumentor\Reflection\Types\Boolean;
 use phpDocumentor\Reflection\Types\Integer;
+use Illuminate\Support\Facades\Auth;
 
 class ItemController extends Controller
 {
@@ -39,7 +41,7 @@ class ItemController extends Controller
         // exists:table,column
         // поле должно существовать в заданной таблице базе данных.
         return [
-            'code' => ['required', 'unique_with: items, base_id, code'],
+            'code' => ['required', 'unique_with: items, base_id, project_id, code'],
             'name_lang_0' => ['max:1000']
         ];
     }
@@ -157,7 +159,7 @@ class ItemController extends Controller
             }
         }
         session(['links' => ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/' . request()->path()]);
-        return view('item/base_index', ['base' => $base, 'items' => $items->where('base_id', $base->id)->paginate(60)]);
+        return view('item/base_index', ['base' => $base, 'items' => $items->where('base_id', $base->id)->where('project_id', GlobalController::glo_project_id())->paginate(60)]);
 
 //        return view('item/index', ['items' => Item::all()->sortBy(function ($item){
 //            return $item->base->name_lang_0 . $item->name_lang_0;})]);
@@ -331,6 +333,7 @@ class ItemController extends Controller
             'array_calc' => $array_calc,
             'array_disabled' => $array_disabled,
             'par_link' => $par_link, 'parent_item' => $parent_item]);
+
     }
 
     function create()
@@ -577,7 +580,8 @@ class ItemController extends Controller
         try {
             // начало транзакции
             DB::transaction(function ($r) use ($item, $keys, $values, $strings_inputs) {
-
+                $item->project_id = GlobalController::glo_project_id();
+                $item->updated_user_id = Auth::user()->id;
                 // Эта команда "$item->save();" нужна, чтобы при сохранении записи стало известно значение $item->id.
                 // оно нужно в функции save_main() (для команды "$main->child_item_id = $item->id;");
                 $item->save();
@@ -624,8 +628,7 @@ class ItemController extends Controller
 //      return redirect()->back()->withInput();                 # Редиректим его <s>взад</s> на ту же страницу
     }
 
-    private
-    function save_main(Main $main, $item, $keys, $values, $index, $strings_inputs)
+    private  function save_main(Main $main, $item, $keys, $values, $index, $strings_inputs)
     {
         $main->link_id = $keys[$index];
         $main->child_item_id = $item->id;
@@ -678,9 +681,11 @@ class ItemController extends Controller
                     }
                     $i = $i + 1;
                 }
+                $item_find->project_id = GlobalController::glo_project_id();
+                $item_find->updated_user_id = Auth::user()->id;
                 $item_find->save();
             }
-            $main->parent_item_id = $item_find->id;
+           $main->parent_item_id = $item_find->id;
 
             // тип корректировки поля - не строка и не список
         } else {
@@ -697,11 +702,13 @@ class ItemController extends Controller
                 foreach (session('glo_menu_save') as $key => $value) {
                     $item_find['name_lang_' . $key] = $values[$index];
                 }
-
+                $item_find->project_id = GlobalController::glo_project_id();
+                $item_find->updated_user_id = Auth::user()->id;
                 $item_find->save();
             }
             $main->parent_item_id = $item_find->id;
         }
+        $main->updated_user_id = Auth::user()->id;
         $main->save();
     }
 
@@ -807,6 +814,8 @@ class ItemController extends Controller
 
         $data = $request->except('_token', '_method');
         $item->fill($data);
+        $item->project_id = GlobalController::glo_project_id();
+        $item->updated_user_id = Auth::user()->id;
         // Похожая проверка в ext_edit.blade.php
 //        if ($item->base->is_code_needed == true && $item->base->is_code_number == true && $item->base->is_limit_sign_code == true
 //            && $item->base->is_code_zeros == true && $item->base->is_code_zeros > 0) {
@@ -1045,8 +1054,7 @@ class ItemController extends Controller
         return redirect(session('links'));
     }
 
-    private
-    function delete_items_old($array_calc)
+    private function delete_items_old($array_calc)
     {
         foreach ($array_calc as $key => $value) {
             // использовать '$link = Link::find($key); if($link){}'
@@ -1541,7 +1549,7 @@ class ItemController extends Controller
         if ($base->is_suggest_code == true) {
             //Список, отсортированный по коду
 //          $items = Item::where('base_id', $base->id)->orderBy('code')->get();
-            $items = Item::all()->where('base_id', $base->id)->sortBy(function ($row) {
+            $items = Item::all()->where('base_id', $base->id)->where('project_id', GlobalController::glo_project_id())->sortBy(function ($row) {
                 return $row->code;
             })->toArray();
             if ($items == null) {

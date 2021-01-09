@@ -19,6 +19,25 @@ class GlobalController extends Controller
         Artisan::call('storage:link');
     }
 
+    static function glo_project_role_setnull()
+    {
+        Session::put('glo_project_id', 0);
+        Session::put('glo_role_id', 0);
+    }
+
+    static function glo_project_id()
+    {
+        $result = 0;
+        // если существует переменная в сессии
+        if (Session::has('glo_project_id')) {
+            $glo_project_id = session('glo_project_id');
+            if ($glo_project_id != 0) {
+                $result = Project::findOrFail($glo_project_id)->id;
+            }
+        }
+        return $result;
+    }
+
     static function glo_project_name()
     {
         $result = "";
@@ -44,6 +63,7 @@ class GlobalController extends Controller
         }
         return $result;
     }
+
     static function glo_role_name()
     {
         $result = "";

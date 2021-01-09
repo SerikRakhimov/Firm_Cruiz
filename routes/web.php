@@ -37,17 +37,17 @@ Route::get('/', function () {
     GlobalController::start_artisan();
     // массив "glo_menu_main" показывает, что четыре поля наименований хранятся в bases и items
     // ['1', '2', '3', '4'] - тут разницы нет, какие значения хранятся; главное, чтобы что-то хранилось
-    $array =  ['1', '2', '3', '4'];
+    $array = ['1', '2', '3', '4'];
     Session::put('glo_menu_main', $array);
 
     // массив "glo_menu_lang" показывает какие языки используются в меню
     // должно входить(не превышать) во множество 'locales'(config\app.php)
-    $array =  ['ru', 'kz', 'en'];
+    $array = ['ru', 'kz', 'en'];
     Session::put('glo_menu_lang', $array);
 
     // массив "glo_menu_save" показывает, какие языки хранятся в bases и items
     // должно входить(не превышать) во множество массива 'glo_menu_lang'
-    $array =  ['ru', 'kz', 'en'];
+    $array = ['ru', 'kz', 'en'];
     Session::put('glo_menu_save', $array);
 
     // текущий язык программы
@@ -64,8 +64,9 @@ Route::get('/', function () {
         $user->is_admin = true;
         $user->save();
     }
-    Session::put('glo_project_id', 0);
-    Session::put('glo_role_id', 0);
+
+    GlobalController::glo_project_role_setnull();
+
     if (Auth::check()) {
         //return view('welcome');
         return view('home');
@@ -401,11 +402,11 @@ Route::get('/link/show/{link}', 'LinkController@show')
     ->name('link.show')
     ->middleware('auth');
 
-Route::get('/link/create', 'LinkController@create')
+Route::get('/link/create/{base}', 'LinkController@create')
     ->name('link.create')
     ->middleware('auth');
 
-Route::get('/link/edit/{link}', 'LinkController@edit')
+Route::get('/link/edit/{link}/{base}', 'LinkController@edit')
     ->name('link.edit')
     ->middleware('auth');
 

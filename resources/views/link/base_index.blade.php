@@ -13,7 +13,7 @@
                 <h3>{{trans('main.links')}}</h3>
             </div>
             <div class="col-1 text-left">
-                <a href="{{route('link.create')}}" title="{{trans('main.add')}}">
+                <a href="{{route('link.create', $base)}}" title="{{trans('main.add')}}">
                     <img src="{{Storage::url('add_record.png')}}" width="15" height="15" alt="{{trans('main.add')}}">
                 </a>
             </div>
@@ -111,7 +111,7 @@
                     {{$link->id}}
                 </td>
                 <td class="text-center">
-                    <a href="{{route('link.edit',$link)}}" title="{{trans('main.edit')}}">
+                    <a href="{{route('link.edit',[$link, $base])}}" title="{{trans('main.edit')}}">
                         <img src="{{Storage::url('edit_record.png')}}" width="15" height="15"
                              alt="{{trans('main.edit')}}">
                     </a>

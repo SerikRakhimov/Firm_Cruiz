@@ -25,6 +25,7 @@ class AccessController extends Controller
 
     function index_project(Project $project)
     {
+        GlobalController::glo_project_role_setnull();
         $accesses = Access::where('project_id', $project->id);
         $accesses = $accesses->orderBy('project_id')->orderBy('user_id')->orderBy('role_id');
         session(['accesses_previous_url' => request()->url()]);
@@ -33,6 +34,7 @@ class AccessController extends Controller
 
     function index_user(User $user)
     {
+        GlobalController::glo_project_role_setnull();
         $accesses = Access::where('user_id', $user->id);
         $accesses = $accesses->orderBy('project_id')->orderBy('user_id')->orderBy('role_id');
         session(['accesses_previous_url' => request()->url()]);
@@ -45,6 +47,7 @@ class AccessController extends Controller
         Auth::user()->isAdmin()) {
             return null;
         }
+        GlobalController::glo_project_role_setnull();
         $accesses = Access::where('role_id', $role->id);
         $accesses = $accesses->orderBy('project_id')->orderBy('user_id')->orderBy('role_id');
         session(['accesses_previous_url' => request()->url()]);

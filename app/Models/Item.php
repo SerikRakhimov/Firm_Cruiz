@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 class Item extends Model
 {
-    protected $fillable = ['base_id', 'code', 'name_lang_0', 'name_lang_1', 'name_lang_2', 'name_lang_3'];
+    protected $fillable = ['base_id', 'project_id', 'updated_user_id','code', 'name_lang_0', 'name_lang_1', 'name_lang_2', 'name_lang_3'];
 
     function base()
     {

@@ -18,6 +18,8 @@ class TemplateController extends Controller
 
     function index()
     {
+        GlobalController::glo_project_role_setnull();
+
         $templates = null;
         $index = array_search(session('locale'), session('glo_menu_save'));
         $name = "";  // нужно, не удалять

@@ -47,6 +47,9 @@ class UserController extends Controller
         if (!Auth::user()->isAdmin()) {
             return null;
         }
+
+        GlobalController::glo_project_role_setnull();
+
         $users = User::orderBy('name');
         session(['users_previous_url' => request()->url()]);
         return view('user/index', ['users' => $users->paginate(60)]);

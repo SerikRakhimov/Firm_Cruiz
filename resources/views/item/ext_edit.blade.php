@@ -4,6 +4,7 @@
     <?php
     use App\Models\Link;
     use App\Models\Item;
+    use \App\Http\Controllers\GlobalController;
     use \App\Http\Controllers\BaseController;
     use \App\Http\Controllers\ItemController;
     use \App\Http\Controllers\LinkController;
@@ -45,6 +46,7 @@
             @method('PUT')
         @endif
         <input type="hidden" name="base_id" value="{{$base->id}}">
+        <input type="hidden" name="project_id" value="{{GlobalController::glo_project_id()}}">
         {{--        код--}}
         @if($base->is_code_needed == true)
             <div class="form-group row">

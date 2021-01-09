@@ -25,7 +25,7 @@ class CreateItemsTable extends Migration
             $table->string('name_lang_3',1000)->default("");
             $table->timestamps();
             $table->index('base_id');
-            $table->unique(['base_id', 'code']);
+            //$table->unique(['base_id', 'code']);
             //$table->index('name_lang_0');
             //$table->index('name_lang_1');
             //$table->index('name_lang_2');
