@@ -85,10 +85,10 @@ class ItemController extends Controller
             if ($base->is_code_number == true) {
                 // Сортировка по коду числовому
                 $items = Item::selectRaw("*, code*1  AS code_value")
-                    ->where('base_id', $base_id)->orderBy('code_value');
+                    ->where('base_id', $base_id)->where('project_id', GlobalController::glo_project_id())->orderBy('code_value');
             } else {
                 // Сортировка по коду строковому
-                $items = Item::where('base_id', $base_id)->orderByRaw(strval('code'));
+                $items = Item::where('base_id', $base_id)->where('project_id', GlobalController::glo_project_id())->orderByRaw(strval('code'));
             }
         } else {
             // Сортировка по наименованию
@@ -115,17 +115,17 @@ class ItemController extends Controller
             switch ($index) {
                 case 0:
                     //$items = Item::all()->sortBy('name_lang_0');
-                    $items = Item::orderBy('base_id')->orderBy('name_lang_0');
+                    $items = Item::where('project_id', GlobalController::glo_project_id())->orderBy('base_id')->orderBy('name_lang_0');
                     break;
                 case 1:
                     //$items = Item::all()->sortBy(function($row){return $row->name_lang_1 . $row->name_lang_0;});
-                    $items = Item::orderBy('base_id')->orderBy('name_lang_1')->orderBy('name_lang_0');
+                    $items = Item::where('project_id', GlobalController::glo_project_id())->orderBy('base_id')->orderBy('name_lang_1')->orderBy('name_lang_0');
                     break;
                 case 2:
-                    $items = Item::orderBy('base_id')->orderBy('name_lang_2')->orderBy('name_lang_0');
+                    $items = Item::where('project_id', GlobalController::glo_project_id())->orderBy('base_id')->orderBy('name_lang_2')->orderBy('name_lang_0');
                     break;
                 case 3:
-                    $items = Item::orderBy('base_id')->orderBy('name_lang_3')->orderBy('name_lang_0');
+                    $items = Item::where('project_id', GlobalController::glo_project_id())->orderBy('base_id')->orderBy('name_lang_3')->orderBy('name_lang_0');
                     break;
             }
         }
@@ -144,17 +144,17 @@ class ItemController extends Controller
             switch ($index) {
                 case 0:
                     //$items = Item::all()->sortBy('name_lang_0');
-                    $items = Item::orderBy('base_id')->orderBy('name_lang_0');
+                    $items = Item::orderBy('base_id')->where('project_id', GlobalController::glo_project_id())->orderBy('name_lang_0');
                     break;
                 case 1:
                     //$items = Item::all()->sortBy(function($row){return $row->name_lang_1 . $row->name_lang_0;});
-                    $items = Item::orderBy('base_id')->orderBy('name_lang_1')->orderBy('name_lang_0');
+                    $items = Item::orderBy('base_id')->where('project_id', GlobalController::glo_project_id())->orderBy('name_lang_1')->orderBy('name_lang_0');
                     break;
                 case 2:
-                    $items = Item::orderBy('base_id')->orderBy('name_lang_2')->orderBy('name_lang_0');
+                    $items = Item::orderBy('base_id')->where('project_id', GlobalController::glo_project_id())->orderBy('name_lang_2')->orderBy('name_lang_0');
                     break;
                 case 3:
-                    $items = Item::orderBy('base_id')->orderBy('name_lang_3')->orderBy('name_lang_0');
+                    $items = Item::orderBy('base_id')->where('project_id', GlobalController::glo_project_id())->orderBy('name_lang_3')->orderBy('name_lang_0');
                     break;
             }
         }
@@ -349,7 +349,6 @@ class ItemController extends Controller
 //        }else{
         $request->validate($this->rules());
 //        }
-
         // Проверка на обязательность ввода наименования
         if ($base->is_required_lst_num_str == true && $base->is_calcname_lst == false) {
             // Тип - список или строка
@@ -432,13 +431,14 @@ class ItemController extends Controller
             $item->name_lang_2 = $item->name_lang_0;
             $item->name_lang_3 = $item->name_lang_0;
         }
-        $excepts = array('_token', 'base_id', 'code', '_method', 'name_lang_0', 'name_lang_1', 'name_lang_2', 'name_lang_3');
+        $excepts = array('_token', 'base_id', 'project_id', 'code', '_method', 'name_lang_0', 'name_lang_1', 'name_lang_2', 'name_lang_3');
         $string_langs = $this->get_child_links($base);
         // Формируется массив $code_names - названия полей кодов
         // Формируется массив $string_names - названия полей наименование
         $code_names = array();
         $string_names = array();
         $i = 0;
+
         foreach ($string_langs as $key => $link) {
             if ($link->parent_base->type_is_string()) {
                 $i = 0;
@@ -487,8 +487,10 @@ class ItemController extends Controller
 
         $array_mess = array();
         $errors = false;
+
         foreach ($inputs as $key => $value) {
             $link = Link::findOrFail($key);
+
             $work_base = $link->parent_base;
             // при типе "логический" проверять на обязательность заполнения не нужно
             $control_required = false;
@@ -577,11 +579,14 @@ class ItemController extends Controller
             $item->name_lang_2 = $item->name_lang_0;
             $item->name_lang_3 = $item->name_lang_0;
         }
+
+        $item->project_id = GlobalController::glo_project_id();
+        $item->updated_user_id = Auth::user()->id;
+
         try {
             // начало транзакции
             DB::transaction(function ($r) use ($item, $keys, $values, $strings_inputs) {
-                $item->project_id = GlobalController::glo_project_id();
-                $item->updated_user_id = Auth::user()->id;
+
                 // Эта команда "$item->save();" нужна, чтобы при сохранении записи стало известно значение $item->id.
                 // оно нужно в функции save_main() (для команды "$main->child_item_id = $item->id;");
                 $item->save();
@@ -852,7 +857,7 @@ class ItemController extends Controller
             $item->name_lang_3 = $item->name_lang_0;
         }
 
-        $excepts = array('_token', 'base_id', 'code', '_method', 'name_lang_0', 'name_lang_1', 'name_lang_2', 'name_lang_3');
+        $excepts = array('_token', 'base_id', 'project_id','code', '_method', 'name_lang_0', 'name_lang_1', 'name_lang_2', 'name_lang_3');
         $string_langs = $this->get_child_links($item->base);
 
         // Формируется массив $code_names - названия полей кодов
