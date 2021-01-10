@@ -144,17 +144,17 @@ class ItemController extends Controller
             switch ($index) {
                 case 0:
                     //$items = Item::all()->sortBy('name_lang_0');
-                    $items = Item::orderBy('base_id')->where('project_id', GlobalController::glo_project_id())->orderBy('name_lang_0');
+                    $items = Item::orderBy('base_id')->orderBy('name_lang_0');
                     break;
                 case 1:
                     //$items = Item::all()->sortBy(function($row){return $row->name_lang_1 . $row->name_lang_0;});
-                    $items = Item::orderBy('base_id')->where('project_id', GlobalController::glo_project_id())->orderBy('name_lang_1')->orderBy('name_lang_0');
+                    $items = Item::orderBy('base_id')->orderBy('name_lang_1')->orderBy('name_lang_0');
                     break;
                 case 2:
-                    $items = Item::orderBy('base_id')->where('project_id', GlobalController::glo_project_id())->orderBy('name_lang_2')->orderBy('name_lang_0');
+                    $items = Item::orderBy('base_id')->orderBy('name_lang_2')->orderBy('name_lang_0');
                     break;
                 case 3:
-                    $items = Item::orderBy('base_id')->where('project_id', GlobalController::glo_project_id())->orderBy('name_lang_3')->orderBy('name_lang_0');
+                    $items = Item::orderBy('base_id')->orderBy('name_lang_3')->orderBy('name_lang_0');
                     break;
             }
         }
