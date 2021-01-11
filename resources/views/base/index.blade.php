@@ -1,6 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
+    <?php
+    use App\Models\Item;
+    use App\Http\Controllers\GlobalController;
+    ?>
     @include('layouts.template.show_name',['template'=>$template])
     <div class="container-fluid">
         <div class="row">
@@ -27,7 +31,6 @@
         <tr>
             <th class="text-center">#</th>
             <th class="text-left">{{trans('main.names')}}</th>
-            <th class="text-center">Id</th>
             <th class="text-center"></th>
             <th class="text-center"></th>
             <th class="text-center"></th>
@@ -48,10 +51,8 @@
                 <td class="text-left">
                     <a href="{{route('item.base_index',$base)}}" title="{{$base->names()}}">
                         {{$base->names()}}
+                        ({{count(Item::where('base_id', $base->id)->where('project_id', GlobalController::glo_project_id())->get())}})
                     </a>
-                </td>
-                <td class="text-center">
-                    {{$base->id}}
                 </td>
                 <td class="text-center">
                     <a href="{{route('base.show',$base)}}" title="{{trans('main.view')}}">
