@@ -28,8 +28,8 @@
             </a>
         </div>
         <div class="col-1 text-left">
-            <a href="{{route('link.base_index',$base)}}" title = "{{trans('main.links')}}">
-                <img src="{{Storage::url('links.png')}}" width="15" height="15" alt = "{{trans('main.links')}}">
+            <a href="{{route('link.base_index',$base)}}" title="{{trans('main.links')}}">
+                <img src="{{Storage::url('links.png')}}" width="15" height="15" alt="{{trans('main.links')}}">
             </a>
         </div>
         @if ($base->is_calcname_lst == true)
@@ -70,6 +70,7 @@
                     </a>
                 </th>
             @endforeach
+            <th class="text-center">{{trans('main.user')}}</th>
             <th class="text-center"></th>
             <th class="text-center"></th>
             <th class="text-center"></th>
@@ -120,6 +121,8 @@
                             @endif
                     </td>
                 @endforeach
+                <td>{{$item_find->updated_user->name()}}
+                </td>
                 <td class="text-left">
                     <?php
                     //                    $link = Link::where('child_base_id', $item->base_id)->first();

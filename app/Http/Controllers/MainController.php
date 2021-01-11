@@ -36,9 +36,7 @@ class MainController extends Controller
             return $main->link->parent_base->name() . $main->parent_item->name();
         })->get();
 
-//        $parent_mains = Main::all()->where('parent_item_id', $item->id)->sortBy(function ($main) {
-//            return $main->link->child_base->name() . $main->child_item->name();
-//        });
+
 
         $parent_mains = Main::where('parent_item_id', $item->id)->sortBy(function ($main) {
             return $main->link->child_base->name() . $main->child_item->name();

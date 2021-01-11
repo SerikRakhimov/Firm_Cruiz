@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\User;
 use Illuminate\Support\Facades\DB;
 
 class Item extends Model
@@ -12,6 +13,11 @@ class Item extends Model
     function base()
     {
         return $this->belongsTo(Base::class, 'base_id');
+    }
+
+    function updated_user()
+    {
+        return $this->belongsTo(User::class, 'updated_user_id');
     }
 
     function name()
