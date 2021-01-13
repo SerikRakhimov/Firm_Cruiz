@@ -158,6 +158,8 @@ class ItemController extends Controller
                     break;
             }
         }
+        //'role' => GlobalController::glo_role();
+        // $base_right = GlobalController::base_right($role, $base);
         session(['links' => ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/' . request()->path()]);
         return view('item/base_index', ['base' => $base, 'items' => $items->where('base_id', $base->id)->where('project_id', GlobalController::glo_project_id())->paginate(60)]);
 
