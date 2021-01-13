@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Main extends Model
@@ -19,5 +19,12 @@ class Main extends Model
     function parent_item() {
         return $this->belongsTo(Item::class, 'parent_item_id');
     }
+
+
+    function updated_user()
+    {
+        return $this->belongsTo(User::class, 'updated_user_id');
+    }
+
 
 }

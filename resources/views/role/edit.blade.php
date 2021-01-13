@@ -48,7 +48,7 @@
                        for="is_default_for_external">{{trans('main.is_default_for_external')}}</label>
             </div>
             <div class="col-sm-7">
-                <input class="@error($key) is-invalid @enderror"
+                <input class="@error('is_default_for_external') is-invalid @enderror"
                        type="checkbox"
                        name="is_default_for_external"
                        placeholder=""
@@ -57,6 +57,151 @@
                     @endif
                 >
                 @error('is_default_for_external')
+                <div class="invalid-feedback">
+                    {{$message}}
+                </div>
+                @enderror
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div>
+
+        <div class="form-group row" id="is_author_form_group">
+            <div class="col-sm-3 text-right">
+                <label class="form-label"
+                       for="is_author">{{trans('main.is_author')}}</label>
+            </div>
+            <div class="col-sm-7">
+                <input class="@error('is_author') is-invalid @enderror"
+                       type="checkbox"
+                       name="is_author"
+                       placeholder=""
+                       @if ((old('is_author') ?? ($role->is_author ?? false)) ==  true)
+                       checked
+                    @endif
+                >
+                @error('is_author')
+                <div class="invalid-feedback">
+                    {{$message}}
+                </div>
+                @enderror
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div>
+
+        <div class="form-group row" id="is_create_form_group">
+            <div class="col-sm-3 text-right">
+                <label class="form-label"
+                       for="is_create">{{trans('main.is_create')}}</label>
+            </div>
+            <div class="col-sm-7">
+                <input class="@error('is_create') is-invalid @enderror"
+                       type="checkbox"
+                       name="is_create"
+                       placeholder=""
+                       @if ((old('is_create') ?? ($role->is_create ?? false)) ==  true)
+                       checked
+                    @endif
+                >
+                @error('is_create')
+                <div class="invalid-feedback">
+                    {{$message}}
+                </div>
+                @enderror
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div>
+
+        <div class="form-group row" id="is_read_form_group">
+            <div class="col-sm-3 text-right">
+                <label class="form-label"
+                       for="is_read">{{trans('main.is_read')}}</label>
+            </div>
+            <div class="col-sm-7">
+                <input class="@error('is_read') is-invalid @enderror"
+                       type="checkbox"
+                       name="is_read"
+                       placeholder=""
+                       @if ((old('is_read') ?? ($role->is_read ?? false)) ==  true)
+                       checked
+                    @endif
+                >
+                @error('is_read')
+                <div class="invalid-feedback">
+                    {{$message}}
+                </div>
+                @enderror
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div>
+
+
+        <div class="form-group row" id="is_update_form_group">
+            <div class="col-sm-3 text-right">
+                <label class="form-label"
+                       for="is_update">{{trans('main.is_update')}}</label>
+            </div>
+            <div class="col-sm-7">
+                <input class="@error('is_update') is-invalid @enderror"
+                       type="checkbox"
+                       name="is_update"
+                       placeholder=""
+                       @if ((old('is_update') ?? ($role->is_update ?? false)) ==  true)
+                       checked
+                    @endif
+                >
+                @error('is_update')
+                <div class="invalid-feedback">
+                    {{$message}}
+                </div>
+                @enderror
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div>
+
+        <div class="form-group row" id="is_delete_form_group">
+            <div class="col-sm-3 text-right">
+                <label class="form-label"
+                       for="is_delete">{{trans('main.is_delete')}}</label>
+            </div>
+            <div class="col-sm-7">
+                <input class="@error('is_delete') is-invalid @enderror"
+                       type="checkbox"
+                       name="is_delete"
+                       placeholder=""
+                       @if ((old('is_delete') ?? ($role->is_delete ?? false)) ==  true)
+                       checked
+                    @endif
+                >
+                @error('is_delete')
+                <div class="invalid-feedback">
+                    {{$message}}
+                </div>
+                @enderror
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div>
+
+        <div class="form-group row" id="is_sndb_form_group">
+            <div class="col-sm-3 text-right">
+                <label class="form-label"
+                       for="is_sndb">{{trans('main.is_sndb')}}</label>
+            </div>
+            <div class="col-sm-7">
+                <input class="@error('is_sndb') is-invalid @enderror"
+                       type="checkbox"
+                       name="is_sndb"
+                       placeholder=""
+                       @if ((old('is_sndb') ?? ($role->is_sndb ?? false)) ==  true)
+                       checked
+                    @endif
+                >
+                @error('is_sndb')
                 <div class="invalid-feedback">
                     {{$message}}
                 </div>

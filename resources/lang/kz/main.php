@@ -141,6 +141,12 @@ return [
     'change_password'=>'Құпия сөзді ауыстыру',
     'confirm_password'=>'Құпия сөзді қайта енгізу',
     'uniqueness_of_fields_violated'=>'Өрістердің бірегейлігі бұзылды',
-    'author'=>'Пайдаланушыны және жобаны таңдау',
+    'author'=>'Автор',
     'project_role_selection'=>'Жоба мен рөлді таңдау',
+    'is_author'=>'Автор',
+    'is_create'=>'Жасау',
+    'is_read'=>'Оқу',
+    'is_update'=>'Түзету',
+    'is_delete'=>'Жою',
+    'is_sndb'=>'Қол жетімді Нөмір, Жіп, Күні, Логикалық түрлері бар негіздер',
 ];

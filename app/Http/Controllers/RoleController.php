@@ -86,6 +86,12 @@ class RoleController extends Controller
         $role->name_lang_3 = isset($request->name_lang_3) ? $request->name_lang_3 : "";
 
         $role->is_default_for_external = isset($request->is_default_for_external) ? true : false;
+        $role->is_author = isset($request->is_author) ? true : false;
+        $role->is_create = isset($request->is_create) ? true : false;
+        $role->is_read = isset($request->is_read) ? true : false;
+        $role->is_update = isset($request->is_update) ? true : false;
+        $role->is_delete = isset($request->is_delete) ? true : false;
+        $role->is_sndb = isset($request->is_sndb) ? true : false;
 
         $role->save();
     }

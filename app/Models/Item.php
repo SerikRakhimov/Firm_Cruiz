@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\User;
+use App\Models\Project;
 use Illuminate\Support\Facades\DB;
 
 class Item extends Model
@@ -13,6 +14,11 @@ class Item extends Model
     function base()
     {
         return $this->belongsTo(Base::class, 'base_id');
+    }
+
+    function project()
+    {
+        return $this->belongsTo(Project::class, 'project_id');
     }
 
     function updated_user()

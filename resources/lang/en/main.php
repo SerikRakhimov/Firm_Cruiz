@@ -143,4 +143,10 @@ return [
     'uniqueness_of_fields_violated'=>'Uniqueness of fields violated',
     'author'=>'Author',
     'project_role_selection'=>'Project and role selection',
+    'is_author'=>'Author',
+    'is_create'=>'Create',
+    'is_read'=>'Read',
+    'is_update'=>'Update',
+    'is_delete'=>'Delete',
+    'is_sndb'=>'Bases with types Number, Line, Date, Logical is enabled',
 ];

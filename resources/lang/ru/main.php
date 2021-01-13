@@ -143,4 +143,10 @@ return [
     'uniqueness_of_fields_violated'=>'Уникальность полей нарушена',
     'author'=>'Автор',
     'project_role_selection'=>'Выбор проекта и роли',
+    'is_author'=>'Автор',
+    'is_create'=>'Создание',
+    'is_read'=>'Чтение',
+    'is_update'=>'Корректировка',
+    'is_delete'=>'Удаление',
+    'is_sndb'=>'Доступны Основы с типами Число, Строка, Дата, Логический',
 ];

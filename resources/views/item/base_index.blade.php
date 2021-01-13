@@ -121,7 +121,7 @@
                             @endif
                     </td>
                 @endforeach
-                <td>{{$item_find->updated_user->name()}}
+                <td>{{$item->updated_user->name()}}
                 </td>
                 <td class="text-left">
                     <?php
