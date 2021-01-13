@@ -4,6 +4,7 @@
     <?php
     use App\Models\Item;
     use App\Http\Controllers\GlobalController;
+    $glo_project_role_is_null = GlobalController::glo_project_role_is_null();
     ?>
     @include('layouts.template.show_name',['template'=>$template])
     <div class="container-fluid">
@@ -14,7 +15,7 @@
             <div class="col-2">
             </div>
             <div class="col-5 text-right">
-                @if (Auth::user()->isAdmin())
+                @if (Auth::user()->isAdmin() ||  $glo_project_role_is_null == true)
                     <button type="button" class="btn btn-dreamer" title="{{trans('main.add')}}"
                             onclick="document.location='{{route('base.create', ['template'=>$template])}}'">
                         {{--                    <i class="fas fa-plus fa-fw d-none d-sm-block "></i>--}}
@@ -31,10 +32,12 @@
         <tr>
             <th class="text-center">#</th>
             <th class="text-left">{{trans('main.names')}}</th>
-            <th class="text-center"></th>
-            <th class="text-center"></th>
-            <th class="text-center"></th>
-            <th class="text-center"></th>
+            @if (Auth::user()->isAdmin() ||  $glo_project_role_is_null == true)
+                <th class="text-center"></th>
+                <th class="text-center"></th>
+                <th class="text-center"></th>
+                <th class="text-center"></th>
+            @endif
         </tr>
         </thead>
         <tbody>
@@ -43,41 +46,50 @@
         ?>
         @foreach($bases as $base)
             <?php
-            $i++;
+            $base_right = GlobalController::base_right($role, $base);
             ?>
-            <tr>
-                {{--                <th scope="row">{{$i}}</th>--}}
-                <td class="text-center">{{$i}}</td>
-                <td class="text-left">
-                    <a href="{{route('item.base_index',$base)}}" title="{{$base->names()}}">
-                        {{$base->names()}}
-                        ({{count(Item::where('base_id', $base->id)->where('project_id', GlobalController::glo_project_id())->get())}})
-                    </a>
-                </td>
-                <td class="text-center">
-                    <a href="{{route('base.show',$base)}}" title="{{trans('main.view')}}">
-                        <img src="{{Storage::url('view_record.png')}}" width="15" height="15"
-                             alt="{{trans('main.view')}}">
-                    </a>
-                </td>
-                <td class="text-center">
-                    <a href="{{route('base.edit',$base)}}" title="{{trans('main.edit')}}">
-                        <img src="{{Storage::url('edit_record.png')}}" width="15" height="15"
-                             alt="{{trans('main.edit')}}">
-                    </a>
-                </td>
-                <td class="text-center">
-                    <a href="{{route('base.delete_question',$base)}}" title="{{trans('main.delete')}}">
-                        <img src="{{Storage::url('delete_record.png')}}" width="15" height="15"
-                             alt="{{trans('main.delete')}}">
-                    </a>
-                </td>
-                <td class="text-center">
-                    <a href="{{route('link.base_index',$base)}}" title="{{trans('main.links')}}">
-                        <img src="{{Storage::url('links.png')}}" width="15" height="15" alt="{{trans('main.links')}}">
-                    </a>
-                </td>
-            </tr>
+            @if($base_right['is_enable'] == true)
+                <?php
+                $i++;
+                ?>
+                <tr>
+                    {{--                <th scope="row">{{$i}}</th>--}}
+                    <td class="text-center">{{$i}}</td>
+                    <td class="text-left">
+                        <a href="{{route('item.base_index',$base)}}" title="{{$base->names()}}">
+                            {{$base->names()}}
+                            ({{count(Item::where('base_id', $base->id)->where('project_id', GlobalController::glo_project_id())->get())}}
+                            )
+                        </a>
+                    </td>
+                    @if (Auth::user()->isAdmin() ||  $glo_project_role_is_null == true)
+                        <td class="text-center">
+                            <a href="{{route('base.show',$base)}}" title="{{trans('main.view')}}">
+                                <img src="{{Storage::url('view_record.png')}}" width="15" height="15"
+                                     alt="{{trans('main.view')}}">
+                            </a>
+                        </td>
+                        <td class="text-center">
+                            <a href="{{route('base.edit',$base)}}" title="{{trans('main.edit')}}">
+                                <img src="{{Storage::url('edit_record.png')}}" width="15" height="15"
+                                     alt="{{trans('main.edit')}}">
+                            </a>
+                        </td>
+                        <td class="text-center">
+                            <a href="{{route('base.delete_question',$base)}}" title="{{trans('main.delete')}}">
+                                <img src="{{Storage::url('delete_record.png')}}" width="15" height="15"
+                                     alt="{{trans('main.delete')}}">
+                            </a>
+                        </td>
+                        <td class="text-center">
+                            <a href="{{route('link.base_index',$base)}}" title="{{trans('main.links')}}">
+                                <img src="{{Storage::url('links.png')}}" width="15" height="15"
+                                     alt="{{trans('main.links')}}">
+                            </a>
+                        </td>
+                    @endif
+                </tr>
+            @endif
         @endforeach
         </tbody>
     </table>

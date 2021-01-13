@@ -41,7 +41,7 @@ use App\Models\Project;
             <a class="navbar-brand" href="{{ url('/') }}">
                 {{ config('app.name', 'Laravel') }}
             </a>
-{{--                Этот <button> не удалять, нужен для связки с <div class="collapse navbar-collapse" id="navbarSupportedContent">--}}
+            {{--                Этот <button> не удалять, нужен для связки с <div class="collapse navbar-collapse" id="navbarSupportedContent">--}}
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                     aria-controls="navbarSupportedContent" aria-expanded="false"
                     aria-label="{{ __('Toggle navigation') }}">
@@ -146,18 +146,23 @@ use App\Models\Project;
         </div>
     </nav>
     <main class="py-4 w-75 mx-auto">
-        <p>
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-6 text-left">
-                    <span class="badge badge-success">{{GlobalController::glo_project_name()}}</span>
-                </div>
-                <div class="col-6 text-right">
-                    <span class="badge badge-success">{{GlobalController::glo_role_name()}}</span>
+        <?php
+        $glo_project_role_is_null = GlobalController::glo_project_role_is_null();
+        ?>
+        @if($glo_project_role_is_null == false)
+            <p>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-6 text-left">
+                        <span class="badge badge-success">{{GlobalController::glo_project_name()}}</span>
+                    </div>
+                    <div class="col-6 text-right">
+                        <span class="badge badge-success">{{GlobalController::glo_role_name()}}</span>
+                    </div>
                 </div>
             </div>
-        </div>
-        </p>
+            </p>
+        @endif
         {{--        <div class="mx-auto" style="width: 1200px;">--}}
         @yield('content')
         {{--        </div>--}}

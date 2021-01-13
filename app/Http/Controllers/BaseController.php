@@ -51,7 +51,7 @@ class BaseController extends Controller
             }
         }
         session(['bases_previous_url' => request()->url()]);
-        return view('base/index', ['template' => $template, 'bases' => $bases->paginate(60)]);
+        return view('base/index', ['role' => GlobalController::glo_role(), 'template' => $template, 'bases' => $bases->paginate(60)]);
     }
 
     function show(Base $base)
