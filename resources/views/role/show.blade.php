@@ -47,6 +47,12 @@
                 <i class="fas fa-universal-access"></i>
                 {{trans('main.accesses')}}
             </button>
+            <button type="button" class="btn btn-dreamer" title="{{trans('main.robas')}}"
+                    onclick="document.location='{{route('roba.index_role', $role)}}'"
+            >
+                <i class="fas fa-ring"></i>
+                {{trans('main.robas')}}
+            </button>
             <button type="button" class="btn btn-dreamer"
                     title="{{trans('main.cancel')}}" @include('layouts.role.previous_url')>
                             <i class="fas fa-arrow-left"></i>

@@ -31,6 +31,7 @@
             <th class="text-left">{{trans('main.name')}}</th>
             <th class="text-left">{{trans('main.default')}}</th>
             <th class="text-center">{{trans('main.accesses')}}</th>
+            <th class="text-center">{{trans('main.robas')}}</th>
         </tr>
         </thead>
         <tbody>
@@ -59,6 +60,11 @@
                 <td class="text-center">
                     <a href="{{route('access.index_role', $role)}}" title="{{trans('main.accesses')}}">
                         <i class="fas fa-user-circle"></i>
+                    </a>
+                </td>
+                <td class="text-center">
+                    <a href="{{route('roba.index_role', $role)}}" title="{{trans('main.robas')}}">
+                        <i class="fas fa-ring"></i>
                     </a>
                 </td>
             </tr>

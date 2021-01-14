@@ -37,6 +37,7 @@
                 <th class="text-center"></th>
                 <th class="text-center"></th>
                 <th class="text-center"></th>
+                <th class="text-center"></th>
             @endif
         </tr>
         </thead>
@@ -81,6 +82,11 @@
                             <a href="{{route('link.base_index',$base)}}" title="{{trans('main.links')}}">
                                 <img src="{{Storage::url('links.png')}}" width="15" height="15"
                                      alt="{{trans('main.links')}}">
+                            </a>
+                        </td>
+                        <td class="text-center">
+                            <a href="{{route('roba.index_base', $base)}}" title="{{trans('main.robas')}}">
+                                <i class="fas fa-ring"></i>
                             </a>
                         </td>
                     @endif

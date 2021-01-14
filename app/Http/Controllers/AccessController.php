@@ -27,7 +27,7 @@ class AccessController extends Controller
     {
         GlobalController::glo_project_role_setnull();
         $accesses = Access::where('project_id', $project->id);
-        $accesses = $accesses->orderBy('project_id')->orderBy('user_id')->orderBy('role_id');
+        $accesses = $accesses->orderBy('user_id')->orderBy('role_id');
         session(['accesses_previous_url' => request()->url()]);
         return view('access/index', ['project' => $project, 'accesses' => $accesses->paginate(60)]);
     }
@@ -36,7 +36,7 @@ class AccessController extends Controller
     {
         GlobalController::glo_project_role_setnull();
         $accesses = Access::where('user_id', $user->id);
-        $accesses = $accesses->orderBy('project_id')->orderBy('user_id')->orderBy('role_id');
+        $accesses = $accesses->orderBy('project_id')->orderBy('role_id');
         session(['accesses_previous_url' => request()->url()]);
         return view('access/index', ['user' => $user, 'accesses' => $accesses->paginate(60)]);
     }
@@ -49,7 +49,7 @@ class AccessController extends Controller
         }
         GlobalController::glo_project_role_setnull();
         $accesses = Access::where('role_id', $role->id);
-        $accesses = $accesses->orderBy('project_id')->orderBy('user_id')->orderBy('role_id');
+        $accesses = $accesses->orderBy('project_id')->orderBy('user_id');
         session(['accesses_previous_url' => request()->url()]);
         return view('access/index', ['role' => $role, 'accesses' => $accesses->paginate(60)]);
     }

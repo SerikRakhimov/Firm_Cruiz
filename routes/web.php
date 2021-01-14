@@ -200,20 +200,36 @@ Route::delete('/role/delete/{role}', 'RoleController@delete')
     ->middleware('auth');
 
 // Robas
-Route::get('/roba/index/{template}', 'RobaController@index')
-    ->name('roba.index')
+Route::get('/roba/index_role/{role}', 'RobaController@index_role')
+    ->name('roba.index_role')
     ->middleware('auth');
 
-Route::get('/roba/show/{roba}', 'RobaController@show')
-    ->name('roba.show')
+Route::get('/roba/index_base/{base}', 'RobaController@index_base')
+    ->name('roba.index_base')
     ->middleware('auth');
 
-Route::get('/roba/create/{template}', 'RobaController@create')
-    ->name('roba.create')
+Route::get('/roba/show_role/{roba}', 'RobaController@show_role')
+    ->name('roba.show_role')
     ->middleware('auth');
 
-Route::get('/roba/edit/{roba}', 'RobaController@edit')
-    ->name('roba.edit')
+Route::get('/roba/show_base/{roba}', 'RobaController@show_base')
+    ->name('roba.show_base')
+    ->middleware('auth');
+
+Route::get('/roba/create_role/{role}', 'RobaController@create_role')
+    ->name('roba.create_role')
+    ->middleware('auth');
+
+Route::get('/roba/create_base/{base}', 'RobaController@create_base')
+    ->name('roba.create_base')
+    ->middleware('auth');
+
+Route::get('/roba/edit_role/{roba}', 'RobaController@edit_role')
+    ->name('roba.edit_role')
+    ->middleware('auth');
+
+Route::get('/roba/edit_base/{roba}', 'RobaController@edit_base')
+    ->name('roba.edit_base')
     ->middleware('auth');
 
 Route::post('/roba/store', 'RobaController@store')
@@ -314,7 +330,7 @@ Route::get('/access/create_user/{user}', 'AccessController@create_user')
     ->name('access.create_user')
     ->middleware('auth');
 
-Route::get('/role/create_role/{role}', 'AccessController@create_role')
+Route::get('/access/create_role/{role}', 'AccessController@create_role')
     ->name('access.create_role')
     ->middleware('auth');
 
