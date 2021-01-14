@@ -126,7 +126,7 @@ class GlobalController extends Controller
         $is_delete = false;
 
         $is_enable = true;
-        if (!$role->is_sndb == true) {
+        if ($role->is_sndb == false) {
             if ($base->type_is_number == true || $base->type_is_string == true ||
                 $base->type_is_date == true || $base->type_is_boolean == true) {
                 $is_enable = false;
@@ -137,18 +137,19 @@ class GlobalController extends Controller
         $is_read = false;
         $is_update = false;
         $is_delete = false;
-        if (!$role->is_create == true) {
+        if ($role->is_create == true) {
             $is_create = true;
         }
-        if (!$role->is_read == true) {
+        if ($role->is_read == true) {
             $is_read = true;
         }
-        if (!$role->is_update == true) {
+        if ($role->is_update == true) {
             $is_update = true;
         }
-        if (!$role->is_delete == true) {
+        if ($role->is_delete == true) {
             $is_delete = true;
         }
+
         if ($is_read == true) {
             $is_create = false;
             $is_update = false;

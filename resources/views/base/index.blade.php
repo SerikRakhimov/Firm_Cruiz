@@ -45,10 +45,6 @@
         $i = $bases->firstItem() - 1;
         ?>
         @foreach($bases as $base)
-            <?php
-            $base_right = GlobalController::base_right($role, $base);
-            ?>
-            @if($base_right['is_enable'] == true)
                 <?php
                 $i++;
                 ?>
@@ -56,11 +52,11 @@
                     {{--                <th scope="row">{{$i}}</th>--}}
                     <td class="text-center">{{$i}}</td>
                     <td class="text-left">
-                        <a href="{{route('item.base_index',$base)}}" title="{{$base->names()}}">
+{{--                        <a href="{{route('item.base_index',$base)}}" title="{{$base->names()}}">--}}
                             {{$base->names()}}
-                            ({{count(Item::where('base_id', $base->id)->where('project_id', GlobalController::glo_project_id())->get())}}
+                            ({{count(Item::where('base_id', $base->id)->get())}}
                             )
-                        </a>
+{{--                        </a>--}}
                     </td>
                     @if (Auth::user()->isAdmin() ||  $glo_project_role_is_null == true)
                         <td class="text-center">
@@ -89,7 +85,6 @@
                         </td>
                     @endif
                 </tr>
-            @endif
         @endforeach
         </tbody>
     </table>

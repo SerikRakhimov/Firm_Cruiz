@@ -59,7 +59,7 @@ use App\Models\Project;
                             ?>
                             @if($glo_project_template_id != 0)
                                 <a class="nav-link text-primary"
-                                   href="{{route('base.index', $glo_project_template_id)}}}">{{trans('main.bases')}}</a>
+                                   href="{{route('base.template_index', $glo_project_template_id)}}}">{{trans('main.bases')}}</a>
                             @endif
                         </li>
                         {{--                        <li class="nav-item">--}}

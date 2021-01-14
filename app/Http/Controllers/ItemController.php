@@ -92,7 +92,7 @@ class ItemController extends Controller
             }
         } else {
             // Сортировка по наименованию
-            $items = Item::where('base_id', $base_id)->orderByRaw(strval($name));
+            $items = Item::where('base_id', $base_id)->where('project_id', GlobalController::glo_project_id())->orderByRaw(strval($name));
         }
         if ($items != null) {
             if ($search != "") {
@@ -158,10 +158,8 @@ class ItemController extends Controller
                     break;
             }
         }
-        //'role' => GlobalController::glo_role();
-        // $base_right = GlobalController::base_right($role, $base);
         session(['links' => ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/' . request()->path()]);
-        return view('item/base_index', ['base' => $base, 'items' => $items->where('base_id', $base->id)->where('project_id', GlobalController::glo_project_id())->paginate(60)]);
+        return view('item/base_index', ['role' => GlobalController::glo_role(), 'base' => $base, 'items' => $items->where('base_id', $base->id)->where('project_id', GlobalController::glo_project_id())->paginate(60)]);
 
 //        return view('item/index', ['items' => Item::all()->sortBy(function ($item){
 //            return $item->base->name_lang_0 . $item->name_lang_0;})]);
@@ -169,26 +167,26 @@ class ItemController extends Controller
 
     function item_index(Item $item, Link $par_link = null)
     {
-        $items = null;
-        $index = array_search(session('locale'), session('glo_menu_save'));
-        if ($index !== false) {   // '!==' использовать, '!=' не использовать
-            switch ($index) {
-                case 0:
-                    //$items = Item::all()->sortBy('name_lang_0');
-                    $items = Item::orderBy('base_id')->orderBy('name_lang_0');
-                    break;
-                case 1:
-                    //$items = Item::all()->sortBy(function($row){return $row->name_lang_1 . $row->name_lang_0;});
-                    $items = Item::orderBy('base_id')->orderBy('name_lang_1')->orderBy('name_lang_0');
-                    break;
-                case 2:
-                    $items = Item::orderBy('base_id')->orderBy('name_lang_2')->orderBy('name_lang_0');
-                    break;
-                case 3:
-                    $items = Item::orderBy('base_id')->orderBy('name_lang_3')->orderBy('name_lang_0');
-                    break;
-            }
-        }
+//        $items = null;
+//        $index = array_search(session('locale'), session('glo_menu_save'));
+//        if ($index !== false) {   // '!==' использовать, '!=' не использовать
+//            switch ($index) {
+//                case 0:
+//                    //$items = Item::all()->sortBy('name_lang_0');
+//                    $items = Item::orderBy('base_id')->orderBy('name_lang_0');
+//                    break;
+//                case 1:
+//                    //$items = Item::all()->sortBy(function($row){return $row->name_lang_1 . $row->name_lang_0;});
+//                    $items = Item::orderBy('base_id')->orderBy('name_lang_1')->orderBy('name_lang_0');
+//                    break;
+//                case 2:
+//                    $items = Item::orderBy('base_id')->orderBy('name_lang_2')->orderBy('name_lang_0');
+//                    break;
+//                case 3:
+//                    $items = Item::orderBy('base_id')->orderBy('name_lang_3')->orderBy('name_lang_0');
+//                    break;
+//            }
+//        }
 //        return view('item/item_index', ['base'=>$base, 'items' => $items->where('base_id', $base->id)->paginate(60)]);
         session(['links' => ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/' . request()->path()]);
         return view('item/item_index', ['item' => $item, 'par_link' => $par_link]);
@@ -652,7 +650,7 @@ class ItemController extends Controller
             // тип корректировки поля - строка
         } elseif ($link->parent_base->type_is_string()) {
             // поиск в таблице items значение с таким же названием и base_id
-            $item_find = Item::where('base_id', $link->parent_base_id)->where('name_lang_0', $values[$index]);
+            $item_find = Item::where('base_id', $link->parent_base_id)->where('project_id', GlobalController::glo_project_id())->where('name_lang_0', $values[$index]);
             if ($link->parent_base->is_one_value_lst_str == false) {
                 $i = 0;
                 foreach (session('glo_menu_save') as $lang_key => $lang_value) {
@@ -697,7 +695,7 @@ class ItemController extends Controller
             // тип корректировки поля - не строка и не список
         } else {
             // поиск в таблице items значение с таким же названием и base_id
-            $item_find = Item::where('base_id', $link->parent_base_id)->where('name_lang_0', $values[$index])->first();
+            $item_find = Item::where('base_id', $link->parent_base_id)->where('project_id', GlobalController::glo_project_id())->where('name_lang_0', $values[$index])->first();
             // если не найдено
             if (!$item_find) {
                 // создание новой записи в items
@@ -1154,13 +1152,13 @@ class ItemController extends Controller
                 }
 
                 // список items по выбранному child_base_id
-                $result_child_base_items = Item::select(['id', 'base_id', 'name_lang_0', 'name_lang_1', 'name_lang_2', 'name_lang_3'])->where('base_id', $link->child_base_id)->orderBy($name)->get();
+                $result_child_base_items = Item::select(['id', 'base_id', 'name_lang_0', 'name_lang_1', 'name_lang_2', 'name_lang_3'])->where('base_id', $link->child_base_id)->where('project_id', GlobalController::glo_project_id())->orderBy($name)->get();
                 foreach ($result_child_base_items as $item) {
                     $result_child_base_items_options = $result_child_base_items_options . "<option value='" . $item->id . "'>" . $item->name() . "</option>";
                 }
 
                 // список items по выбранному parent_base_id
-                $result_parent_base_items = Item::select(['id', 'base_id', 'name_lang_0', 'name_lang_1', 'name_lang_2', 'name_lang_3'])->where('base_id', $link->parent_base_id)->orderBy($name)->get();
+                $result_parent_base_items = Item::select(['id', 'base_id', 'name_lang_0', 'name_lang_1', 'name_lang_2', 'name_lang_3'])->where('base_id', $link->parent_base_id)->where('project_id', GlobalController::glo_project_id())->orderBy($name)->get();
                 foreach ($result_parent_base_items as $item) {
                     $result_parent_base_items_options = $result_parent_base_items_options . "<option value='" . $item->id . "'>" . $item->name() . "</option>";
 
@@ -1536,7 +1534,7 @@ class ItemController extends Controller
 
     function calculate_name(Base $base)
     {
-        $items = Item::where('base_id', $base->id)->get();
+        $items = Item::where('base_id', $base->id)->where('project_id', GlobalController::glo_project_id())->get();
         $rs = false;
         foreach ($items as $item) {
             $rs = $this->calc_value_func($item);
@@ -1587,7 +1585,7 @@ class ItemController extends Controller
 
     function recalculation_codes(Base $base)
     {
-        $items = Item::where('base_id', $base->id)->orderBy('name_lang_0')->get();
+        $items = Item::where('base_id', $base->id)->where('project_id', GlobalController::glo_project_id())->orderBy('name_lang_0')->get();
         $i = 0;
         foreach ($items as $item) {
             $i = $i + 1;
@@ -1602,7 +1600,7 @@ class ItemController extends Controller
     {
         $item_id = 0;
         $item_name = trans('main.no_information') . '!';
-        $item = Item::where('base_id', $base->id)->where('code', $code)->get()->first();
+        $item = Item::where('project_id', GlobalController::glo_project_id())->where('base_id', $base->id)->where('code', $code)->get()->first();
         if ($item != null) {
             $item_id = $item->id;
             $item_name = $item->name();

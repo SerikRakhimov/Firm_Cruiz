@@ -51,7 +51,34 @@ class BaseController extends Controller
             }
         }
         session(['bases_previous_url' => request()->url()]);
-        return view('base/index', ['role' => GlobalController::glo_role(), 'template' => $template, 'bases' => $bases->paginate(60)]);
+        return view('base/index', ['template' => $template, 'bases' => $bases->paginate(60)]);
+    }
+
+
+    function template_index(Template $template)
+    {
+        $bases = Base::where('template_id', $template->id);
+        $index = array_search(session('locale'), session('glo_menu_save'));
+        if ($index !== false) {   // '!==' использовать, '!=' не использовать
+            switch ($index) {
+                case 0:
+                    //$bases = Base::all()->sortBy('name_lang_0');
+                    $bases = $bases->orderBy('name_lang_0');
+                    break;
+                case 1:
+                    //$bases = Base::all()->sortBy(function($row){return $row->name_lang_1 . $row->name_lang_0;});
+                    $bases = $bases->orderBy('name_lang_1')->orderBy('name_lang_0');
+                    break;
+                case 2:
+                    $bases = $bases->orderBy('name_lang_2')->orderBy('name_lang_0');
+                    break;
+                case 3:
+                    $bases = $bases->orderBy('name_lang_3')->orderBy('name_lang_0');
+                    break;
+            }
+        }
+        session(['bases_previous_url' => request()->url()]);
+        return view('base/template_index', ['role' => GlobalController::glo_role(), 'template' => $template, 'bases' => $bases->paginate(60)]);
     }
 
     function show(Base $base)

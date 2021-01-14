@@ -360,6 +360,10 @@ Route::get('/base/index/{template}', 'BaseController@index')
     ->name('base.index')
     ->middleware('auth');
 
+Route::get('/base/template_index/{template}', 'BaseController@template_index')
+    ->name('base.template_index')
+    ->middleware('auth');
+
 Route::get('/base/show/{base}', 'BaseController@show')
     ->name('base.show')
     ->middleware('auth');

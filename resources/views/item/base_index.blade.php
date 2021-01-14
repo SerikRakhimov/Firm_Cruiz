@@ -4,9 +4,10 @@
     <?php
     use App\Models\Link;
     use App\Models\Main;
-    use \App\Http\Controllers\ItemController;
+    use \App\Http\Controllers\GlobalController;
     use \App\Http\Controllers\MainController;
     $links = $base->child_links->sortBy('parent_base_number');
+    $base_right = GlobalController::base_right($role, $base);
     ?>
     <p>
     <div class="container-fluid">
@@ -15,23 +16,25 @@
                 <h3>{{$base->names()}}</h3>
             </div>
         </div>
-        <div class="col-1 text-left">
-            <a href="{{route('item.ext_create', $base->id)}}"
-               title="{{trans('main.add')}}">
-                <img src="{{Storage::url('add_record.png')}}" width="15" height="15" alt="{{trans('main.add')}}">
-            </a>
-        </div>
-        <div class="col-1 text-left">
-            <a href="{{route('item.create')}}" title="{{trans('main.add')}}">
-                <img src="{{Storage::url('add_record.png')}}" width="15" height="15"
-                     alt="{{trans('main.add')}}">
-            </a>
-        </div>
-        <div class="col-1 text-left">
-            <a href="{{route('link.base_index',$base)}}" title="{{trans('main.links')}}">
-                <img src="{{Storage::url('links.png')}}" width="15" height="15" alt="{{trans('main.links')}}">
-            </a>
-        </div>
+        @if($base_right['is_create'] == true)
+            <div class="col-1 text-left">
+                <a href="{{route('item.ext_create', $base->id)}}"
+                   title="{{trans('main.add')}}">
+                    <img src="{{Storage::url('add_record.png')}}" width="15" height="15" alt="{{trans('main.add')}}">
+                </a>
+            </div>
+        @endif
+        {{--        <div class="col-1 text-left">--}}
+        {{--            <a href="{{route('item.create')}}" title="{{trans('main.add')}}">--}}
+        {{--                <img src="{{Storage::url('add_record.png')}}" width="15" height="15"--}}
+        {{--                     alt="{{trans('main.add')}}">--}}
+        {{--            </a>--}}
+        {{--        </div>--}}
+        {{--        <div class="col-1 text-left">--}}
+        {{--            <a href="{{route('link.base_index',$base)}}" title="{{trans('main.links')}}">--}}
+        {{--                <img src="{{Storage::url('links.png')}}" width="15" height="15" alt="{{trans('main.links')}}">--}}
+        {{--            </a>--}}
+        {{--        </div>--}}
         @if ($base->is_calcname_lst == true)
             <div class="col-1 text-left">
                 <a href="{{route('item.calculate_name',$base)}}" title="{{trans('main.calculate_name')}}">
@@ -75,9 +78,12 @@
             <th class="text-center"></th>
             <th class="text-center"></th>
             <th class="text-center"></th>
-            <th class="text-center"></th>
-            <th class="text-center"></th>
-            <th class="text-center"></th>
+            @if($base_right['is_update'] == true)
+                <th class="text-center"></th>
+            @endif
+            @if($base_right['is_delete'] == true)
+                <th class="text-center"></th>
+            @endif
         </tr>
         </thead>
         <tbody>
@@ -174,24 +180,28 @@
                              alt="{{trans('main.info')}}">
                     </a>
                 </td>
-                <td class="text-center">
-                    <a href="{{route('item.ext_edit', $item)}}" title="{{trans('main.edit')}}">
-                        <img src="{{Storage::url('edit_record.png')}}" width="15" height="15"
-                             alt="{{trans('main.edit')}}">
-                    </a>
-                </td>
-                <td class="text-center">
-                    <a href="{{route('item.edit',$item)}}" title="{{trans('main.edit')}}">
-                        <img src="{{Storage::url('edit_record.png')}}" width="15" height="15"
-                             alt="{{trans('main.edit')}}">
-                    </a>
-                </td>
-                <td class="text-center">
-                    <a href="{{route('item.ext_delete_question',$item)}}" title="{{trans('main.delete')}}">
-                        <img src="{{Storage::url('delete_record.png')}}" width="15" height="15"
-                             alt="{{trans('main.delete')}}">
-                    </a>
-                </td>
+                @if($base_right['is_update'] == true)
+                    <td class="text-center">
+                        <a href="{{route('item.ext_edit', $item)}}" title="{{trans('main.edit')}}">
+                            <img src="{{Storage::url('edit_record.png')}}" width="15" height="15"
+                                 alt="{{trans('main.edit')}}">
+                        </a>
+                    </td>
+                @endif
+                {{--                <td class="text-center">--}}
+                {{--                    <a href="{{route('item.edit',$item)}}" title="{{trans('main.edit')}}">--}}
+                {{--                        <img src="{{Storage::url('edit_record.png')}}" width="15" height="15"--}}
+                {{--                             alt="{{trans('main.edit')}}">--}}
+                {{--                    </a>--}}
+                {{--                </td>--}}
+                @if($base_right['is_delete'] == true)
+                    <td class="text-center">
+                        <a href="{{route('item.ext_delete_question',$item)}}" title="{{trans('main.delete')}}">
+                            <img src="{{Storage::url('delete_record.png')}}" width="15" height="15"
+                                 alt="{{trans('main.delete')}}">
+                        </a>
+                    </td>
+                @endif
             </tr>
         @endforeach
         </tbody>
