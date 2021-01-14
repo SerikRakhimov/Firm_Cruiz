@@ -151,4 +151,5 @@ return [
     'is_update'=>'Update',
     'is_delete'=>'Delete',
     'is_sndb'=>'Bases with types Number, Line, Date, Logical is enabled',
+    'is_byuser'=>'By user',
 ];

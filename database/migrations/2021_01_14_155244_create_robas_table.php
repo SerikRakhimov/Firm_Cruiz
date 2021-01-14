@@ -21,7 +21,7 @@ class CreateRobasTable extends Migration
             $table->boolean('is_read')->default(false);
             $table->boolean('is_update')->default(false);
             $table->boolean('is_delete')->default(false);
-            $table->boolean('is_user')->default(false);
+            $table->boolean('is_byuser')->default(false);
             $table->timestamps();
             $table->index('role_id');
             $table->index('base_id');

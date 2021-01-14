@@ -118,7 +118,7 @@ class RobaController extends Controller
         $roba->is_read = isset($request->is_read) ? true : false;
         $roba->is_update = isset($request->is_update) ? true : false;
         $roba->is_delete = isset($request->is_delete) ? true : false;
-        $roba->is_user = isset($request->is_user) ? true : false;
+        $roba->is_byuser = isset($request->is_byuser) ? true : false;
 
         $roba->save();
     }

@@ -40,7 +40,7 @@
     <p>{{trans('main.is_read')}}: <b>{{GlobalController::name_is_boolean($roba->is_read)}}</b></p>
     <p>{{trans('main.is_update')}}: <b>{{GlobalController::name_is_boolean($roba->is_update)}}</b></p>
     <p>{{trans('main.is_delete')}}: <b>{{GlobalController::name_is_boolean($roba->is_delete)}}</b></p>
-    <p>{{trans('main.is_user')}}: <b>{{GlobalController::name_is_boolean($roba->is_user)}}</b></p>
+    <p>{{trans('main.is_byuser')}}: <b>{{GlobalController::name_is_boolean($roba->is_byuser)}}</b></p>
 
     @if ($type_form == 'show')
 {{--        @if (Auth::user()->isAdmin() ||!(($is_user == true) && ($roba->role->is_default_for_external == false)))--}}

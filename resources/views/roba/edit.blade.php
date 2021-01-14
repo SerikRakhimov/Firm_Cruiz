@@ -190,21 +190,21 @@
             </div>
         </div>
 
-        <div class="form-group row" id="is_user_form_group">
+        <div class="form-group row" id="is_byuser_form_group">
             <div class="col-sm-3 text-right">
                 <label class="form-label"
-                       for="is_user">{{trans('main.is_user')}}</label>
+                       for="is_byuser">{{trans('main.is_byuser')}}</label>
             </div>
             <div class="col-sm-7">
-                <input class="@error('is_user') is-invalid @enderror"
+                <input class="@error('is_byuser') is-invalid @enderror"
                        type="checkbox"
-                       name="is_user"
+                       name="is_byuser"
                        placeholder=""
-                       @if ((old('is_user') ?? ($roba->is_user ?? false)) ==  true)
+                       @if ((old('is_byuser') ?? ($roba->is_byuser ?? false)) ==  true)
                        checked
                     @endif
                 >
-                @error('is_user')
+                @error('is_byuser')
                 <div class="invalid-feedback">
                     {{$message}}
                 </div>
