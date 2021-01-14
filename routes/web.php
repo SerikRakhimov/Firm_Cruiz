@@ -199,6 +199,38 @@ Route::delete('/role/delete/{role}', 'RoleController@delete')
     ->name('role.delete')
     ->middleware('auth');
 
+// Robas
+Route::get('/roba/index/{template}', 'RobaController@index')
+    ->name('roba.index')
+    ->middleware('auth');
+
+Route::get('/roba/show/{roba}', 'RobaController@show')
+    ->name('roba.show')
+    ->middleware('auth');
+
+Route::get('/roba/create/{template}', 'RobaController@create')
+    ->name('roba.create')
+    ->middleware('auth');
+
+Route::get('/roba/edit/{roba}', 'RobaController@edit')
+    ->name('roba.edit')
+    ->middleware('auth');
+
+Route::post('/roba/store', 'RobaController@store')
+    ->name('roba.store')
+    ->middleware('auth');
+
+Route::put('/roba/edit/{roba}', 'RobaController@update')
+    ->name('roba.update')
+    ->middleware('auth');
+
+Route::get('/roba/delete_question/{roba}', 'RobaController@delete_question')
+    ->name('roba.delete_question')
+    ->middleware('auth');
+
+Route::delete('/roba/delete/{roba}', 'RobaController@delete')
+    ->name('roba.delete')
+    ->middleware('auth');
 
 // Projects
 Route::get('/project/index_template/{template}', 'ProjectController@index_template')
