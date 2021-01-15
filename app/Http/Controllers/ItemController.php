@@ -138,31 +138,22 @@ class ItemController extends Controller
 
     function base_index(Base $base)
     {
-        $items = null;
+        $base_right = GlobalController::base_right(GlobalController::glo_role(), $base);
+
+        $items = Item::where('base_id', $base->id)->where('project_id', GlobalController::glo_project_id());
+        if ($base_right['is_byuser'] == true) {
+            $items = $items->where('updated_user_id', GlobalController::glo_user_id());
+        }
+        $name = "";  // нужно, не удалять
         $index = array_search(session('locale'), session('glo_menu_save'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
-            switch ($index) {
-                case 0:
-                    //$items = Item::all()->sortBy('name_lang_0');
-                    $items = Item::orderBy('base_id')->orderBy('name_lang_0');
-                    break;
-                case 1:
-                    //$items = Item::all()->sortBy(function($row){return $row->name_lang_1 . $row->name_lang_0;});
-                    $items = Item::orderBy('base_id')->orderBy('name_lang_1')->orderBy('name_lang_0');
-                    break;
-                case 2:
-                    $items = Item::orderBy('base_id')->orderBy('name_lang_2')->orderBy('name_lang_0');
-                    break;
-                case 3:
-                    $items = Item::orderBy('base_id')->orderBy('name_lang_3')->orderBy('name_lang_0');
-                    break;
-            }
+            $name = 'name_lang_' . $index;
+            $items = $items->orderBy($name);
         }
-        session(['links' => ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/' . request()->path()]);
-        return view('item/base_index', ['role' => GlobalController::glo_role(), 'base' => $base, 'items' => $items->where('base_id', $base->id)->where('project_id', GlobalController::glo_project_id())->paginate(60)]);
 
-//        return view('item/index', ['items' => Item::all()->sortBy(function ($item){
-//            return $item->base->name_lang_0 . $item->name_lang_0;})]);
+        session(['links' => ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/' . request()->path()]);
+        return view('item/base_index', ['base_right' => $base_right, 'base' => $base, 'items' => $items->paginate(60)]);
+
     }
 
     function item_index(Item $item, Link $par_link = null)
@@ -633,7 +624,7 @@ class ItemController extends Controller
 //      return redirect()->back()->withInput();                 # Редиректим его <s>взад</s> на ту же страницу
     }
 
-    private  function save_main(Main $main, $item, $keys, $values, $index, $strings_inputs)
+    private function save_main(Main $main, $item, $keys, $values, $index, $strings_inputs)
     {
         $main->link_id = $keys[$index];
         $main->child_item_id = $item->id;
@@ -690,7 +681,7 @@ class ItemController extends Controller
                 $item_find->updated_user_id = Auth::user()->id;
                 $item_find->save();
             }
-           $main->parent_item_id = $item_find->id;
+            $main->parent_item_id = $item_find->id;
 
             // тип корректировки поля - не строка и не список
         } else {
@@ -857,7 +848,7 @@ class ItemController extends Controller
             $item->name_lang_3 = $item->name_lang_0;
         }
 
-        $excepts = array('_token', 'base_id', 'project_id','code', '_method', 'name_lang_0', 'name_lang_1', 'name_lang_2', 'name_lang_3');
+        $excepts = array('_token', 'base_id', 'project_id', 'code', '_method', 'name_lang_0', 'name_lang_1', 'name_lang_2', 'name_lang_3');
         $string_langs = $this->get_child_links($item->base);
 
         // Формируется массив $code_names - названия полей кодов

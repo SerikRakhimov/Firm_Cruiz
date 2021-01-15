@@ -6,8 +6,10 @@ use Illuminate\Support\Facades\Session;
 use App\Models\Base;
 use App\Models\Project;
 use App\Models\Role;
+use App\Models\Roba;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Auth;
 
 class GlobalController extends Controller
 {
@@ -18,6 +20,16 @@ class GlobalController extends Controller
         //Artisan::call('migrate:refresh', ['--path' => 'database/migrations']);
         // для настройки папки storage
         Artisan::call('storage:link');
+    }
+
+    static function glo_user()
+    {
+        return Auth::user();
+    }
+
+    static function glo_user_id()
+    {
+        return Auth::user()->id;
     }
 
     static function glo_project_role_setnull()
@@ -111,6 +123,7 @@ class GlobalController extends Controller
         $result = $glo_project_id == 0 && $glo_role_id == 0;
         return $result;
     }
+
     static function name_is_boolean($value)
     {
         return $value == true ? html_entity_decode('	&#9745;')
@@ -124,7 +137,9 @@ class GlobalController extends Controller
         $is_read = false;
         $is_update = false;
         $is_delete = false;
+        $is_byuser = false;
 
+        // Блок проверки по Role
         $is_enable = true;
         if ($role->is_sndb == false) {
             if ($base->type_is_number == true || $base->type_is_string == true ||
@@ -133,10 +148,6 @@ class GlobalController extends Controller
             }
         }
 
-        $is_create = false;
-        $is_read = false;
-        $is_update = false;
-        $is_delete = false;
         if ($role->is_create == true) {
             $is_create = true;
         }
@@ -155,7 +166,55 @@ class GlobalController extends Controller
             $is_update = false;
             $is_delete = false;
         }
-        return ['is_enable' => $is_enable, 'is_create' => $is_create, 'is_read' => $is_read, 'is_update' => $is_update, 'is_delete' => $is_delete];
+        // "$is_enable &&" нужно
+        $is_enable = $is_enable && ($is_create || $is_read || $is_update || $is_delete);
+
+        // Блок проверки по Robas, используя переменные $role и $base
+        $is_roba_enable = false;
+        $is_roba_create = false;
+        $is_roba_read = false;
+        $is_roba_update = false;
+        $is_roba_delete = false;
+        $roba = Roba::where('role_id', $role->id)->where('base_id', $base->id)->first();
+        if ($roba != null) {
+            if ($roba->is_create == true) {
+                $is_roba_create = true;
+            }
+            if ($roba->is_read == true) {
+                $is_roba_read = true;
+            }
+            if ($roba->is_update == true) {
+                $is_roba_update = true;
+            }
+            if ($roba->is_delete == true) {
+                $is_roba_delete = true;
+            }
+
+            if ($is_roba_read == true) {
+                $is_roba_create = false;
+                $is_roba_update = false;
+                $is_roba_delete = false;
+            }
+
+            $is_roba_enable = $is_roba_create || $is_roba_read || $is_roba_update || $is_roba_delete;
+
+//            $is_enable = $is_enable && $is_roba_enable;
+//            $is_create = $is_create && $is_roba_create;
+//            $is_read = $is_read && $is_roba_read;
+//            $is_update = $is_update && $is_roba_update;
+//            $is_delete = $is_delete && $is_roba_delete;
+
+            $is_enable = $is_roba_enable;
+            $is_create = $is_roba_create;
+            $is_read = $is_roba_read;
+            $is_update = $is_roba_update;
+            $is_delete = $is_roba_delete;
+
+            $is_byuser = $roba->is_byuser;
+
+        }
+
+        return ['is_enable' => $is_enable, 'is_create' => $is_create, 'is_read' => $is_read, 'is_update' => $is_update, 'is_delete' => $is_delete, 'is_byuser' => $is_byuser];
     }
 
 }

@@ -7,7 +7,6 @@
     use \App\Http\Controllers\GlobalController;
     use \App\Http\Controllers\MainController;
     $links = $base->child_links->sortBy('parent_base_number');
-    $base_right = GlobalController::base_right($role, $base);
     ?>
     <p>
     <div class="container-fluid">
@@ -111,11 +110,12 @@
                 </td>
                 <td class="text-center">&#8594;</td>
                 @foreach($links as $link)
-                    <td>
-                        <?php
-                        $item_find = MainController::view_info($item->id, $link->id);
-                        ?>
-                        @if($item_find)
+
+                    <?php
+                    $item_find = MainController::view_info($item->id, $link->id);
+                    ?>
+                    @if($item_find)
+                        <td>
                             {{--                                проверка, если link - вычисляемое поле--}}
                             @if ($link->parent_is_parent_related == true || $link->parent_is_numcalc == true)
                                 <a href="{{route('item.item_index', ['item'=>$item_find])}}">
@@ -124,8 +124,9 @@
                                             @endif
                                             {{$item_find->name()}}
                                         </a>
-                            @endif
-                    </td>
+                        </td>
+                    @endif
+
                 @endforeach
                 <td>{{$item->updated_user->name()}}
                 </td>
