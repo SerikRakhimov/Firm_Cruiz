@@ -65,12 +65,17 @@
             <th class="text-left">{{trans('main.name')}}</th>
             <th class="text-center"></th>
             @foreach($links as $link)
-                <th>
-                    <a href="{{route('item.base_index',$link->parent_base_id)}}"
-                       title="{{$link->parent_base->names()}}">
-                        {{$link->parent_label()}}
-                    </a>
-                </th>
+                <?php
+                $base_link_right = GlobalController::base_link_right($link);
+                ?>
+                @if($base_link_right['is_enable'] == true)
+                    <th>
+                        <a href="{{route('item.base_index',$link->parent_base_id)}}"
+                           title="{{$link->parent_base->names()}}">
+                            {{$link->parent_label()}}
+                        </a>
+                    </th>
+                @endif
             @endforeach
             <th class="text-center">{{trans('main.user')}}</th>
             <th class="text-center"></th>
@@ -110,23 +115,26 @@
                 </td>
                 <td class="text-center">&#8594;</td>
                 @foreach($links as $link)
-
                     <?php
-                    $item_find = MainController::view_info($item->id, $link->id);
+                    $base_link_right = GlobalController::base_link_right($link);
                     ?>
-                    @if($item_find)
-                        <td>
-                            {{--                                проверка, если link - вычисляемое поле--}}
-                            @if ($link->parent_is_parent_related == true || $link->parent_is_numcalc == true)
-                                <a href="{{route('item.item_index', ['item'=>$item_find])}}">
-                                    @else
-                                        <a href="{{route('item.item_index', ['item'=>$item_find,'par_link'=>$link])}}">
-                                            @endif
-                                            {{$item_find->name()}}
-                                        </a>
-                        </td>
+                    @if($base_link_right['is_enable'] == true)
+                        <?php
+                        $item_find = MainController::view_info($item->id, $link->id);
+                        ?>
+                        @if($item_find)
+                            <td>
+                                {{--                                проверка, если link - вычисляемое поле--}}
+                                @if ($link->parent_is_parent_related == true || $link->parent_is_numcalc == true)
+                                    <a href="{{route('item.item_index', ['item'=>$item_find])}}">
+                                        @else
+                                            <a href="{{route('item.item_index', ['item'=>$item_find,'par_link'=>$link])}}">
+                                                @endif
+                                                {{$item_find->name()}}
+                                            </a>
+                            </td>
+                        @endif
                     @endif
-
                 @endforeach
                 <td>{{$item->updated_user->name()}}
                 </td>

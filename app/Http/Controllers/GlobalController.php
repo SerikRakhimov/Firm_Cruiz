@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Session;
 use App\Models\Base;
+use App\Models\Link;
+use App\Models\Item;
 use App\Models\Project;
 use App\Models\Role;
 use App\Models\Roba;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
+use phpDocumentor\Reflection\Types\Boolean;
 
 class GlobalController extends Controller
 {
@@ -130,7 +133,7 @@ class GlobalController extends Controller
             : ($value == false ? html_entity_decode('&#65794;') : trans('main.empty'));
     }
 
-    static function base_right(Base $base)
+    static function base_right(Base $base, bool $is_no_sndb_rule = null)
     {
         $role = GlobalController::glo_role();
         $is_enable = false;
@@ -141,11 +144,14 @@ class GlobalController extends Controller
         $is_byuser = false;
 
         // Блок проверки по Role
+        // "$is_enable = true" нужно
         $is_enable = true;
-        if ($role->is_sndb == false) {
-            if ($base->type_is_number == true || $base->type_is_string == true ||
-                $base->type_is_date == true || $base->type_is_boolean == true) {
-                $is_enable = false;
+        if (!$is_no_sndb_rule) {
+            if ($role->is_sndb == false) {
+                if ($base->type_is_number == true || $base->type_is_string == true ||
+                    $base->type_is_date == true || $base->type_is_boolean == true) {
+                    $is_enable = false;
+                }
             }
         }
 
@@ -218,4 +224,35 @@ class GlobalController extends Controller
         return ['is_enable' => $is_enable, 'is_create' => $is_create, 'is_read' => $is_read, 'is_update' => $is_update, 'is_delete' => $is_delete, 'is_byuser' => $is_byuser];
     }
 
+    static function base_link_right(Link $link)
+    {
+        $base = $link->parent_base;
+        $base_right = self::base_right($base, true);
+
+        $is_enable = $base_right['is_enable'];
+        $is_create = $base_right['is_create'];
+        $is_read = $base_right['is_read'];
+        $is_update = $base_right['is_update'];
+        $is_delete = $base_right['is_delete'];
+        $is_byuser = $base_right['is_byuser'];
+
+        return ['is_enable' => $is_enable, 'is_create' => $is_create, 'is_read' => $is_read, 'is_update' => $is_update, 'is_delete' => $is_delete, 'is_byuser' => $is_byuser];
+    }
+
+    static function items_right(Base $base)
+    {
+        $base_right = self::base_right($base);
+        $items = Item::where('base_id', $base->id)->where('project_id', GlobalController::glo_project_id());
+        if ($base_right['is_byuser'] == true) {
+            $items = $items->where('updated_user_id', GlobalController::glo_user_id());
+        }
+        $name = "";  // нужно, не удалять
+        $index = array_search(session('locale'), session('glo_menu_save'));
+        if ($index !== false) {   // '!==' использовать, '!=' не использовать
+            $name = 'name_lang_' . $index;
+            $items = $items->orderBy($name);
+        }
+        $itget = $items->get();
+        return ['items' => $items, 'itget' => $itget];
+    }
 }

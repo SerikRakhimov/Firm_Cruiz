@@ -37,11 +37,6 @@
             @if($base_right['is_enable'] == true)
                 <?php
                 $i++;
-                $items = Item::where('base_id', $base->id)->where('project_id', GlobalController::glo_project_id());
-                if ($base_right['is_byuser'] == true) {
-                    $items = $items->where('updated_user_id', GlobalController::glo_user_id());
-                }
-                $items = $items->get();
                 ?>
                 <tr>
                     {{--                <th scope="row">{{$i}}</th>--}}
@@ -49,8 +44,7 @@
                     <td class="text-left">
                         <a href="{{route('item.base_index',$base)}}" title="{{$base->names()}}">
                             {{$base->names()}}
-                            ({{count($items)}}
-                            )
+                            ({{count(GlobalController::items_right($base)['itget'])}})
                         </a>
                     </td>
                 </tr>

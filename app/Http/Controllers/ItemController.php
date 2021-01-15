@@ -140,19 +140,9 @@ class ItemController extends Controller
     {
         $base_right = GlobalController::base_right($base);
 
-        $items = Item::where('base_id', $base->id)->where('project_id', GlobalController::glo_project_id());
-        if ($base_right['is_byuser'] == true) {
-            $items = $items->where('updated_user_id', GlobalController::glo_user_id());
-        }
-        $name = "";  // нужно, не удалять
-        $index = array_search(session('locale'), session('glo_menu_save'));
-        if ($index !== false) {   // '!==' использовать, '!=' не использовать
-            $name = 'name_lang_' . $index;
-            $items = $items->orderBy($name);
-        }
-
         session(['links' => ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/' . request()->path()]);
-        return view('item/base_index', ['base_right' => $base_right, 'base' => $base, 'items' => $items->paginate(60)]);
+        return view('item/base_index', ['base_right' => $base_right, 'base' => $base,
+            'items' => GlobalController::items_right($base)['items']->paginate(60)]);
 
     }
 
