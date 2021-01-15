@@ -130,8 +130,9 @@ class GlobalController extends Controller
             : ($value == false ? html_entity_decode('&#65794;') : trans('main.empty'));
     }
 
-    static function base_right(Role $role, Base $base)
+    static function base_right(Base $base)
     {
+        $role = GlobalController::glo_role();
         $is_enable = false;
         $is_create = false;
         $is_read = false;

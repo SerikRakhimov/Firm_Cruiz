@@ -32,11 +32,16 @@
         ?>
         @foreach($bases as $base)
             <?php
-            $base_right = GlobalController::base_right($role, $base);
+            $base_right = GlobalController::base_right($base);
             ?>
             @if($base_right['is_enable'] == true)
                 <?php
                 $i++;
+                $items = Item::where('base_id', $base->id)->where('project_id', GlobalController::glo_project_id());
+                if ($base_right['is_byuser'] == true) {
+                    $items = $items->where('updated_user_id', GlobalController::glo_user_id());
+                }
+                $items = $items->get();
                 ?>
                 <tr>
                     {{--                <th scope="row">{{$i}}</th>--}}
@@ -44,7 +49,7 @@
                     <td class="text-left">
                         <a href="{{route('item.base_index',$base)}}" title="{{$base->names()}}">
                             {{$base->names()}}
-                            ({{count(Item::where('base_id', $base->id)->where('project_id', GlobalController::glo_project_id())->get())}}
+                            ({{count($items)}}
                             )
                         </a>
                     </td>

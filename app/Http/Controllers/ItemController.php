@@ -138,7 +138,7 @@ class ItemController extends Controller
 
     function base_index(Base $base)
     {
-        $base_right = GlobalController::base_right(GlobalController::glo_role(), $base);
+        $base_right = GlobalController::base_right($base);
 
         $items = Item::where('base_id', $base->id)->where('project_id', GlobalController::glo_project_id());
         if ($base_right['is_byuser'] == true) {
