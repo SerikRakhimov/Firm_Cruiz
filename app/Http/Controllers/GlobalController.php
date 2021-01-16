@@ -255,4 +255,9 @@ class GlobalController extends Controller
         $itget = $items->get();
         return ['items' => $items, 'itget' => $itget];
     }
+
+    static function empty_html()
+    {
+        return trans('main.empty');
+    }
 }

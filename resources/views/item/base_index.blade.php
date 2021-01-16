@@ -119,11 +119,11 @@
                     $base_link_right = GlobalController::base_link_right($link);
                     ?>
                     @if($base_link_right['is_enable'] == true)
-                        <?php
-                        $item_find = MainController::view_info($item->id, $link->id);
-                        ?>
-                        @if($item_find)
-                            <td>
+                        <td>
+                            <?php
+                            $item_find = MainController::view_info($item->id, $link->id);
+                            ?>
+                            @if($item_find)
                                 {{--                                проверка, если link - вычисляемое поле--}}
                                 @if ($link->parent_is_parent_related == true || $link->parent_is_numcalc == true)
                                     <a href="{{route('item.item_index', ['item'=>$item_find])}}">
@@ -132,8 +132,11 @@
                                                 @endif
                                                 {{$item_find->name()}}
                                             </a>
-                            </td>
-                        @endif
+                                            @else
+                                                <div class="text-danger">
+                                                    {{GlobalController::empty_html()}}</div>
+                                @endif
+                        </td>
                     @endif
                 @endforeach
                 <td>{{$item->updated_user->name()}}

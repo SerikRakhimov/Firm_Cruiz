@@ -441,11 +441,18 @@ class ItemController extends Controller
         }
         // загрузить в $inputs все поля ввода, кроме $excepts, $string_names, $string_codes, array_merge() - функция суммирования двух и более массивов
         $inputs = $request->except(array_merge($excepts, $string_names, $code_names));
+
         // обработка для логических полей
         // если при вводе формы пометка checkbox не установлена, в $request записи про элемент checkbox вообще нет
         // если при вводе формы пометка checkbox установлена, в $request есть запись со значеним "on"
         // см. https://webformyself.com/kak-v-php-poluchit-znachenie-checkbox/
         foreach ($string_langs as $link) {
+            //111
+            // Проверка нужна
+            $base_link_right = GlobalController::base_link_right($link);
+            if ($base_link_right['is_enable'] == false) {
+                continue;
+            }
             // похожая формула выше (в этой же процедуре)
             if ($link->parent_base->type_is_boolean()) {
                 // у этой команды два предназначения:
@@ -455,6 +462,7 @@ class ItemController extends Controller
                 $inputs[$link->id] = isset($inputs[$link->id]) ? "1" : "0";
             }
         }
+
         foreach ($inputs as $key => $value) {
             $inputs[$key] = ($value != null) ? $value : "";
         }

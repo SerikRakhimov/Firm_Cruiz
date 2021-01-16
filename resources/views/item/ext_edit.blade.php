@@ -200,6 +200,12 @@
         @foreach($array_calc as $key=>$value)
             <?php
             $link = Link::find($key);
+            $base_link_right = GlobalController::base_link_right($link);
+            ?>
+            @if($base_link_right['is_enable'] == false)
+                @continue
+            @endif
+            <?php
             $result = ItemController::get_items_for_link($link);
             $items = $result['result_parent_base_items'];
             $code_find = null;
@@ -251,6 +257,10 @@
                                    @if($par_link)
                                    @if ($key == $par_link->id)
                                    disabled
+                                   @endif
+                                   @else
+                                   @if($base_link_right['is_read'] == true)
+                                   disabled
                                 @endif
                                 @endif
                             >
@@ -267,8 +277,12 @@
                         {{--                                {{session('errors')!=null ? session('errors')->first($key): ''}}--}}
                         {{--                            </div>--}}
                         <div class="col-sm-1">
-                            <input type="button" value="..." title="{{trans('main.select_from_refer')}}"
-                                   onclick="browse('{{$link->parent_base_id}}','{{$key}}')">
+                                <input type="button" value="..." title="{{trans('main.select_from_refer')}}"
+                                       onclick="browse('{{$link->parent_base_id}}','{{$key}}')"
+                                       @if($base_link_right['is_read'] == true)
+                                       disabled
+                                    @endif
+                                >
                         </div>
                         <div class="col-sm-6">
                                 <span class="form-label text-success"
@@ -311,6 +325,10 @@
                                    {{--                                   parent_base_id_work = document.getElementById('link{{$key}}').disabled = true;--}}
                                    {{--                                   parent_base_id_work = document.getElementById('link{{$key}}').disabled = false;--}}
                                    readonly
+                                   @endif
+                                   @else
+                                   @if($base_link_right['is_read'] == true)
+                                   disabled
                                 @endif
                                 @endif
                             >
@@ -362,7 +380,12 @@
                                    @if($par_link)
                                    @if ($key == $par_link->id)
                                    disabled
+                                   @endif
+                                   @else
+                                   @if($base_link_right['is_read'] == true)
+                                   disabled
                                 @endif
+
                                 @endif
                             >
                             @error($key)
@@ -399,6 +422,10 @@
                                    @if($par_link)
                                    @if ($key == $par_link->id)
                                    disabled
+                                   @endif
+                                   @else
+                                   @if($base_link_right['is_read'] == true)
+                                   disabled
                                 @endif
                                 @endif
                             >
@@ -417,6 +444,10 @@
                     <fieldset id="link{{$key}}"
                               @if($par_link)
                               @if ($key == $par_link->id)
+                              disabled
+                              @endif
+                              @else
+                              @if($base_link_right['is_read'] == true)
                               disabled
                         @endif
                         @endif
@@ -444,7 +475,6 @@
                                     <div class="col-sm-7">
                                         <input type="text"
                                                name="{{$input_name}}"
-                                               link{{$input_name}}
                                                id="link{{$input_name}}"
                                                class="form-control @error($input_name) is-invalid @enderror"
                                                placeholder=""
@@ -483,6 +513,10 @@
                                     class="form-control @error($key) is-invalid @enderror"
                                     @if($par_link)
                                     @if ($key == $par_link->id)
+                                    disabled
+                                    @endif
+                                    @else
+                                    @if($base_link_right['is_read'] == true)
                                     disabled
                                 @endif
                                 @endif
@@ -567,6 +601,13 @@
 
     @foreach($array_calc as $key=>$value)
         <?php
+        $link = Link::find($key);
+        $base_link_right = GlobalController::base_link_right($link);
+        ?>
+        @if($base_link_right['is_enable'] == false)
+            @continue
+        @endif
+        <?php
         // похожие строки ниже
         $const_link_id_start = null;
         $const_link_start = null;
@@ -574,7 +615,7 @@
         $link_result_child = null;
         $link_parent = null;
         $lres = null;
-        $link = Link::find($key);
+        //$link = Link::find($key);
         if ($link) {
             // эта проверка не нужна
             //if (!array_key_exists($key, $array_disabled)) {
