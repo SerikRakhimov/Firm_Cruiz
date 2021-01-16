@@ -14,7 +14,7 @@ class UpdateMainsTableAddUniqueIndex extends Migration
     public function up()
     {
         Schema::table('mains', function (Blueprint $table) {
-            $table->unique(['link_id', 'child_item_id','parent_item_id']);
+            $table->unique(['link_id', 'child_item_id']);
         });
     }
 
