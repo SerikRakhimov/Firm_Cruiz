@@ -17,6 +17,7 @@ class CreateRobasTable extends Migration
             $table->id();
             $table->unsignedBigInteger('role_id')->default(0);
             $table->unsignedBigInteger('base_id')->default(0);
+            $table->boolean('is_inlist')->default(false);
             $table->boolean('is_create')->default(false);
             $table->boolean('is_read')->default(false);
             $table->boolean('is_update')->default(false);

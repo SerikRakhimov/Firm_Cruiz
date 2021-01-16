@@ -146,6 +146,7 @@ return [
     'author'=>'Author',
     'project_role_selection'=>'Project and role selection',
     'is_author'=>'Author',
+    'is_inlist'=>'Show in the Bases list',
     'is_create'=>'Create',
     'is_read'=>'Read',
     'is_update'=>'Update',

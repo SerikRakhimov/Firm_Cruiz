@@ -93,6 +93,30 @@
             </div>
         @endif
 
+        <div class="form-group row" id="is_inlist_form_group">
+            <div class="col-sm-3 text-right">
+                <label class="form-label"
+                       for="is_inlist">{{trans('main.is_inlist')}}</label>
+            </div>
+            <div class="col-sm-7">
+                <input class="@error('is_inlist') is-invalid @enderror"
+                       type="checkbox"
+                       name="is_inlist"
+                       placeholder=""
+                       @if ((old('is_inlist') ?? ($roba->is_inlist ?? false)) ==  true)
+                       checked
+                    @endif
+                >
+                @error('is_inlist')
+                <div class="invalid-feedback">
+                    {{$message}}
+                </div>
+                @enderror
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div>
+
         <div class="form-group row" id="is_create_form_group">
             <div class="col-sm-3 text-right">
                 <label class="form-label"

@@ -146,6 +146,7 @@ return [
     'author'=>'Автор',
     'project_role_selection'=>'Жоба мен рөлді таңдау',
     'is_author'=>'Автор',
+    'is_inlist'=>'Негіздер тізімінде көрсету',
     'is_create'=>'Жасау',
     'is_read'=>'Оқу',
     'is_update'=>'Түзету',

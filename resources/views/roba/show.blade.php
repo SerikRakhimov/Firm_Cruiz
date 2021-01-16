@@ -36,6 +36,7 @@
     @if(!$is_base)
         <p>{{trans('main.base')}}: <b>{{$roba->base->name()}}</b></p>
     @endif
+    <p>{{trans('main.is_inlist')}}: <b>{{GlobalController::name_is_boolean($roba->is_inlist)}}</b></p>
     <p>{{trans('main.is_create')}}: <b>{{GlobalController::name_is_boolean($roba->is_create)}}</b></p>
     <p>{{trans('main.is_read')}}: <b>{{GlobalController::name_is_boolean($roba->is_read)}}</b></p>
     <p>{{trans('main.is_update')}}: <b>{{GlobalController::name_is_boolean($roba->is_update)}}</b></p>
