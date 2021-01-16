@@ -577,22 +577,51 @@ class ItemController extends Controller
 //              значение массива = item_id (для занесения в mains->parent_item_id)
                 $i_max = count($keys);
 
-                //$mains = Main::all()->where('child_item_id', $item->id);
-                $mains = Main::where('child_item_id', $item->id)->get();
+//                // Предыдущий вариант
+//                $mains = Main::where('child_item_id', $item->id)->get();
+//                $i = 0;
+//                foreach ($mains as $main) {
+//                    if ($i < $i_max) {
+//                        $this->save_main($main, $item, $keys, $values, $i, $strings_inputs);
+//                        $i = $i + 1;
+//                    } else {
+//                        $main->delete();
+//                    }
+//                }
+//                for ($i; $i < $i_max; $i++) {
+//                    $main = new Main();
+//                    $this->save_main($main, $item, $keys, $values, $i, $strings_inputs);
+//                }
 
+                // Новый вариант
+                // "$i = 0" использовать, т.к. индексы в массивах начинаются с 0
                 $i = 0;
+                foreach ($keys as $key) {
+                    $main = Main::where('child_item_id', $item->id)->where('link_id', $key)->first();
+                    if ($main == null) {
+                        $main = new Main();
+                    }
+                    $this->save_main($main, $item, $keys, $values, $i, $strings_inputs);
+                    // "$i = $i + 1;" использовать здесь, т.к. индексы в массивах начинаются с 0
+                    $i = $i + 1;
+                }
+                // Проверка на $main->link_id, если такой не найден - то удаляется
+                $mains = Main::where('child_item_id', $item->id)->get();
                 foreach ($mains as $main) {
-                    if ($i < $i_max) {
-                        $this->save_main($main, $item, $keys, $values, $i, $strings_inputs);
-                        $i = $i + 1;
+                    $delete_main = false;
+                    $link = Link::where('id', $main->link_id)->first();
+                    if ($link) {
+                        if ($link->child_base_id != $item->base_id) {
+                            $delete_main = true;
+                        }
                     } else {
+                        $delete_main = true;
+                    }
+                    if ($delete_main) {
                         $main->delete();
                     }
                 }
-                for ($i; $i < $i_max; $i++) {
-                    $main = new Main();
-                    $this->save_main($main, $item, $keys, $values, $i, $strings_inputs);
-                }
+//
                 $rs = $this->calc_value_func($item);
                 if ($rs != null) {
                     $item->name_lang_0 = $rs['calc_lang_0'];
