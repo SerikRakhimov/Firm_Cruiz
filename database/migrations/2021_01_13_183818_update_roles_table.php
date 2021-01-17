@@ -15,11 +15,11 @@ class UpdateRolesTable extends Migration
     {
         Schema::table('roles', function (Blueprint $table) {
             $table->boolean('is_author')->default(false);
-            $table->boolean('is_create')->default(false);
-            $table->boolean('is_read')->default(false);
-            $table->boolean('is_update')->default(false);
-            $table->boolean('is_delete')->default(false);
-            $table->boolean('is_sndb')->default(false);
+            $table->boolean('is_list_base_create')->default(false);
+            $table->boolean('is_list_base_read')->default(false);
+            $table->boolean('is_list_base_update')->default(false);
+            $table->boolean('is_list_base_delete')->default(false);
+            $table->boolean('is_list_base_sndb')->default(false);
            });
     }
 

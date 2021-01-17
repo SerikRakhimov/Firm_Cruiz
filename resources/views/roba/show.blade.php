@@ -36,12 +36,13 @@
     @if(!$is_base)
         <p>{{trans('main.base')}}: <b>{{$roba->base->name()}}</b></p>
     @endif
-    <p>{{trans('main.is_inlist')}}: <b>{{GlobalController::name_is_boolean($roba->is_inlist)}}</b></p>
-    <p>{{trans('main.is_create')}}: <b>{{GlobalController::name_is_boolean($roba->is_create)}}</b></p>
-    <p>{{trans('main.is_read')}}: <b>{{GlobalController::name_is_boolean($roba->is_read)}}</b></p>
-    <p>{{trans('main.is_update')}}: <b>{{GlobalController::name_is_boolean($roba->is_update)}}</b></p>
-    <p>{{trans('main.is_delete')}}: <b>{{GlobalController::name_is_boolean($roba->is_delete)}}</b></p>
-    <p>{{trans('main.is_byuser')}}: <b>{{GlobalController::name_is_boolean($roba->is_byuser)}}</b></p>
+    <p>{{trans('main.is_list_base_create')}}: <b>{{GlobalController::name_is_boolean($roba->is_list_base_create)}}</b></p>
+    <p>{{trans('main.is_list_base_read')}}: <b>{{GlobalController::name_is_boolean($roba->is_list_base_read)}}</b></p>
+    <p>{{trans('main.is_list_base_update')}}: <b>{{GlobalController::name_is_boolean($roba->is_list_base_update)}}</b></p>
+    <p>{{trans('main.is_list_base_delete')}}: <b>{{GlobalController::name_is_boolean($roba->is_list_base_delete)}}</b></p>
+    <p>{{trans('main.is_list_base_byuser')}}: <b>{{GlobalController::name_is_boolean($roba->is_list_base_byuser)}}</b></p>
+    <p>{{trans('main.is_form_base_read')}}: <b>{{GlobalController::name_is_boolean($roba->is_form_base_read)}}</b></p>
+    <p>{{trans('main.is_form_base_update')}}: <b>{{GlobalController::name_is_boolean($roba->is_form_base_update)}}</b></p>
 
     @if ($type_form == 'show')
 {{--        @if (Auth::user()->isAdmin() ||!(($is_user == true) && ($roba->role->is_default_for_external == false)))--}}

@@ -97,6 +97,13 @@ class RobaController extends Controller
             $request->validate($this->rules($request));
         }
 
+        if ($request->is_list_base_create != $request->is_form_base_read) {
+            $array_mess['is_form_base_read'] = trans('main.is_list_base_create_and_is_form_base_read_in_must_be_the_same') . '!';
+            return redirect()->back()
+                ->withInput()
+                ->withErrors($array_mess);
+        }
+
         $data = $request->except('_token', '_method');
 
         $roba->fill($data);
@@ -114,12 +121,13 @@ class RobaController extends Controller
     {
         $roba->role_id = $request->role_id;
         $roba->base_id = $request->base_id;
-        $roba->is_inlist = isset($request->is_inlist) ? true : false;
-        $roba->is_create = isset($request->is_create) ? true : false;
-        $roba->is_read = isset($request->is_read) ? true : false;
-        $roba->is_update = isset($request->is_update) ? true : false;
-        $roba->is_delete = isset($request->is_delete) ? true : false;
-        $roba->is_byuser = isset($request->is_byuser) ? true : false;
+        $roba->is_list_base_create = isset($request->is_list_base_create) ? true : false;
+        $roba->is_list_base_read = isset($request->is_list_base_read) ? true : false;
+        $roba->is_list_base_update = isset($request->is_list_base_update) ? true : false;
+        $roba->is_list_base_delete = isset($request->is_list_base_delete) ? true : false;
+        $roba->is_list_base_byuser = isset($request->is_list_base_byuser) ? true : false;
+        $roba->is_form_base_read = isset($request->is_form_base_read) ? true : false;
+        $roba->is_form_base_update = isset($request->is_form_base_update) ? true : false;
 
         $roba->save();
     }

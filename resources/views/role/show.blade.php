@@ -20,11 +20,12 @@
     @endforeach
     <p>{{trans('main.is_default_for_external')}}: <b>{{GlobalController::name_is_boolean($role->is_default_for_external)}}</b></p>
     <p>{{trans('main.is_author')}}: <b>{{GlobalController::name_is_boolean($role->is_author)}}</b></p>
-    <p>{{trans('main.is_create')}}: <b>{{GlobalController::name_is_boolean($role->is_create)}}</b></p>
-    <p>{{trans('main.is_read')}}: <b>{{GlobalController::name_is_boolean($role->is_read)}}</b></p>
-    <p>{{trans('main.is_update')}}: <b>{{GlobalController::name_is_boolean($role->is_update)}}</b></p>
-    <p>{{trans('main.is_delete')}}: <b>{{GlobalController::name_is_boolean($role->is_delete)}}</b></p>
-    <p>{{trans('main.is_sndb')}}: <b>{{GlobalController::name_is_boolean($role->is_sndb)}}</b></p>
+    <p>{{trans('main.is_list_base_sndb')}}: <b>{{GlobalController::name_is_boolean($role->is_list_base_is_sndb)}}</b></p>
+    <p>{{trans('main.is_list_base_create')}}: <b>{{GlobalController::name_is_boolean($role->is_list_base_create)}}</b></p>
+    <p>{{trans('main.is_list_base_read')}}: <b>{{GlobalController::name_is_boolean($role->is_list_base_read)}}</b></p>
+    <p>{{trans('main.is_list_base_update')}}: <b>{{GlobalController::name_is_boolean($role->is_list_base_update)}}</b></p>
+    <p>{{trans('main.is_list_base_delete')}}: <b>{{GlobalController::name_is_boolean($role->is_list_base_delete)}}</b></p>
+    <p>{{trans('main.is_list_base_is_byuser')}}: <b>{{GlobalController::name_is_boolean($role->is_list_base_byuser)}}</b></p>
 
     @if ($type_form == 'show')
         <p>

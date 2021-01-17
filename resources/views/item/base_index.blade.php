@@ -15,7 +15,7 @@
                 <h3>{{$base->names()}}</h3>
             </div>
         </div>
-        @if($base_right['is_create'] == true)
+        @if($base_right['is_list_base_create'] == true)
             <div class="col-1 text-left">
                 <a href="{{route('item.ext_create', $base->id)}}"
                    title="{{trans('main.add')}}">
@@ -68,7 +68,7 @@
                 <?php
                 $base_link_right = GlobalController::base_link_right($link);
                 ?>
-                @if($base_link_right['is_enable'] == true)
+                @if($base_link_right['is_list_base_enable'] == true)
                     <th>
                         <a href="{{route('item.base_index',$link->parent_base_id)}}"
                            title="{{$link->parent_base->names()}}">
@@ -82,10 +82,10 @@
             <th class="text-center"></th>
             <th class="text-center"></th>
             <th class="text-center"></th>
-            @if($base_right['is_update'] == true)
+            @if($base_right['is_list_base_update'] == true)
                 <th class="text-center"></th>
             @endif
-            @if($base_right['is_delete'] == true)
+            @if($base_right['is_list_base_delete'] == true)
                 <th class="text-center"></th>
             @endif
         </tr>
@@ -118,7 +118,7 @@
                     <?php
                     $base_link_right = GlobalController::base_link_right($link);
                     ?>
-                    @if($base_link_right['is_enable'] == true)
+                    @if($base_link_right['is_list_link_enable'] == true)
                         <td>
                             <?php
                             $item_find = MainController::view_info($item->id, $link->id);
@@ -192,7 +192,7 @@
                              alt="{{trans('main.info')}}">
                     </a>
                 </td>
-                @if($base_right['is_update'] == true)
+                @if($base_right['is_list_base_update'] == true)
                     <td class="text-center">
                         <a href="{{route('item.ext_edit', $item)}}" title="{{trans('main.edit')}}">
                             <img src="{{Storage::url('edit_record.png')}}" width="15" height="15"
@@ -206,7 +206,7 @@
                 {{--                             alt="{{trans('main.edit')}}">--}}
                 {{--                    </a>--}}
                 {{--                </td>--}}
-                @if($base_right['is_delete'] == true)
+                @if($base_right['is_list_base_delete'] == true)
                     <td class="text-center">
                         <a href="{{route('item.ext_delete_question',$item)}}" title="{{trans('main.delete')}}">
                             <img src="{{Storage::url('delete_record.png')}}" width="15" height="15"

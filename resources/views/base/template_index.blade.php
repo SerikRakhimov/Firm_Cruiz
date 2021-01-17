@@ -34,7 +34,7 @@
             <?php
             $base_right = GlobalController::base_right($base);
             ?>
-            @if($base_right['is_enable'] == true)
+            @if($base_right['is_list_base_enable'] == true)
                 <?php
                 $i++;
                 ?>

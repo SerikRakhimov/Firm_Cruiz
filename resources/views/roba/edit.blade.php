@@ -93,21 +93,21 @@
             </div>
         @endif
 
-        <div class="form-group row" id="is_inlist_form_group">
+        <div class="form-group row" id="is_list_base_create_form_group">
             <div class="col-sm-3 text-right">
                 <label class="form-label"
-                       for="is_inlist">{{trans('main.is_inlist')}}</label>
+                       for="is_list_base_create">{{trans('main.is_list_base_create')}}</label>
             </div>
             <div class="col-sm-7">
-                <input class="@error('is_inlist') is-invalid @enderror"
+                <input class="@error('is_list_base_create') is-invalid @enderror"
                        type="checkbox"
-                       name="is_inlist"
+                       name="is_list_base_create"
                        placeholder=""
-                       @if ((old('is_inlist') ?? ($roba->is_inlist ?? false)) ==  true)
+                       @if ((old('is_list_base_create') ?? ($roba->is_list_base_create ?? false)) ==  true)
                        checked
                     @endif
                 >
-                @error('is_inlist')
+                @error('is_list_base_create')
                 <div class="invalid-feedback">
                     {{$message}}
                 </div>
@@ -117,45 +117,21 @@
             </div>
         </div>
 
-        <div class="form-group row" id="is_create_form_group">
+        <div class="form-group row" id="is_list_base_read_form_group">
             <div class="col-sm-3 text-right">
                 <label class="form-label"
-                       for="is_create">{{trans('main.is_create')}}</label>
+                       for="is_list_base_read">{{trans('main.is_list_base_read')}}</label>
             </div>
             <div class="col-sm-7">
-                <input class="@error('is_create') is-invalid @enderror"
+                <input class="@error('is_list_base_read') is-invalid @enderror"
                        type="checkbox"
-                       name="is_create"
+                       name="is_list_base_read"
                        placeholder=""
-                       @if ((old('is_create') ?? ($roba->is_create ?? false)) ==  true)
+                       @if ((old('is_list_base_read') ?? ($roba->is_list_base_read ?? false)) ==  true)
                        checked
                     @endif
                 >
-                @error('is_create')
-                <div class="invalid-feedback">
-                    {{$message}}
-                </div>
-                @enderror
-            </div>
-            <div class="col-sm-2">
-            </div>
-        </div>
-
-        <div class="form-group row" id="is_read_form_group">
-            <div class="col-sm-3 text-right">
-                <label class="form-label"
-                       for="is_read">{{trans('main.is_read')}}</label>
-            </div>
-            <div class="col-sm-7">
-                <input class="@error('is_read') is-invalid @enderror"
-                       type="checkbox"
-                       name="is_read"
-                       placeholder=""
-                       @if ((old('is_read') ?? ($roba->is_read ?? false)) ==  true)
-                       checked
-                    @endif
-                >
-                @error('is_read')
+                @error('is_list_base_read')
                 <div class="invalid-feedback">
                     {{$message}}
                 </div>
@@ -166,21 +142,21 @@
         </div>
 
 
-        <div class="form-group row" id="is_update_form_group">
+        <div class="form-group row" id="is_list_base_update_form_group">
             <div class="col-sm-3 text-right">
                 <label class="form-label"
-                       for="is_update">{{trans('main.is_update')}}</label>
+                       for="is_list_base_update">{{trans('main.is_list_base_update')}}</label>
             </div>
             <div class="col-sm-7">
-                <input class="@error('is_update') is-invalid @enderror"
+                <input class="@error('is_list_base_update') is-invalid @enderror"
                        type="checkbox"
-                       name="is_update"
+                       name="is_list_base_update"
                        placeholder=""
-                       @if ((old('is_update') ?? ($roba->is_update ?? false)) ==  true)
+                       @if ((old('is_list_base_update') ?? ($roba->is_list_base_update ?? false)) ==  true)
                        checked
                     @endif
                 >
-                @error('is_update')
+                @error('is_list_base_update')
                 <div class="invalid-feedback">
                     {{$message}}
                 </div>
@@ -190,21 +166,21 @@
             </div>
         </div>
 
-        <div class="form-group row" id="is_delete_form_group">
+        <div class="form-group row" id="is_list_base_delete_form_group">
             <div class="col-sm-3 text-right">
                 <label class="form-label"
-                       for="is_delete">{{trans('main.is_delete')}}</label>
+                       for="is_list_base_delete">{{trans('main.is_list_base_delete')}}</label>
             </div>
             <div class="col-sm-7">
-                <input class="@error('is_delete') is-invalid @enderror"
+                <input class="@error('is_list_base_delete') is-invalid @enderror"
                        type="checkbox"
-                       name="is_delete"
+                       name="is_list_base_delete"
                        placeholder=""
-                       @if ((old('is_delete') ?? ($roba->is_delete ?? false)) ==  true)
+                       @if ((old('is_list_base_delete') ?? ($roba->is_list_base_delete ?? false)) ==  true)
                        checked
                     @endif
                 >
-                @error('is_delete')
+                @error('is_list_base_delete')
                 <div class="invalid-feedback">
                     {{$message}}
                 </div>
@@ -214,21 +190,70 @@
             </div>
         </div>
 
-        <div class="form-group row" id="is_byuser_form_group">
+        <div class="form-group row" id="is_list_base_byuser_form_group">
             <div class="col-sm-3 text-right">
                 <label class="form-label"
-                       for="is_byuser">{{trans('main.is_byuser')}}</label>
+                       for="is_list_base_byuser">{{trans('main.is_list_base_byuser')}}</label>
             </div>
             <div class="col-sm-7">
-                <input class="@error('is_byuser') is-invalid @enderror"
+                <input class="@error('is_list_base_byuser') is-invalid @enderror"
                        type="checkbox"
-                       name="is_byuser"
+                       name="is_list_base_byuser"
                        placeholder=""
-                       @if ((old('is_byuser') ?? ($roba->is_byuser ?? false)) ==  true)
+                       @if ((old('is_list_base_byuser') ?? ($roba->is_list_base_byuser ?? false)) ==  true)
                        checked
                     @endif
                 >
-                @error('is_byuser')
+                @error('is_list_base_byuser')
+                <div class="invalid-feedback">
+                    {{$message}}
+                </div>
+                @enderror
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div>
+
+        <div class="form-group row" id="is_form_base_read_form_group">
+            <div class="col-sm-3 text-right">
+                <label class="form-label"
+                       for="is_form_base_read">{{trans('main.is_form_base_read')}}</label>
+            </div>
+            <div class="col-sm-7">
+                <input class="@error('is_form_base_read') is-invalid @enderror"
+                       type="checkbox"
+                       name="is_form_base_read"
+                       placeholder=""
+                       @if ((old('is_form_base_read') ?? ($roba->is_form_base_read ?? false)) ==  true)
+                       checked
+                    @endif
+                >
+                @error('is_form_base_read')
+                <div class="invalid-feedback">
+                    {{$message}}
+                </div>
+                @enderror
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div>
+
+
+        <div class="form-group row" id="is_form_base_update_form_group">
+            <div class="col-sm-3 text-right">
+                <label class="form-label"
+                       for="is_form_base_update">{{trans('main.is_form_base_update')}}</label>
+            </div>
+            <div class="col-sm-7">
+                <input class="@error('is_form_base_update') is-invalid @enderror"
+                       type="checkbox"
+                       name="is_form_base_update"
+                       placeholder=""
+                       @if ((old('is_form_base_update') ?? ($roba->is_form_base_update ?? false)) ==  true)
+                       checked
+                    @endif
+                >
+                @error('is_form_base_update')
                 <div class="invalid-feedback">
                     {{$message}}
                 </div>

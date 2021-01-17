@@ -136,92 +136,119 @@ class GlobalController extends Controller
     static function base_right(Base $base, bool $is_no_sndb_rule = null)
     {
         $role = GlobalController::glo_role();
-        $is_enable = false;
-        $is_create = false;
-        $is_read = false;
-        $is_update = false;
-        $is_delete = false;
-        $is_byuser = false;
+        $is_list_base_enable = false;
+        $is_list_base_create = false;
+        $is_list_base_read = false;
+        $is_list_base_update = false;
+        $is_list_base_delete = false;
+        $is_list_base_byuser = false;
+        $is_form_base_enable = false;
+        $is_form_base_read = false;
+        $is_form_base_update = false;
 
         // Блок проверки по Role
         // "$is_enable = true" нужно
-        $is_enable = true;
+        $is_list_base_enable = true;
         if (!$is_no_sndb_rule) {
-            if ($role->is_sndb == false) {
+            if ($role->is_list_base_sndb == false) {
                 if ($base->type_is_number == true || $base->type_is_string == true ||
                     $base->type_is_date == true || $base->type_is_boolean == true) {
-                    $is_enable = false;
+                    $is_list_base_enable = false;
                 }
             }
         }
 
-        if ($role->is_create == true) {
-            $is_create = true;
+        if ($role->is_list_base_create == true) {
+            $is_list_base_create = true;
         }
-        if ($role->is_read == true) {
-            $is_read = true;
+        if ($role->is_list_base_read == true) {
+            $is_list_base_read = true;
         }
-        if ($role->is_update == true) {
-            $is_update = true;
+        if ($role->is_list_base_update == true) {
+            $is_list_base_update = true;
         }
-        if ($role->is_delete == true) {
-            $is_delete = true;
+        if ($role->is_list_base_delete == true) {
+            $is_list_base_delete = true;
+        }
+        if ($role->is_list_base_byuser == true) {
+            $is_list_base_byuser = true;
         }
 
-        if ($is_read == true) {
-            $is_create = false;
-            $is_update = false;
-            $is_delete = false;
+        if ($is_list_base_read == true) {
+            $is_list_base_create = false;
+            $is_list_base_update = false;
+            $is_list_base_delete = false;
         }
         // "$is_enable &&" нужно
-        $is_enable = $is_enable && ($is_create || $is_read || $is_update || $is_delete);
+        $is_list_base_enable = $is_list_base_enable && ($is_list_base_create || $is_list_base_read || $is_list_base_update || $is_list_base_delete);
+        $is_form_base_read = $is_list_base_read;
+        $is_form_base_update = $is_list_base_update;
+        $is_form_base_enable = $is_form_base_read || $is_form_base_update;
 
         // Блок проверки по Robas, используя переменные $role и $base
-        $is_roba_enable = false;
-        $is_roba_create = false;
-        $is_roba_read = false;
-        $is_roba_update = false;
-        $is_roba_delete = false;
+        $is_roba_list_base_enable = false;
+        $is_roba_list_base_create = false;
+        $is_roba_list_base_read = false;
+        $is_roba_list_base_update = false;
+        $is_roba_list_base_delete = false;
+        $is_roba_list_base_byuser = false;
+        $is_roba_form_base_enable = false;
+        $is_roba_form_base_read = false;
+        $is_roba_form_base_update = false;
+
         $roba = Roba::where('role_id', $role->id)->where('base_id', $base->id)->first();
         if ($roba != null) {
-            if ($roba->is_create == true) {
-                $is_roba_create = true;
+            if ($roba->is_list_base_create == true) {
+                $is_roba_list_base_create = true;
             }
-            if ($roba->is_read == true) {
-                $is_roba_read = true;
+            if ($roba->is_list_base_read == true) {
+                $is_roba_list_base_read = true;
             }
-            if ($roba->is_update == true) {
-                $is_roba_update = true;
+            if ($roba->is_list_base_update == true) {
+                $is_roba_list_base_update = true;
             }
-            if ($roba->is_delete == true) {
-                $is_roba_delete = true;
+            if ($roba->is_list_base_delete == true) {
+                $is_roba_list_base_delete = true;
+            }
+            if ($roba->is_list_base_byuser == true) {
+                $is_roba_list_base_byuser = true;
+            }
+            if ($roba->is_form_base_read == true) {
+                $is_roba_form_base_read = true;
+            }
+            if ($roba->is_form_base_update == true) {
+                $is_roba_form_base_update = true;
+            }
+            if ($is_roba_list_base_read == true) {
+                $is_roba_list_base_create = false;
+                $is_roba_list_base_update = false;
+                $is_roba_list_base_delete = false;
             }
 
-            if ($is_roba_read == true) {
-                $is_roba_create = false;
-                $is_roba_update = false;
-                $is_roba_delete = false;
-            }
+            $is_roba_list_base_enable = $is_roba_list_base_create || $is_roba_list_base_read || $is_roba_list_base_update || $is_roba_list_base_delete;
+            $is_roba_form_base_enable = $is_roba_form_base_read || $is_roba_form_base_update;
 
-            $is_roba_enable = $is_roba_create || $is_roba_read || $is_roba_update || $is_roba_delete;
-
-//            $is_enable = $is_enable && $is_roba_enable;
-//            $is_create = $is_create && $is_roba_create;
-//            $is_read = $is_read && $is_roba_read;
-//            $is_update = $is_update && $is_roba_update;
-//            $is_delete = $is_delete && $is_roba_delete;
-
-            $is_enable = $is_roba_enable;
-            $is_create = $is_roba_create;
-            $is_read = $is_roba_read;
-            $is_update = $is_roba_update;
-            $is_delete = $is_roba_delete;
-
-            $is_byuser = $roba->is_byuser;
+            $is_list_base_enable = $is_roba_list_base_enable;
+            $is_list_base_create = $is_roba_list_base_create;
+            $is_list_base_read = $is_roba_list_base_read;
+            $is_list_base_update = $is_roba_list_base_update;
+            $is_list_base_delete = $is_roba_list_base_delete;
+            $is_list_base_byuser = $is_roba_list_base_byuser;
+            $is_form_base_enable = $is_roba_form_base_enable;
+            $is_form_base_read = $is_roba_form_base_read;
+            $is_form_base_update = $is_roba_form_base_update;
 
         }
 
-        return ['is_enable' => $is_enable, 'is_create' => $is_create, 'is_read' => $is_read, 'is_update' => $is_update, 'is_delete' => $is_delete, 'is_byuser' => $is_byuser];
+        return ['is_list_base_enable' => $is_list_base_enable,
+            'is_list_base_create' => $is_list_base_create,
+            'is_list_base_read' => $is_list_base_read,
+            'is_list_base_update' => $is_list_base_update,
+            'is_list_base_delete' => $is_list_base_delete,
+            'is_list_base_byuser' => $is_list_base_byuser,
+            'is_form_base_enable' => $is_form_base_enable,
+            'is_form_base_read' => $is_form_base_read,
+            'is_form_base_update' => $is_form_base_update];
     }
 
     static function base_link_right(Link $link)
@@ -229,21 +256,41 @@ class GlobalController extends Controller
         $base = $link->parent_base;
         $base_right = self::base_right($base, true);
 
-        $is_enable = $base_right['is_enable'];
-        $is_create = $base_right['is_create'];
-        $is_read = $base_right['is_read'];
-        $is_update = $base_right['is_update'];
-        $is_delete = $base_right['is_delete'];
-        $is_byuser = $base_right['is_byuser'];
+        $is_list_base_enable = $base_right['is_list_base_enable'];
+        $is_list_base_create = $base_right['is_list_base_create'];
+        $is_list_base_read = $base_right['is_list_base_read'];
+        $is_list_base_update = $base_right['is_list_base_update'];
+        $is_list_base_delete = $base_right['is_list_base_delete'];
+        $is_list_base_byuser = $base_right['is_list_base_byuser'];
+        $is_form_base_enable = $base_right['is_form_base_enable'];
+        $is_form_base_read = $base_right['is_form_base_read'];
+        $is_form_base_update = $base_right['is_form_base_update'];
+        $is_list_link_enable = $is_list_base_enable;
+        $is_form_link_read = $is_form_base_read;
+        $is_form_link_update = $is_form_base_update;
+        $is_form_link_enable = $is_form_link_read || $is_form_link_update;
 
-        return ['is_enable' => $is_enable, 'is_create' => $is_create, 'is_read' => $is_read, 'is_update' => $is_update, 'is_delete' => $is_delete, 'is_byuser' => $is_byuser];
+        return ['is_list_base_enable' => $is_list_base_enable,
+            'is_list_base_create' => $is_list_base_create,
+            'is_list_base_read' => $is_list_base_read,
+            'is_list_base_update' => $is_list_base_update,
+            'is_list_base_delete' => $is_list_base_delete,
+            'is_list_base_byuser' => $is_list_base_byuser,
+            'is_form_base_enable' => $is_form_base_enable,
+            'is_form_base_read' => $is_form_base_read,
+            'is_form_base_update' => $is_form_base_update,
+            'is_list_link_enable' => $is_list_link_enable,
+            'is_form_link_enable' => $is_form_link_enable,
+            'is_form_link_read' => $is_form_link_read,
+            'is_form_link_update' => $is_form_link_update,
+            ];
     }
 
     static function items_right(Base $base)
     {
         $base_right = self::base_right($base);
         $items = Item::where('base_id', $base->id)->where('project_id', GlobalController::glo_project_id());
-        if ($base_right['is_byuser'] == true) {
+        if ($base_right['is_list_base_byuser'] == true) {
             $items = $items->where('updated_user_id', GlobalController::glo_user_id());
         }
         $name = "";  // нужно, не удалять
