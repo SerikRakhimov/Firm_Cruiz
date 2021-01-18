@@ -77,6 +77,15 @@ class RobaController extends Controller
     {
         $request->validate($this->rules($request));
 
+        $array_mess = [];
+        $this->check($request, $array_mess);
+
+        if (count($array_mess) > 0) {
+            return redirect()->back()
+                ->withInput()
+                ->withErrors($array_mess);
+        }
+
         // установка часового пояса нужно для сохранения времени
         date_default_timezone_set('Asia/Almaty');
 
@@ -96,9 +105,10 @@ class RobaController extends Controller
         if (!(($roba->role_id == $request->role_id) && ($roba->base_id == $request->base_id))) {
             $request->validate($this->rules($request));
         }
+        $array_mess = [];
+        $this->check($request, $array_mess);
 
-        if ($request->is_list_base_create == true && $request->is_edit_base_read == true) {
-            $array_mess['is_edit_base_read'] = trans('main.is_list_base_create_and_is_edit_base_read_in_must_be_the_same') . '!';
+        if (count($array_mess) > 0) {
             return redirect()->back()
                 ->withInput()
                 ->withErrors($array_mess);
@@ -114,6 +124,13 @@ class RobaController extends Controller
             return redirect(session('robas_previous_url'));
         } else {
             return redirect()->back();
+        }
+    }
+
+    function check(Request $request, &$array_mess)
+    {
+        if ($request->is_list_base_create == true && $request->is_edit_base_read == true) {
+            $array_mess['is_edit_base_read'] = trans('main.is_list_base_create_and_is_edit_base_read_in_must_be_the_same') . '!';
         }
     }
 
