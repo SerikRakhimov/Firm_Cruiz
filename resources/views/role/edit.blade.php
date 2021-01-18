@@ -235,21 +235,21 @@
             </div>
         </div>
 
-        <div class="form-group row" id="is_form_base_read_form_group">
+        <div class="form-group row" id="is_edit_base_read_form_group">
             <div class="col-sm-3 text-right">
                 <label class="form-label"
-                       for="is_form_base_read">{{trans('main.is_form_base_read')}}</label>
+                       for="is_edit_base_read">{{trans('main.is_edit_base_read')}}</label>
             </div>
             <div class="col-sm-7">
-                <input class="@error('is_form_base_read') is-invalid @enderror"
+                <input class="@error('is_edit_base_read') is-invalid @enderror"
                        type="checkbox"
-                       name="is_form_base_read"
+                       name="is_edit_base_read"
                        placeholder=""
-                       @if ((old('is_form_base_read') ?? ($role->is_form_base_read ?? false)) ==  true)
+                       @if ((old('is_edit_base_read') ?? ($role->is_edit_base_read ?? false)) ==  true)
                        checked
                     @endif
                 >
-                @error('is_form_base_read')
+                @error('is_edit_base_read')
                 <div class="invalid-feedback">
                     {{$message}}
                 </div>
@@ -259,21 +259,21 @@
             </div>
         </div>
 
-        <div class="form-group row" id="is_form_base_update_form_group">
+        <div class="form-group row" id="is_edit_base_update_form_group">
             <div class="col-sm-3 text-right">
                 <label class="form-label"
-                       for="is_form_base_update">{{trans('main.is_form_base_update')}}</label>
+                       for="is_edit_base_update">{{trans('main.is_edit_base_update')}}</label>
             </div>
             <div class="col-sm-7">
-                <input class="@error('is_form_base_update') is-invalid @enderror"
+                <input class="@error('is_edit_base_update') is-invalid @enderror"
                        type="checkbox"
-                       name="is_form_base_update"
+                       name="is_edit_base_update"
                        placeholder=""
-                       @if ((old('is_form_base_update') ?? ($role->is_form_base_update ?? false)) ==  true)
+                       @if ((old('is_edit_base_update') ?? ($role->is_edit_base_update ?? false)) ==  true)
                        checked
                     @endif
                 >
-                @error('is_form_base_update')
+                @error('is_edit_base_update')
                 <div class="invalid-feedback">
                     {{$message}}
                 </div>
@@ -308,21 +308,21 @@
             </div>
         </div>
 
-        <div class="form-group row" id="is_form_link_read_form_group">
+        <div class="form-group row" id="is_edit_link_read_form_group">
             <div class="col-sm-3 text-right">
                 <label class="form-label"
-                       for="is_form_link_read">{{trans('main.is_form_link_read')}}</label>
+                       for="is_edit_link_read">{{trans('main.is_edit_link_read')}}</label>
             </div>
             <div class="col-sm-7">
-                <input class="@error('is_form_link_read') is-invalid @enderror"
+                <input class="@error('is_edit_link_read') is-invalid @enderror"
                        type="checkbox"
-                       name="is_form_link_read"
+                       name="is_edit_link_read"
                        placeholder=""
-                       @if ((old('is_form_link_read') ?? ($role->is_form_link_read ?? false)) ==  true)
+                       @if ((old('is_edit_link_read') ?? ($role->is_edit_link_read ?? false)) ==  true)
                        checked
                     @endif
                 >
-                @error('is_form_link_read')
+                @error('is_edit_link_read')
                 <div class="invalid-feedback">
                     {{$message}}
                 </div>
@@ -332,21 +332,21 @@
             </div>
         </div>
 
-        <div class="form-group row" id="is_form_link_update_form_group">
+        <div class="form-group row" id="is_edit_link_update_form_group">
             <div class="col-sm-3 text-right">
                 <label class="form-label"
-                       for="is_form_link_update">{{trans('main.is_form_link_update')}}</label>
+                       for="is_edit_link_update">{{trans('main.is_edit_link_update')}}</label>
             </div>
             <div class="col-sm-7">
-                <input class="@error('is_form_link_update') is-invalid @enderror"
+                <input class="@error('is_edit_link_update') is-invalid @enderror"
                        type="checkbox"
-                       name="is_form_link_update"
+                       name="is_edit_link_update"
                        placeholder=""
-                       @if ((old('is_form_link_update') ?? ($role->is_form_link_update ?? false)) ==  true)
+                       @if ((old('is_edit_link_update') ?? ($role->is_edit_link_update ?? false)) ==  true)
                        checked
                     @endif
                 >
-                @error('is_form_link_update')
+                @error('is_edit_link_update')
                 <div class="invalid-feedback">
                     {{$message}}
                 </div>

@@ -22,11 +22,11 @@ class CreateRobasTable extends Migration
             $table->boolean('is_list_base_update')->default(false);
             $table->boolean('is_list_base_delete')->default(false);
             $table->boolean('is_list_base_byuser')->default(false);
-            $table->boolean('is_form_base_read')->default(false);
-            $table->boolean('is_form_base_update')->default(false);
+            $table->boolean('is_edit_base_read')->default(false);
+            $table->boolean('is_edit_base_update')->default(false);
             $table->boolean('is_list_link_enable')->default(false);
-            $table->boolean('is_form_link_read')->default(false);
-            $table->boolean('is_form_link_update')->default(false);
+            $table->boolean('is_edit_link_read')->default(false);
+            $table->boolean('is_edit_link_update')->default(false);
             $table->timestamps();
             $table->index('role_id');
             $table->index('base_id');

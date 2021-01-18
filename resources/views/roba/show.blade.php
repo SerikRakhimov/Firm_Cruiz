@@ -41,11 +41,11 @@
     <p>{{trans('main.is_list_base_update')}}: <b>{{GlobalController::name_is_boolean($roba->is_list_base_update)}}</b></p>
     <p>{{trans('main.is_list_base_delete')}}: <b>{{GlobalController::name_is_boolean($roba->is_list_base_delete)}}</b></p>
     <p>{{trans('main.is_list_base_byuser')}}: <b>{{GlobalController::name_is_boolean($roba->is_list_base_byuser)}}</b></p>
-    <p>{{trans('main.is_form_base_read')}}: <b>{{GlobalController::name_is_boolean($roba->is_form_base_read)}}</b></p>
-    <p>{{trans('main.is_form_base_update')}}: <b>{{GlobalController::name_is_boolean($roba->is_form_base_update)}}</b></p>
+    <p>{{trans('main.is_edit_base_read')}}: <b>{{GlobalController::name_is_boolean($roba->is_edit_base_read)}}</b></p>
+    <p>{{trans('main.is_edit_base_update')}}: <b>{{GlobalController::name_is_boolean($roba->is_edit_base_update)}}</b></p>
     <p>{{trans('main.is_list_link_enable')}}: <b>{{GlobalController::name_is_boolean($roba->is_list_link_enable)}}</b></p>
-    <p>{{trans('main.is_form_link_read')}}: <b>{{GlobalController::name_is_boolean($roba->is_form_link_read)}}</b></p>
-    <p>{{trans('main.is_form_link_update')}}: <b>{{GlobalController::name_is_boolean($roba->is_form_link_update)}}</b></p>
+    <p>{{trans('main.is_edit_link_read')}}: <b>{{GlobalController::name_is_boolean($roba->is_edit_link_read)}}</b></p>
+    <p>{{trans('main.is_edit_link_update')}}: <b>{{GlobalController::name_is_boolean($roba->is_edit_link_update)}}</b></p>
     @if ($type_form == 'show')
 {{--        @if (Auth::user()->isAdmin() ||!(($is_user == true) && ($roba->role->is_default_for_external == false)))--}}
             <p>

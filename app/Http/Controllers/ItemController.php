@@ -449,7 +449,7 @@ class ItemController extends Controller
         foreach ($string_langs as $link) {
             // Проверка нужна
             $base_link_right = GlobalController::base_link_right($link);
-            if ($base_link_right['is_form_link_enable'] == false) {
+            if ($base_link_right['is_edit_link_enable'] == false) {
                 continue;
             }
             // похожая формула выше (в этой же процедуре)
@@ -915,7 +915,7 @@ class ItemController extends Controller
         foreach ($string_langs as $link) {
             // Проверка нужна
             $base_link_right = GlobalController::base_link_right($link);
-            if ($base_link_right['is_form_link_enable'] == false) {
+            if ($base_link_right['is_edit_link_enable'] == false) {
                 continue;
             }
             // похожая формула выше (в этой же процедуре)
