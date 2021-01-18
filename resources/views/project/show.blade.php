@@ -40,12 +40,12 @@
 
     @if ($type_form == 'show')
         <p>
-            <button type="button" class="btn btn-dreamer"
+            <button class="btn btn-dreamer"
                     onclick="document.location='{{route($project_edit,$project)}}'" title="{{trans('main.edit')}}">
                             <i class="fas fa-edit"></i>
                 {{trans('main.edit')}}
             </button>
-            <button type="button" class="btn btn-dreamer"
+            <button class="btn btn-dreamer"
                     onclick="document.location='{{route('project.delete_question',$project)}}'"
                     title="{{trans('main.delete')}}">
                             <i class="fas fa-trash"></i>
@@ -53,12 +53,12 @@
             </button>
         </p>
         <p>
-            <button type="button" class="btn btn-dreamer" title="{{trans('main.accesses')}}"
+            <button class="btn btn-dreamer" title="{{trans('main.accesses')}}"
                     onclick="document.location='{{route('access.index_project', $project)}}'">
                             <i class="fas fa-universal-access"></i>
                 {{trans('main.accesses')}}
             </button>
-            <button type="button" class="btn btn-dreamer"
+            <button class="btn btn-dreamer"
                     title="{{trans('main.cancel')}}" @include('layouts.project.previous_url')>
                             <i class="fas fa-arrow-left"></i>
                 {{trans('main.cancel')}}
@@ -73,7 +73,7 @@
                                     <i class="fas fa-trash"></i>
                     {{trans('main.delete')}}
                 </button>
-                <button type="button" class="btn btn-dreamer"
+                <button class="btn btn-dreamer"
                         title="{{trans('main.cancel')}}" @include('layouts.project.previous_url')>
                                     <i class="fas fa-arrow-left"></i>
                     {{trans('main.cancel')}}

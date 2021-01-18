@@ -65,7 +65,7 @@
     ?>
 
     @if ($type_form == 'show')
-        <button type="button" class="btn btn-dreamer" title="{{trans('main.return')}}"
+        <button class="btn btn-dreamer" title="{{trans('main.return')}}"
             @include('layouts.base.previous_url')
         >
             {{--                    <i class="fas fa-arrow-left"></i>--}}
@@ -76,7 +76,7 @@
             @csrf
             @method('DELETE')
             <button type="submit" class="btn btn-primary">{{trans('main.delete')}}</button>
-            <button type="button" class="btn btn-dreamer" title="{{trans('main.cancel')}}"
+            <button class="btn btn-dreamer" title="{{trans('main.cancel')}}"
                 @include('layouts.base.previous_url')
             >
                 {{--                    <i class="fas fa-arrow-left"></i>--}}

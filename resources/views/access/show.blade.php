@@ -49,13 +49,13 @@
     @if ($type_form == 'show')
         @if (Auth::user()->isAdmin() ||!(($is_user == true) && ($access->role->is_default_for_external == false)))
             <p>
-                <button type="button" class="btn btn-dreamer"
+                <button class="btn btn-dreamer"
                         onclick="document.location='{{route($access_edit,$access)}}'"
                         title="{{trans('main.edit')}}">
                     <i class="fas fa-edit"></i>
                     {{trans('main.edit')}}
                 </button>
-                <button type="button" class="btn btn-dreamer"
+                <button class="btn btn-dreamer"
                         onclick="document.location='{{route('access.delete_question',$access)}}'"
                         title="{{trans('main.delete')}}">
                     <i class="fas fa-trash"></i>
@@ -64,7 +64,7 @@
             </p>
         @endif
         <p>
-            <button type="button" class="btn btn-dreamer"
+            <button class="btn btn-dreamer"
                     title="{{trans('main.cancel')}}" @include('layouts.access.previous_url')>
                 <i class="fas fa-arrow-left"></i>
                 {{trans('main.cancel')}}
@@ -79,7 +79,7 @@
                     <i class="fas fa-trash"></i>
                     {{trans('main.delete')}}
                 </button>
-                <button type="button" class="btn btn-dreamer"
+                <button class="btn btn-dreamer"
                         title="{{trans('main.cancel')}}" @include('layouts.access.previous_url')>
                     <i class="fas fa-arrow-left"></i>
                     {{trans('main.cancel')}}

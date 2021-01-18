@@ -5,6 +5,7 @@
     <?php
     use App\Models\Link;
     use App\Models\Item;
+    use App\Http\Controllers\GlobalController;
     use App\Http\Controllers\ItemController;
     use App\Http\Controllers\MainController;
     ?>
@@ -15,50 +16,57 @@
         @elseif($type_form == 'delete_question')
             {{trans('main.delete_record_question')}}?
         @endif
-        <span class="text-info">-</span> <span class="text-success">{{trans('main.item')}}</span>
+        <span class="text-info">-</span> <span class="text-success">{{$item->base->info()}}</span>
     </h3>
     <br>
+    <?php
+    $base_right = GlobalController::base_right($item->base);
+    ?>
+    @if($base_right['is_show_base_enable'] == true)
+        <p>Id: <b>{{$item->id}}</b></p>
+        <p>
+        {{trans('main.code')}}: <b>{{$item->code}}</b><br>
+        @foreach (session('glo_menu_save') as $key=>$value)
+            {{trans('main.name')}} ({{trans('main.' . $value)}}): <b>{{$item['name_lang_' . $key]}}</b><br>
+        @endforeach
+        </p>
+    @endif
 
-    <p>Id: <b>{{$item->id}}</b></p>
-    <p>{{trans('main.base')}}: <b>{{$item->base->info()}}</b>
-    <div><b>{{$item->base->info_full()}}</b></div></p>
-    <p>{{trans('main.code')}}: <b>{{$item->code}}</b></p>
+    {{--    @foreach($array_plan as $key=>$value)--}}
+    {{--        <?php--}}
+    {{--        $result = ItemController::get_items_for_link(Link::find($key));--}}
+    {{--        $items = $result['result_parent_base_items'];--}}
+    {{--        $item_work = Item::find($value);--}}
+    {{--        ?>--}}
+    {{--        --}}{{--    проверка нужна; для правильного вывода '$item_work->name()'--}}
+    {{--        @if($item_work)--}}
+    {{--            --}}{{--            <p>{{$result['result_parent_label']}} ({{$result['result_parent_base_name']}}):--}}
+    {{--            <p>{{$result['result_parent_label']}}:--}}
+    {{--                <b>{{$item_work->name()}}</b></p>--}}
+    {{--        @endif--}}
+    {{--    @endforeach--}}
 
-    @foreach (session('glo_menu_save') as $key=>$value)
-        <p>{{trans('main.name')}} ({{trans('main.' . $value)}}): <b>{{$item['name_lang_' . $key]}}</b></p>
-    @endforeach
+    <p>
+        @foreach($array_calc as $key=>$value)
+            <?php
 
-{{--    @foreach($array_plan as $key=>$value)--}}
-{{--        <?php--}}
-{{--        $result = ItemController::get_items_for_link(Link::find($key));--}}
-{{--        $items = $result['result_parent_base_items'];--}}
-{{--        $item_work = Item::find($value);--}}
-{{--        ?>--}}
-{{--        --}}{{--    проверка нужна; для правильного вывода '$item_work->name()'--}}
-{{--        @if($item_work)--}}
-{{--            --}}{{--            <p>{{$result['result_parent_label']}} ({{$result['result_parent_base_name']}}):--}}
-{{--            <p>{{$result['result_parent_label']}}:--}}
-{{--                <b>{{$item_work->name()}}</b></p>--}}
-{{--        @endif--}}
-{{--    @endforeach--}}
+            $link = Link::find($key);
+            $item_find = MainController::view_info($item->id, $key);
+            ?>
+            @if($link && $item_find)
+                <?php
+                $base_link_right = GlobalController::base_link_right($link);
+                ?>
+                @if($base_link_right['is_show_link_enable'] == true)
+                    {{$link->parent_label()}}:
+                    <b>{{$item_find->name()}}</b><br>
+                @endif
+            @endif
+        @endforeach
+    </p>
 
-    @foreach($array_calc as $key=>$value)
-        <?php
-
-        $link = Link::find($key);
-        $item_find = MainController::view_info($item->id, $key);
-        ?>
-        @if($link && $item_find)
-            <p>{{$link->parent_label()}}:
-                <b>{{$item_find->name()}}</b></p>
-
-        @endif
-    @endforeach
-
-
-
-    <p>{{trans('main.date_created')}}: <b>{{$item->created_at}}</b></p>
-    <p>{{trans('main.date_updated')}}: <b>{{$item->updated_at}}</b></p>
+    <p>{{trans('main.date_created')}}: <b>{{$item->created_at}}</b><br>
+        {{trans('main.date_updated')}}: <b>{{$item->updated_at}}</b></p>
 
     <?php
     $result = ItemController::form_tree($item->id);

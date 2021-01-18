@@ -145,6 +145,8 @@ class GlobalController extends Controller
         $is_edit_base_read = $role->is_edit_base_read;
         $is_edit_base_update = $role->is_edit_base_update;
         $is_list_link_enable = $role->is_list_link_enable;
+        $is_show_base_enable = $role->is_show_base_enable;
+        $is_show_link_enable = $role->is_show_link_enable;
         $is_edit_link_read = $role->is_edit_link_read;
         $is_edit_link_update = $role->is_edit_link_update;
 
@@ -182,6 +184,8 @@ class GlobalController extends Controller
             $is_roba_edit_base_read = $roba->is_edit_base_read;
             $is_roba_edit_base_update = $roba->is_edit_base_update;
             $is_roba_list_link_enable = $roba->is_list_link_enable;
+            $is_roba_show_base_enable = $roba->is_show_base_enable;
+            $is_roba_show_link_enable = $roba->is_show_link_enable;
             $is_roba_edit_link_read = $roba->is_edit_link_read;
             $is_roba_edit_link_update = $roba->is_edit_link_update;
             if ($is_roba_list_base_read == true) {
@@ -205,6 +209,8 @@ class GlobalController extends Controller
             $is_edit_base_update = $is_roba_edit_base_update;
             $is_list_link_enable = $is_roba_list_link_enable;
             $is_edit_link_enable = $is_roba_edit_link_enable;
+            $is_show_base_enable = $is_roba_show_base_enable;
+            $is_show_link_enable = $is_roba_show_link_enable;
             $is_edit_link_read = $is_roba_edit_link_read;
             $is_edit_link_update = $is_roba_edit_link_update;
         }
@@ -219,6 +225,8 @@ class GlobalController extends Controller
             'is_edit_base_read' => $is_edit_base_read,
             'is_edit_base_update' => $is_edit_base_update,
             'is_list_link_enable' => $is_list_link_enable,
+            'is_show_base_enable' => $is_show_base_enable,
+            'is_show_link_enable' => $is_show_link_enable,
             'is_edit_link_enable' => $is_edit_link_enable,
             'is_edit_link_read' => $is_edit_link_read,
             'is_edit_link_update' => $is_edit_link_update
@@ -240,6 +248,8 @@ class GlobalController extends Controller
         $is_edit_base_read = $base_right['is_edit_base_read'];
         $is_edit_base_update = $base_right['is_edit_base_update'];
         $is_list_link_enable = $base_right['is_list_link_enable'];
+        $is_show_base_enable = $base_right['is_show_base_enable'];
+        $is_show_link_enable = $base_right['is_show_link_enable'];
         $is_edit_link_read = $base_right['is_edit_link_read'];
         $is_edit_link_update = $base_right['is_edit_link_update'];
         $is_edit_link_enable = $is_edit_link_read || $is_edit_link_update;
@@ -254,6 +264,8 @@ class GlobalController extends Controller
             'is_edit_base_read' => $is_edit_base_read,
             'is_edit_base_update' => $is_edit_base_update,
             'is_list_link_enable' => $is_list_link_enable,
+            'is_show_base_enable' => $is_show_base_enable,
+            'is_show_link_enable' => $is_show_link_enable,
             'is_edit_link_enable' => $is_edit_link_enable,
             'is_edit_link_read' => $is_edit_link_read,
             'is_edit_link_update' => $is_edit_link_update,

@@ -27,7 +27,7 @@
             <div class="col-2">
             </div>
             <div class="col-5 text-right">
-                <button type="button" class="btn btn-dreamer" title="{{trans('main.add')}}"
+                <button class="btn btn-dreamer" title="{{trans('main.add')}}"
                         onclick="document.location=
                         @if($is_template)
                             '{{route('project.create_template', ['template'=>$template])}}'

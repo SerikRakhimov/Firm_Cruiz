@@ -28,7 +28,7 @@
         @else
             {{trans('main.edit_record')}}
         @endif
-        <span class="text-info">-</span> <span class="text-success">{{$base->info()}} ({{trans('main.item')}})</span>
+        <span class="text-info">-</span> <span class="text-success">{{$base->info()}}</span>
     </h3>
     <br>
     {{--    https://qastack.ru/programming/1191113/how-to-ensure-a-select-form-field-is-submitted-when-it-is-disabled--}}
@@ -254,13 +254,13 @@
                                    {{--                                       @if($link->parent_base->is_code_number == true  && $link->parent_base->is_limit_sign_code == true)--}}
                                    {{--                                       min="0" max="{{$link->parent_base->number_format()}}"--}}
                                    {{--                                       @endif--}}
+                                   @if($base_link_right['is_edit_link_read'] == true)
+                                   disabled
+                                   @else
                                    @if($par_link)
                                    @if ($key == $par_link->id)
                                    disabled
-                                   @endif
-                                   @else
-                                   @if($base_link_right['is_edit_link_read'] == true)
-                                   disabled
+                                @endif
                                 @endif
                                 @endif
                             >
@@ -277,12 +277,12 @@
                         {{--                                {{session('errors')!=null ? session('errors')->first($key): ''}}--}}
                         {{--                            </div>--}}
                         <div class="col-sm-1">
-                                <input type="button" value="..." title="{{trans('main.select_from_refer')}}"
-                                       onclick="browse('{{$link->parent_base_id}}','{{$key}}')"
-                                       @if($base_link_right['is_edit_link_read'] == true)
-                                       disabled
-                                    @endif
-                                >
+                            <input type="button" value="..." title="{{trans('main.select_from_refer')}}"
+                                   onclick="browse('{{$link->parent_base_id}}','{{$key}}')"
+                                   @if($base_link_right['is_edit_link_read'] == true)
+                                   disabled
+                                @endif
+                            >
                         </div>
                         <div class="col-sm-6">
                                 <span class="form-label text-success"
@@ -314,6 +314,9 @@
                                    value="{{(old($key)) ?? (($value != null) ? Item::find($value)->name() : '0')}}"
                                    step="{{$link->parent_base->digits_num_format()}}"
 
+                                   @if($base_link_right['is_edit_link_read'] == true)
+                                   disabled
+                                   @else
                                    @if($par_link || $link->parent_is_nc_viewonly==true)
                                    @if($par_link)
                                    @if ($key == $par_link->id)
@@ -325,10 +328,7 @@
                                    {{--                                   parent_base_id_work = document.getElementById('link{{$key}}').disabled = true;--}}
                                    {{--                                   parent_base_id_work = document.getElementById('link{{$key}}').disabled = false;--}}
                                    readonly
-                                   @endif
-                                   @else
-                                   @if($base_link_right['is_edit_link_read'] == true)
-                                   disabled
+                                @endif
                                 @endif
                                 @endif
                             >
@@ -377,15 +377,14 @@
                                    class="form-control @error($key) is-invalid @enderror"
                                    placeholder=""
                                    value="{{(old($key)) ?? (($value != null) ? Item::find($value)->name_lang_0 : date('Y-m-d'))}}"
+                                   @if($base_link_right['is_edit_link_read'] == true)
+                                   disabled
+                                   @else
                                    @if($par_link)
                                    @if ($key == $par_link->id)
                                    disabled
-                                   @endif
-                                   @else
-                                   @if($base_link_right['is_edit_link_read'] == true)
-                                   disabled
                                 @endif
-
+                                @endif
                                 @endif
                             >
                             @error($key)
@@ -419,13 +418,13 @@
                                    @if ((boolean)((old($key)) ?? (($value != null) ? Item::find($value)->name_lang_0 : '0')) == true)
                                    checked
                                    @endif
+                                   @if($base_link_right['is_edit_link_read'] == true)
+                                   disabled
+                                   @else
                                    @if($par_link)
                                    @if ($key == $par_link->id)
                                    disabled
-                                   @endif
-                                   @else
-                                   @if($base_link_right['is_edit_link_read'] == true)
-                                   disabled
+                                @endif
                                 @endif
                                 @endif
                             >
@@ -442,13 +441,13 @@
                     {{--                                если тип корректировки поля - строка--}}
                 @elseif($link->parent_base->type_is_string())
                     <fieldset id="link{{$key}}"
+                              @if($base_link_right['is_edit_link_read'] == true)
+                              disabled
+                              @else
                               @if($par_link)
                               @if ($key == $par_link->id)
                               disabled
-                              @endif
-                              @else
-                              @if($base_link_right['is_edit_link_read'] == true)
-                              disabled
+                        @endif
                         @endif
                         @endif
                     >
@@ -511,13 +510,13 @@
                                     name="{{$key}}"
                                     id="link{{$key}}"
                                     class="form-control @error($key) is-invalid @enderror"
+                                    @if($base_link_right['is_edit_link_read'] == true)
+                                    disabled
+                                    @else
                                     @if($par_link)
                                     @if ($key == $par_link->id)
                                     disabled
-                                    @endif
-                                    @else
-                                    @if($base_link_right['is_edit_link_read'] == true)
-                                    disabled
+                                @endif
                                 @endif
                                 @endif
                             >
@@ -555,10 +554,12 @@
         <br>
         <div class="row text-center">
             <div class="col-sm-5 text-right">
-                <button type="submit" class="btn btn-primary">
-                    @if (!$update)
-                        {{trans('main.add')}}
+                <button type="submit" class="btn btn-dreamer"
+                        @if (!$update)
+                        title="{{trans('main.add')}}">
+                    {{trans('main.add')}}
                     @else
+                        title="{{trans('main.save')}}">
                         {{trans('main.save')}}
                     @endif
                 </button>
@@ -566,7 +567,12 @@
             <div class="col-sm-2">
             </div>
             <div class="col-sm-5 text-left">
-                <a class="btn btn-success" href="{{session('links')}}">{{trans('main.cancel')}}</a>
+                <button class="btn btn-dreamer" title="{{trans('main.cancel')}}"
+                        onclick="document.location='{{session('links')}}'"
+                >
+                    <i class="fas fa-arrow-left"></i>
+                    {{trans('main.cancel')}}
+                </button>
             </div>
         </div>
     </form>

@@ -16,7 +16,7 @@
             </div>
             <div class="col-5 text-right">
                 @if (Auth::user()->isAdmin() ||  $glo_project_role_is_null == true)
-                    <button type="button" class="btn btn-dreamer" title="{{trans('main.add')}}"
+                    <button class="btn btn-dreamer" title="{{trans('main.add')}}"
                             onclick="document.location='{{route('base.create', ['template'=>$template])}}'">
                         {{--                    <i class="fas fa-plus fa-fw d-none d-sm-block "></i>--}}
                         {{trans('main.add')}}

@@ -286,6 +286,54 @@
             </div>
         </div>
 
+        <div class="form-group row" id="is_show_base_enable_form_group">
+            <div class="col-sm-3 text-right">
+                <label class="form-label"
+                       for="is_show_base_enable">{{trans('main.is_show_base_enable')}}</label>
+            </div>
+            <div class="col-sm-7">
+                <input class="@error('is_show_base_enable') is-invalid @enderror"
+                       type="checkbox"
+                       name="is_show_base_enable"
+                       placeholder=""
+                       @if ((old('is_show_base_enable') ?? ($roba->is_show_base_enable ?? false)) ==  true)
+                       checked
+                    @endif
+                >
+                @error('is_show_base_enable')
+                <div class="invalid-feedback">
+                    {{$message}}
+                </div>
+                @enderror
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div>
+
+        <div class="form-group row" id="is_show_link_enable_form_group">
+            <div class="col-sm-3 text-right">
+                <label class="form-label"
+                       for="is_show_link_enable">{{trans('main.is_show_link_enable')}}</label>
+            </div>
+            <div class="col-sm-7">
+                <input class="@error('is_show_link_enable') is-invalid @enderror"
+                       type="checkbox"
+                       name="is_show_link_enable"
+                       placeholder=""
+                       @if ((old('is_show_link_enable') ?? ($roba->is_show_link_enable ?? false)) ==  true)
+                       checked
+                    @endif
+                >
+                @error('is_show_link_enable')
+                <div class="invalid-feedback">
+                    {{$message}}
+                </div>
+                @enderror
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div>
+
         <div class="form-group row" id="is_edit_link_read_form_group">
             <div class="col-sm-3 text-right">
                 <label class="form-label"
@@ -353,7 +401,7 @@
                 <div class="col-2">
                 </div>
                 <div class="col-5 text-left">
-                    <button type="button" class="btn btn-dreamer" title="{{trans('main.cancel')}}"
+                    <button class="btn btn-dreamer" title="{{trans('main.cancel')}}"
                         @include('layouts.roba.previous_url')
                     >
                         <i class="fas fa-arrow-left"></i>

@@ -155,6 +155,8 @@ return [
     'is_edit_base_read'=>'Reading Bases in the form',
     'is_edit_base_update'=>'Adjust the Bases in the form',
     'is_list_link_enable'=>'Show Link in list',
+    'is_show_base_enable'=>'Reading Bases when viewing',
+    'is_show_link_enable'=>'Read Links when viewing',
     'is_edit_link_read'=>'Reading Links in the form',
     'is_edit_link_update'=>'Adjustment of the Link in the form',
     'is_list_base_create_and_is_edit_base_read_in_must_be_the_same'=>'"Creating Bases in the list" and "Reading Bases in the form" in must be the same (True)',

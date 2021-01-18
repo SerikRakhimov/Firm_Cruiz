@@ -25,6 +25,8 @@ class CreateRobasTable extends Migration
             $table->boolean('is_edit_base_read')->default(false);
             $table->boolean('is_edit_base_update')->default(false);
             $table->boolean('is_list_link_enable')->default(false);
+            $table->boolean('is_show_base_enable')->default(false);
+            $table->boolean('is_show_link_enable')->default(false);
             $table->boolean('is_edit_link_read')->default(false);
             $table->boolean('is_edit_link_update')->default(false);
             $table->timestamps();

@@ -153,6 +153,8 @@ return [
     'is_edit_base_read'=>'Пішіндегі Негіздерді оқу',
     'is_edit_base_update'=>'Пішіндегі Негіздерді түзету',
     'is_list_link_enable'=>'Тізімдегі Байланысты көрсету',
+    'is_show_base_enable'=>'Қарап шығу Негіздерін оқу',
+    'is_show_link_enable'=>'Қарап шығу кезіндегі Байланыстарды оқу',
     'is_edit_link_read'=>'Пішіндегі Байланысты оқу',
     'is_edit_link_update'=>'Пішіндегі Байланысты түзету',
     'is_list_base_create_and_is_edit_base_read_in_must_be_the_same'=>'"Тізімдегі Негіздерді жасау" және "Пішіндегі Негіздерді оқу" бірдей болуы тиіс (Ақиқат)',

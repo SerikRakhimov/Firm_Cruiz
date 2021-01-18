@@ -28,7 +28,7 @@
             <div class="col-2">
             </div>
             <div class="col-5 text-right">
-                <button type="button" class="btn btn-dreamer" title="{{trans('main.add')}}"
+                <button class="btn btn-dreamer" title="{{trans('main.add')}}"
                         onclick="document.location=
                         @if($is_role)
                             '{{route('roba.create_role', ['role'=>$role])}}'

@@ -1425,9 +1425,9 @@ class ItemController extends Controller
         $items = array();
         $result = self::form_tree_start($items, $item_id, 0);
         if ($result != '') {
-            $result = '<ul type="circle"><li>'
-                . $item->base->name() . ' (' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b>)' . $result . '</li></ul>';
-
+//            $result = '<ul type="circle"><li>'
+//                . $item->base->name() . ' (' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b>)' . $result . '</li></ul>';
+            $result = '<ul type="circle"><li>' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b>' . $result . '</li></ul>';
         }
         return $result;
     }
@@ -1454,9 +1454,10 @@ class ItemController extends Controller
         $items[count($items)] = $id;
         foreach ($mains as $main) {
             $str = '';
+//            $result = $result . '<li>' . $main->link->id . ' ' . $main->link->parent_label() . ' (' . $main->link->parent_base->name() . ': ' . '<b>' . $main->parent_item->name() . '</b>)'
+//                . $str . '</li>';
             $str = self::form_tree_start($items, $main->parent_item_id, $level);
-            $result = $result . '<li>' . $main->link->id . ' ' . $main->link->parent_label() . ' (' . $main->link->parent_base->name() . ': ' . '<b>' . $main->parent_item->name() . '</b>)'
-                . $str . '</li>';
+            $result = $result . '<li>' . $main->link->parent_base->name() . ': ' . '<b>' . $main->parent_item->name() . '</b>' . $str . '</li>';
         }
         $result = $result . "</ul>";
         return $result;

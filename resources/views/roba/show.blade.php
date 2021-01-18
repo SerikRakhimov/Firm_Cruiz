@@ -44,18 +44,20 @@
     <p>{{trans('main.is_edit_base_read')}}: <b>{{GlobalController::name_is_boolean($roba->is_edit_base_read)}}</b></p>
     <p>{{trans('main.is_edit_base_update')}}: <b>{{GlobalController::name_is_boolean($roba->is_edit_base_update)}}</b></p>
     <p>{{trans('main.is_list_link_enable')}}: <b>{{GlobalController::name_is_boolean($roba->is_list_link_enable)}}</b></p>
+    <p>{{trans('main.is_show_base_enable')}}: <b>{{GlobalController::name_is_boolean($roba->is_show_base_enable)}}</b></p>
+    <p>{{trans('main.is_show_link_enable')}}: <b>{{GlobalController::name_is_boolean($roba->is_show_link_enable)}}</b></p>
     <p>{{trans('main.is_edit_link_read')}}: <b>{{GlobalController::name_is_boolean($roba->is_edit_link_read)}}</b></p>
     <p>{{trans('main.is_edit_link_update')}}: <b>{{GlobalController::name_is_boolean($roba->is_edit_link_update)}}</b></p>
     @if ($type_form == 'show')
 {{--        @if (Auth::user()->isAdmin() ||!(($is_user == true) && ($roba->role->is_default_for_external == false)))--}}
             <p>
-                <button type="button" class="btn btn-dreamer"
+                <button class="btn btn-dreamer"
                         onclick="document.location='{{route($roba_edit,$roba)}}'"
                         title="{{trans('main.edit')}}">
                     <i class="fas fa-edit"></i>
                     {{trans('main.edit')}}
                 </button>
-                <button type="button" class="btn btn-dreamer"
+                <button class="btn btn-dreamer"
                         onclick="document.location='{{route('roba.delete_question',$roba)}}'"
                         title="{{trans('main.delete')}}">
                     <i class="fas fa-trash"></i>
@@ -64,7 +66,7 @@
             </p>
 {{--        @endif--}}
         <p>
-            <button type="button" class="btn btn-dreamer"
+            <button class="btn btn-dreamer"
                     title="{{trans('main.cancel')}}" @include('layouts.roba.previous_url')>
                 <i class="fas fa-arrow-left"></i>
                 {{trans('main.cancel')}}
@@ -79,7 +81,7 @@
                     <i class="fas fa-trash"></i>
                     {{trans('main.delete')}}
                 </button>
-                <button type="button" class="btn btn-dreamer"
+                <button class="btn btn-dreamer"
                         title="{{trans('main.cancel')}}" @include('layouts.roba.previous_url')>
                     <i class="fas fa-arrow-left"></i>
                     {{trans('main.cancel')}}

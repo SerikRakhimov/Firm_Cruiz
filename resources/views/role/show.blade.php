@@ -29,17 +29,19 @@
     <p>{{trans('main.is_edit_base_read')}}: <b>{{GlobalController::name_is_boolean($role->is_edit_base_read)}}</b></p>
     <p>{{trans('main.is_edit_base_update')}}: <b>{{GlobalController::name_is_boolean($role->is_edit_base_update)}}</b></p>
     <p>{{trans('main.is_list_link_enable')}}: <b>{{GlobalController::name_is_boolean($role->is_list_link_enable)}}</b></p>
+    <p>{{trans('main.is_show_base_enable')}}: <b>{{GlobalController::name_is_boolean($role->is_show_base_enable)}}</b></p>
+    <p>{{trans('main.is_show_link_enable')}}: <b>{{GlobalController::name_is_boolean($role->is_show_link_enable)}}</b></p>
     <p>{{trans('main.is_edit_link_read')}}: <b>{{GlobalController::name_is_boolean($role->is_edit_link_read)}}</b></p>
     <p>{{trans('main.is_edit_link_update')}}: <b>{{GlobalController::name_is_boolean($role->is_edit_link_update)}}</b></p>
 
     @if ($type_form == 'show')
         <p>
-            <button type="button" class="btn btn-dreamer"
+            <button class="btn btn-dreamer"
                     onclick="document.location='{{route('role.edit',$role)}}'" title="{{trans('main.edit')}}">
                             <i class="fas fa-edit"></i>
                 {{trans('main.edit')}}
             </button>
-            <button type="button" class="btn btn-dreamer"
+            <button class="btn btn-dreamer"
                     onclick="document.location='{{route('role.delete_question',$role)}}'"
                     title="{{trans('main.delete')}}">
                             <i class="fas fa-trash"></i>
@@ -47,19 +49,19 @@
             </button>
         </p>
         <p>
-            <button type="button" class="btn btn-dreamer" title="{{trans('main.accesses')}}"
+            <button class="btn btn-dreamer" title="{{trans('main.accesses')}}"
                     onclick="document.location='{{route('access.index_role', $role)}}'"
             >
                 <i class="fas fa-universal-access"></i>
                 {{trans('main.accesses')}}
             </button>
-            <button type="button" class="btn btn-dreamer" title="{{trans('main.robas')}}"
+            <button class="btn btn-dreamer" title="{{trans('main.robas')}}"
                     onclick="document.location='{{route('roba.index_role', $role)}}'"
             >
                 <i class="fas fa-ring"></i>
                 {{trans('main.robas')}}
             </button>
-            <button type="button" class="btn btn-dreamer"
+            <button class="btn btn-dreamer"
                     title="{{trans('main.cancel')}}" @include('layouts.role.previous_url')>
                             <i class="fas fa-arrow-left"></i>
                 {{trans('main.cancel')}}
@@ -74,7 +76,7 @@
                                     <i class="fas fa-trash"></i>
                     {{trans('main.delete')}}
                 </button>
-                <button type="button" class="btn btn-dreamer"
+                <button class="btn btn-dreamer"
                         title="{{trans('main.cancel')}}" @include('layouts.role.previous_url')>
                                     <i class="fas fa-arrow-left"></i>
                     {{trans('main.cancel')}}
