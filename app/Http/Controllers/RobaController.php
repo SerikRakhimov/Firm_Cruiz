@@ -97,7 +97,7 @@ class RobaController extends Controller
             $request->validate($this->rules($request));
         }
 
-        if ($request->is_list_base_create != $request->is_form_base_read) {
+        if ($request->is_list_base_create == true && $request->is_form_base_read == true) {
             $array_mess['is_form_base_read'] = trans('main.is_list_base_create_and_is_form_base_read_in_must_be_the_same') . '!';
             return redirect()->back()
                 ->withInput()
@@ -128,7 +128,9 @@ class RobaController extends Controller
         $roba->is_list_base_byuser = isset($request->is_list_base_byuser) ? true : false;
         $roba->is_form_base_read = isset($request->is_form_base_read) ? true : false;
         $roba->is_form_base_update = isset($request->is_form_base_update) ? true : false;
-
+        $roba->is_list_link_enable = isset($request->is_list_link_enable) ? true : false;
+        $roba->is_form_link_read = isset($request->is_form_link_read) ? true : false;
+        $roba->is_form_link_update = isset($request->is_form_link_update) ? true : false;
         $roba->save();
     }
 

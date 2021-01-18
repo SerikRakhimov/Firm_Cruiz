@@ -25,7 +25,12 @@
     <p>{{trans('main.is_list_base_read')}}: <b>{{GlobalController::name_is_boolean($role->is_list_base_read)}}</b></p>
     <p>{{trans('main.is_list_base_update')}}: <b>{{GlobalController::name_is_boolean($role->is_list_base_update)}}</b></p>
     <p>{{trans('main.is_list_base_delete')}}: <b>{{GlobalController::name_is_boolean($role->is_list_base_delete)}}</b></p>
-    <p>{{trans('main.is_list_base_is_byuser')}}: <b>{{GlobalController::name_is_boolean($role->is_list_base_byuser)}}</b></p>
+    <p>{{trans('main.is_list_base_byuser')}}: <b>{{GlobalController::name_is_boolean($role->is_list_base_byuser)}}</b></p>
+    <p>{{trans('main.is_form_base_read')}}: <b>{{GlobalController::name_is_boolean($role->is_form_base_read)}}</b></p>
+    <p>{{trans('main.is_form_base_update')}}: <b>{{GlobalController::name_is_boolean($role->is_form_base_update)}}</b></p>
+    <p>{{trans('main.is_list_link_enable')}}: <b>{{GlobalController::name_is_boolean($role->is_list_link_enable)}}</b></p>
+    <p>{{trans('main.is_form_link_read')}}: <b>{{GlobalController::name_is_boolean($role->is_form_link_read)}}</b></p>
+    <p>{{trans('main.is_form_link_update')}}: <b>{{GlobalController::name_is_boolean($role->is_form_link_update)}}</b></p>
 
     @if ($type_form == 'show')
         <p>

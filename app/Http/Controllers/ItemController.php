@@ -447,10 +447,9 @@ class ItemController extends Controller
         // если при вводе формы пометка checkbox установлена, в $request есть запись со значеним "on"
         // см. https://webformyself.com/kak-v-php-poluchit-znachenie-checkbox/
         foreach ($string_langs as $link) {
-            //111
             // Проверка нужна
             $base_link_right = GlobalController::base_link_right($link);
-            if ($base_link_right['is_enable'] == false) {
+            if ($base_link_right['is_form_link_enable'] == false) {
                 continue;
             }
             // похожая формула выше (в этой же процедуре)
@@ -914,6 +913,11 @@ class ItemController extends Controller
         // если при вводе формы пометка checkbox установлена, в $request есть запись со значеним "on"
         // см. https://webformyself.com/kak-v-php-poluchit-znachenie-checkbox/
         foreach ($string_langs as $link) {
+            // Проверка нужна
+            $base_link_right = GlobalController::base_link_right($link);
+            if ($base_link_right['is_form_link_enable'] == false) {
+                continue;
+            }
             // похожая формула выше (в этой же процедуре)
             if ($link->parent_base->type_is_boolean()) {
                 // у этой команды два предназначения:

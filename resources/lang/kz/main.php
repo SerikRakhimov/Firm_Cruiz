@@ -155,5 +155,5 @@ return [
     'is_list_link_enable'=>'Тізімдегі Байланысты көрсету',
     'is_form_link_read'=>'Пішіндегі Байланысты оқу',
     'is_form_link_update'=>'Пішіндегі Байланысты түзету',
-    'is_list_base_create_and_is_form_base_read_in_must_be_the_same'=>'"Тізімдегі Негіздерді жасау" және "Пішіндегі Негіздерді оқу" бірдей болуы тиіс',
+    'is_list_base_create_and_is_form_base_read_in_must_be_the_same'=>'"Тізімдегі Негіздерді жасау" және "Пішіндегі Негіздерді оқу" бірдей болуы тиіс (Ақиқат)',
 ];

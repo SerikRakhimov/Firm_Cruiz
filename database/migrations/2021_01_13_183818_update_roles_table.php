@@ -15,11 +15,17 @@ class UpdateRolesTable extends Migration
     {
         Schema::table('roles', function (Blueprint $table) {
             $table->boolean('is_author')->default(false);
+            $table->boolean('is_list_base_sndb')->default(false);
             $table->boolean('is_list_base_create')->default(false);
             $table->boolean('is_list_base_read')->default(false);
             $table->boolean('is_list_base_update')->default(false);
             $table->boolean('is_list_base_delete')->default(false);
-            $table->boolean('is_list_base_sndb')->default(false);
+            $table->boolean('is_list_base_byuser')->default(false);
+            $table->boolean('is_form_base_read')->default(false);
+            $table->boolean('is_form_base_update')->default(false);
+            $table->boolean('is_list_link_enable')->default(false);
+            $table->boolean('is_form_link_read')->default(false);
+            $table->boolean('is_form_link_update')->default(false);
            });
     }
 

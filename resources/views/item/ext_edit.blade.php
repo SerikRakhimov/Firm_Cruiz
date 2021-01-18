@@ -202,7 +202,7 @@
             $link = Link::find($key);
             $base_link_right = GlobalController::base_link_right($link);
             ?>
-            @if($base_link_right['is_list_link_enable'] == false)
+            @if($base_link_right['is_form_link_enable'] == false)
                 @continue
             @endif
             <?php
@@ -604,7 +604,7 @@
         $link = Link::find($key);
         $base_link_right = GlobalController::base_link_right($link);
         ?>
-        @if($base_link_right['is_list_base_enable'] == false)
+        @if($base_link_right['is_form_link_enable'] == false)
             @continue
         @endif
         <?php

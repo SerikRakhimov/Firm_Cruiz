@@ -157,5 +157,5 @@ return [
     'is_list_link_enable'=>'Показывать Связь в списке',
     'is_form_link_read'=>'Чтение Связи в форме',
     'is_form_link_update'=>'Корректировка Связи в форме',
-    'is_list_base_create_and_is_form_base_read_in_must_be_the_same'=>'"Создание Основы в списке" и "Чтение Основы в форме" должны быть одинаковые',
+    'is_list_base_create_and_is_form_base_read_in_must_be_the_same'=>'"Создание Основы в списке" и "Чтение Основы в форме" должны быть одинаковые (Истина)',
 ];

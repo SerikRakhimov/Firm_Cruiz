@@ -93,6 +93,11 @@ class RoleController extends Controller
         $role->is_list_base_delete = isset($request->is_list_base_delete) ? true : false;
         $role->is_list_base_sndb = isset($request->is_list_base_sndb) ? true : false;
         $role->is_list_base_byuser = isset($request->is_list_base_byuser) ? true : false;
+        $role->is_form_base_read = isset($request->is_form_base_read) ? true : false;
+        $role->is_form_base_update = isset($request->is_form_base_update) ? true : false;
+        $role->is_list_link_enable = isset($request->is_list_link_enable) ? true : false;
+        $role->is_form_link_read = isset($request->is_form_link_read) ? true : false;
+        $role->is_form_link_update = isset($request->is_form_link_update) ? true : false;
 
         $role->save();
     }

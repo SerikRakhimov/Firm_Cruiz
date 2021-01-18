@@ -136,15 +136,17 @@ class GlobalController extends Controller
     static function base_right(Base $base, bool $is_no_sndb_rule = null)
     {
         $role = GlobalController::glo_role();
-        $is_list_base_enable = false;
-        $is_list_base_create = false;
-        $is_list_base_read = false;
-        $is_list_base_update = false;
-        $is_list_base_delete = false;
-        $is_list_base_byuser = false;
-        $is_form_base_enable = false;
-        $is_form_base_read = false;
-        $is_form_base_update = false;
+
+        $is_list_base_create = $role->is_list_base_create;
+        $is_list_base_read = $role->is_list_base_read;
+        $is_list_base_update = $role->is_list_base_update;
+        $is_list_base_delete = $role->is_list_base_delete;
+        $is_list_base_byuser = $role->is_list_base_byuser;
+        $is_form_base_read = $role->is_form_base_read;
+        $is_form_base_update = $role->is_form_base_update;
+        $is_list_link_enable = $role->is_list_link_enable;
+        $is_form_link_read = $role->is_form_link_read;
+        $is_form_link_update = $role->is_form_link_update;
 
         // Блок проверки по Role
         // "$is_enable = true" нужно
@@ -158,22 +160,6 @@ class GlobalController extends Controller
             }
         }
 
-        if ($role->is_list_base_create == true) {
-            $is_list_base_create = true;
-        }
-        if ($role->is_list_base_read == true) {
-            $is_list_base_read = true;
-        }
-        if ($role->is_list_base_update == true) {
-            $is_list_base_update = true;
-        }
-        if ($role->is_list_base_delete == true) {
-            $is_list_base_delete = true;
-        }
-        if ($role->is_list_base_byuser == true) {
-            $is_list_base_byuser = true;
-        }
-
         if ($is_list_base_read == true) {
             $is_list_base_create = false;
             $is_list_base_update = false;
@@ -181,44 +167,23 @@ class GlobalController extends Controller
         }
         // "$is_enable &&" нужно
         $is_list_base_enable = $is_list_base_enable && ($is_list_base_create || $is_list_base_read || $is_list_base_update || $is_list_base_delete);
-        $is_form_base_read = $is_list_base_read;
-        $is_form_base_update = $is_list_base_update;
         $is_form_base_enable = $is_form_base_read || $is_form_base_update;
+        $is_form_link_enable = $is_form_link_read || $is_form_link_update;
 
         // Блок проверки по Robas, используя переменные $role и $base
-        $is_roba_list_base_enable = false;
-        $is_roba_list_base_create = false;
-        $is_roba_list_base_read = false;
-        $is_roba_list_base_update = false;
-        $is_roba_list_base_delete = false;
-        $is_roba_list_base_byuser = false;
-        $is_roba_form_base_enable = false;
-        $is_roba_form_base_read = false;
-        $is_roba_form_base_update = false;
 
         $roba = Roba::where('role_id', $role->id)->where('base_id', $base->id)->first();
         if ($roba != null) {
-            if ($roba->is_list_base_create == true) {
-                $is_roba_list_base_create = true;
-            }
-            if ($roba->is_list_base_read == true) {
-                $is_roba_list_base_read = true;
-            }
-            if ($roba->is_list_base_update == true) {
-                $is_roba_list_base_update = true;
-            }
-            if ($roba->is_list_base_delete == true) {
-                $is_roba_list_base_delete = true;
-            }
-            if ($roba->is_list_base_byuser == true) {
-                $is_roba_list_base_byuser = true;
-            }
-            if ($roba->is_form_base_read == true) {
-                $is_roba_form_base_read = true;
-            }
-            if ($roba->is_form_base_update == true) {
-                $is_roba_form_base_update = true;
-            }
+            $is_roba_list_base_create = $roba->is_list_base_create;
+            $is_roba_list_base_read = $roba->is_list_base_read;
+            $is_roba_list_base_update = $roba->is_list_base_update;
+            $is_roba_list_base_delete = $roba->is_list_base_delete;
+            $is_roba_list_base_byuser = $roba->is_list_base_byuser;
+            $is_roba_form_base_read = $roba->is_form_base_read;
+            $is_roba_form_base_update = $roba->is_form_base_update;
+            $is_roba_list_link_enable = $roba->is_list_link_enable;
+            $is_roba_form_link_read = $roba->is_form_link_read;
+            $is_roba_form_link_update = $roba->is_form_link_update;
             if ($is_roba_list_base_read == true) {
                 $is_roba_list_base_create = false;
                 $is_roba_list_base_update = false;
@@ -227,6 +192,7 @@ class GlobalController extends Controller
 
             $is_roba_list_base_enable = $is_roba_list_base_create || $is_roba_list_base_read || $is_roba_list_base_update || $is_roba_list_base_delete;
             $is_roba_form_base_enable = $is_roba_form_base_read || $is_roba_form_base_update;
+            $is_roba_form_link_enable = $is_roba_form_link_read || $is_roba_form_link_update;
 
             $is_list_base_enable = $is_roba_list_base_enable;
             $is_list_base_create = $is_roba_list_base_create;
@@ -237,7 +203,10 @@ class GlobalController extends Controller
             $is_form_base_enable = $is_roba_form_base_enable;
             $is_form_base_read = $is_roba_form_base_read;
             $is_form_base_update = $is_roba_form_base_update;
-
+            $is_list_link_enable = $is_roba_list_link_enable;
+            $is_form_link_enable = $is_roba_form_link_enable;
+            $is_form_link_read = $is_roba_form_link_read;
+            $is_form_link_update = $is_roba_form_link_update;
         }
 
         return ['is_list_base_enable' => $is_list_base_enable,
@@ -248,7 +217,12 @@ class GlobalController extends Controller
             'is_list_base_byuser' => $is_list_base_byuser,
             'is_form_base_enable' => $is_form_base_enable,
             'is_form_base_read' => $is_form_base_read,
-            'is_form_base_update' => $is_form_base_update];
+            'is_form_base_update' => $is_form_base_update,
+            'is_list_link_enable' => $is_list_link_enable,
+            'is_form_link_enable' => $is_form_link_enable,
+            'is_form_link_read' => $is_form_link_read,
+            'is_form_link_update' => $is_form_link_update
+        ];
     }
 
     static function base_link_right(Link $link)
@@ -265,9 +239,9 @@ class GlobalController extends Controller
         $is_form_base_enable = $base_right['is_form_base_enable'];
         $is_form_base_read = $base_right['is_form_base_read'];
         $is_form_base_update = $base_right['is_form_base_update'];
-        $is_list_link_enable = $is_list_base_enable;
-        $is_form_link_read = $is_form_base_read;
-        $is_form_link_update = $is_form_base_update;
+        $is_list_link_enable = $base_right['is_list_link_enable'];
+        $is_form_link_read = $base_right['is_form_link_read'];
+        $is_form_link_update = $base_right['is_form_link_update'];
         $is_form_link_enable = $is_form_link_read || $is_form_link_update;
 
         return ['is_list_base_enable' => $is_list_base_enable,
@@ -283,7 +257,7 @@ class GlobalController extends Controller
             'is_form_link_enable' => $is_form_link_enable,
             'is_form_link_read' => $is_form_link_read,
             'is_form_link_update' => $is_form_link_update,
-            ];
+        ];
     }
 
     static function items_right(Base $base)

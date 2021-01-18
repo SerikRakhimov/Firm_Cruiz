@@ -68,7 +68,7 @@
                 <?php
                 $base_link_right = GlobalController::base_link_right($link);
                 ?>
-                @if($base_link_right['is_list_base_enable'] == true)
+                @if($base_link_right['is_list_link_enable'] == true)
                     <th>
                         <a href="{{route('item.base_index',$link->parent_base_id)}}"
                            title="{{$link->parent_base->names()}}">
