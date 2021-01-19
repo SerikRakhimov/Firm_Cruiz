@@ -130,7 +130,10 @@ class RobaController extends Controller
     function check(Request $request, &$array_mess)
     {
         if ($request->is_list_base_create == true && $request->is_edit_base_read == true) {
-            $array_mess['is_edit_base_read'] = trans('main.is_list_base_create_and_is_edit_base_read_in_must_be_the_same') . '!';
+            $array_mess['is_edit_base_read'] = trans('main.is_list_base_create_rule') . '!';
+        }
+        if ($request->is_list_base_read  == true && ($request->is_list_base_create || $request->is_list_base_update ||$request->is_list_base_delete)) {
+            $array_mess['is_list_base_read'] = trans('main.is_list_base_read_rule') . '!';
         }
     }
 
