@@ -44,6 +44,15 @@ class RoleController extends Controller
     {
         $request->validate($this->rules());
 
+        $array_mess = [];
+        $this->check($request, $array_mess);
+
+        if (count($array_mess) > 0) {
+            return redirect()->back()
+                ->withInput()
+                ->withErrors($array_mess);
+        }
+
         // установка часового пояса нужно для сохранения времени
         date_default_timezone_set('Asia/Almaty');
 
@@ -65,6 +74,15 @@ class RoleController extends Controller
             $request->validate($this->rules());
         }
 
+        $array_mess = [];
+        $this->check($request, $array_mess);
+
+        if (count($array_mess) > 0) {
+            return redirect()->back()
+                ->withInput()
+                ->withErrors($array_mess);
+        }
+
         $data = $request->except('_token', '_method');
 
         $role->fill($data);
@@ -75,6 +93,16 @@ class RoleController extends Controller
             return redirect(session('roles_previous_url'));
         } else {
             return redirect()->back();
+        }
+    }
+
+    function check(Request $request, &$array_mess)
+    {
+        if ($request->is_list_base_create == true && $request->is_edit_base_read == true) {
+            $array_mess['is_edit_base_read'] = trans('main.is_list_base_create_rule') . '!';
+        }
+        if ($request->is_list_base_read  == true && ($request->is_list_base_create || $request->is_list_base_update ||$request->is_list_base_delete)) {
+            $array_mess['is_list_base_read'] = trans('main.is_list_base_read_rule') . '!';
         }
     }
 
