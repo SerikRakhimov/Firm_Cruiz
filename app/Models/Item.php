@@ -21,6 +21,11 @@ class Item extends Model
         return $this->belongsTo(Project::class, 'project_id');
     }
 
+    function created_user()
+    {
+        return $this->belongsTo(User::class, 'created_user_id');
+    }
+
     function updated_user()
     {
         return $this->belongsTo(User::class, 'updated_user_id');

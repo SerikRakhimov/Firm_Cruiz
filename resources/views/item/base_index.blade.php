@@ -78,6 +78,7 @@
                 @endif
             @endforeach
             <th class="text-center">{{trans('main.user')}}</th>
+            <th class="text-center">{{trans('main.user')}}</th>
             <th class="text-center"></th>
             <th class="text-center"></th>
             <th class="text-center"></th>
@@ -139,6 +140,8 @@
                         </td>
                     @endif
                 @endforeach
+                <td>{{$item->created_user->name()}}
+                </td>
                 <td>{{$item->updated_user->name()}}
                 </td>
                 <td class="text-left">

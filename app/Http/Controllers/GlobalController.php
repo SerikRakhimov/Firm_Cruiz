@@ -162,11 +162,11 @@ class GlobalController extends Controller
             }
         }
 
-        if ($is_list_base_read == true) {
-            $is_list_base_create = false;
-            $is_list_base_update = false;
-            $is_list_base_delete = false;
-        }
+//        if ($is_list_base_read == true) {
+//            $is_list_base_create = false;
+//            $is_list_base_update = false;
+//            $is_list_base_delete = false;
+//        }
         // "$is_enable &&" нужно
         $is_list_base_enable = $is_list_base_enable && ($is_list_base_create || $is_list_base_read || $is_list_base_update || $is_list_base_delete);
         $is_edit_base_enable = $is_edit_base_read || $is_edit_base_update;
@@ -188,11 +188,11 @@ class GlobalController extends Controller
             $is_roba_show_link_enable = $roba->is_show_link_enable;
             $is_roba_edit_link_read = $roba->is_edit_link_read;
             $is_roba_edit_link_update = $roba->is_edit_link_update;
-            if ($is_roba_list_base_read == true) {
-                $is_roba_list_base_create = false;
-                $is_roba_list_base_update = false;
-                $is_roba_list_base_delete = false;
-            }
+//            if ($is_roba_list_base_read == true) {
+//                $is_roba_list_base_create = false;
+//                $is_roba_list_base_update = false;
+//                $is_roba_list_base_delete = false;
+//            }
 
             $is_roba_list_base_enable = $is_roba_list_base_create || $is_roba_list_base_read || $is_roba_list_base_update || $is_roba_list_base_delete;
             $is_roba_edit_base_enable = $is_roba_edit_base_read || $is_roba_edit_base_update;
@@ -277,7 +277,7 @@ class GlobalController extends Controller
         $base_right = self::base_right($base);
         $items = Item::where('base_id', $base->id)->where('project_id', GlobalController::glo_project_id());
         if ($base_right['is_list_base_byuser'] == true) {
-            $items = $items->where('updated_user_id', GlobalController::glo_user_id());
+            $items = $items->where('created_user_id', GlobalController::glo_user_id());
         }
         $name = "";  // нужно, не удалять
         $index = array_search(session('locale'), session('glo_menu_save'));

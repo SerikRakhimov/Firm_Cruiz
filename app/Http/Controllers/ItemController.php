@@ -569,6 +569,8 @@ class ItemController extends Controller
         }
 
         $item->project_id = GlobalController::glo_project_id();
+        // при создании записи "$item->created_user_id" заполняется
+        $item->created_user_id = Auth::user()->id;
         $item->updated_user_id = Auth::user()->id;
 
         try {
@@ -627,6 +629,8 @@ class ItemController extends Controller
                     $main = Main::where('child_item_id', $item->id)->where('link_id', $key)->first();
                     if ($main == null) {
                         $main = new Main();
+                        // при создании записи "$item->created_user_id" заполняется
+                        $main->created_user_id = Auth::user()->id;
                     }
                     $this->save_main($main, $item, $keys, $values, $i, $strings_inputs);
                     // "$i = $i + 1;" использовать здесь, т.к. индексы в массивах начинаются с 0
@@ -708,6 +712,8 @@ class ItemController extends Controller
                     $i = $i + 1;
                 }
                 $item_find->project_id = GlobalController::glo_project_id();
+                // при создании записи "$item->created_user_id" заполняется
+                $item_find->created_user_id = Auth::user()->id;
                 $item_find->updated_user_id = Auth::user()->id;
                 $item_find->save();
             }
@@ -729,6 +735,8 @@ class ItemController extends Controller
                     $item_find['name_lang_' . $key] = $values[$index];
                 }
                 $item_find->project_id = GlobalController::glo_project_id();
+                // при создании записи "$item->created_user_id" заполняется
+                $item_find->created_user_id = Auth::user()->id;
                 $item_find->updated_user_id = Auth::user()->id;
                 $item_find->save();
             }
@@ -1089,6 +1097,7 @@ class ItemController extends Controller
                     if ($main == null) {
                         $main = new Main();
                     }
+                    $main->created_user_id = Auth::user()->id;
                     $this->save_main($main, $item, $keys, $values, $i, $strings_inputs);
                     // "$i = $i + 1;" использовать здесь, т.к. индексы в массивах начинаются с 0
                     $i = $i + 1;
@@ -1645,6 +1654,14 @@ class ItemController extends Controller
     function recalculation_codes(Base $base)
     {
         $items = Item::where('base_id', $base->id)->where('project_id', GlobalController::glo_project_id())->orderBy('name_lang_0')->get();
+        // Чтобы не было ошибки уникальность кода "items:base_id, project_id, code" нарушена
+        $i = 0;
+        foreach ($items as $item) {
+            $i = $i + 1;
+            $item->code = -$i;
+            $item->save();
+        }
+        // Непосредственно расчет и присвоение новых кодов
         $i = 0;
         foreach ($items as $item) {
             $i = $i + 1;

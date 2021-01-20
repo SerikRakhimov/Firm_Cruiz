@@ -17,8 +17,11 @@ class UpdateItemsTable extends Migration
             $table->unsignedBigInteger('project_id')->default(0);
             $table->index('project_id');
             $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
+            $table->unsignedBigInteger('created_user_id')->default(0);
             $table->unsignedBigInteger('updated_user_id')->default(0);
+            $table->index('created_user_id');
             $table->index('updated_user_id');
+            $table->foreign('created_user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('updated_user_id')->references('id')->on('users')->onDelete('cascade');
             $table->unique(['base_id', 'project_id', 'code']);
         });

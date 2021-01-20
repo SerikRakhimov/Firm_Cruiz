@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\DB;
 class BaseController extends Controller
 {
 
-
     protected function rules()
     {
         // sun
