@@ -39,6 +39,7 @@
             <th class="text-center">Id</th>
             <th class="text-center"></th>
             <th class="text-center"></th>
+            <th class="text-center">{{trans('main.rolis')}}</th>
         </tr>
         </thead>
         <tbody>
@@ -120,6 +121,11 @@
                     <a href="{{route('link.delete_question',$link)}}" title="{{trans('main.delete')}}">
                         <img src="{{Storage::url('delete_record.png')}}" width="15" height="15"
                              alt="{{trans('main.delete')}}">
+                    </a>
+                </td>
+                <td class="text-center">
+                    <a href="{{route('roli.index_link', $link)}}" title="{{trans('main.rolis')}}">
+                        <i class="fas fa-paperclip"></i>
                     </a>
                 </td>
             </tr>

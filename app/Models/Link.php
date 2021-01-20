@@ -80,4 +80,10 @@ class Link extends Model
         return trans('main.link') . " (" . $this->id . ")" . " _ " . $this->child_base->name() . " - " . $this->parent_label() . ": " . $this->parent_base->name();
     }
 
+
+    function name()
+    {
+        return $this->info();
+    }
+
 }

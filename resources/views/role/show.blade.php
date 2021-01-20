@@ -61,6 +61,12 @@
                 <i class="fas fa-ring"></i>
                 {{trans('main.robas')}}
             </button>
+            <button class="btn btn-dreamer" title="{{trans('main.rolis')}}"
+                    onclick="document.location='{{route('roli.index_role', $role)}}'"
+            >
+                <i class="fas fa-paperclip"></i>
+                {{trans('main.rolis')}}
+            </button>
             <button class="btn btn-dreamer"
                     title="{{trans('main.cancel')}}" @include('layouts.role.previous_url')>
                             <i class="fas fa-arrow-left"></i>

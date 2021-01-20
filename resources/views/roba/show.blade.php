@@ -7,7 +7,6 @@
     use App\Http\Controllers\BaseController;
     use Illuminate\Support\Facades\Request;
     use App\User;
-    $is_roba = isset($roba);
     $is_role = isset($role);
     $is_base = isset($base);
     $roba_edit = "";

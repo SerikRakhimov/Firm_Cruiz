@@ -248,6 +248,55 @@ Route::delete('/roba/delete/{roba}', 'RobaController@delete')
     ->name('roba.delete')
     ->middleware('auth');
 
+// Rolis
+Route::get('/roli/index_role/{role}', 'RoliController@index_role')
+    ->name('roli.index_role')
+    ->middleware('auth');
+
+Route::get('/roli/index_link/{link}', 'RoliController@index_link')
+    ->name('roli.index_link')
+    ->middleware('auth');
+
+Route::get('/roli/show_role/{roli}', 'RoliController@show_role')
+    ->name('roli.show_role')
+    ->middleware('auth');
+
+Route::get('/roli/show_link/{roli}', 'RoliController@show_link')
+    ->name('roli.show_link')
+    ->middleware('auth');
+
+Route::get('/roli/create_role/{role}', 'RoliController@create_role')
+    ->name('roli.create_role')
+    ->middleware('auth');
+
+Route::get('/roli/create_link/{link}', 'RoliController@create_link')
+    ->name('roli.create_link')
+    ->middleware('auth');
+
+Route::get('/roli/edit_role/{roli}', 'RoliController@edit_role')
+    ->name('roli.edit_role')
+    ->middleware('auth');
+
+Route::get('/roli/edit_link/{roli}', 'RoliController@edit_link')
+    ->name('roli.edit_link')
+    ->middleware('auth');
+
+Route::post('/roli/store', 'RoliController@store')
+    ->name('roli.store')
+    ->middleware('auth');
+
+Route::put('/roli/edit/{roli}', 'RoliController@update')
+    ->name('roli.update')
+    ->middleware('auth');
+
+Route::get('/roli/delete_question/{roli}', 'RoliController@delete_question')
+    ->name('roli.delete_question')
+    ->middleware('auth');
+
+Route::delete('/roli/delete/{roli}', 'RoliController@delete')
+    ->name('roli.delete')
+    ->middleware('auth');
+
 // Projects
 Route::get('/project/index_template/{template}', 'ProjectController@index_template')
     ->name('project.index_template')

@@ -9,6 +9,7 @@ use App\Models\Item;
 use App\Models\Project;
 use App\Models\Role;
 use App\Models\Roba;
+use App\Models\Roli;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
@@ -169,11 +170,8 @@ class GlobalController extends Controller
 //        }
         // "$is_enable &&" нужно
         $is_list_base_enable = $is_list_base_enable && ($is_list_base_create || $is_list_base_read || $is_list_base_update || $is_list_base_delete);
-        $is_edit_base_enable = $is_edit_base_read || $is_edit_base_update;
-        $is_edit_link_enable = $is_edit_link_read || $is_edit_link_update;
 
-        // Блок проверки по Robas, используя переменные $role и $base
-
+        // Блок проверки по robas, используя переменные $role и $base
         $roba = Roba::where('role_id', $role->id)->where('base_id', $base->id)->first();
         if ($roba != null) {
             $is_roba_list_base_create = $roba->is_list_base_create;
@@ -195,8 +193,8 @@ class GlobalController extends Controller
 //            }
 
             $is_roba_list_base_enable = $is_roba_list_base_create || $is_roba_list_base_read || $is_roba_list_base_update || $is_roba_list_base_delete;
-            $is_roba_edit_base_enable = $is_roba_edit_base_read || $is_roba_edit_base_update;
-            $is_roba_edit_link_enable = $is_roba_edit_link_read || $is_roba_edit_link_update;
+//            $is_roba_edit_base_enable = $is_roba_edit_base_read || $is_roba_edit_base_update;
+//            $is_roba_edit_link_enable = $is_roba_edit_link_read || $is_roba_edit_link_update;
 
             $is_list_base_enable = $is_roba_list_base_enable;
             $is_list_base_create = $is_roba_list_base_create;
@@ -204,16 +202,19 @@ class GlobalController extends Controller
             $is_list_base_update = $is_roba_list_base_update;
             $is_list_base_delete = $is_roba_list_base_delete;
             $is_list_base_byuser = $is_roba_list_base_byuser;
-            $is_edit_base_enable = $is_roba_edit_base_enable;
+//            $is_edit_base_enable = $is_roba_edit_base_enable;
             $is_edit_base_read = $is_roba_edit_base_read;
             $is_edit_base_update = $is_roba_edit_base_update;
             $is_list_link_enable = $is_roba_list_link_enable;
-            $is_edit_link_enable = $is_roba_edit_link_enable;
+//            $is_edit_link_enable = $is_roba_edit_link_enable;
             $is_show_base_enable = $is_roba_show_base_enable;
             $is_show_link_enable = $is_roba_show_link_enable;
             $is_edit_link_read = $is_roba_edit_link_read;
             $is_edit_link_update = $is_roba_edit_link_update;
         }
+
+        $is_edit_base_enable = $is_edit_base_read || $is_edit_base_update;
+        $is_edit_link_enable = $is_edit_link_read || $is_edit_link_update;
 
         return ['is_list_base_enable' => $is_list_base_enable,
             'is_list_base_create' => $is_list_base_create,
@@ -235,6 +236,8 @@ class GlobalController extends Controller
 
     static function base_link_right(Link $link)
     {
+        $role = GlobalController::glo_role();
+
         $base = $link->parent_base;
         $base_right = self::base_right($base, true);
 
@@ -252,6 +255,15 @@ class GlobalController extends Controller
         $is_show_link_enable = $base_right['is_show_link_enable'];
         $is_edit_link_read = $base_right['is_edit_link_read'];
         $is_edit_link_update = $base_right['is_edit_link_update'];
+
+        // Блок проверки по rolis, используя переменные $role и $link
+        $roli = Roli::where('role_id', $role->id)->where('link_id', $link->id)->first();
+        if ($roli != null) {
+            $is_list_link_enable = $roli->is_list_link_enable;
+            $is_show_link_enable = $roli->is_show_link_enable;
+            $is_edit_link_read = $roli->is_edit_link_read;
+            $is_edit_link_update = $roli->is_edit_link_update;
+        }
         $is_edit_link_enable = $is_edit_link_read || $is_edit_link_update;
 
         return ['is_list_base_enable' => $is_list_base_enable,

@@ -79,6 +79,8 @@ return [
     'role' => 'Role',
     'robas' => 'Bases settings',
     'roba' => 'Bases setting',
+    'rolis' => 'Links settings',
+    'roli' => 'Links setting',
     'accesses' => 'Accesses',
     'access' => 'Access',
     'date_created' => 'Creation date',
