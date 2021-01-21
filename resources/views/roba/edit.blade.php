@@ -103,7 +103,8 @@
                        type="checkbox"
                        name="is_list_base_create"
                        placeholder=""
-                       @if ((old('is_list_base_create') ?? ($roba->is_list_base_create ?? false)) ==  true)
+                       {{--                       "$roba->is_list_base_create ?? true" - "true" значение по умолчанию--}}
+                       @if ((old('is_list_base_create') ?? ($roba->is_list_base_create ?? true)) ==  true)
                        checked
                     @endif
                 >
@@ -152,7 +153,8 @@
                        type="checkbox"
                        name="is_list_base_update"
                        placeholder=""
-                       @if ((old('is_list_base_update') ?? ($roba->is_list_base_update ?? false)) ==  true)
+                       {{--                       "$roba->is_list_base_update ?? true" - "true" значение по умолчанию--}}
+                       @if ((old('is_list_base_update') ?? ($roba->is_list_base_update ?? true)) ==  true)
                        checked
                     @endif
                 >
@@ -176,7 +178,8 @@
                        type="checkbox"
                        name="is_list_base_delete"
                        placeholder=""
-                       @if ((old('is_list_base_delete') ?? ($roba->is_list_base_delete ?? false)) ==  true)
+                       {{--                       "$roba->is_list_base_delete ?? true" - "true" значение по умолчанию--}}
+                       @if ((old('is_list_base_delete') ?? ($roba->is_list_base_delete ?? true)) ==  true)
                        checked
                     @endif
                 >
@@ -248,7 +251,8 @@
                        type="checkbox"
                        name="is_edit_base_update"
                        placeholder=""
-                       @if ((old('is_edit_base_update') ?? ($roba->is_edit_base_update ?? false)) ==  true)
+                       {{--                       "$roba->is_edit_base_update ?? true" - "true" значение по умолчанию--}}
+                       @if ((old('is_edit_base_update') ?? ($roba->is_edit_base_update ?? true)) ==  true)
                        checked
                     @endif
                 >
@@ -272,7 +276,8 @@
                        type="checkbox"
                        name="is_list_link_enable"
                        placeholder=""
-                       @if ((old('is_list_link_enable') ?? ($roba->is_list_link_enable ?? false)) ==  true)
+                       {{--                       "$roba->is_list_link_enable ?? true" - "true" значение по умолчанию--}}
+                       @if ((old('is_list_link_enable') ?? ($roba->is_list_link_enable ?? true)) ==  true)
                        checked
                     @endif
                 >
@@ -296,7 +301,8 @@
                        type="checkbox"
                        name="is_show_base_enable"
                        placeholder=""
-                       @if ((old('is_show_base_enable') ?? ($roba->is_show_base_enable ?? false)) ==  true)
+                       {{--                       "$roba->is_show_base_enable ?? true" - "true" значение по умолчанию--}}
+                       @if ((old('is_show_base_enable') ?? ($roba->is_show_base_enable ?? true)) ==  true)
                        checked
                     @endif
                 >
@@ -320,7 +326,8 @@
                        type="checkbox"
                        name="is_show_link_enable"
                        placeholder=""
-                       @if ((old('is_show_link_enable') ?? ($roba->is_show_link_enable ?? false)) ==  true)
+                       {{--                       "$roba->is_show_link_enable ?? true" - "true" значение по умолчанию--}}
+                       @if ((old('is_show_link_enable') ?? ($roba->is_show_link_enable ?? true)) ==  true)
                        checked
                     @endif
                 >
@@ -368,7 +375,8 @@
                        type="checkbox"
                        name="is_edit_link_update"
                        placeholder=""
-                       @if ((old('is_edit_link_update') ?? ($roba->is_edit_link_update ?? false)) ==  true)
+                       {{--                       "$roba->is_edit_link_update ?? true" - "true" значение по умолчанию--}}
+                       @if ((old('is_edit_link_update') ?? ($roba->is_edit_link_update ?? true)) ==  true)
                        checked
                     @endif
                 >

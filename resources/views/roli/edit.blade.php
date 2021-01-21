@@ -103,7 +103,8 @@
                        type="checkbox"
                        name="is_list_link_enable"
                        placeholder=""
-                       @if ((old('is_list_link_enable') ?? ($roli->is_list_link_enable ?? false)) ==  true)
+                       {{--                       "$roli->is_list_link_enable ?? true" - "true" значение по умолчанию--}}
+                       @if ((old('is_list_link_enable') ?? ($roli->is_list_link_enable ?? true)) ==  true)
                        checked
                     @endif
                 >
@@ -127,7 +128,8 @@
                        type="checkbox"
                        name="is_show_link_enable"
                        placeholder=""
-                       @if ((old('is_show_link_enable') ?? ($roli->is_show_link_enable ?? false)) ==  true)
+                       {{--                       "$roli->is_show_link_enable ?? true" - "true" значение по умолчанию--}}
+                       @if ((old('is_show_link_enable') ?? ($roli->is_show_link_enable ?? true)) ==  true)
                        checked
                     @endif
                 >
@@ -174,8 +176,10 @@
                 <input class="@error('is_edit_link_update') is-invalid @enderror"
                        type="checkbox"
                        name="is_edit_link_update"
+                       id="is_edit_link_update"
                        placeholder=""
-                       @if ((old('is_edit_link_update') ?? ($roli->is_edit_link_update ?? false)) ==  true)
+{{--                       "$roli->is_edit_link_update ?? true" - "true" значение по умолчанию--}}
+                       @if ((old('is_edit_link_update') ?? ($roli->is_edit_link_update ?? true)) ==  true)
                        checked
                     @endif
                 >
@@ -218,5 +222,4 @@
             </div>
         </div>
     </form>
-
 @endsection

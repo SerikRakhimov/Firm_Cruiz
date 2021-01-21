@@ -17,10 +17,10 @@ class CreateRolisTable extends Migration
             $table->id();
             $table->unsignedBigInteger('role_id')->default(0);
             $table->unsignedBigInteger('link_id')->default(0);
-            $table->boolean('is_list_link_enable')->default(false);
-            $table->boolean('is_show_link_enable')->default(false);
+            $table->boolean('is_list_link_enable')->default(true);
+            $table->boolean('is_show_link_enable')->default(true);
             $table->boolean('is_edit_link_read')->default(false);
-            $table->boolean('is_edit_link_update')->default(false);
+            $table->boolean('is_edit_link_update')->default(true);
             $table->timestamps();
             $table->index('role_id');
             $table->index('link_id');

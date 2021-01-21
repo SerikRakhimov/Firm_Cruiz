@@ -124,7 +124,8 @@
                        type="checkbox"
                        name="is_list_base_create"
                        placeholder=""
-                       @if ((old('is_list_base_create') ?? ($role->is_list_base_create ?? false)) ==  true)
+                       {{--                       "$role->is_list_base_create ?? true" - "true" значение по умолчанию--}}
+                       @if ((old('is_list_base_create') ?? ($role->is_list_base_create ?? true)) ==  true)
                        checked
                     @endif
                 >
@@ -173,7 +174,8 @@
                        type="checkbox"
                        name="is_list_base_update"
                        placeholder=""
-                       @if ((old('is_list_base_update') ?? ($role->is_list_base_update ?? false)) ==  true)
+                       {{--                       "$role->is_list_base_update ?? true" - "true" значение по умолчанию--}}
+                       @if ((old('is_list_base_update') ?? ($role->is_list_base_update ?? true)) ==  true)
                        checked
                     @endif
                 >
@@ -197,7 +199,8 @@
                        type="checkbox"
                        name="is_list_base_delete"
                        placeholder=""
-                       @if ((old('is_list_base_delete') ?? ($role->is_list_base_delete ?? false)) ==  true)
+                       {{--                       "$role->is_list_base_delete ?? true" - "true" значение по умолчанию--}}
+                       @if ((old('is_list_base_delete') ?? ($role->is_list_base_delete ?? true)) ==  true)
                        checked
                     @endif
                 >
@@ -269,7 +272,8 @@
                        type="checkbox"
                        name="is_edit_base_update"
                        placeholder=""
-                       @if ((old('is_edit_base_update') ?? ($role->is_edit_base_update ?? false)) ==  true)
+                       {{--                       "$role->is_edit_base_update ?? true" - "true" значение по умолчанию--}}
+                       @if ((old('is_edit_base_update') ?? ($role->is_edit_base_update ?? true)) ==  true)
                        checked
                     @endif
                 >
@@ -283,7 +287,6 @@
             </div>
         </div>
 
-
         <div class="form-group row" id="is_list_link_enable_form_group">
             <div class="col-sm-3 text-right">
                 <label class="form-label"
@@ -294,7 +297,8 @@
                        type="checkbox"
                        name="is_list_link_enable"
                        placeholder=""
-                       @if ((old('is_list_link_enable') ?? ($role->is_list_link_enable ?? false)) ==  true)
+                       {{--                       "$role->is_list_link_enable ?? true" - "true" значение по умолчанию--}}
+                       @if ((old('is_list_link_enable') ?? ($role->is_list_link_enable ?? true)) ==  true)
                        checked
                     @endif
                 >
@@ -318,7 +322,8 @@
                        type="checkbox"
                        name="is_show_base_enable"
                        placeholder=""
-                       @if ((old('is_show_base_enable') ?? ($role->is_show_base_enable ?? false)) ==  true)
+                       {{--                       "$role->is_show_base_enable ?? true" - "true" значение по умолчанию--}}
+                       @if ((old('is_show_base_enable') ?? ($role->is_show_base_enable ?? true)) ==  true)
                        checked
                     @endif
                 >
@@ -342,7 +347,8 @@
                        type="checkbox"
                        name="is_show_link_enable"
                        placeholder=""
-                       @if ((old('is_show_link_enable') ?? ($role->is_show_link_enable ?? false)) ==  true)
+                       {{--                       "$role->is_show_link_enable ?? true" - "true" значение по умолчанию--}}
+                       @if ((old('is_show_link_enable') ?? ($role->is_show_link_enable ?? true)) ==  true)
                        checked
                     @endif
                 >
@@ -390,7 +396,8 @@
                        type="checkbox"
                        name="is_edit_link_update"
                        placeholder=""
-                       @if ((old('is_edit_link_update') ?? ($role->is_edit_link_update ?? false)) ==  true)
+                       {{--                       "$role->is_edit_link_update ?? true" - "true" значение по умолчанию--}}
+                       @if ((old('is_edit_link_update') ?? ($role->is_edit_link_update ?? true)) ==  true)
                        checked
                     @endif
                 >
