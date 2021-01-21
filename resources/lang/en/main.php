@@ -163,4 +163,6 @@ return [
     'is_edit_link_update'=>'Update of the Link in the form',
     'is_list_base_create_rule'=>'Create Basics in List and Read Basics in Form must not be the same (True)',
     'is_list_base_read_rule'=>'In this case, you need to uncheck "Reading Bases in the list" (incompatibility with "Creating Bases in the list", "Updating the Bases in the List", "Delete the Bases from the list")',
+    'is_edit_base_read_rule'=>'This option is not allowed ("Reading Bases in the form" = True and "Update the Bases in the form" = True)',
+    'is_edit_link_read_rule'=>'This option is not allowed ("Reading Links in the form" = True and "Update of the Link in the form" = True)',
 ];

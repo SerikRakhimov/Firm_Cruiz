@@ -36,10 +36,11 @@
         action="{{$update ? route('item.ext_update', $item):route('item.ext_store', ['base' => $base, 'heading' => $heading])}}"
         method="POST"
         enctype=multipart/form-data
-        @if($par_link)
-        onsubmit=on_submit()
-        @endif
-        name="form">
+{{--        @if($par_link)--}}
+{{--        onsubmit=on_submit()--}}
+{{--        @endif--}}
+        onsubmit="playSound('sound');"
+    name="form">
         @csrf
 
         @if ($update)
@@ -568,13 +569,20 @@
             </div>
             <div class="col-sm-5 text-left">
                 <button class="btn btn-dreamer" title="{{trans('main.cancel')}}"
-                        onclick="document.location='{{session('links')}}'"
+{{--                        onclick="document.location='{{session('links')}}'"--}}
+{{--onclick="beep(20, 100, 30)"--}}
+                        onclick="playSound('sound'); document.location='{{session('links')}}'"
                 >
                     <i class="fas fa-arrow-left"></i>
                     {{trans('main.cancel')}}
                 </button>
             </div>
         </div>
+
+
+    <audio id="sound"><source src="https://ozarnik.ru/uploads/files/2019-02/1549784984_dj-ozarnik-primite-zakaz.mp3" type="audio/mp3"></audio>
+{{--        <input type="submit" value="Заказать билет" form="order_form" id="button" class="button" onclick="playSound('sound'); setTimeout('alert(\'Откладываем второе событие\')', 7000);form.submit()">--}}
+        <input type="submit" value="Заказать билет" form="order_form" id="button" class="button" >
     </form>
     <?php
     $functions = array();
@@ -965,7 +973,28 @@
             @endforeach
         };
 
+        a=new AudioContext()
+        function beep(vol, freq, duration){
+            v=a.createOscillator()
+            u=a.createGain()
+            v.connect(u)
+            v.frequency.value=freq
+            v.type="square"
+            u.connect(a.destination)
+            u.gain.value=vol*0.01
+            v.start(a.currentTime)
+            v.stop(a.currentTime+duration*0.001)
+        }
 
+        function playSound(sound) {
+            var song = document.getElementById(sound);
+            song.volume = 1;
+            if (song.paused) {
+                song.play();
+            } else {
+                song.pause();
+            }
+        }
     </script>
 
 

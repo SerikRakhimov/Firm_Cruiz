@@ -69,7 +69,16 @@
                 $base_link_right = GlobalController::base_link_right($link);
                 ?>
                 @if($base_link_right['is_list_link_enable'] == true)
-                    <th>
+                    <th
+                        {{--                                если тип корректировки поля - число--}}
+                        @if($link->parent_base->type_is_number())
+                        class="text-right"
+                        {{--                                если тип корректировки поля - дата--}}
+                        {{--                                если тип корректировки поля - логический--}}
+                        @elseif($link->parent_base->type_is_date() || $link->parent_base->type_is_boolean())
+                        class="text-center"
+                        @endif
+                    >
                         <a href="{{route('item.base_index',$link->parent_base_id)}}"
                            title="{{$link->parent_base->names()}}">
                             {{$link->parent_label()}}
@@ -120,7 +129,16 @@
                     $base_link_right = GlobalController::base_link_right($link);
                     ?>
                     @if($base_link_right['is_list_link_enable'] == true)
-                        <td>
+                        <td
+                            {{--                                если тип корректировки поля - число--}}
+                            @if($link->parent_base->type_is_number())
+                            class="text-right"
+                            {{--                                если тип корректировки поля - дата--}}
+                            {{--                                если тип корректировки поля - логический--}}
+                            @elseif($link->parent_base->type_is_date() || $link->parent_base->type_is_boolean())
+                            class="text-center"
+                            @endif
+                        >
                             <?php
                             $item_find = MainController::view_info($item->id, $link->id);
                             ?>

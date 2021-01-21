@@ -71,6 +71,15 @@ class RoliController extends Controller
     {
         $request->validate($this->rules($request));
 
+        $array_mess = [];
+        $this->check($request, $array_mess);
+
+        if (count($array_mess) > 0) {
+            return redirect()->back()
+                ->withInput()
+                ->withErrors($array_mess);
+        }
+
         // установка часового пояса нужно для сохранения времени
         date_default_timezone_set('Asia/Almaty');
 
@@ -91,6 +100,15 @@ class RoliController extends Controller
             $request->validate($this->rules($request));
         }
 
+        $array_mess = [];
+        $this->check($request, $array_mess);
+
+        if (count($array_mess) > 0) {
+            return redirect()->back()
+                ->withInput()
+                ->withErrors($array_mess);
+        }
+
         $data = $request->except('_token', '_method');
 
         $roli->fill($data);
@@ -101,6 +119,13 @@ class RoliController extends Controller
             return redirect(session('rolis_previous_url'));
         } else {
             return redirect()->back();
+        }
+    }
+
+    function check(Request $request, &$array_mess)
+    {
+        if ($request->is_edit_link_read  == true && $request->is_edit_link_update == true) {
+            $array_mess['is_edit_link_read'] = trans('main.is_edit_link_read_rule') . '!';
         }
     }
 

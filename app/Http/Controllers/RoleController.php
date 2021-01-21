@@ -104,6 +104,12 @@ class RoleController extends Controller
         if ($request->is_list_base_read  == true && ($request->is_list_base_create || $request->is_list_base_update ||$request->is_list_base_delete)) {
             $array_mess['is_list_base_read'] = trans('main.is_list_base_read_rule') . '!';
         }
+        if ($request->is_edit_base_read  == true && $request->is_edit_base_update == true) {
+            $array_mess['is_edit_base_read'] = trans('main.is_edit_base_read_rule') . '!';
+        }
+        if ($request->is_edit_link_read  == true && $request->is_edit_link_update == true) {
+            $array_mess['is_edit_link_read'] = trans('main.is_edit_link_read_rule') . '!';
+        }
     }
 
     function set(Request $request, Role &$role)
