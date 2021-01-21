@@ -156,6 +156,7 @@ return [
     'is_list_base_byuser'=>'Filter by user in the list',
     'is_edit_base_read'=>'Reading Bases in the form',
     'is_edit_base_update'=>'Update the Bases in the form',
+    'is_list_base_enable'=>'Show Base in list',
     'is_list_link_enable'=>'Show Link in list',
     'is_show_base_enable'=>'Reading Bases when viewing',
     'is_show_link_enable'=>'Read Links when viewing',

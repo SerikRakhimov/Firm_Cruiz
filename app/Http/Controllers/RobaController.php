@@ -155,6 +155,7 @@ class RobaController extends Controller
         $roba->is_list_base_byuser = isset($request->is_list_base_byuser) ? true : false;
         $roba->is_edit_base_read = isset($request->is_edit_base_read) ? true : false;
         $roba->is_edit_base_update = isset($request->is_edit_base_update) ? true : false;
+        $roba->is_list_base_enable = isset($request->is_list_base_enable) ? true : false;
         $roba->is_list_link_enable = isset($request->is_list_link_enable) ? true : false;
         $roba->is_show_base_enable = isset($request->is_show_base_enable) ? true : false;
         $roba->is_show_link_enable = isset($request->is_show_link_enable) ? true : false;

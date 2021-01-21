@@ -42,6 +42,7 @@
     <p>{{trans('main.is_list_base_byuser')}}: <b>{{GlobalController::name_is_boolean($roba->is_list_base_byuser)}}</b></p>
     <p>{{trans('main.is_edit_base_read')}}: <b>{{GlobalController::name_is_boolean($roba->is_edit_base_read)}}</b></p>
     <p>{{trans('main.is_edit_base_update')}}: <b>{{GlobalController::name_is_boolean($roba->is_edit_base_update)}}</b></p>
+    <p>{{trans('main.is_list_base_enable')}}: <b>{{GlobalController::name_is_boolean($roba->is_list_base_enable)}}</b></p>
     <p>{{trans('main.is_list_link_enable')}}: <b>{{GlobalController::name_is_boolean($roba->is_list_link_enable)}}</b></p>
     <p>{{trans('main.is_show_base_enable')}}: <b>{{GlobalController::name_is_boolean($roba->is_show_base_enable)}}</b></p>
     <p>{{trans('main.is_show_link_enable')}}: <b>{{GlobalController::name_is_boolean($roba->is_show_link_enable)}}</b></p>

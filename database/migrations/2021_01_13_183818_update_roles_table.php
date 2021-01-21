@@ -23,6 +23,7 @@ class UpdateRolesTable extends Migration
             $table->boolean('is_list_base_byuser')->default(false);
             $table->boolean('is_edit_base_read')->default(false);
             $table->boolean('is_edit_base_update')->default(true);
+            $table->boolean('is_list_base_enable')->default(true);
             $table->boolean('is_list_link_enable')->default(true);
             $table->boolean('is_show_base_enable')->default(true);
             $table->boolean('is_show_link_enable')->default(true);

@@ -10,6 +10,7 @@
     use \App\Http\Controllers\LinkController;
     use \App\Http\Controllers\StepController;
     $update = isset($item);
+    $base_right = GlobalController::base_right($base);
     ?>
     <script>
 
@@ -36,11 +37,13 @@
         action="{{$update ? route('item.ext_update', $item):route('item.ext_store', ['base' => $base, 'heading' => $heading])}}"
         method="POST"
         enctype=multipart/form-data
-{{--        @if($par_link)--}}
-{{--        onsubmit=on_submit()--}}
-{{--        @endif--}}
-        onsubmit="playSound('sound');"
-    name="form">
+        @if($par_link)
+        onsubmit=on_submit()
+        {{--        @else--}}
+        {{--        onsubmit="playSound('sound');"--}}
+        @endif
+
+        name="form">
         @csrf
 
         @if ($update)
@@ -48,155 +51,158 @@
         @endif
         <input type="hidden" name="base_id" value="{{$base->id}}">
         <input type="hidden" name="project_id" value="{{GlobalController::glo_project_id()}}">
-        {{--        код--}}
-        @if($base->is_code_needed == true)
-            <div class="form-group row">
-                <div class="col-sm-3 text-right">
-                    <label for="code" class="col-form-label">{{trans('main.code')}}
-                        <span
-                            class="text-danger">*</span></label>
-                </div>
-                <div class="col-sm-2">
-                    <input type={{$base->is_code_number == true?"number":"text"}}
-                        name="code"
-                           id="code" ;
-                           class="form-control @error('code') is-invalid @enderror"
-                           placeholder=""
-                           value="{{old('code') ?? ($item->code ?? ($base->is_code_number == true?($update ?"0":$code_new):""))}}"
-                           {{$base->is_code_number == true?" step = 0":""}}
-                           @if($base->is_code_number == true  && $base->is_limit_sign_code == true)
-                           min="0" max="{{$base->number_format()}}"
-                        @endif
-                    >
-                    @error('code')
-                    <div class="invalid-feedback">
-                        {{$message}}
-                    </div>
-                    @enderror
-                </div>
-                <div class="col-sm-7">
-                </div>
-            </div>
-        @else
-            <input type="hidden" name="code" value="{{$update ? $item->code: $code_uniqid}}">
-        @endif
-        {{--        если тип корректировки поля - число--}}
-        @if($base->type_is_number())
-            <div class="form-group row">
-                <div class="col-sm-3 text-right">
-                    <label for="name_lang_0" class="col-form-label">{{$base->name()}}
-                        <span
-                            class="text-danger">*</span></label>
-                </div>
-                <div class="col-sm-2">
-                    <input type="number"
-                           name="name_lang_0"
-                           id="name_lang_0" ;
-                           class="form-control @error('name_lang_0') is-invalid @enderror"
-                           placeholder=""
-                           value="{{old('name_lang_0') ?? ($item['name_lang_0'] ?? '') }}"
-                           step="{{$base->digits_num_format()}}">
-                    @error('name_lang_0')
-                    <div class="invalid-feedback">
-                        {{$message}}
-                    </div>
-                    @enderror
-                </div>
-                <div class="col-sm-7">
-                </div>
-            </div>
-            {{--                            если тип корректировки поля - дата--}}
-        @elseif($base->type_is_date())
-            <div class="form-group row">
-                <div class="col-sm-3 text-right">
-                    <label for="name_lang_0" class="col-form-label">{{$base->name()}}
-                        <span
-                            class="text-danger">*</span></label>
-                </div>
-                <div class="col-sm-2">
-                    <input type="date"
-                           name="name_lang_0"
-                           id="name_lang_0" ;
-                           class="form-control @error('name_lang_0') is-invalid @enderror"
-                           placeholder=""
-                           текущая дата
-                           value="{{old('name_lang_0') ?? ($item['name_lang_0'] ?? date('Y-m-d')) }}">
-                    @error('name_lang_0')
-                    <div class="invalid-feedback">
-                        {{$message}}
-                    </div>
-                    @enderror
-                </div>
-                <div class="col-sm-7">
-                </div>
-            </div>
-            {{--                            если тип корректировки поля - логический--}}
-        @elseif($base->type_is_boolean())
-            <div class="form-group row">
-                <div class="col-sm-3 text-right">
-                    <label class="form-label" for="name_lang_0">{{$base->name()}}</label>
-                </div>
-                <div class="col-sm-7">
-                    <input class="form-check-input @error('name_lang_0') is-invalid @enderror"
-                           type="checkbox"
-                           name="name_lang_0"
-                           id="name_lang_0"
-                           placeholder=""
-                           @if ((old('name_lang_0') ?? ($item['name_lang_0'] ?? false)) ==  true)
-                           checked
-                        @endif
-                    >
-                    @error('name_lang_0')
-                    <div class="invalid-feedback">
-                        {{$message}}
-                    </div>
-                    @enderror
-                </div>
-                <div class="col-sm-2">
-                </div>
-            </div>
-
-            {{--                            если тип корректировки поля - строка или список--}}
-        @else
-            @if($base->is_calcname_lst == false)
+        @if($base_right['is_edit_base_enable'] == true)
+            {{--        код--}}
+            @if($base->is_code_needed == true)
                 <div class="form-group row">
-                    @foreach (session('glo_menu_save') as $key=>$value)
-                        @if(($base->is_one_value_lst_str == true && $key == 0) || ($base->is_one_value_lst_str == false))
-                            <div class="col-sm-3 text-right">
-                                <label for="name_lang_{{$key}}" class="col-form-label">{{trans('main.name')}}
-                                    @if($base->is_one_value_lst_str == false)
-                                        ({{trans('main.' . $value)}})
-                                    @endif<span
-                                        class="text-danger">*</span></label>
-                            </div>
-                            <div class="col-sm-7">
-                                <input type="text"
-                                       name="name_lang_{{$key}}"
-                                       id="name_lang_{{$key}}"
-                                       class="form-control @error('name_lang_' . $key) is-invalid @enderror"
-                                       placeholder=""
-                                       value="{{ old('name_lang_' . $key) ?? ($item['name_lang_' . $key] ?? '') }}">
-                                {{--                            <div class="invalid-feedback">--}}
-                                {{--                                Не заполнена строка!--}}
-                                {{--                            </div>--}}
-                                @error('name_lang_' . $key)
-                                <div class="text-danger">
-                                    {{$message}}
-                                </div>
-                                @enderror
-                                {{--                            <div class="text-danger">--}}
-                                {{--                                session('errors') передается командой в контроллере "return--}}
-                                {{--                                redirect()->back()->withInput()->withErrors(...)"--}}
-                                {{--                                {{session('errors')!=null ? session('errors')->first('"name_lang_' . $key): ''}}--}}
-                                {{--                            </div>--}}
-                            </div>
-                            <div class="col-sm-2">
-                            </div>
-                        @endif
-                    @endforeach
+                    <div class="col-sm-3 text-right">
+                        <label for="code" class="col-form-label">{{trans('main.code')}}
+                            <span
+                                class="text-danger">*</span></label>
+                    </div>
+                    <div class="col-sm-2">
+                        <input type={{$base->is_code_number == true?"number":"text"}}
+                            name="code"
+                               id="code" ;
+                               class="form-control @error('code') is-invalid @enderror"
+                               placeholder=""
+                               value="{{old('code') ?? ($item->code ?? ($base->is_code_number == true?($update ?"0":$code_new):""))}}"
+                               {{$base->is_code_number == true?" step = 0":""}}
+                               @if($base->is_code_number == true  && $base->is_limit_sign_code == true)
+                               min="0" max="{{$base->number_format()}}"
+                            @endif
+                        >
+                        @error('code')
+                        <div class="invalid-feedback">
+                            {{$message}}
+                        </div>
+                        @enderror
+                    </div>
+                    <div class="col-sm-7">
+                    </div>
                 </div>
+            @else
+                <input type="hidden" name="code" value="{{$update ? $item->code: $code_uniqid}}">
+            @endif
+            {{--        если тип корректировки поля - число--}}
+            @if($base->type_is_number())
+                <div class="form-group row">
+                    <div class="col-sm-3 text-right">
+                        <label for="name_lang_0" class="col-form-label">{{$base->name()}}
+                            <span
+                                class="text-danger">*</span></label>
+                    </div>
+                    <div class="col-sm-2">
+                        <input type="number"
+                               name="name_lang_0"
+                               id="name_lang_0" ;
+                               class="form-control @error('name_lang_0') is-invalid @enderror"
+                               placeholder=""
+                               value="{{old('name_lang_0') ?? ($item['name_lang_0'] ?? '') }}"
+                               step="{{$base->digits_num_format()}}">
+                        @error('name_lang_0')
+                        <div class="invalid-feedback">
+                            {{$message}}
+                        </div>
+                        @enderror
+                    </div>
+                    <div class="col-sm-7">
+                    </div>
+                </div>
+                {{--                            если тип корректировки поля - дата--}}
+            @elseif($base->type_is_date())
+                <div class="form-group row">
+                    <div class="col-sm-3 text-right">
+                        <label for="name_lang_0" class="col-form-label">{{$base->name()}}
+                            <span
+                                class="text-danger">*</span></label>
+                    </div>
+                    <div class="col-sm-2">
+                        <input type="date"
+                               name="name_lang_0"
+                               id="name_lang_0" ;
+                               class="form-control @error('name_lang_0') is-invalid @enderror"
+                               placeholder=""
+                               текущая дата
+                               value="{{old('name_lang_0') ?? ($item['name_lang_0'] ?? date('Y-m-d')) }}">
+                        @error('name_lang_0')
+                        <div class="invalid-feedback">
+                            {{$message}}
+                        </div>
+                        @enderror
+                    </div>
+                    <div class="col-sm-7">
+                    </div>
+                </div>
+                {{--                            если тип корректировки поля - логический--}}
+            @elseif($base->type_is_boolean())
+                <div class="form-group row">
+                    <div class="col-sm-3 text-right">
+                        <label class="form-label" for="name_lang_0">{{$base->name()}}</label>
+                    </div>
+                    <div class="col-sm-7">
+                        <input class="form-check-input @error('name_lang_0') is-invalid @enderror"
+                               type="checkbox"
+                               name="name_lang_0"
+                               id="name_lang_0"
+                               placeholder=""
+                               @if ((old('name_lang_0') ?? ($item['name_lang_0'] ?? false)) ==  true)
+                               checked
+                            @endif
+                        >
+                        @error('name_lang_0')
+                        <div class="invalid-feedback">
+                            {{$message}}
+                        </div>
+                        @enderror
+                    </div>
+                    <div class="col-sm-2">
+                    </div>
+                </div>
+
+                {{--                            если тип корректировки поля - строка или список--}}
+            @else
+                @if($base->is_calcname_lst == false)
+                    <div class="form-group row">
+                        @foreach (session('glo_menu_save') as $key=>$value)
+                            @if(($base->is_one_value_lst_str == true && $key == 0) || ($base->is_one_value_lst_str == false))
+                                <div class="col-sm-3 text-right">
+                                    <label for="name_lang_{{$key}}" class="col-form-label">{{trans('main.name')}}
+                                        @if($base->is_one_value_lst_str == false)
+                                            ({{trans('main.' . $value)}})
+                                        @endif<span
+                                            class="text-danger">*</span></label>
+                                </div>
+                                <div class="col-sm-7">
+                                    <input type="text"
+                                           name="name_lang_{{$key}}"
+                                           id="name_lang_{{$key}}"
+                                           class="form-control @error('name_lang_' . $key) is-invalid @enderror"
+                                           placeholder=""
+                                           value="{{ old('name_lang_' . $key) ?? ($item['name_lang_' . $key] ?? '') }}">
+                                    {{--                            <div class="invalid-feedback">--}}
+                                    {{--                                Не заполнена строка!--}}
+                                    {{--                            </div>--}}
+                                    @error('name_lang_' . $key)
+                                    <div class="text-danger">
+                                        {{$message}}
+                                    </div>
+                                    @enderror
+                                    {{--                            <div class="text-danger">--}}
+                                    {{--                                session('errors') передается командой в контроллере "return--}}
+                                    {{--                                redirect()->back()->withInput()->withErrors(...)"--}}
+                                    {{--                                {{session('errors')!=null ? session('errors')->first('"name_lang_' . $key): ''}}--}}
+                                    {{--                            </div>--}}
+                                </div>
+                                <div class="col-sm-2">
+                                </div>
+                            @endif
+                        @endforeach
+                    </div>
+                @endif
             @endif
         @endif
+
 
         @foreach($array_calc as $key=>$value)
             <?php
@@ -569,20 +575,14 @@
             </div>
             <div class="col-sm-5 text-left">
                 <button class="btn btn-dreamer" title="{{trans('main.cancel')}}"
-{{--                        onclick="document.location='{{session('links')}}'"--}}
-{{--onclick="beep(20, 100, 30)"--}}
-                        onclick="playSound('sound'); document.location='{{session('links')}}'"
+                        onclick="document.location='{{session('links')}}';"
                 >
                     <i class="fas fa-arrow-left"></i>
                     {{trans('main.cancel')}}
                 </button>
             </div>
         </div>
-
-
-    <audio id="sound"><source src="https://ozarnik.ru/uploads/files/2019-02/1549784984_dj-ozarnik-primite-zakaz.mp3" type="audio/mp3"></audio>
-{{--        <input type="submit" value="Заказать билет" form="order_form" id="button" class="button" onclick="playSound('sound'); setTimeout('alert(\'Откладываем второе событие\')', 7000);form.submit()">--}}
-        <input type="submit" value="Заказать билет" form="order_form" id="button" class="button" >
+        {{--    <audio id="sound"><source src="https://ozarnik.ru/uploads/files/2019-02/1549784984_dj-ozarnik-primite-zakaz.mp3" type="audio/mp3"></audio>--}}
     </form>
     <?php
     $functions = array();
@@ -973,30 +973,18 @@
             @endforeach
         };
 
-        a=new AudioContext()
-        function beep(vol, freq, duration){
-            v=a.createOscillator()
-            u=a.createGain()
-            v.connect(u)
-            v.frequency.value=freq
-            v.type="square"
-            u.connect(a.destination)
-            u.gain.value=vol*0.01
-            v.start(a.currentTime)
-            v.stop(a.currentTime+duration*0.001)
-        }
-
-        function playSound(sound) {
-            var song = document.getElementById(sound);
-            song.volume = 1;
-            if (song.paused) {
-                song.play();
-            } else {
-                song.pause();
-            }
-        }
+        // https://ru.stackoverflow.com/questions/1114823/%D0%9A%D0%B0%D0%BA-%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C-%D1%82%D0%B0%D0%BA-%D1%87%D1%82%D0%BE%D0%B1%D1%8B-%D0%BF%D1%80%D0%B8-%D0%BD%D0%B0%D0%B6%D0%B0%D1%82%D0%B8%D0%B8-%D0%BD%D0%B0-%D0%BA%D0%BD%D0%BE%D0%BF%D0%BA%D1%83-%D0%BF%D1%80%D0%BE%D0%B8%D0%B3%D1%80%D1%8B%D0%B2%D0%B0%D0%BB%D1%81%D1%8F-%D0%B7%D0%B2%D1%83%D0%BA
+        // https://odino.org/emit-a-beeping-sound-with-javascript/
+        // https://question-it.com/questions/1025607/vosproizvesti-zvukovoj-signal-pri-nazhatii-knopki
+        // function playSound(sound) {
+        //     var song = document.getElementById(sound);
+        //     song.volume = 1;
+        //     if (song.paused) {
+        //         song.play();
+        //     } else {
+        //         song.pause();
+        //     }
+        // }
     </script>
-
-
 
 @endsection

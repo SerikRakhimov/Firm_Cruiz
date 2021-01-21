@@ -156,6 +156,7 @@ return [
     'is_list_base_byuser'=>'Фильтровать по пользователю в списке',
     'is_edit_base_read'=>'Чтение Основы в форме',
     'is_edit_base_update'=>'Корректировка Основы в форме',
+    'is_list_base_enable'=>'Показывать Основу в списке',
     'is_list_link_enable'=>'Показывать Связь в списке',
     'is_show_base_enable'=>'Чтение Основы при просмотре',
     'is_show_link_enable'=>'Чтение Связи при просмотре',

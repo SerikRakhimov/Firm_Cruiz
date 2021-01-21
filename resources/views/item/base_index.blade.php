@@ -7,6 +7,7 @@
     use \App\Http\Controllers\GlobalController;
     use \App\Http\Controllers\MainController;
     $links = $base->child_links->sortBy('parent_base_number');
+    $base_right = GlobalController::base_right($base);
     ?>
     <p>
     <div class="container-fluid">
@@ -58,26 +59,19 @@
         <thead>
         <tr>
             <th class="text-center">#</th>
-            <th class="text-center">Id</th>
-            @if($base->is_code_needed==true)
-                <th class="text-center">{{trans('main.code')}}</th>
+            @if($base_right['is_list_base_enable'] == true)
+                @if($base->is_code_needed == true)
+                    <th class="text-center">{{trans('main.code')}}</th>
+                @endif
             @endif
             <th class="text-left">{{trans('main.name')}}</th>
-            <th class="text-center"></th>
             @foreach($links as $link)
                 <?php
                 $base_link_right = GlobalController::base_link_right($link);
                 ?>
                 @if($base_link_right['is_list_link_enable'] == true)
                     <th
-                        {{--                                если тип корректировки поля - число--}}
-                        @if($link->parent_base->type_is_number())
-                        class="text-right"
-                        {{--                                если тип корректировки поля - дата--}}
-                        {{--                                если тип корректировки поля - логический--}}
-                        @elseif($link->parent_base->type_is_date() || $link->parent_base->type_is_boolean())
-                        class="text-center"
-                        @endif
+                        @include('layouts.class_from_base',['base'=>$link->parent_base])
                     >
                         <a href="{{route('item.base_index',$link->parent_base_id)}}"
                            title="{{$link->parent_base->names()}}">
@@ -110,34 +104,28 @@
             ?>
             <tr>
                 <td class="text-center">{{$i}}</td>
-                <td class="text-center">{{$item->id}}</td>
-                @if($base->is_code_needed==true)
-                    <td class="text-center">
-                        <a href="{{route('item.item_index', $item)}}">
-                            {{$item->code}}
-                        </a>
-                    </td>
+                @if($base_right['is_list_base_enable'] == true)
+                    @if($base->is_code_needed == true)
+                        <td class="text-center">
+                            <a href="{{route('item.item_index', $item)}}">
+                                {{$item->code}}
+                            </a>
+                        </td>
+                    @endif
                 @endif
                 <td class="text-left">
                     <a href="{{route('item.item_index', $item)}}">
                         {{$item->name()}}
                     </a>
                 </td>
-                <td class="text-center">&#8594;</td>
+                {{--                <td class="text-center">&#8594;</td>--}}
                 @foreach($links as $link)
                     <?php
                     $base_link_right = GlobalController::base_link_right($link);
                     ?>
                     @if($base_link_right['is_list_link_enable'] == true)
                         <td
-                            {{--                                если тип корректировки поля - число--}}
-                            @if($link->parent_base->type_is_number())
-                            class="text-right"
-                            {{--                                если тип корректировки поля - дата--}}
-                            {{--                                если тип корректировки поля - логический--}}
-                            @elseif($link->parent_base->type_is_date() || $link->parent_base->type_is_boolean())
-                            class="text-center"
-                            @endif
+                            @include('layouts.class_from_base',['base'=>$link->parent_base])
                         >
                             <?php
                             $item_find = MainController::view_info($item->id, $link->id);
