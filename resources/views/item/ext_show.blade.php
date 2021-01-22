@@ -31,8 +31,10 @@
 {{--            {{trans('main.name')}} ({{trans('main.' . $value)}}): <b>{{$item['name_lang_' . $key]}}</b><br>--}}
 {{--        @endforeach--}}
             @if($base->type_is_photo)
-                <img src="{{Storage::url($item->name())}}" height="450"
-                     alt="" title="{{$item->name()}}">
+                <a href="{{Storage::url($item->filename())}}">
+                <img src="{{Storage::url($item->filename())}}" height="250"
+                     alt="" title="{{$item->filename()}}">
+                </a>
             @else
                 {{trans('main.name')}}: <b>{{$item->name()}}</b>
             @endif

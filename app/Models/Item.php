@@ -123,4 +123,10 @@ class Item extends Model
         return $this->hasMany(Main::class, 'parent_item_id');
     }
 
+    // Для типов полей Фотография, Документ
+    function filename()
+    {
+        return $this->name_lang_0;
+    }
+
 }

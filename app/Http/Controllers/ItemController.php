@@ -9,6 +9,7 @@ use App\Models\Main;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use phpDocumentor\Reflection\Types\Boolean;
 use phpDocumentor\Reflection\Types\Integer;
 use Illuminate\Support\Facades\Auth;
@@ -416,8 +417,7 @@ class ItemController extends Controller
         if ($base->type_is_photo() || $base->type_is_document()) {
             $path = "";
             if ($request->hasFile('name_lang_0')) {
-                //$path = $request->name_lang_0->store('public/uploads');
-                $path = $request->name_lang_0->store('public/' . $item->project_id . '/' . $base->id);
+                 $path = $request->name_lang_0->store('public/' . $item->project_id . '/' . $base->id);
             }
             $item->name_lang_0 = $path;
             $item->name_lang_1 = $item->name_lang_0;
@@ -1200,6 +1200,7 @@ class ItemController extends Controller
 
     function ext_delete(Item $item, $heading = false)
     {
+        Storage::delete($item->filename());
         $item->delete();
         return $heading == true ? redirect()->route('item.base_index', $item->base_id) : redirect(session('links'));
     }

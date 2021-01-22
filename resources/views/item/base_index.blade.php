@@ -64,7 +64,8 @@
                     <th class="text-center">{{trans('main.code')}}</th>
                 @endif
             @endif
-            <th class="text-left">{{trans('main.name')}}</th>
+            <th @include('layouts.class_from_base',['base'=>$base])>
+                {{trans('main.name')}}</th>
             @foreach($links as $link)
                 <?php
                 $base_link_right = GlobalController::base_link_right($link);
@@ -103,7 +104,11 @@
             $i++;
             ?>
             <tr>
-                <td class="text-center">{{$i}}</td>
+                <td class="text-center">
+                    <a href="{{route('item.item_index', $item)}}">
+                        {{$i}}
+                    </a>
+                </td>
                 @if($base_right['is_list_base_enable'] == true)
                     @if($base->is_code_needed == true)
                         <td class="text-center">
@@ -113,16 +118,21 @@
                         </td>
                     @endif
                 @endif
-                <td class="text-left">
-                    <a href="{{route('item.item_index', $item)}}">
-
-                        @if($base->type_is_photo)
-                            <img src="{{Storage::url($item->name())}}" height="50"
-                                 alt="" title="{{$item->name()}}">
-                        @else
+                <td @include('layouts.class_from_base',['base'=>$base])>
+                    @if($base->type_is_photo)
+                        <a href="{{Storage::url($item->filename())}}">
+                            <img src="{{Storage::url($item->filename())}}" height="50"
+                                 alt="" title="{{$item->filename()}}">
+                        </a>
+                    @elseif($base->type_is_document)
+                        <a href="{{Storage::url($item->filename())}}" target="_blank">
+                            Открыть документ
+                        </a>
+                    @else
+                        <a href="{{route('item.item_index', $item)}}">
                             {{$item->name()}}
-                        @endif
-                    </a>
+                        </a>
+                    @endif
                 </td>
                 {{--                <td class="text-center">&#8594;</td>--}}
                 @foreach($links as $link)
@@ -137,18 +147,25 @@
                             $item_find = MainController::view_info($item->id, $link->id);
                             ?>
                             @if($item_find)
-                                {{--                                проверка, если link - вычисляемое поле--}}
-                                @if ($link->parent_is_parent_related == true || $link->parent_is_numcalc == true)
-                                    <a href="{{route('item.item_index', ['item'=>$item_find])}}">
-                                        @else
-                                            <a href="{{route('item.item_index', ['item'=>$item_find,'par_link'=>$link])}}">
-                                                @endif
-                                                {{$item_find->name()}}
-                                            </a>
+                                @if($link->parent_base->type_is_photo())
+                                    <a href="{{Storage::url($item_find->filename())}}">
+                                        <img src="{{Storage::url($item_find->filename())}}" height="50"
+                                             alt="" title="{{$item_find->filename()}}">
+                                    </a>
+                                @else
+                                    {{--                                проверка, если link - вычисляемое поле--}}
+                                    @if ($link->parent_is_parent_related == true || $link->parent_is_numcalc == true)
+                                        <a href="{{route('item.item_index', ['item'=>$item_find])}}">
+                                            @else
+                                                <a href="{{route('item.item_index', ['item'=>$item_find,'par_link'=>$link])}}">
+                                                    @endif
+                                                    {{$item_find->name()}}
+                                                </a>
+                                            @endif
                                             @else
                                                 <div class="text-danger">
                                                     {{GlobalController::empty_html()}}</div>
-                                @endif
+                                    @endif
                         </td>
                     @endif
                 @endforeach

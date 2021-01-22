@@ -162,10 +162,18 @@
                 {{--                            если тип корректировки поля - фото--}}
             @elseif($base->type_is_photo())
                 <div class="form-group">
-                    <label for="input">Или вложите файл с текстом для перевода<span class="text-danger">*</span></label>
+                    <label for="name_lang_0">Выберите файл - изображение, размером не более 500 Кб<span class="text-danger">*</span></label>
                     <input type="file"
-                           name="name_lang_0"
-                           id ="name_lang_0">
+                           name="name_lang_0" id ="name_lang_0" accept="image/*">
+                </div>
+                {{--                            если тип корректировки поля - документ--}}
+            @elseif($base->type_is_document())
+                <div class="form-group">
+                    <label for="name_lang_0">Выберите файл - документ (.xls, .xlsx, .pdf, .doc, .docx, .rtf, .txt), размером не более 500 Кб<span class="text-danger">*</span></label>
+                    <input type="file"
+                           name="name_lang_0"id="name_lang_0" accept=".xls, .xlsx, .pdf, .doc, .docx, .rtf, .txt">
+
+                    {{--                    <input type="hidden" name="MAX_FILE_SIZE" value="15000">--}}{{--                    id ="name_lang_0" accept="image/*" >--}}
                 </div>
                 {{--                            если тип корректировки поля - строка или список--}}
             @else
@@ -512,6 +520,13 @@
                             @endforeach
                         </div>
                     </fieldset>
+
+                    @elseif($link->parent_base->type_is_photo())
+                        <div class="form-group row">
+                            <label for="name_lang_0">Выберите файл - изображение, размером не более 500 Кб<span class="text-danger">*</span></label>
+                            <input type="file"
+                                   name="{{$key}}" id ="link{{$key}}" accept="image/*">
+                        </div>
                     {{--                                если тип корректировки поля - список--}}
                 @elseif($link->parent_base->type_is_list())
                     <div class="form-group row">
