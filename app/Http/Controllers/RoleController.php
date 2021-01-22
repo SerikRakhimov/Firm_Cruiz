@@ -121,11 +121,12 @@ class RoleController extends Controller
 
         $role->is_default_for_external = isset($request->is_default_for_external) ? true : false;
         $role->is_author = isset($request->is_author) ? true : false;
+        $role->is_list_base_sndb = isset($request->is_list_base_sndb) ? true : false;
+        $role->is_list_base_pd = isset($request->is_list_base_pd) ? true : false;
         $role->is_list_base_create = isset($request->is_list_base_create) ? true : false;
         $role->is_list_base_read = isset($request->is_list_base_read) ? true : false;
         $role->is_list_base_update = isset($request->is_list_base_update) ? true : false;
         $role->is_list_base_delete = isset($request->is_list_base_delete) ? true : false;
-        $role->is_list_base_sndb = isset($request->is_list_base_sndb) ? true : false;
         $role->is_list_base_byuser = isset($request->is_list_base_byuser) ? true : false;
         $role->is_edit_base_read = isset($request->is_edit_base_read) ? true : false;
         $role->is_edit_base_update = isset($request->is_edit_base_update) ? true : false;

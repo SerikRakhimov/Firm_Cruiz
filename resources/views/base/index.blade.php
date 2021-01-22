@@ -32,6 +32,7 @@
         <tr>
             <th class="text-center">#</th>
             <th class="text-left">{{trans('main.names')}}</th>
+            <th class="text-center">{{trans('main.type')}}</th>
             @if (Auth::user()->isAdmin() ||  $glo_project_role_is_null == true)
                 <th class="text-center"></th>
                 <th class="text-center"></th>
@@ -53,11 +54,14 @@
                     {{--                <th scope="row">{{$i}}</th>--}}
                     <td class="text-center">{{$i}}</td>
                     <td class="text-left">
-{{--                        <a href="{{route('item.base_index',$base)}}" title="{{$base->names()}}">--}}
-                            {{$base->names()}}
-                            ({{count(Item::where('base_id', $base->id)->get())}}
-                            )
-{{--                        </a>--}}
+                        {{--                        <a href="{{route('item.base_index',$base)}}" title="{{$base->names()}}">--}}
+                        {{$base->names()}}
+                        ({{count(Item::where('base_id', $base->id)->get())}}
+                        )
+                        {{--                        </a>--}}
+                    </td>
+                    <td class="text-center">
+                        {{$base->type_name()}}
                     </td>
                     @if (Auth::user()->isAdmin() ||  $glo_project_role_is_null == true)
                         <td class="text-center">

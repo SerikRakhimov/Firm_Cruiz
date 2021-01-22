@@ -53,7 +53,9 @@ class Base extends Model
             "1" => trans('main.number'),
             "2" => trans('main.string'),
             "3" => trans('main.date'),
-            "4" => trans('main.boolean')
+            "4" => trans('main.boolean'),
+            "5" => trans('main.photo'),
+            "6" => trans('main.document')
         );
     }
 
@@ -71,6 +73,10 @@ class Base extends Model
             $result = 3;
         } else if ($this->type_is_boolean == true) {
             $result = 4;
+        } else if ($this->type_is_photo == true) {
+            $result = 5;
+        } else if ($this->type_is_document == true) {
+            $result = 6;
         }
         return $result;
     }
@@ -93,6 +99,12 @@ class Base extends Model
                 break;
             case 4:
                 $result = trans('main.boolean');
+                break;
+            case 5:
+                $result = trans('main.photo');
+                break;
+            case 6:
+                $result = trans('main.document');
                 break;
         }
         return $result;
@@ -121,6 +133,16 @@ class Base extends Model
     function type_is_boolean()
     {
         return $this->type_is_boolean == true;
+    }
+
+    function type_is_photo()
+    {
+        return $this->type_is_photo == true;
+    }
+
+    function type_is_document()
+    {
+        return $this->type_is_document == true;
     }
 
     function info()

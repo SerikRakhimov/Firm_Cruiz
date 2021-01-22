@@ -134,7 +134,7 @@ class GlobalController extends Controller
             : ($value == false ? html_entity_decode('&#65794;') : trans('main.empty'));
     }
 
-    static function base_right(Base $base, bool $is_no_sndb_rule = null)
+    static function base_right(Base $base, bool $is_no_sndb_pd_rule = false)
     {
         $role = GlobalController::glo_role();
 
@@ -152,12 +152,17 @@ class GlobalController extends Controller
         $is_edit_link_update = $role->is_edit_link_update;
 
         // Блок проверки по Role
-        // "$is_enable = true" нужно
+        // "$is_list_base_enable = true" нужно
         $is_list_base_enable = true;
-        if (!$is_no_sndb_rule) {
+        if (!$is_no_sndb_pd_rule) {
             if ($role->is_list_base_sndb == false) {
                 if ($base->type_is_number == true || $base->type_is_string == true ||
                     $base->type_is_date == true || $base->type_is_boolean == true) {
+                    $is_list_base_enable = false;
+                }
+            }
+            if ($role->is_list_base_pd == false) {
+                if ($base->type_is_photo == true || $base->type_is_document == true ) {
                     $is_list_base_enable = false;
                 }
             }

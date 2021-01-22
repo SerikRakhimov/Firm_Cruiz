@@ -214,6 +214,40 @@ class BaseController extends Controller
                 $base->sepa_same_left_calcname = "";
                 $base->sepa_same_right_calcname = "";
                 break;
+            // Фото
+            case 5:
+                $base->type_is_list = false;
+                $base->type_is_number = false;
+                $base->type_is_string = false;
+                $base->type_is_date = false;
+                $base->type_is_boolean = true;
+                $base->is_code_needed = "0";
+                $base->digits_num = 0;
+                $base->is_required_lst_num_str = "0";
+                $base->is_one_value_lst_str = "0";
+                $base->is_calcname_lst = "0";
+                $base->sepa_calcname = "";
+                $base->is_same_small_calcname = "0";
+                $base->sepa_same_left_calcname = "";
+                $base->sepa_same_right_calcname = "";
+                break;
+            // Документ
+            case 6:
+                $base->type_is_list = false;
+                $base->type_is_number = false;
+                $base->type_is_string = false;
+                $base->type_is_date = false;
+                $base->type_is_boolean = true;
+                $base->is_code_needed = "0";
+                $base->digits_num = 0;
+                $base->is_required_lst_num_str = "0";
+                $base->is_one_value_lst_str = "0";
+                $base->is_calcname_lst = "0";
+                $base->sepa_calcname = "";
+                $base->is_same_small_calcname = "0";
+                $base->sepa_same_left_calcname = "";
+                $base->sepa_same_right_calcname = "";
+                break;
         }
         if ($base->is_code_needed == "0") {
             $base->is_code_number = "0";
@@ -228,7 +262,7 @@ class BaseController extends Controller
             $base->is_suggest_max_code = "0";
         };
         // Нужно, если пользователь введет 0 в поле $base->significance_code при $base->is_limit_sign_code = true
-        if($base->significance_code == 0){
+        if ($base->significance_code == 0) {
             $base->is_limit_sign_code = "0";
         }
         // Нужно
@@ -304,6 +338,8 @@ class BaseController extends Controller
                 $base->type_is_string = false;
                 $base->type_is_date = false;
                 $base->type_is_boolean = false;
+                $base->type_is_photo = false;
+                $base->type_is_document = false;
                 $base->digits_num = 0;
                 break;
             // Число
@@ -313,6 +349,8 @@ class BaseController extends Controller
                 $base->type_is_string = false;
                 $base->type_is_date = false;
                 $base->type_is_boolean = false;
+                $base->type_is_photo = false;
+                $base->type_is_document = false;
                 $base->is_code_needed = "0";
                 $base->is_one_value_lst_str = "0";
                 $base->is_calcname_lst = "0";
@@ -328,6 +366,8 @@ class BaseController extends Controller
                 $base->type_is_string = true;
                 $base->type_is_date = false;
                 $base->type_is_boolean = false;
+                $base->type_is_photo = false;
+                $base->type_is_document = false;
                 $base->is_code_needed = "0";
                 $base->digits_num = 0;
                 $base->is_calcname_lst = "0";
@@ -343,6 +383,8 @@ class BaseController extends Controller
                 $base->type_is_string = false;
                 $base->type_is_date = true;
                 $base->type_is_boolean = false;
+                $base->type_is_photo = false;
+                $base->type_is_document = false;
                 $base->is_code_needed = "0";
                 $base->digits_num = 0;
                 $base->is_required_lst_num_str = "0";
@@ -360,6 +402,46 @@ class BaseController extends Controller
                 $base->type_is_string = false;
                 $base->type_is_date = false;
                 $base->type_is_boolean = true;
+                $base->type_is_photo = false;
+                $base->type_is_document = false;
+                $base->is_code_needed = "0";
+                $base->digits_num = 0;
+                $base->is_required_lst_num_str = "0";
+                $base->is_one_value_lst_str = "0";
+                $base->is_calcname_lst = "0";
+                $base->sepa_calcname = "";
+                $base->is_same_small_calcname = "0";
+                $base->sepa_same_left_calcname = "";
+                $base->sepa_same_right_calcname = "";
+                break;
+            // Фото
+            case 5:
+                $base->type_is_list = false;
+                $base->type_is_number = false;
+                $base->type_is_string = false;
+                $base->type_is_date = false;
+                $base->type_is_boolean = false;
+                $base->type_is_photo = true;
+                $base->type_is_document = false;
+                $base->is_code_needed = "0";
+                $base->digits_num = 0;
+                $base->is_required_lst_num_str = "0";
+                $base->is_one_value_lst_str = "0";
+                $base->is_calcname_lst = "0";
+                $base->sepa_calcname = "";
+                $base->is_same_small_calcname = "0";
+                $base->sepa_same_left_calcname = "";
+                $base->sepa_same_right_calcname = "";
+                break;
+            // Документ
+            case 6:
+                $base->type_is_list = false;
+                $base->type_is_number = false;
+                $base->type_is_string = false;
+                $base->type_is_date = false;
+                $base->type_is_boolean = false;
+                $base->type_is_photo = false;
+                $base->type_is_document = true;
                 $base->is_code_needed = "0";
                 $base->digits_num = 0;
                 $base->is_required_lst_num_str = "0";
@@ -385,7 +467,7 @@ class BaseController extends Controller
             $base->is_suggest_max_code = "0";
         };
         // Нужно, если пользователь введет 0 в поле $base->significance_code при $base->is_limit_sign_code = true
-        if($base->significance_code == 0){
+        if ($base->significance_code == 0) {
             $base->is_limit_sign_code = "0";
         }
         // Ограничить количество вводимых цифр
@@ -398,7 +480,7 @@ class BaseController extends Controller
         $base->save();
 
         $template = Template::findOrFail($base->template_id);
-        return redirect()->route('base.index', ['template' => $template] );
+        return redirect()->route('base.index', ['template' => $template]);
     }
 
     function edit(Base $base)
@@ -428,7 +510,7 @@ class BaseController extends Controller
         // потом эта команда
         $base->delete();
 
-        return redirect()->route('base.index', ['template' => $template] );
+        return redirect()->route('base.index', ['template' => $template]);
     }
 
 //    // Вариант 1
@@ -629,8 +711,9 @@ class BaseController extends Controller
         return $result;
     }
 
-    function getBasesAll(){
-  $bases = $bases = Base::orderBy('name_lang_0')->get();
+    function getBasesAll()
+    {
+        $bases = $bases = Base::orderBy('name_lang_0')->get();
 
         print(json_encode($bases));
 

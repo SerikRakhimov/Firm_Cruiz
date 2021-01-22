@@ -114,6 +114,30 @@
             </div>
         </div>
 
+        <div class="form-group row" id="is_list_base_pd_form_group">
+            <div class="col-sm-3 text-right">
+                <label class="form-label"
+                       for="is_list_base_pd">{{trans('main.is_list_base_pd')}}</label>
+            </div>
+            <div class="col-sm-7">
+                <input class="@error('is_list_base_pd') is-invalid @enderror"
+                       type="checkbox"
+                       name="is_list_base_pd"
+                       placeholder=""
+                       @if ((old('is_list_base_pd') ?? ($role->is_list_base_pd ?? false)) ==  true)
+                       checked
+                    @endif
+                >
+                @error('is_list_base_pd')
+                <div class="invalid-feedback">
+                    {{$message}}
+                </div>
+                @enderror
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div>
+
         <div class="form-group row" id="is_list_base_create_form_group">
             <div class="col-sm-3 text-right">
                 <label class="form-label"
