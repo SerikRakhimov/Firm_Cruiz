@@ -115,7 +115,13 @@
                 @endif
                 <td class="text-left">
                     <a href="{{route('item.item_index', $item)}}">
-                        {{$item->name()}}
+
+                        @if($base->type_is_photo)
+                            <img src="{{Storage::url($item->name())}}" height="50"
+                                 alt="" title="{{$item->name()}}">
+                        @else
+                            {{$item->name()}}
+                        @endif
                     </a>
                 </td>
                 {{--                <td class="text-center">&#8594;</td>--}}

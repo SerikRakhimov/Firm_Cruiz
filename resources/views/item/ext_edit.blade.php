@@ -159,7 +159,14 @@
                     <div class="col-sm-2">
                     </div>
                 </div>
-
+                {{--                            если тип корректировки поля - фото--}}
+            @elseif($base->type_is_photo())
+                <div class="form-group">
+                    <label for="input">Или вложите файл с текстом для перевода<span class="text-danger">*</span></label>
+                    <input type="file"
+                           name="name_lang_0"
+                           id ="name_lang_0">
+                </div>
                 {{--                            если тип корректировки поля - строка или список--}}
             @else
                 @if($base->is_calcname_lst == false)

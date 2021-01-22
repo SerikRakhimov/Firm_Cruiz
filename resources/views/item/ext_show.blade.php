@@ -20,7 +20,8 @@
     </h3>
     <br>
     <?php
-    $base_right = GlobalController::base_right($item->base);
+        $base = $item->base;
+    $base_right = GlobalController::base_right($base);
     ?>
     <p>Id: <b>{{$item->id}}</b></p>
     @if($base_right['is_show_base_enable'] == true)
@@ -29,7 +30,13 @@
 {{--        @foreach (session('glo_menu_save') as $key=>$value)--}}
 {{--            {{trans('main.name')}} ({{trans('main.' . $value)}}): <b>{{$item['name_lang_' . $key]}}</b><br>--}}
 {{--        @endforeach--}}
-            {{trans('main.name')}}: <b>{{$item->name()}}</b><br>
+            @if($base->type_is_photo)
+                <img src="{{Storage::url($item->name())}}" height="450"
+                     alt="" title="{{$item->name()}}">
+            @else
+                {{trans('main.name')}}: <b>{{$item->name()}}</b>
+            @endif
+            <br>
         </p>
     @endif
 

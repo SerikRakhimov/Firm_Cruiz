@@ -394,6 +394,7 @@ class ItemController extends Controller
         $item->name_lang_1 = isset($request->name_lang_1) ? $request->name_lang_1 : "";
         $item->name_lang_2 = isset($request->name_lang_2) ? $request->name_lang_2 : "";
         $item->name_lang_3 = isset($request->name_lang_3) ? $request->name_lang_3 : "";
+        $item->project_id = GlobalController::glo_project_id();
         // далее этот блок
         // похожая формула ниже (в этой же процедуре)
         if ($base->type_is_boolean()) {
@@ -408,6 +409,17 @@ class ItemController extends Controller
 //                    $item['name_lang_' . $key] = $item->name_lang_0;
 //                }
 //            }
+            $item->name_lang_1 = $item->name_lang_0;
+            $item->name_lang_2 = $item->name_lang_0;
+            $item->name_lang_3 = $item->name_lang_0;
+        }
+        if ($base->type_is_photo() || $base->type_is_document()) {
+            $path = "";
+            if ($request->hasFile('name_lang_0')) {
+                //$path = $request->name_lang_0->store('public/uploads');
+                $path = $request->name_lang_0->store('public/' . $item->project_id . '/' . $base->id);
+            }
+            $item->name_lang_0 = $path;
             $item->name_lang_1 = $item->name_lang_0;
             $item->name_lang_2 = $item->name_lang_0;
             $item->name_lang_3 = $item->name_lang_0;
@@ -568,7 +580,6 @@ class ItemController extends Controller
             $item->name_lang_3 = $item->name_lang_0;
         }
 
-        $item->project_id = GlobalController::glo_project_id();
         // при создании записи "$item->created_user_id" заполняется
         $item->created_user_id = Auth::user()->id;
         $item->updated_user_id = Auth::user()->id;
