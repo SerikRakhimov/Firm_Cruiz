@@ -20,20 +20,24 @@
     </h3>
     <br>
     <?php
-        $base = $item->base;
+    $base = $item->base;
     $base_right = GlobalController::base_right($base);
     ?>
     <p>Id: <b>{{$item->id}}</b></p>
     @if($base_right['is_show_base_enable'] == true)
         <p>
-        {{trans('main.code')}}: <b>{{$item->code}}</b><br>
-{{--        @foreach (session('glo_menu_save') as $key=>$value)--}}
-{{--            {{trans('main.name')}} ({{trans('main.' . $value)}}): <b>{{$item['name_lang_' . $key]}}</b><br>--}}
-{{--        @endforeach--}}
+            {{trans('main.code')}}: <b>{{$item->code}}</b><br>
+            {{--        @foreach (session('glo_menu_save') as $key=>$value)--}}
+            {{--            {{trans('main.name')}} ({{trans('main.' . $value)}}): <b>{{$item['name_lang_' . $key]}}</b><br>--}}
+            {{--        @endforeach--}}
             @if($base->type_is_photo)
                 <a href="{{Storage::url($item->filename())}}">
-                <img src="{{Storage::url($item->filename())}}" height="250"
-                     alt="" title="{{$item->filename()}}">
+                    <img src="{{Storage::url($item->filename())}}" height="250"
+                         alt="" title="{{$item->filename()}}">
+                </a>
+            @elseif($base->type_is_document)
+                <a href="{{Storage::url($item->filename())}}" target="_blank">
+                    Открыть документ
                 </a>
             @else
                 {{trans('main.name')}}: <b>{{$item->name()}}</b>
@@ -69,19 +73,36 @@
                 ?>
                 @if($base_link_right['is_show_link_enable'] == true)
                     {{$link->parent_label()}}:
-                    <b>{{$item_find->name()}}</b><br>
+                        @if($link->parent_base->type_is_photo)
+                            <br>
+                            <a href="{{Storage::url($item_find->filename())}}">
+                                <img src="{{Storage::url($item_find->filename())}}" height="250"
+                                     alt="" title="{{$item_find->filename()}}">
+                            </a>
+                        @elseif($link->parent_base->type_is_document)
+                            <a href="{{Storage::url($item_find->filename())}}" target="_blank">
+                                Открыть документ
+                            </a>
+                        @else
+                            <b>{{$item_find->name()}}</b>
+                        @endif
+                        <br>
                 @endif
             @endif
         @endforeach
     </p>
 
-    <p>{{trans('main.date_created')}}: <b>{{$item->created_at->Format(trans('main.format_date'))}}</b>, {{mb_strtolower(trans('main.user'))}}: <b>{{$item->created_user->name()}}</b><br>
-        {{trans('main.date_updated')}}: <b>{{$item->updated_at->Format(trans('main.format_date'))}}</b>, {{mb_strtolower(trans('main.user'))}}: <b>{{$item->updated_user->name()}}</b></p>
+    <p>{{trans('main.date_created')}}:
+        <b>{{$item->created_at->Format(trans('main.format_date'))}}</b>, {{mb_strtolower(trans('main.user'))}}:
+        <b>{{$item->created_user->name()}}</b><br>
+        {{trans('main.date_updated')}}:
+        <b>{{$item->updated_at->Format(trans('main.format_date'))}}</b>, {{mb_strtolower(trans('main.user'))}}:
+        <b>{{$item->updated_user->name()}}</b></p>
 
-<!--    --><?php
-//    $result = ItemController::form_tree($item->id);
-//    echo $result;
-//    ?>
+    <?php
+    $result = ItemController::form_tree($item->id);
+    echo $result;
+    ?>
 
     @if ($type_form == 'show')
         <div class="mb-3 btn-group btn-group-sm">

@@ -152,6 +152,10 @@
                                         <img src="{{Storage::url($item_find->filename())}}" height="50"
                                              alt="" title="{{$item_find->filename()}}">
                                     </a>
+                                @elseif($link->parent_base->type_is_document())
+                                    <a href="{{Storage::url($item_find->filename())}}" target="_blank">
+                                        Открыть документ
+                                    </a>
                                 @else
                                     {{--                                проверка, если link - вычисляемое поле--}}
                                     @if ($link->parent_is_parent_related == true || $link->parent_is_numcalc == true)

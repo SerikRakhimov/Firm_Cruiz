@@ -5,7 +5,7 @@
     use App\Models\Item;
     use App\Http\Controllers\GlobalController;
     ?>
-    @include('layouts.template.show_name',['template'=>$template])
+{{--    @include('layouts.template.show_name',['template'=>$template])--}}
     <div class="container-fluid">
         <div class="row">
             <div class="col-5 text-center">
@@ -32,14 +32,14 @@
         ?>
         @foreach($bases as $base)
             <?php
-            $base_right = GlobalController::base_right($base);
+                $base_right = GlobalController::base_right($base);
             ?>
             @if($base_right['is_list_base_enable'] == true)
                 <?php
                 $i++;
                 ?>
                 <tr>
-                    {{--                <th scope="row">{{$i}}</th>--}}
+{{--                                    <th scope="row">{{$i}}</th>--}}
                     <td class="text-center">{{$i}}</td>
                     <td class="text-left">
                         <a href="{{route('item.base_index',$base)}}" title="{{$base->names()}}">

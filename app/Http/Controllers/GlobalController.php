@@ -174,7 +174,7 @@ class GlobalController extends Controller
 //            $is_list_base_delete = false;
 //        }
         // "$is_enable &&" нужно
-        $is_list_base_enable = $is_list_base_enable && ($is_list_base_create || $is_list_base_read || $is_list_base_update || $is_list_base_delete);
+       $is_list_base_enable = $is_list_base_enable && ($is_list_base_create || $is_list_base_read || $is_list_base_update || $is_list_base_delete);
 
         // Блок проверки по robas, используя переменные $role и $base
         $roba = Roba::where('role_id', $role->id)->where('base_id', $base->id)->first();
@@ -220,7 +220,7 @@ class GlobalController extends Controller
 
         $is_edit_base_enable = $is_edit_base_read || $is_edit_base_update;
         $is_edit_link_enable = $is_edit_link_read || $is_edit_link_update;
-
+//
         return ['is_list_base_enable' => $is_list_base_enable,
             'is_list_base_create' => $is_list_base_create,
             'is_list_base_read' => $is_list_base_read,

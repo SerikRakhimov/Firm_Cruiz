@@ -417,7 +417,7 @@ class ItemController extends Controller
         if ($base->type_is_photo() || $base->type_is_document()) {
             $path = "";
             if ($request->hasFile('name_lang_0')) {
-                 $path = $request->name_lang_0->store('public/' . $item->project_id . '/' . $base->id);
+                $path = $request->name_lang_0->store('public/' . $item->project_id . '/' . $base->id);
             }
             $item->name_lang_0 = $path;
             $item->name_lang_1 = $item->name_lang_0;
@@ -480,6 +480,17 @@ class ItemController extends Controller
         $strings_inputs = $request->only($string_names);
         foreach ($strings_inputs as $key => $value) {
             $strings_inputs[$key] = ($value != null) ? $value : "";
+        }
+
+        foreach ($inputs as $key => $value) {
+            $link = Link::findOrFail($key);
+            if ($link->parent_base->type_is_photo() || $link->parent_base->type_is_document()) {
+                $path = "";
+                if ($request->hasFile($key)) {
+                    $path = $request[$key]->store('public/' . $item->project_id . '/' . $base->id);
+                }
+                $inputs[$key] = $path;
+            }
         }
 
         $keys = array_keys($inputs);
@@ -683,8 +694,41 @@ class ItemController extends Controller
             }
             $main->parent_item_id = $values[$index];
 
-            // тип корректировки поля - строка
-        } elseif ($link->parent_base->type_is_string()) {
+
+        } // тип корректировки поля - фото или документ
+        elseif ($link->parent_base->type_is_photo() || $link->parent_base->type_is_document()) {
+            // создание новой записи в items
+            $item_find = new Item();
+            $item_find->base_id = $link->parent_base_id;
+            // Похожая строка вверху и внизу
+            $item_find->code = uniqid($item_find->id . '_', true);
+             //присваивание полям наименование строкового значение числа
+//            $i = 0;
+//            foreach (session('glo_menu_save') as $lang_key => $lang_value) {
+//                if ($i == 0) {
+//                    $item_find['name_lang_' . $lang_key] = $values[$index];
+//                } else {
+//                    if ($link->parent_base->is_one_value_lst_str == true) {
+//                        // Одно значение для наименований у всех языков
+//                        $item_find['name_lang_' . $lang_key] = $values[$index];
+//                    } else {
+//                        $item_find['name_lang_' . $lang_key] = $strings_inputs[$link->id . '_' . $lang_key];
+//                    }
+//                }
+//                $i = $i + 1;
+//            }
+            $item_find->name_lang_0 = $values[$index];
+            $item_find->name_lang_1 = $item_find->name_lang_0;
+            $item_find->name_lang_2 = $item_find->name_lang_0;
+            $item_find->name_lang_3 = $item_find->name_lang_0;
+            $item_find->project_id = GlobalController::glo_project_id();
+            // при создании записи "$item->created_user_id" заполняется
+            $item_find->created_user_id = Auth::user()->id;
+            $item_find->updated_user_id = Auth::user()->id;
+            $item_find->save();
+            $main->parent_item_id = $item_find->id;
+        } // тип корректировки поля - строка
+        elseif ($link->parent_base->type_is_string()) {
             // поиск в таблице items значение с таким же названием и base_id
             $item_find = Item::where('base_id', $link->parent_base_id)->where('project_id', GlobalController::glo_project_id())->where('name_lang_0', $values[$index]);
             if ($link->parent_base->is_one_value_lst_str == false) {
