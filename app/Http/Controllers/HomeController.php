@@ -35,6 +35,7 @@ class HomeController extends Controller
         Session::put('glo_project_id', $request->project_id);
         Session::put('glo_role_id', $request->role_id);
         return redirect()->route('base.template_index', GlobalController::glo_project_template_id());
+        //return redirect('/');
     }
 
 }

@@ -374,6 +374,32 @@ class ItemController extends Controller
                         ->withInput()
                         ->withErrors($array_mess);
                 }
+                // Тип - фото
+            } elseif ($base->type_is_photo()) {
+                $errors = false;
+                if (!$request->hasFile('name_lang_0')) {
+                    $array_mess['name_lang_0'] = trans('main.is_required_lst_num_str') . '!';
+                    $errors = true;
+                }
+                if ($errors) {
+                    // повторный вызов формы
+                    return redirect()->back()
+                        ->withInput()
+                        ->withErrors($array_mess);
+                }
+                // Тип - документ
+            } elseif ($base->type_is_document()) {
+                $errors = false;
+                if (!$request->hasFile('name_lang_0')) {
+                    $array_mess['name_lang_0'] = trans('main.is_required_lst_num_str') . '!';
+                    $errors = true;
+                }
+                if ($errors) {
+                    // повторный вызов формы
+                    return redirect()->back()
+                        ->withInput()
+                        ->withErrors($array_mess);
+                }
             }
         }
         // установка часового пояса нужно для сохранения времени
@@ -902,6 +928,36 @@ class ItemController extends Controller
                 if ($name_lang_0_val === '0') {
                     $array_mess['name_lang_0'] = trans('main.is_required_lst_num_str') . '!';
                     $errors = true;
+                }
+                if ($errors) {
+                    // повторный вызов формы
+                    return redirect()->back()
+                        ->withInput()
+                        ->withErrors($array_mess);
+                }
+                // Тип - фото
+            } elseif ($item->base->type_is_photo()) {
+                $errors = false;
+                if (!$item->image_exist()) {
+                    if (!$request->hasFile('name_lang_0')) {
+                        $array_mess['name_lang_0'] = trans('main.is_required_lst_num_str') . '!';
+                        $errors = true;
+                    }
+                }
+                if ($errors) {
+                    // повторный вызов формы
+                    return redirect()->back()
+                        ->withInput()
+                        ->withErrors($array_mess);
+                }
+                // Тип - документ
+            } elseif ($item->base->type_is_document()) {
+                $errors = false;
+                if (!$item->image_exist()) {
+                    if (!$request->hasFile('name_lang_0')) {
+                        $array_mess['name_lang_0'] = trans('main.is_required_lst_num_str') . '!';
+                        $errors = true;
+                    }
                 }
                 if ($errors) {
                     // повторный вызов формы

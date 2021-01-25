@@ -159,37 +159,35 @@
                     <div class="col-sm-2">
                     </div>
                 </div>
-                {{--                --}}{{--                            если тип корректировки поля - фото--}}
-                {{--            @elseif($base->type_is_photo())--}}
-                {{--                <div class="form-group">--}}
-                {{--                    <label for="name_lang_0">Выберите файл - изображение, размером не более 500 Кб<span--}}
-                {{--                            class="text-danger">*</span></label>--}}
-                {{--                    <input type="file"--}}
-                {{--                           name="name_lang_0" id="name_lang_0" accept="image/*">--}}
-                {{--                </div>--}}
-                {{--                --}}{{--                            если тип корректировки поля - документ--}}
-                {{--            @elseif($base->type_is_document())--}}
-                {{--                <div class="form-group">--}}
-                {{--                    <label for="name_lang_0">Выберите файл - документ (.xls, .xlsx, .pdf, .doc, .docx, .rtf, .txt),--}}
-                {{--                        размером не более 500 Кб<span class="text-danger">*</span></label>--}}
-                {{--                    <input type="file"--}}
-                {{--                           name="name_lang_0" id="name_lang_0" accept=".xls, .xlsx, .pdf, .doc, .docx, .rtf, .txt">--}}
-
-                {{--                    --}}{{--                    <input type="hidden" name="MAX_FILE_SIZE" value="15000">--}}{{----}}{{--                    id ="name_lang_0" accept="image/*" >--}}
-                {{--                </div>--}}
-                {{--                                                   если тип корректировки поля - фото--}}
             @elseif($base->type_is_photo())
                 <div class="form-group row">
                     <div class="col-sm-3 text-right">
                         {{--                            Выберите файл - изображение, размером не более 500 Кб--}}
                         <label for="name_lang_0">{{$base->name()}}<span
-                                class="text-danger">*</span></label>
+                                class="text-danger">*</span>
+                            @if($update)
+                                @if($item->image_exist())
+                                    (сейчас:<a href="{{Storage::url($item->filename())}}">
+                                        <img src="{{Storage::url($item->filename())}}" height="50"
+                                             alt="" title="{{$item->filename()}}">
+                                    </a>)
+                                @endif
+                            @endif
+                        </label>
                     </div>
-                    <div class="col-sm-7">
+                    <div class="col-sm-4">
                         <input type="file"
-                               name="name_lang_0" id="name_lang_0" accept="image/*">
+                               name="name_lang_0" id="name_lang_0"
+                               class="@error('name_lang_0') is-invalid @enderror"
+                               accept="image/*">
+                        @error('name_lang_0')
+                        <div class="text-danger">
+                            {{$message}}
+                        </div>
+                        @enderror
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-sm-5-left">
+                        <label>Выберите другую картинку для изменения, или оставьте существующую</label>
                     </div>
                 </div>
                 {{--                            если тип корректировки поля - документ--}}
@@ -198,18 +196,32 @@
                     <div class="col-sm-3 text-right">
                         {{--Выберите файл - документ (.xls, .xlsx, .pdf, .doc, .docx, .rtf, .txt)--}}
                         <label for="name_lang_0">{{$base->name()}}(.xls, .xlsx, .pdf, .doc, .docx, .rtf, .txt)<span
-                                class="text-danger">*</span></label>
+                                class="text-danger">*</span>
+                            @if($update)
+                                @if($item->image_exist())
+                                    (сейчас:                                                <a
+                                        href="{{Storage::url($item_image->filename())}}" target="_blank">
+                                        Открыть документ
+                                    </a>)
+                                @endif
+                            @endif
+                        </label>
                     </div>
-                    <div class="col-sm-7">
+                    <div class="col-sm-4">
                         <input type="file"
-                               name="name_lang_0" id="name_lang_0" accept=".xls, .xlsx, .pdf, .doc, .docx, .rtf, .txt">
+                               name="name_lang_0" id="name_lang_0"
+                               class="@error('name_lang_0') is-invalid @enderror"
+                               accept=".xls, .xlsx, .pdf, .doc, .docx, .rtf, .txt">
+                        @error('name_lang_0')
+                        <div class="text-danger">
+                            {{$message}}
+                        </div>
+                        @enderror
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-sm-5-left">
+                        <label>Выберите другую картинку для изменения, или оставьте существующую</label>
                     </div>
                 </div>
-
-
-
                 {{--                            если тип корректировки поля - строка или список--}}
             @else
                 @if($base->is_calcname_lst == false)
@@ -557,20 +569,6 @@
                     </fieldset>
                     {{--                            если тип корректировки поля - фото--}}
                 @elseif($link->parent_base->type_is_photo())
-                    {{--                    @if($update)--}}
-                    {{--                        @if ($value != null)--}}
-                    {{--                            <?php--}}
-                    {{--                            $item_image = Item::find($value);--}}
-                    {{--                            ?>--}}
-                    {{--                            @if ($item_image != null)--}}
-                    {{--                                <br>--}}
-                    {{--                                <a href="{{Storage::url($item_image->filename())}}">--}}
-                    {{--                                    <img src="{{Storage::url($item_image->filename())}}" height="50"--}}
-                    {{--                                         alt="" title="{{$item_image->filename()}}">--}}
-                    {{--                                </a>--}}
-                    {{--                            @endif--}}
-                    {{--                        @endif--}}
-                    {{--                    @endif--}}
                     <div class="form-group row">
                         <div class="col-sm-3 text-right">
                             {{--                            Выберите файл - изображение, размером не более 500 Кб--}}
@@ -596,7 +594,8 @@
                                    name="{{$key}}" id="link{{$key}}" accept="image/*">
                         </div>
                         <div class="col-sm-5-left">
-                            <label for="{{$key}}">Выберите другую картинку для изменения, или оставьте существующую</label>
+                            <label for="{{$key}}">Выберите другую картинку для изменения, или оставьте
+                                существующую</label>
                         </div>
                     </div>
                     {{--                            если тип корректировки поля - документ--}}
@@ -613,10 +612,11 @@
                                         $item_image = Item::find($value);
                                         ?>
                                         @if ($item_image != null)
-                                            (сейчас:<a href="{{Storage::url($item_image->filename())}}">
-                                                <img src="{{Storage::url($item_image->filename())}}" height="50"
-                                                     alt="" title="{{$item_image->filename()}}">
-                                            </a>)
+                                            (сейчас:
+                                            <a href="{{Storage::url($item_image->filename())}}" target="_blank">
+                                                Открыть документ
+                                            </a>
+                                            )
                                         @endif
                                     @endif
                                 @endif
@@ -628,7 +628,8 @@
                                    accept=".xls, .xlsx, .pdf, .doc, .docx, .rtf, .txt">
                         </div>
                         <div class="col-sm-5-left">
-                            <label for="{{$key}}">Выберите другую картинку для изменения, или оставьте существующую</label>
+                            <label for="{{$key}}">Выберите другую картинку для изменения, или оставьте
+                                существующую</label>
                         </div>
                     </div>
                     {{--                                если тип корректировки поля - список--}}
@@ -700,7 +701,7 @@
             <div class="col-sm-2">
             </div>
             <div class="col-sm-5 text-left">
-                <button class="btn btn-dreamer" title="{{trans('main.cancel')}}"
+                <button type="button" class="btn btn-dreamer" title="{{trans('main.cancel')}}"
                         onclick="document.location='{{session('links')}}';"
                 >
                     <i class="fas fa-arrow-left"></i>

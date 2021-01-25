@@ -611,6 +611,14 @@
                     val_required_num_str = "visible";
                     val_onevalue_str = "visible";
                     break;
+                // Фото
+                case "5":
+                    val_required_num_str = "visible";
+                    break;
+                // Документ
+                case "6":
+                    val_required_num_str = "visible";
+                    break;
             }
             // digits_num.style.display = val_digits_num;
             // is_required_lst_num_str.style.display = val_required_num_str;

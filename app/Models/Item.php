@@ -129,4 +129,10 @@ class Item extends Model
         return $this->name_lang_0;
     }
 
+    // Для типов полей Фотография, Документ
+    function image_exist()
+    {
+        return $this->name_lang_0 != "";
+    }
+
 }

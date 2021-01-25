@@ -223,7 +223,6 @@ class BaseController extends Controller
                 $base->type_is_boolean = true;
                 $base->is_code_needed = "0";
                 $base->digits_num = 0;
-                $base->is_required_lst_num_str = "0";
                 $base->is_one_value_lst_str = "0";
                 $base->is_calcname_lst = "0";
                 $base->sepa_calcname = "";
@@ -240,7 +239,6 @@ class BaseController extends Controller
                 $base->type_is_boolean = true;
                 $base->is_code_needed = "0";
                 $base->digits_num = 0;
-                $base->is_required_lst_num_str = "0";
                 $base->is_one_value_lst_str = "0";
                 $base->is_calcname_lst = "0";
                 $base->sepa_calcname = "";
@@ -425,7 +423,6 @@ class BaseController extends Controller
                 $base->type_is_document = false;
                 $base->is_code_needed = "0";
                 $base->digits_num = 0;
-                $base->is_required_lst_num_str = "0";
                 $base->is_one_value_lst_str = "0";
                 $base->is_calcname_lst = "0";
                 $base->sepa_calcname = "";
@@ -444,7 +441,6 @@ class BaseController extends Controller
                 $base->type_is_document = true;
                 $base->is_code_needed = "0";
                 $base->digits_num = 0;
-                $base->is_required_lst_num_str = "0";
                 $base->is_one_value_lst_str = "0";
                 $base->is_calcname_lst = "0";
                 $base->sepa_calcname = "";
