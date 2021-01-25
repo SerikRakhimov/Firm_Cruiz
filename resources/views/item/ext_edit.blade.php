@@ -159,24 +159,57 @@
                     <div class="col-sm-2">
                     </div>
                 </div>
-                {{--                            если тип корректировки поля - фото--}}
+                {{--                --}}{{--                            если тип корректировки поля - фото--}}
+                {{--            @elseif($base->type_is_photo())--}}
+                {{--                <div class="form-group">--}}
+                {{--                    <label for="name_lang_0">Выберите файл - изображение, размером не более 500 Кб<span--}}
+                {{--                            class="text-danger">*</span></label>--}}
+                {{--                    <input type="file"--}}
+                {{--                           name="name_lang_0" id="name_lang_0" accept="image/*">--}}
+                {{--                </div>--}}
+                {{--                --}}{{--                            если тип корректировки поля - документ--}}
+                {{--            @elseif($base->type_is_document())--}}
+                {{--                <div class="form-group">--}}
+                {{--                    <label for="name_lang_0">Выберите файл - документ (.xls, .xlsx, .pdf, .doc, .docx, .rtf, .txt),--}}
+                {{--                        размером не более 500 Кб<span class="text-danger">*</span></label>--}}
+                {{--                    <input type="file"--}}
+                {{--                           name="name_lang_0" id="name_lang_0" accept=".xls, .xlsx, .pdf, .doc, .docx, .rtf, .txt">--}}
+
+                {{--                    --}}{{--                    <input type="hidden" name="MAX_FILE_SIZE" value="15000">--}}{{----}}{{--                    id ="name_lang_0" accept="image/*" >--}}
+                {{--                </div>--}}
+                {{--                                                   если тип корректировки поля - фото--}}
             @elseif($base->type_is_photo())
-                <div class="form-group">
-                    <label for="name_lang_0">Выберите файл - изображение, размером не более 500 Кб<span
-                            class="text-danger">*</span></label>
-                    <input type="file"
-                           name="name_lang_0" id="name_lang_0" accept="image/*">
+                <div class="form-group row">
+                    <div class="col-sm-3 text-right">
+                        {{--                            Выберите файл - изображение, размером не более 500 Кб--}}
+                        <label for="name_lang_0">{{$base->name()}}<span
+                                class="text-danger">*</span></label>
+                    </div>
+                    <div class="col-sm-7">
+                        <input type="file"
+                               name="name_lang_0" id="name_lang_0" accept="image/*">
+                    </div>
+                    <div class="col-sm-2">
+                    </div>
                 </div>
                 {{--                            если тип корректировки поля - документ--}}
             @elseif($base->type_is_document())
-                <div class="form-group">
-                    <label for="name_lang_0">Выберите файл - документ (.xls, .xlsx, .pdf, .doc, .docx, .rtf, .txt),
-                        размером не более 500 Кб<span class="text-danger">*</span></label>
-                    <input type="file"
-                           name="name_lang_0" id="name_lang_0" accept=".xls, .xlsx, .pdf, .doc, .docx, .rtf, .txt">
-
-                    {{--                    <input type="hidden" name="MAX_FILE_SIZE" value="15000">--}}{{--                    id ="name_lang_0" accept="image/*" >--}}
+                <div class="form-group row">
+                    <div class="col-sm-3 text-right">
+                        {{--Выберите файл - документ (.xls, .xlsx, .pdf, .doc, .docx, .rtf, .txt)--}}
+                        <label for="name_lang_0">{{$base->name()}}(.xls, .xlsx, .pdf, .doc, .docx, .rtf, .txt)<span
+                                class="text-danger">*</span></label>
+                    </div>
+                    <div class="col-sm-7">
+                        <input type="file"
+                               name="name_lang_0" id="name_lang_0" accept=".xls, .xlsx, .pdf, .doc, .docx, .rtf, .txt">
+                    </div>
+                    <div class="col-sm-2">
+                    </div>
                 </div>
+
+
+
                 {{--                            если тип корректировки поля - строка или список--}}
             @else
                 @if($base->is_calcname_lst == false)
@@ -522,36 +555,82 @@
                             @endforeach
                         </div>
                     </fieldset>
-                        {{--                            если тип корректировки поля - фото--}}
+                    {{--                            если тип корректировки поля - фото--}}
                 @elseif($link->parent_base->type_is_photo())
+                    {{--                    @if($update)--}}
+                    {{--                        @if ($value != null)--}}
+                    {{--                            <?php--}}
+                    {{--                            $item_image = Item::find($value);--}}
+                    {{--                            ?>--}}
+                    {{--                            @if ($item_image != null)--}}
+                    {{--                                <br>--}}
+                    {{--                                <a href="{{Storage::url($item_image->filename())}}">--}}
+                    {{--                                    <img src="{{Storage::url($item_image->filename())}}" height="50"--}}
+                    {{--                                         alt="" title="{{$item_image->filename()}}">--}}
+                    {{--                                </a>--}}
+                    {{--                            @endif--}}
+                    {{--                        @endif--}}
+                    {{--                    @endif--}}
                     <div class="form-group row">
                         <div class="col-sm-3 text-right">
                             {{--                            Выберите файл - изображение, размером не более 500 Кб--}}
-                            <label for="name_lang_0">{{$result['result_parent_label']}}<span
-                                    class="text-danger">*</span></label>
+                            <label for="{{$key}}">{{$result['result_parent_label']}}<span
+                                    class="text-danger">*</span>
+                                @if($update)
+                                    @if ($value != null)
+                                        <?php
+                                        $item_image = Item::find($value);
+                                        ?>
+                                        @if ($item_image != null)
+                                            (сейчас:<a href="{{Storage::url($item_image->filename())}}">
+                                                <img src="{{Storage::url($item_image->filename())}}" height="50"
+                                                     alt="" title="{{$item_image->filename()}}">
+                                            </a>)
+                                        @endif
+                                    @endif
+                                @endif
+                            </label>
                         </div>
-                        <div class="col-sm-7">
+                        <div class="col-sm-4">
                             <input type="file"
                                    name="{{$key}}" id="link{{$key}}" accept="image/*">
                         </div>
-                        <div class="col-sm-2">
+                        <div class="col-sm-5-left">
+                            <label for="{{$key}}">Выберите другую картинку для изменения, или оставьте существующую</label>
                         </div>
                     </div>
-                        {{--                            если тип корректировки поля - документ--}}
-                    @elseif($link->parent_base->type_is_document())
-                        <div class="form-group row">
-                            <div class="col-sm-3 text-right">
-                                {{--Выберите файл - документ (.xls, .xlsx, .pdf, .doc, .docx, .rtf, .txt)--}}
-                                <label for="name_lang_0">{{$result['result_parent_label']}}(.xls, .xlsx, .pdf, .doc, .docx, .rtf, .txt)<span
-                                        class="text-danger">*</span></label>
-                            </div>
-                            <div class="col-sm-7">
-                                <input type="file"
-                                       name="{{$key}}" id="link{{$key}}" accept=".xls, .xlsx, .pdf, .doc, .docx, .rtf, .txt">
-                            </div>
-                            <div class="col-sm-2">
-                            </div>
+                    {{--                            если тип корректировки поля - документ--}}
+                @elseif($link->parent_base->type_is_document())
+                    <div class="form-group row">
+                        <div class="col-sm-3 text-right">
+                            {{--Выберите файл - документ (.xls, .xlsx, .pdf, .doc, .docx, .rtf, .txt)--}}
+                            <label for="{{$key}}">{{$result['result_parent_label']}}(.xls, .xlsx, .pdf, .doc, .docx,
+                                .rtf, .txt)<span
+                                    class="text-danger">*</span>
+                                @if($update)
+                                    @if ($value != null)
+                                        <?php
+                                        $item_image = Item::find($value);
+                                        ?>
+                                        @if ($item_image != null)
+                                            (сейчас:<a href="{{Storage::url($item_image->filename())}}">
+                                                <img src="{{Storage::url($item_image->filename())}}" height="50"
+                                                     alt="" title="{{$item_image->filename()}}">
+                                            </a>)
+                                        @endif
+                                    @endif
+                                @endif
+                            </label>
                         </div>
+                        <div class="col-sm-4">
+                            <input type="file"
+                                   name="{{$key}}" id="link{{$key}}"
+                                   accept=".xls, .xlsx, .pdf, .doc, .docx, .rtf, .txt">
+                        </div>
+                        <div class="col-sm-5-left">
+                            <label for="{{$key}}">Выберите другую картинку для изменения, или оставьте существующую</label>
+                        </div>
+                    </div>
                     {{--                                если тип корректировки поля - список--}}
                 @elseif($link->parent_base->type_is_list())
                     <div class="form-group row">

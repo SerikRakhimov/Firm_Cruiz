@@ -418,11 +418,11 @@ class ItemController extends Controller
             $path = "";
             if ($request->hasFile('name_lang_0')) {
                 $path = $request->name_lang_0->store('public/' . $item->project_id . '/' . $base->id);
+                $item->name_lang_0 = $path;
+                $item->name_lang_1 = $item->name_lang_0;
+                $item->name_lang_2 = $item->name_lang_0;
+                $item->name_lang_3 = $item->name_lang_0;
             }
-            $item->name_lang_0 = $path;
-            $item->name_lang_1 = $item->name_lang_0;
-            $item->name_lang_2 = $item->name_lang_0;
-            $item->name_lang_3 = $item->name_lang_0;
         }
         $excepts = array('_token', 'base_id', 'project_id', 'code', '_method', 'name_lang_0', 'name_lang_1', 'name_lang_2', 'name_lang_3');
         $string_langs = $this->get_child_links($base);
@@ -487,7 +487,7 @@ class ItemController extends Controller
             if ($link->parent_base->type_is_photo() || $link->parent_base->type_is_document()) {
                 $path = "";
                 if ($request->hasFile($key)) {
-                    $path = $request[$key]->store('public/' . $item->project_id . '/' . $base->id);
+                    $path = $request[$key]->store('public/' . $item->project_id . '/' . $link->parent_base_id);
                 }
                 $inputs[$key] = $path;
             }
@@ -653,6 +653,13 @@ class ItemController extends Controller
                         $main = new Main();
                         // при создании записи "$item->created_user_id" заполняется
                         $main->created_user_id = Auth::user()->id;
+                    } else {
+                        // удалить файл-предыдущее значение при корректировке
+                        if ($main->parent_item->base->type_is_photo() || $main->parent_item->base->type_is_document()) {
+                            if ($values[$i] != "") {
+                                Storage::delete($main->parent_item->filename());
+                            }
+                        }
                     }
                     $this->save_main($main, $item, $keys, $values, $i, $strings_inputs);
                     // "$i = $i + 1;" использовать здесь, т.к. индексы в массивах начинаются с 0
@@ -697,12 +704,15 @@ class ItemController extends Controller
 
         } // тип корректировки поля - фото или документ
         elseif ($link->parent_base->type_is_photo() || $link->parent_base->type_is_document()) {
-            // создание новой записи в items
-            $item_find = new Item();
+            $item_find = Item::find($main->parent_item_id);
+            if (!$item_find) {
+                // создание новой записи в items
+                $item_find = new Item();
+            }
             $item_find->base_id = $link->parent_base_id;
             // Похожая строка вверху и внизу
             $item_find->code = uniqid($item_find->id . '_', true);
-             //присваивание полям наименование строкового значение числа
+            //присваивание полям наименование строкового значение числа
 //            $i = 0;
 //            foreach (session('glo_menu_save') as $lang_key => $lang_value) {
 //                if ($i == 0) {
@@ -855,6 +865,7 @@ class ItemController extends Controller
         if (!($item->code == $request->code)) {
             $request->validate($this->code_rules());
         }
+
         // Проверка на обязательность ввода
         if ($item->base->is_required_lst_num_str == true && $item->base->is_calcname_lst == false) {
             // Тип - список или строка
@@ -900,7 +911,11 @@ class ItemController extends Controller
                 }
             }
         }
-
+        if ($item->base->type_is_photo() || $item->base->type_is_document()) {
+            if ($request->hasFile('name_lang_0')) {
+                Storage::delete($item->filename());
+            }
+        }
         $data = $request->except('_token', '_method');
         $item->fill($data);
         $item->project_id = GlobalController::glo_project_id();
@@ -917,11 +932,12 @@ class ItemController extends Controller
         // нужно по порядку: сначала этот блок
         // значения null в ""
         // у строк могут быть пустые значения, поэтому нужно так: '$item->name_lang_0 = isset($request->name_lang_0) ? $request->name_lang_0 : ""'
-        $item->name_lang_0 = isset($request->name_lang_0) ? $request->name_lang_0 : "";
-        $item->name_lang_1 = isset($request->name_lang_1) ? $request->name_lang_1 : "";
-        $item->name_lang_2 = isset($request->name_lang_2) ? $request->name_lang_2 : "";
-        $item->name_lang_3 = isset($request->name_lang_3) ? $request->name_lang_3 : "";
-
+        if (!($item->base->type_is_photo() || $item->base->type_is_document())) {
+            $item->name_lang_0 = isset($request->name_lang_0) ? $request->name_lang_0 : "";
+            $item->name_lang_1 = isset($request->name_lang_1) ? $request->name_lang_1 : "";
+            $item->name_lang_2 = isset($request->name_lang_2) ? $request->name_lang_2 : "";
+            $item->name_lang_3 = isset($request->name_lang_3) ? $request->name_lang_3 : "";
+        }
         // далее этот блок
         // похожая формула ниже (в этой же процедуре)
         if ($item->base->type_is_boolean()) {
@@ -940,7 +956,16 @@ class ItemController extends Controller
             $item->name_lang_2 = $item->name_lang_0;
             $item->name_lang_3 = $item->name_lang_0;
         }
-
+        if ($item->base->type_is_photo() || $item->base->type_is_document()) {
+            $path = "";
+            if ($request->hasFile('name_lang_0')) {
+                $path = $request->name_lang_0->store('public/' . $item->project_id . '/' . $item->base->id);
+                $item->name_lang_0 = $path;
+                $item->name_lang_1 = $item->name_lang_0;
+                $item->name_lang_2 = $item->name_lang_0;
+                $item->name_lang_3 = $item->name_lang_0;
+            }
+        }
         $excepts = array('_token', 'base_id', 'project_id', 'code', '_method', 'name_lang_0', 'name_lang_1', 'name_lang_2', 'name_lang_3');
         $string_langs = $this->get_child_links($item->base);
 
@@ -975,6 +1000,18 @@ class ItemController extends Controller
         // если при вводе формы пометка checkbox не установлена, в $request записи про элемент checkbox вообще нет
         // если при вводе формы пометка checkbox установлена, в $request есть запись со значеним "on"
         // см. https://webformyself.com/kak-v-php-poluchit-znachenie-checkbox/
+
+        foreach ($inputs as $key => $value) {
+            $link = Link::findOrFail($key);
+            if ($link->parent_base->type_is_photo() || $link->parent_base->type_is_document()) {
+                $path = "";
+                if ($request->hasFile($key)) {
+                    $path = $request[$key]->store('public/' . $item->project_id . '/' . $link->parent_base_id);
+                }
+                $inputs[$key] = $path;
+            }
+        }
+
         foreach ($string_langs as $link) {
             // Проверка нужна
             $base_link_right = GlobalController::base_link_right($link);
@@ -997,6 +1034,7 @@ class ItemController extends Controller
         foreach ($strings_inputs as $key => $value) {
             $strings_inputs[$key] = ($value != null) ? $value : "";
         }
+
 
         $keys = array_keys($inputs);
         $values = array_values($inputs);
@@ -1151,8 +1189,17 @@ class ItemController extends Controller
                     $main = Main::where('child_item_id', $item->id)->where('link_id', $key)->first();
                     if ($main == null) {
                         $main = new Main();
+                        // при создании записи "$item->created_user_id" заполняется
+                        $main->created_user_id = Auth::user()->id;
+                    } else {
+                        // удалить файл-предыдущее значение при корректировке
+                        if ($main->parent_item->base->type_is_photo() || $main->parent_item->base->type_is_document()) {
+                            if ($values[$i] != "") {
+                                Storage::delete($main->parent_item->filename());
+                                //$main->parent_item->delete();
+                            }
+                        }
                     }
-                    $main->created_user_id = Auth::user()->id;
                     $this->save_main($main, $item, $keys, $values, $i, $strings_inputs);
                     // "$i = $i + 1;" использовать здесь, т.к. индексы в массивах начинаются с 0
                     $i = $i + 1;
@@ -1244,7 +1291,17 @@ class ItemController extends Controller
 
     function ext_delete(Item $item, $heading = false)
     {
-        Storage::delete($item->filename());
+        if ($item->base->type_is_photo() || $item->base->type_is_document()) {
+            Storage::delete($item->filename());
+        }
+
+        $mains = Main::where('child_item_id', $item->id)->get();
+        foreach ($mains as $main) {
+            if ($main->parent_item->base->type_is_photo() || $main->parent_item->base->type_is_document()) {
+                Storage::delete($main->parent_item->filename());
+                $main->parent_item->delete();
+            }
+        }
         $item->delete();
         return $heading == true ? redirect()->route('item.base_index', $item->base_id) : redirect(session('links'));
     }
