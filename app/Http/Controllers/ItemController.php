@@ -500,6 +500,27 @@ class ItemController extends Controller
             }
         }
 
+        $array_mess = array();
+        foreach ($string_langs as $link) {
+            // Тип - фото
+            if ($link->parent_base->type_is_photo() || $link->parent_base->type_is_document()) {
+                // Проверка на обязательность ввода
+                if ($link->parent_base->is_required_lst_num_str == true) {
+                    $errors = false;
+                    if (!$request->hasFile($link->id)) {
+                        $array_mess[$link->id] = trans('main.is_required_lst_num_str') . '!';
+                        $errors = true;
+                    }
+                    if ($errors) {
+                        // повторный вызов формы
+                        return redirect()->back()
+                            ->withInput()
+                            ->withErrors($array_mess);
+                    }
+                }
+
+            }
+        }
         foreach ($inputs as $key => $value) {
             $inputs[$key] = ($value != null) ? $value : "";
         }
@@ -522,7 +543,6 @@ class ItemController extends Controller
         $keys = array_keys($inputs);
         $values = array_values($inputs);
 
-        $array_mess = array();
         $errors = false;
 
         foreach ($inputs as $key => $value) {
@@ -713,7 +733,8 @@ class ItemController extends Controller
 //      return redirect()->back()->withInput();                 # Редиректим его <s>взад</s> на ту же страницу
     }
 
-    private function save_main(Main $main, $item, $keys, $values, $index, $strings_inputs)
+    private
+    function save_main(Main $main, $item, $keys, $values, $index, $strings_inputs)
     {
         $main->link_id = $keys[$index];
         $main->child_item_id = $item->id;
@@ -1083,6 +1104,36 @@ class ItemController extends Controller
                 $inputs[$link->id] = isset($inputs[$link->id]) ? "1" : "0";
             }
         }
+        $array_mess = array();
+        foreach ($string_langs as $link) {
+            // Тип - фото
+            if ($link->parent_base->type_is_photo() || $link->parent_base->type_is_document()) {
+                // Проверка на обязательность ввода
+                if ($link->parent_base->is_required_lst_num_str == true) {
+                    $item_seek = MainController::get_parent_item_from_main($item->id, $link->id);
+                    $check = false;
+                    if ($item_seek) {
+                        if (!$item_seek->image_exist()) {
+                            $check = true;
+                        }
+                    } else {
+                        $check = true;
+                    }
+
+                    $errors = false;
+                    if ($check && !$request->hasFile($link->id)) {
+                        $array_mess[$link->id] = trans('main.is_required_lst_num_str') . '!';
+                        $errors = true;
+                    }
+                    if ($errors) {
+                        // повторный вызов формы
+                        return redirect()->back()
+                            ->withInput()
+                            ->withErrors($array_mess);
+                    }
+                }
+            }
+        }
         foreach ($inputs as $key => $value) {
             $inputs[$key] = ($value != null) ? $value : "";
         }
@@ -1095,7 +1146,6 @@ class ItemController extends Controller
         $keys = array_keys($inputs);
         $values = array_values($inputs);
 
-        $array_mess = array();
         $errors = false;
         foreach ($inputs as $key => $value) {
             $link = Link::findOrFail($key);
@@ -1284,7 +1334,8 @@ class ItemController extends Controller
         return redirect(session('links'));
     }
 
-    private function delete_items_old($array_calc)
+    private
+    function delete_items_old($array_calc)
     {
         foreach ($array_calc as $key => $value) {
             // использовать '$link = Link::find($key); if($link){}'

@@ -591,7 +591,14 @@
                         </div>
                         <div class="col-sm-4">
                             <input type="file"
-                                   name="{{$key}}" id="link{{$key}}" accept="image/*">
+                                   name="{{$key}}" id="link{{$key}}"
+                                   class="@error($key) is-invalid @enderror"
+                                   accept="image/*">
+                            @error($key)
+                            <div class="text-danger">
+                                {{$message}}
+                            </div>
+                            @enderror
                         </div>
                         <div class="col-sm-5-left">
                             <label for="{{$key}}">Выберите другую картинку для изменения, или оставьте
@@ -625,7 +632,13 @@
                         <div class="col-sm-4">
                             <input type="file"
                                    name="{{$key}}" id="link{{$key}}"
+                                   class="@error($key) is-invalid @enderror"
                                    accept=".xls, .xlsx, .pdf, .doc, .docx, .rtf, .txt">
+                            @error($key)
+                            <div class="text-danger">
+                                {{$message}}
+                            </div>
+                            @enderror
                         </div>
                         <div class="col-sm-5-left">
                             <label for="{{$key}}">Выберите другую картинку для изменения, или оставьте
