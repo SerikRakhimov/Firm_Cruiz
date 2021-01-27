@@ -25,7 +25,7 @@
                                    ">
                     </div>
                     <div class="col-auto">
-                        <button class="btn btn-success" type="button" onclick="seach_click()">
+                        <button type="button" class="btn btn-success" type="button" onclick="seach_click()">
                             {{trans('main.search')}}</button>
                     </div>
                 </div>

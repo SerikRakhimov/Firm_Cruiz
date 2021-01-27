@@ -42,7 +42,9 @@
 {{--                                    <th scope="row">{{$i}}</th>--}}
                     <td class="text-center">{{$i}}</td>
                     <td class="text-left">
-                        <a href="{{route('item.base_index',$base)}}" title="{{$base->names()}}">
+                        <a
+                            href="{{route('item.base_index',$base)}}"
+                           title="{{$base->names()}}">
                             {{$base->names()}}
                             ({{count(GlobalController::items_right($base)['itget'])}})
                         </a>

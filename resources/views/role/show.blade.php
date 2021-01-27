@@ -38,12 +38,12 @@
 
     @if ($type_form == 'show')
         <p>
-            <button class="btn btn-dreamer"
+            <button type="button" class="btn btn-dreamer"
                     onclick="document.location='{{route('role.edit',$role)}}'" title="{{trans('main.edit')}}">
                             <i class="fas fa-edit"></i>
                 {{trans('main.edit')}}
             </button>
-            <button class="btn btn-dreamer"
+            <button type="button" class="btn btn-dreamer"
                     onclick="document.location='{{route('role.delete_question',$role)}}'"
                     title="{{trans('main.delete')}}">
                             <i class="fas fa-trash"></i>
@@ -51,25 +51,25 @@
             </button>
         </p>
         <p>
-            <button class="btn btn-dreamer" title="{{trans('main.accesses')}}"
+            <button type="button" class="btn btn-dreamer" title="{{trans('main.accesses')}}"
                     onclick="document.location='{{route('access.index_role', $role)}}'"
             >
                 <i class="fas fa-universal-access"></i>
                 {{trans('main.accesses')}}
             </button>
-            <button class="btn btn-dreamer" title="{{trans('main.robas')}}"
+            <button type="button" class="btn btn-dreamer" title="{{trans('main.robas')}}"
                     onclick="document.location='{{route('roba.index_role', $role)}}'"
             >
                 <i class="fas fa-ring"></i>
                 {{trans('main.robas')}}
             </button>
-            <button class="btn btn-dreamer" title="{{trans('main.rolis')}}"
+            <button type="button" class="btn btn-dreamer" title="{{trans('main.rolis')}}"
                     onclick="document.location='{{route('roli.index_role', $role)}}'"
             >
                 <i class="fas fa-paperclip"></i>
                 {{trans('main.rolis')}}
             </button>
-            <button class="btn btn-dreamer"
+            <button type="button" class="btn btn-dreamer"
                     title="{{trans('main.cancel')}}" @include('layouts.role.previous_url')>
                             <i class="fas fa-arrow-left"></i>
                 {{trans('main.cancel')}}
@@ -84,7 +84,7 @@
                                     <i class="fas fa-trash"></i>
                     {{trans('main.delete')}}
                 </button>
-                <button class="btn btn-dreamer"
+                <button type="button" class="btn btn-dreamer"
                         title="{{trans('main.cancel')}}" @include('layouts.role.previous_url')>
                                     <i class="fas fa-arrow-left"></i>
                     {{trans('main.cancel')}}

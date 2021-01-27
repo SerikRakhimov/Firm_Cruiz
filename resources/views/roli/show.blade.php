@@ -42,13 +42,13 @@
     @if ($type_form == 'show')
 {{--        @if (Auth::user()->isAdmin() ||!(($is_user == true) && ($roli->role->is_default_for_external == false)))--}}
             <p>
-                <button class="btn btn-dreamer"
+                <button type="button" class="btn btn-dreamer"
                         onclick="document.location='{{route($roli_edit,$roli)}}'"
                         title="{{trans('main.edit')}}">
                     <i class="fas fa-edit"></i>
                     {{trans('main.edit')}}
                 </button>
-                <button class="btn btn-dreamer"
+                <button type="button" class="btn btn-dreamer"
                         onclick="document.location='{{route('roli.delete_question',$roli)}}'"
                         title="{{trans('main.delete')}}">
                     <i class="fas fa-trash"></i>
@@ -57,7 +57,7 @@
             </p>
 {{--        @endif--}}
         <p>
-            <button class="btn btn-dreamer"
+            <button type="button" class="btn btn-dreamer"
                     title="{{trans('main.cancel')}}" @include('layouts.roli.previous_url')>
                 <i class="fas fa-arrow-left"></i>
                 {{trans('main.cancel')}}
@@ -72,7 +72,7 @@
                     <i class="fas fa-trash"></i>
                     {{trans('main.delete')}}
                 </button>
-                <button class="btn btn-dreamer"
+                <button type="button" class="btn btn-dreamer"
                         title="{{trans('main.cancel')}}" @include('layouts.roli.previous_url')>
                     <i class="fas fa-arrow-left"></i>
                     {{trans('main.cancel')}}

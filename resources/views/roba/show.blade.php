@@ -51,13 +51,13 @@
     @if ($type_form == 'show')
 {{--        @if (Auth::user()->isAdmin() ||!(($is_user == true) && ($roba->role->is_default_for_external == false)))--}}
             <p>
-                <button class="btn btn-dreamer"
+                <button type="button" class="btn btn-dreamer"
                         onclick="document.location='{{route($roba_edit,$roba)}}'"
                         title="{{trans('main.edit')}}">
                     <i class="fas fa-edit"></i>
                     {{trans('main.edit')}}
                 </button>
-                <button class="btn btn-dreamer"
+                <button type="button" class="btn btn-dreamer"
                         onclick="document.location='{{route('roba.delete_question',$roba)}}'"
                         title="{{trans('main.delete')}}">
                     <i class="fas fa-trash"></i>
@@ -66,7 +66,7 @@
             </p>
 {{--        @endif--}}
         <p>
-            <button class="btn btn-dreamer"
+            <button type="button" class="btn btn-dreamer"
                     title="{{trans('main.cancel')}}" @include('layouts.roba.previous_url')>
                 <i class="fas fa-arrow-left"></i>
                 {{trans('main.cancel')}}
@@ -81,7 +81,7 @@
                     <i class="fas fa-trash"></i>
                     {{trans('main.delete')}}
                 </button>
-                <button class="btn btn-dreamer"
+                <button type="button" class="btn btn-dreamer"
                         title="{{trans('main.cancel')}}" @include('layouts.roba.previous_url')>
                     <i class="fas fa-arrow-left"></i>
                     {{trans('main.cancel')}}

@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Item;
+use App\Models\Project;
+use App\Observers\ItemObserver;
+use App\Observers\ProjectObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -27,8 +31,10 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        parent::boot();
 
+        parent::boot();
+//        Item::observe(ItemObserver::class);
+//        Project::observe(ProjectObserver::class);
         //
     }
 }

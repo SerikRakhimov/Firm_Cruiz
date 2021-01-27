@@ -124,22 +124,22 @@
             </div>
         </div>
 
-        <div class="form-group row" id="is_required_lst_num_str_form_group">
+        <div class="form-group row" id="is_required_lst_num_str_img_doc_form_group">
             <div class="col-sm-3 text-right">
                 <label class="form-label"
-                       for="is_required_lst_num_str">{{trans('main.is_required_lst_num_str')}}</label>
+                       for="is_required_lst_num_str_img_doc">{{trans('main.is_required_lst_num_str_img_doc')}}</label>
             </div>
             <div class="col-sm-7">
                 <input class="@error($key) is-invalid @enderror"
                        type="checkbox"
-                       name="is_required_lst_num_str"
-                       id="linkis_required_lst_num_str"
+                       name="is_required_lst_num_str_img_doc"
+                       id="linkis_required_lst_num_str_img_doc"
                        placeholder=""
-                       @if ((old('is_required_lst_num_str') ?? ($base->is_required_lst_num_str ?? false)) ==  true)
+                       @if ((old('is_required_lst_num_str_img_doc') ?? ($base->is_required_lst_num_str_img_doc ?? false)) ==  true)
                        checked
                     @endif
                 >
-                @error('is_required_lst_num_str')
+                @error('is_required_lst_num_str_img_doc')
                 <div class="invalid-feedback">
                     {{$message}}
                 </div>
@@ -507,7 +507,7 @@
                 <div class="col-2">
                 </div>
                 <div class="col-5 text-left">
-                    <button class="btn btn-dreamer" title="{{trans('main.cancel')}}"
+                    <button type="button" class="btn btn-dreamer" title="{{trans('main.cancel')}}"
                         @include('layouts.base.previous_url')
                     >
                         {{--                    <i class="fas fa-arrow-left"></i>--}}
@@ -530,7 +530,7 @@
         var is_suggest_code = document.getElementById('is_suggest_code_form_group');
         var is_suggest_max_code = document.getElementById('is_suggest_max_code_form_group');
         var is_recalc_code = document.getElementById('is_recalc_code_form_group');
-        var is_required_lst_num_str = document.getElementById('is_required_lst_num_str_form_group');
+        var is_required_lst_num_str_img_doc = document.getElementById('is_required_lst_num_str_img_doc_form_group');
         var is_onevalue_str = document.getElementById('is_one_value_lst_str_form_group');
         var is_calcname_lst = document.getElementById('is_calcname_lst_form_group');
         var sepa_calcname = document.getElementById('sepa_calcname_form_group');
@@ -621,7 +621,7 @@
                     break;
             }
             // digits_num.style.display = val_digits_num;
-            // is_required_lst_num_str.style.display = val_required_num_str;
+            // is_required_lst_num_str_img_doc.style.display = val_required_num_str;
             // is_onevalue_str.style.display = val_onevalue_str;
             is_code_needed.style.visibility = val_code_needed;
             is_limit_sign_code.style.visibility = val_limit_sign_code;
@@ -632,7 +632,7 @@
             is_suggest_max_code.style.visibility = val_suggest_max_code;
             is_recalc_code.style.visibility = val_recalc_code;
             digits_num.style.visibility = val_digits_num;
-            is_required_lst_num_str.style.visibility = val_required_num_str;
+            is_required_lst_num_str_img_doc.style.visibility = val_required_num_str;
             is_onevalue_str.style.visibility = val_onevalue_str;
             is_calcname_lst.style.visibility = val_calcname_lst;
             sepa_calcname.style.visibility = val_sepa_calcname;

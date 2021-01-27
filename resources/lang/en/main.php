@@ -111,7 +111,7 @@ return [
     'is_suggest_max_code'=>'Suggest the code by the maximum value, otherwise - by the first free value',
     'is_recalc_code'=>'Recalculation of codes',
     'digits_num' =>'Number of digits after decimal point',
-    'is_required_lst_num_str'=>'Required',
+    'is_required_lst_num_str_img_doc'=>'Required',
     'is_one_value_lst_str'=>'One value in all languages',
     'parent_is_parent_related'=>'Automatically populate from parent input field',
     'parent_parent_related_start_link_id'=>'What field will we take as a basis?',

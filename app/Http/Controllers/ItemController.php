@@ -325,14 +325,16 @@ class ItemController extends Controller
 
     function ext_store(Request $request, Base $base, $heading)
     {
+
         //https://webformyself.com/kak-v-php-poluchit-znachenie-checkbox/
         //        if($base->type_is_boolean()){
 //            $request->validate($this->name_lang_boolean_rules());
 //        }else{
         $request->validate($this->rules());
+
 //        }
         // Проверка на обязательность ввода наименования
-        if ($base->is_required_lst_num_str == true && $base->is_calcname_lst == false) {
+        if ($base->is_required_lst_num_str_img_doc == true && $base->is_calcname_lst == false) {
             // Тип - список или строка
             if ($base->type_is_list() || $base->type_is_string()) {
                 $name_lang_array = array();
@@ -346,7 +348,7 @@ class ItemController extends Controller
                 foreach (session('glo_menu_save') as $lang_key => $lang_value) {
                     if (($base->is_one_value_lst_str == true && $lang_key == 0) || ($base->is_one_value_lst_str == false)) {
                         if ($name_lang_array[$i] === '') {
-                            $array_mess['name_lang_' . $i] = trans('main.is_required_lst_num_str') . '!';
+                            $array_mess['name_lang_' . $i] = trans('main.is_required_lst_num_str_img_doc') . '!';
                             $errors = true;
                         }
                         $i = $i + 1;
@@ -365,7 +367,7 @@ class ItemController extends Controller
                 $errors = false;
                 // "$value === '0'" использовать для точного сравнения (например, при $link->parent_base->type_is_string())
                 if ($name_lang_0_val === '0') {
-                    $array_mess['name_lang_0'] = trans('main.is_required_lst_num_str') . '!';
+                    $array_mess['name_lang_0'] = trans('main.is_required_lst_num_str_img_doc') . '!';
                     $errors = true;
                 }
                 if ($errors) {
@@ -378,7 +380,7 @@ class ItemController extends Controller
             } elseif ($base->type_is_photo()) {
                 $errors = false;
                 if (!$request->hasFile('name_lang_0')) {
-                    $array_mess['name_lang_0'] = trans('main.is_required_lst_num_str') . '!';
+                    $array_mess['name_lang_0'] = trans('main.is_required_lst_num_str_img_doc') . '!';
                     $errors = true;
                 }
                 if ($errors) {
@@ -391,7 +393,7 @@ class ItemController extends Controller
             } elseif ($base->type_is_document()) {
                 $errors = false;
                 if (!$request->hasFile('name_lang_0')) {
-                    $array_mess['name_lang_0'] = trans('main.is_required_lst_num_str') . '!';
+                    $array_mess['name_lang_0'] = trans('main.is_required_lst_num_str_img_doc') . '!';
                     $errors = true;
                 }
                 if ($errors) {
@@ -505,10 +507,10 @@ class ItemController extends Controller
             // Тип - фото
             if ($link->parent_base->type_is_photo() || $link->parent_base->type_is_document()) {
                 // Проверка на обязательность ввода
-                if ($link->parent_base->is_required_lst_num_str == true) {
+                if ($link->parent_base->is_required_lst_num_str_img_doc == true) {
                     $errors = false;
                     if (!$request->hasFile($link->id)) {
-                        $array_mess[$link->id] = trans('main.is_required_lst_num_str') . '!';
+                        $array_mess[$link->id] = trans('main.is_required_lst_num_str_img_doc') . '!';
                         $errors = true;
                     }
                     if ($errors) {
@@ -555,7 +557,7 @@ class ItemController extends Controller
             if ($work_base->type_is_list()) {
                 // так не использовать
                 // Проверка на обязательность ввода
-                if ($work_base->is_required_lst_num_str == true) {
+                if ($work_base->is_required_lst_num_str_img_doc == true) {
                     $control_required = true;
                 }
                 // это правильно
@@ -565,13 +567,13 @@ class ItemController extends Controller
             } // Тип - число
             elseif ($work_base->type_is_number()) {
                 // Проверка на обязательность ввода
-                if ($work_base->is_required_lst_num_str == true) {
+                if ($work_base->is_required_lst_num_str_img_doc == true) {
                     $control_required = true;
                 }
             } // Тип - строка
             elseif ($work_base->type_is_string()) {
                 // Проверка на обязательность ввода
-                if ($work_base->is_required_lst_num_str == true) {
+                if ($work_base->is_required_lst_num_str_img_doc == true) {
                     $control_required = true;
                 }
             } // Тип - дата
@@ -914,7 +916,7 @@ class ItemController extends Controller
         }
 
         // Проверка на обязательность ввода
-        if ($item->base->is_required_lst_num_str == true && $item->base->is_calcname_lst == false) {
+        if ($item->base->is_required_lst_num_str_img_doc == true && $item->base->is_calcname_lst == false) {
             // Тип - список или строка
             if ($item->base->type_is_list() || $item->base->type_is_string()) {
                 $name_lang_array = array();
@@ -928,7 +930,7 @@ class ItemController extends Controller
                 foreach (session('glo_menu_save') as $lang_key => $lang_value) {
                     if (($item->base->is_one_value_lst_str == true && $lang_key == 0) || ($item->base->is_one_value_lst_str == false)) {
                         if ($name_lang_array[$i] === '') {
-                            $array_mess['name_lang_' . $i] = trans('main.is_required_lst_num_str') . '!';
+                            $array_mess['name_lang_' . $i] = trans('main.is_required_lst_num_str_img_doc') . '!';
                             $errors = true;
                         }
                         $i = $i + 1;
@@ -947,7 +949,7 @@ class ItemController extends Controller
                 $errors = false;
                 // "$value === '0'" использовать для точного сравнения (например, при $link->parent_base->type_is_string())
                 if ($name_lang_0_val === '0') {
-                    $array_mess['name_lang_0'] = trans('main.is_required_lst_num_str') . '!';
+                    $array_mess['name_lang_0'] = trans('main.is_required_lst_num_str_img_doc') . '!';
                     $errors = true;
                 }
                 if ($errors) {
@@ -961,7 +963,7 @@ class ItemController extends Controller
                 $errors = false;
                 if (!$item->image_exist()) {
                     if (!$request->hasFile('name_lang_0')) {
-                        $array_mess['name_lang_0'] = trans('main.is_required_lst_num_str') . '!';
+                        $array_mess['name_lang_0'] = trans('main.is_required_lst_num_str_img_doc') . '!';
                         $errors = true;
                     }
                 }
@@ -976,7 +978,7 @@ class ItemController extends Controller
                 $errors = false;
                 if (!$item->image_exist()) {
                     if (!$request->hasFile('name_lang_0')) {
-                        $array_mess['name_lang_0'] = trans('main.is_required_lst_num_str') . '!';
+                        $array_mess['name_lang_0'] = trans('main.is_required_lst_num_str_img_doc') . '!';
                         $errors = true;
                     }
                 }
@@ -1109,7 +1111,7 @@ class ItemController extends Controller
             // Тип - фото
             if ($link->parent_base->type_is_photo() || $link->parent_base->type_is_document()) {
                 // Проверка на обязательность ввода
-                if ($link->parent_base->is_required_lst_num_str == true) {
+                if ($link->parent_base->is_required_lst_num_str_img_doc == true) {
                     $item_seek = MainController::get_parent_item_from_main($item->id, $link->id);
                     $check = false;
                     if ($item_seek) {
@@ -1122,7 +1124,7 @@ class ItemController extends Controller
 
                     $errors = false;
                     if ($check && !$request->hasFile($link->id)) {
-                        $array_mess[$link->id] = trans('main.is_required_lst_num_str') . '!';
+                        $array_mess[$link->id] = trans('main.is_required_lst_num_str_img_doc') . '!';
                         $errors = true;
                     }
                     if ($errors) {
@@ -1142,7 +1144,6 @@ class ItemController extends Controller
             $strings_inputs[$key] = ($value != null) ? $value : "";
         }
 
-
         $keys = array_keys($inputs);
         $values = array_values($inputs);
 
@@ -1156,7 +1157,7 @@ class ItemController extends Controller
             if ($work_base->type_is_list()) {
                 // так не использовать
                 // Проверка на обязательность ввода
-                if ($work_base->is_required_lst_num_str == true) {
+                if ($work_base->is_required_lst_num_str_img_doc == true) {
                     $control_required = true;
                 }
                 // это правильно
@@ -1164,13 +1165,13 @@ class ItemController extends Controller
             } // Тип - число
             elseif ($work_base->type_is_number()) {
                 // Проверка на обязательность ввода
-                if ($work_base->is_required_lst_num_str == true) {
+                if ($work_base->is_required_lst_num_str_img_doc == true) {
                     $control_required = true;
                 }
             } // Тип - строка
             elseif ($work_base->type_is_string()) {
                 // Проверка на обязательность ввода
-                if ($work_base->is_required_lst_num_str == true) {
+                if ($work_base->is_required_lst_num_str_img_doc == true) {
                     $control_required = true;
                 }
             } // Тип - дата
@@ -1398,17 +1399,17 @@ class ItemController extends Controller
 
     function ext_delete(Item $item, $heading = false)
     {
-        if ($item->base->type_is_photo() || $item->base->type_is_document()) {
-            Storage::delete($item->filename());
-        }
-
-        $mains = Main::where('child_item_id', $item->id)->get();
-        foreach ($mains as $main) {
-            if ($main->parent_item->base->type_is_photo() || $main->parent_item->base->type_is_document()) {
-                Storage::delete($main->parent_item->filename());
-                $main->parent_item->delete();
-            }
-        }
+//        if ($item->base->type_is_photo() || $item->base->type_is_document()) {
+//            Storage::delete($item->filename());
+//        }
+//
+//        $mains = Main::where('child_item_id', $item->id)->get();
+//        foreach ($mains as $main) {
+//            if ($main->parent_item->base->type_is_photo() || $main->parent_item->base->type_is_document()) {
+//                Storage::delete($main->parent_item->filename());
+//                $main->parent_item->delete();
+//            }
+//        }
         $item->delete();
         return $heading == true ? redirect()->route('item.base_index', $item->base_id) : redirect(session('links'));
     }

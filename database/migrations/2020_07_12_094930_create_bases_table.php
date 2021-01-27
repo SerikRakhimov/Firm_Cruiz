@@ -37,7 +37,7 @@ class CreateBasesTable extends Migration
             $table->boolean('is_suggest_max_code')->default(false);
             $table->boolean('is_recalc_code')->default(false);
             $table->integer('digits_num')->default(0);
-            $table->boolean('is_required_lst_num_str')->default(false);
+            $table->boolean('is_required_lst_num_str_img_doc')->default(false);
             $table->boolean('is_one_value_lst_str')->default(false);
             $table->boolean('is_calcname_lst')->default(false);
             $table->string('sepa_calcname',255)->default(",");

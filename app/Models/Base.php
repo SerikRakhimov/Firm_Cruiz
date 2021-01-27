@@ -172,10 +172,10 @@ class Base extends Model
 
 
 //    Похожие строки в Item.php
-    function name_is_required_lst_num_str()
+    function name_is_required_lst_num_str_img_doc()
     {
-        return $this->is_required_lst_num_str == "1" ? html_entity_decode('	&#9745;')
-            : ($this->is_required_lst_num_str == "0" ? html_entity_decode('&#65794;') : trans('main.empty'));
+        return $this->is_required_lst_num_str_img_doc == "1" ? html_entity_decode('	&#9745;')
+            : ($this->is_required_lst_num_str_img_doc == "0" ? html_entity_decode('&#65794;') : trans('main.empty'));
     }
 
     function name_is_one_value_lst_str()

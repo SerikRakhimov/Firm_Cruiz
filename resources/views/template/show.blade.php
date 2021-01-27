@@ -19,13 +19,13 @@
     @if ($type_form == 'show')
         @if(Auth::user()->isAdmin() == true)
             <p>
-                <button class="btn btn-dreamer mb-1 mb-sm-0"
+                <button type="button" class="btn btn-dreamer mb-1 mb-sm-0"
                         onclick="document.location='{{route('template.edit',$template)}}'"
                         title="{{trans('main.edit')}}">
                     <i class="fas fa-edit"></i>
                     {{trans('main.edit')}}
                 </button>
-                <button class="btn btn-dreamer mb-1 mb-sm-0"
+                <button type="button" class="btn btn-dreamer mb-1 mb-sm-0"
                         onclick="document.location='{{route('template.delete_question',$template)}}'"
                         title="{{trans('main.delete')}}">
                     <i class="fas fa-trash"></i>
@@ -36,29 +36,29 @@
         <p>
             @if(Auth::user()->isAdmin() == true)
             {{--            "mb-1 mb-sm-0" нужно чтобы на маленьких экранах кнопки не слипались (margin-botton - 1px) --}}
-            <button class="btn btn-dreamer mb-1 mb-sm-0" title="{{trans('main.projects')}}"
+            <button type="button" class="btn btn-dreamer mb-1 mb-sm-0" title="{{trans('main.projects')}}"
                     onclick="document.location='{{route('project.index_template', $template)}}'">
                 <i class="fas fa-cube"></i>
                 {{trans('main.projects')}}
             </button>
                 @else
-                <button class="btn btn-dreamer mb-1 mb-sm-0" title="{{trans('main.projects')}}"
+                <button type="button" class="btn btn-dreamer mb-1 mb-sm-0" title="{{trans('main.projects')}}"
                         onclick="document.location='{{route('project.index_user', Auth::user())}}'">
                     <i class="fas fa-cube"></i>
                     {{trans('main.projects')}}
                 </button>
             @endif
-            <button class="btn btn-dreamer  mb-1 mb-sm-0" title="{{trans('main.roles')}}"
+            <button type="button" class="btn btn-dreamer  mb-1 mb-sm-0" title="{{trans('main.roles')}}"
                     onclick="document.location='{{route('role.index', $template)}}'">
                 <i class="fas fa-user-circle"></i>
                 {{trans('main.roles')}}
             </button>
-            <button class="btn btn-dreamer mb-1 mb-sm-0" title="{{trans('main.bases')}}"
+            <button type="button" class="btn btn-dreamer mb-1 mb-sm-0" title="{{trans('main.bases')}}"
                     onclick="document.location='{{route('base.index', $template)}}'">
                 <i class="fas fa-atom"></i>
                 {{trans('main.bases')}}
             </button>
-            <button class="btn btn-dreamer mb-1 mb-sm-0"
+            <button type="button" class="btn btn-dreamer mb-1 mb-sm-0"
                     title="{{trans('main.cancel')}}" @include('layouts.template.previous_url')>
                 <i class="fas fa-arrow-left"></i>
                 {{trans('main.cancel')}}
@@ -73,7 +73,7 @@
                     <i class="fas fa-trash"></i>
                     {{trans('main.delete')}}
                 </button>
-                <button class="btn btn-dreamer"
+                <button type="button" class="btn btn-dreamer"
                         title="{{trans('main.cancel')}}" @include('layouts.template.previous_url')>
                     <i class="fas fa-arrow-left"></i>
                     {{trans('main.cancel')}}
