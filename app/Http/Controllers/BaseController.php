@@ -98,6 +98,7 @@ class BaseController extends Controller
         if (!Auth::user()->isAdmin()) {
             return null;
         }
+
         $request->validate($this->rules());
 
         // установка часового пояса нужно для сохранения времени
@@ -148,6 +149,8 @@ class BaseController extends Controller
                 $base->type_is_string = false;
                 $base->type_is_date = false;
                 $base->type_is_boolean = false;
+                $base->type_is_photo = false;
+                $base->type_is_document = false;
                 $base->digits_num = 0;
                 break;
             // Число
@@ -157,6 +160,8 @@ class BaseController extends Controller
                 $base->type_is_string = false;
                 $base->type_is_date = false;
                 $base->type_is_boolean = false;
+                $base->type_is_photo = false;
+                $base->type_is_document = false;
                 $base->is_code_needed = "0";
                 $base->is_one_value_lst_str = "0";
                 $base->is_calcname_lst = "0";
@@ -172,6 +177,8 @@ class BaseController extends Controller
                 $base->type_is_string = true;
                 $base->type_is_date = false;
                 $base->type_is_boolean = false;
+                $base->type_is_photo = false;
+                $base->type_is_document = false;
                 $base->is_code_needed = "0";
                 $base->digits_num = 0;
                 $base->is_calcname_lst = "0";
@@ -187,6 +194,8 @@ class BaseController extends Controller
                 $base->type_is_string = false;
                 $base->type_is_date = true;
                 $base->type_is_boolean = false;
+                $base->type_is_photo = false;
+                $base->type_is_document = false;
                 $base->is_code_needed = "0";
                 $base->digits_num = 0;
                 $base->is_required_lst_num_str_img_doc = "0";
@@ -204,6 +213,8 @@ class BaseController extends Controller
                 $base->type_is_string = false;
                 $base->type_is_date = false;
                 $base->type_is_boolean = true;
+                $base->type_is_photo = false;
+                $base->type_is_document = false;
                 $base->is_code_needed = "0";
                 $base->digits_num = 0;
                 $base->is_required_lst_num_str_img_doc = "0";
@@ -220,7 +231,9 @@ class BaseController extends Controller
                 $base->type_is_number = false;
                 $base->type_is_string = false;
                 $base->type_is_date = false;
-                $base->type_is_boolean = true;
+                $base->type_is_boolean = false;
+                $base->type_is_photo = true;
+                $base->type_is_document = false;
                 $base->is_code_needed = "0";
                 $base->digits_num = 0;
                 $base->is_one_value_lst_str = "0";
@@ -236,7 +249,9 @@ class BaseController extends Controller
                 $base->type_is_number = false;
                 $base->type_is_string = false;
                 $base->type_is_date = false;
-                $base->type_is_boolean = true;
+                $base->type_is_boolean = false;
+                $base->type_is_photo = false;
+                $base->type_is_document = true;
                 $base->is_code_needed = "0";
                 $base->digits_num = 0;
                 $base->is_one_value_lst_str = "0";

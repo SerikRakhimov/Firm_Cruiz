@@ -40,7 +40,6 @@ class ItemObserver
     public function deleting($item)
     {
         // предварительное удаление файлов с диска
-        // эти записи items потом удалятся автоматически, т.к. связаны с projects
         if ($item->base->type_is_photo() || $item->base->type_is_document()) {
             Storage::delete($item->filename());
         }
@@ -48,6 +47,7 @@ class ItemObserver
         foreach ($mains as $main) {
             if ($main->parent_item->base->type_is_photo() || $main->parent_item->base->type_is_document()) {
                 //Storage::delete($main->parent_item->filename());
+                // нужно удалять, "Storage::delete()" выполнится, т.к. это рекурсивный вызов этой же функции "public function deleting($item)"
                 $main->parent_item->delete();
             }
         }

@@ -31,10 +31,7 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-
         parent::boot();
-//        Item::observe(ItemObserver::class);
-//        Project::observe(ProjectObserver::class);
-        //
     }
+
 }

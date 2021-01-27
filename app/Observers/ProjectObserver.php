@@ -3,7 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Item;
-use App\Project;
+use App\Models\Project;
 use Illuminate\Support\Facades\Storage;
 
 class ProjectObserver
@@ -41,12 +41,8 @@ class ProjectObserver
         // предварительное удаление файлов с диска
         // эти записи items потом удалятся автоматически, т.к. связаны с projects
         $items = Item::where('project_id', $project->id)->get();
-        echo $project->id." - ";
-        echo count($items) ." = ";
         foreach ($items as $item) {
-
             if ($item->base->type_is_photo() || $item->base->type_is_document()) {
-                echo $item->filename() . ',';
                 Storage::delete($item->filename());
             }
         }
