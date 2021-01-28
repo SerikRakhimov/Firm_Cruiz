@@ -910,6 +910,7 @@ class ItemController extends Controller
 
     function ext_update(Request $request, Item $item)
     {
+        return $item->getOriginal('code');
         // Если данные изменились - выполнить проверку. оператор '??' нужны
         if (!($item->name_lang_0 ?? '' == $request->name_lang_0 ?? '')) {
             $request->validate($this->name_lang_rules());
@@ -1665,7 +1666,11 @@ class ItemController extends Controller
                     if (!$error && $item) {
                         $result_item = $item;
                         $result_item_id = $item->id;
-                        $result_item_name = $item->name();
+                        if ($item->base->type_is_photo() || $item->base->type_is_document()) {
+                            $result_item_name = Storage::url($item->filename());
+                        } else {
+                            $result_item_name = $item->name();
+                        }
                         $result_item_name_options = "<option value='" . $item->id . "'>" . $item->name() . "</option>";
                     }
                 }
