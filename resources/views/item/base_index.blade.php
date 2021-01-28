@@ -5,6 +5,7 @@
     use App\Models\Link;
     use App\Models\Main;
     use \App\Http\Controllers\GlobalController;
+    use \App\Http\Controllers\ItemController;
     use \App\Http\Controllers\MainController;
     $links = $base->child_links->sortBy('parent_base_number');
     $base_right = GlobalController::base_right($base);
@@ -242,7 +243,7 @@
                 {{--                             alt="{{trans('main.edit')}}">--}}
                 {{--                    </a>--}}
                 {{--                </td>--}}
-                @if($base_right['is_list_base_delete'] == true)
+                @if(ItemController::is_delete($item) == true)
                     <td class="text-center">
                         <a href="{{route('item.ext_delete_question',$item)}}" title="{{trans('main.delete')}}">
                             <img src="{{Storage::url('delete_record.png')}}" width="15" height="15"

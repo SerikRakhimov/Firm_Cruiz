@@ -104,6 +104,9 @@ class RoleController extends Controller
         if ($request->is_list_base_read  == true && ($request->is_list_base_create || $request->is_list_base_update ||$request->is_list_base_delete)) {
             $array_mess['is_list_base_read'] = trans('main.is_list_base_read_rule') . '!';
         }
+        if ($request->is_list_base_delete  == false && $request->is_list_base_used_delete == true) {
+            $array_mess['is_list_base_used_delete'] = trans('main.is_list_base_used_delete_rule') . '!';
+        }
         if ($request->is_edit_base_read  == true && $request->is_edit_base_update == true) {
             $array_mess['is_edit_base_read'] = trans('main.is_edit_base_read_rule') . '!';
         }
@@ -127,6 +130,7 @@ class RoleController extends Controller
         $role->is_list_base_read = isset($request->is_list_base_read) ? true : false;
         $role->is_list_base_update = isset($request->is_list_base_update) ? true : false;
         $role->is_list_base_delete = isset($request->is_list_base_delete) ? true : false;
+        $role->is_list_base_used_delete = isset($request->is_list_base_used_delete) ? true : false;
         $role->is_list_base_byuser = isset($request->is_list_base_byuser) ? true : false;
         $role->is_edit_base_read = isset($request->is_edit_base_read) ? true : false;
         $role->is_edit_base_update = isset($request->is_edit_base_update) ? true : false;

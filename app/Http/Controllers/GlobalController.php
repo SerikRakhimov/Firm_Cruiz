@@ -142,6 +142,7 @@ class GlobalController extends Controller
         $is_list_base_read = $role->is_list_base_read;
         $is_list_base_update = $role->is_list_base_update;
         $is_list_base_delete = $role->is_list_base_delete;
+        $is_list_base_used_delete = $role->is_list_base_used_delete;
         $is_list_base_byuser = $role->is_list_base_byuser;
         $is_edit_base_read = $role->is_edit_base_read;
         $is_edit_base_update = $role->is_edit_base_update;
@@ -183,6 +184,7 @@ class GlobalController extends Controller
             $is_roba_list_base_read = $roba->is_list_base_read;
             $is_roba_list_base_update = $roba->is_list_base_update;
             $is_roba_list_base_delete = $roba->is_list_base_delete;
+            $is_roba_list_base_used_delete = $roba->is_list_base_used_delete;
             $is_roba_list_base_byuser = $roba->is_list_base_byuser;
             $is_roba_edit_base_read = $roba->is_edit_base_read;
             $is_roba_edit_base_update = $roba->is_edit_base_update;
@@ -206,6 +208,7 @@ class GlobalController extends Controller
             $is_list_base_read = $is_roba_list_base_read;
             $is_list_base_update = $is_roba_list_base_update;
             $is_list_base_delete = $is_roba_list_base_delete;
+            $is_list_base_used_delete = $is_roba_list_base_used_delete;
             $is_list_base_byuser = $is_roba_list_base_byuser;
 //            $is_edit_base_enable = $is_roba_edit_base_enable;
             $is_edit_base_read = $is_roba_edit_base_read;
@@ -226,6 +229,7 @@ class GlobalController extends Controller
             'is_list_base_read' => $is_list_base_read,
             'is_list_base_update' => $is_list_base_update,
             'is_list_base_delete' => $is_list_base_delete,
+            'is_list_base_used_delete' => $is_list_base_used_delete,
             'is_list_base_byuser' => $is_list_base_byuser,
             'is_edit_base_enable' => $is_edit_base_enable,
             'is_edit_base_read' => $is_edit_base_read,
@@ -251,6 +255,7 @@ class GlobalController extends Controller
         $is_list_base_read = $base_right['is_list_base_read'];
         $is_list_base_update = $base_right['is_list_base_update'];
         $is_list_base_delete = $base_right['is_list_base_delete'];
+        $is_list_base_used_delete = $base_right['is_list_base_used_delete'];
         $is_list_base_byuser = $base_right['is_list_base_byuser'];
         $is_edit_base_enable = $base_right['is_edit_base_enable'];
         $is_edit_base_read = $base_right['is_edit_base_read'];
@@ -276,6 +281,7 @@ class GlobalController extends Controller
             'is_list_base_read' => $is_list_base_read,
             'is_list_base_update' => $is_list_base_update,
             'is_list_base_delete' => $is_list_base_delete,
+            'is_list_base_used_delete' => $is_list_base_used_delete,
             'is_list_base_byuser' => $is_list_base_byuser,
             'is_edit_base_enable' => $is_edit_base_enable,
             'is_edit_base_read' => $is_edit_base_read,

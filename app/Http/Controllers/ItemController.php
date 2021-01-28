@@ -504,25 +504,28 @@ class ItemController extends Controller
 
         $array_mess = array();
         foreach ($string_langs as $link) {
-            // Тип - фото
-            if ($link->parent_base->type_is_photo() || $link->parent_base->type_is_document()) {
-                // Проверка на обязательность ввода
-                if ($link->parent_base->is_required_lst_num_str_img_doc == true) {
-                    $errors = false;
-                    if (!$request->hasFile($link->id)) {
-                        $array_mess[$link->id] = trans('main.is_required_lst_num_str_img_doc') . '!';
-                        $errors = true;
-                    }
-                    if ($errors) {
-                        // повторный вызов формы
-                        return redirect()->back()
-                            ->withInput()
-                            ->withErrors($array_mess);
+            if ($link->parent_is_parent_related == false) {
+                // Тип - фото
+                if ($link->parent_base->type_is_photo() || $link->parent_base->type_is_document()) {
+                    // Проверка на обязательность ввода
+                    return $link->id;
+                    if ($link->parent_base->is_required_lst_num_str_img_doc == true) {
+                        $errors = false;
+                        if (!$request->hasFile($link->id)) {
+                            $array_mess[$link->id] = trans('main.is_required_lst_num_str_img_doc') . '!';
+                            $errors = true;
+                        }
+                        if ($errors) {
+                            // повторный вызов формы
+                            return redirect()->back()
+                                ->withInput()
+                                ->withErrors($array_mess);
+                        }
                     }
                 }
-
             }
         }
+
         foreach ($inputs as $key => $value) {
             $inputs[$key] = ($value != null) ? $value : "";
         }
@@ -1108,30 +1111,32 @@ class ItemController extends Controller
         }
         $array_mess = array();
         foreach ($string_langs as $link) {
-            // Тип - фото
-            if ($link->parent_base->type_is_photo() || $link->parent_base->type_is_document()) {
-                // Проверка на обязательность ввода
-                if ($link->parent_base->is_required_lst_num_str_img_doc == true) {
-                    $item_seek = MainController::get_parent_item_from_main($item->id, $link->id);
-                    $check = false;
-                    if ($item_seek) {
-                        if (!$item_seek->image_exist()) {
+            if ($link->parent_is_parent_related == false) {
+                // Тип - фото
+                if ($link->parent_base->type_is_photo() || $link->parent_base->type_is_document()) {
+                    // Проверка на обязательность ввода
+                    if ($link->parent_base->is_required_lst_num_str_img_doc == true) {
+                        $item_seek = MainController::get_parent_item_from_main($item->id, $link->id);
+                        $check = false;
+                        if ($item_seek) {
+                            if (!$item_seek->image_exist()) {
+                                $check = true;
+                            }
+                        } else {
                             $check = true;
                         }
-                    } else {
-                        $check = true;
-                    }
 
-                    $errors = false;
-                    if ($check && !$request->hasFile($link->id)) {
-                        $array_mess[$link->id] = trans('main.is_required_lst_num_str_img_doc') . '!';
-                        $errors = true;
-                    }
-                    if ($errors) {
-                        // повторный вызов формы
-                        return redirect()->back()
-                            ->withInput()
-                            ->withErrors($array_mess);
+                        $errors = false;
+                        if ($check && !$request->hasFile($link->id)) {
+                            $array_mess[$link->id] = trans('main.is_required_lst_num_str_img_doc') . '!';
+                            $errors = true;
+                        }
+                        if ($errors) {
+                            // повторный вызов формы
+                            return redirect()->back()
+                                ->withInput()
+                                ->withErrors($array_mess);
+                        }
                     }
                 }
             }
@@ -1410,8 +1415,31 @@ class ItemController extends Controller
 //                $main->parent_item->delete();
 //            }
 //        }
-        $item->delete();
+        if (self::is_delete($item) == true) {
+            $item->delete();
+        }
         return $heading == true ? redirect()->route('item.base_index', $item->base_id) : redirect(session('links'));
+    }
+
+    static function is_delete(Item $item)
+    {
+        // Нужно "$result = false;"
+        $result = false;
+        $base_right = GlobalController::base_right($item->base);
+        if ($base_right['is_list_base_delete'] == true) {
+            if ($base_right['is_list_base_used_delete'] == true) {
+                $result = true;
+            } else {
+                // Отрицание "!" используется
+                $result = !self::main_exists($item);
+            }
+        }
+        return $result;
+    }
+
+    static function main_exists(Item $item)
+    {
+        return Main::where('parent_item_id', $item->id)->exists();
     }
 
     static function get_items_for_link(Link $link)
@@ -1588,9 +1616,9 @@ class ItemController extends Controller
             'result_item_name_options' => $result_item_name_options];
     }
 
-    // Функция get_parent_item_from_calc_child_item() ищет вычисляемое поля от первого невычисляемого
-    // Например: значение вычисляемого (через "Бабушка со стороны матери") "Прабабушка со стороны матери" находится от значение поля "Мать",
-    // т.е. не зависит от промежуточных значений ("Бабушка со стороны матери")
+// Функция get_parent_item_from_calc_child_item() ищет вычисляемое поля от первого невычисляемого
+// Например: значение вычисляемого (через "Бабушка со стороны матери") "Прабабушка со стороны матери" находится от значение поля "Мать",
+// т.е. не зависит от промежуточных значений ("Бабушка со стороны матери")
     static function get_parent_item_from_calc_child_item(Item $item_start, Link $link_result, $item_calc)
     {
         $result_item = null;
@@ -1693,7 +1721,7 @@ class ItemController extends Controller
         return $result;
     }
 
-    // Функция calc_value_func() вычисляет наимеования для записи $item
+// Функция calc_value_func() вычисляет наимеования для записи $item
     private
     function calc_value_func(Item $item, $level = 0, $first_run = true)
     {
