@@ -292,7 +292,10 @@
                         </label>
                     </div>
                     <div class="col-sm-7">
-{{--                        @if($link->parent_base->type_is_photo())--}}
+                        @if($link->parent_base->type_is_photo())
+                            <span class=""
+                                  name="calc{{$key}}"
+                                  id="link{{$key}}"></span>
 {{--                            <a href="{{Storage::url($item_find->filename())}}">--}}
 {{--                                <img src="{{Storage::url($item_find->filename())}}" height="50"--}}
 {{--                                     alt="" title="{{$item_find->filename()}}">--}}
@@ -301,11 +304,11 @@
 {{--                            <a href="{{Storage::url($item_find->filename())}}" target="_blank">--}}
 {{--                                Открыть документ--}}
 {{--                            </a>--}}
-{{--                        @else--}}
+                        @else
                             <span class="form-label text-success"
                                   name="calc{{$key}}"
                                   id="link{{$key}}"></span>
-{{--                        @endif--}}
+                        @endif
                     </div>
                     <div class="col-sm-2">
                     </div>
