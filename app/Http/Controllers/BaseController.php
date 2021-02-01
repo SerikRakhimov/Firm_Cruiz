@@ -129,6 +129,7 @@ class BaseController extends Controller
         $base->is_suggest_max_code = isset($request->is_suggest_max_code) ? "1" : "0";
         $base->is_recalc_code = isset($request->is_recalc_code) ? "1" : "0";
         $base->is_required_lst_num_str_img_doc = isset($request->is_required_lst_num_str_img_doc) ? "1" : "0";
+        $base->is_to_moderate_photo = isset($request->is_to_moderate_photo) ? "1" : "0";
         $base->is_one_value_lst_str = isset($request->is_one_value_lst_str) ? "1" : "0";
         $base->is_calcname_lst = isset($request->is_calcname_lst) ? "1" : "0";
         $base->is_same_small_calcname = isset($request->is_same_small_calcname) ? "1" : "0";
@@ -152,6 +153,7 @@ class BaseController extends Controller
                 $base->type_is_photo = false;
                 $base->type_is_document = false;
                 $base->digits_num = 0;
+                $base->is_to_moderate_photo = "0";
                 break;
             // Число
             case 1:
@@ -169,6 +171,7 @@ class BaseController extends Controller
                 $base->is_same_small_calcname = "0";
                 $base->sepa_same_left_calcname = "";
                 $base->sepa_same_right_calcname = "";
+                $base->is_to_moderate_photo = "0";
                 break;
             // Строка
             case 2:
@@ -186,6 +189,7 @@ class BaseController extends Controller
                 $base->is_same_small_calcname = "0";
                 $base->sepa_same_left_calcname = "";
                 $base->sepa_same_right_calcname = "";
+                $base->is_to_moderate_photo = "0";
                 break;
             // Дата
             case 3:
@@ -199,6 +203,7 @@ class BaseController extends Controller
                 $base->is_code_needed = "0";
                 $base->digits_num = 0;
                 $base->is_required_lst_num_str_img_doc = "0";
+                $base->is_to_moderate_photo = "0";
                 $base->is_one_value_lst_str = "0";
                 $base->is_calcname_lst = "0";
                 $base->sepa_calcname = "";
@@ -218,6 +223,7 @@ class BaseController extends Controller
                 $base->is_code_needed = "0";
                 $base->digits_num = 0;
                 $base->is_required_lst_num_str_img_doc = "0";
+                $base->is_to_moderate_photo = "0";
                 $base->is_one_value_lst_str = "0";
                 $base->is_calcname_lst = "0";
                 $base->sepa_calcname = "";
@@ -260,6 +266,7 @@ class BaseController extends Controller
                 $base->is_same_small_calcname = "0";
                 $base->sepa_same_left_calcname = "";
                 $base->sepa_same_right_calcname = "";
+                $base->is_to_moderate_photo = "0";
                 break;
         }
         if ($base->is_code_needed == "0") {
@@ -331,6 +338,7 @@ class BaseController extends Controller
         $base->is_suggest_max_code = isset($request->is_suggest_max_code) ? "1" : "0";
         $base->is_recalc_code = isset($request->is_recalc_code) ? "1" : "0";
         $base->is_required_lst_num_str_img_doc = isset($request->is_required_lst_num_str_img_doc) ? "1" : "0";
+        $base->is_to_moderate_photo = isset($request->is_to_moderate_photo) ? "1" : "0";
         $base->is_one_value_lst_str = isset($request->is_one_value_lst_str) ? "1" : "0";
         $base->is_calcname_lst = isset($request->is_calcname_lst) ? "1" : "0";
         $base->is_same_small_calcname = isset($request->is_same_small_calcname) ? "1" : "0";
@@ -354,6 +362,7 @@ class BaseController extends Controller
                 $base->type_is_photo = false;
                 $base->type_is_document = false;
                 $base->digits_num = 0;
+                $base->is_to_moderate_photo = "0";
                 break;
             // Число
             case 1:
@@ -371,6 +380,7 @@ class BaseController extends Controller
                 $base->is_same_small_calcname = "0";
                 $base->sepa_same_left_calcname = "";
                 $base->sepa_same_right_calcname = "";
+                $base->is_to_moderate_photo = "0";
                 break;
             // Строка
             case 2:
@@ -388,6 +398,7 @@ class BaseController extends Controller
                 $base->is_same_small_calcname = "0";
                 $base->sepa_same_left_calcname = "";
                 $base->sepa_same_right_calcname = "";
+                $base->is_to_moderate_photo = "0";
                 break;
             // Дата
             case 3:
@@ -401,6 +412,7 @@ class BaseController extends Controller
                 $base->is_code_needed = "0";
                 $base->digits_num = 0;
                 $base->is_required_lst_num_str_img_doc = "0";
+                $base->is_to_moderate_photo = "0";
                 $base->is_one_value_lst_str = "0";
                 $base->is_calcname_lst = "0";
                 $base->sepa_calcname = "";
@@ -420,6 +432,7 @@ class BaseController extends Controller
                 $base->is_code_needed = "0";
                 $base->digits_num = 0;
                 $base->is_required_lst_num_str_img_doc = "0";
+                $base->is_to_moderate_photo = "0";
                 $base->is_one_value_lst_str = "0";
                 $base->is_calcname_lst = "0";
                 $base->sepa_calcname = "";
@@ -462,6 +475,7 @@ class BaseController extends Controller
                 $base->is_same_small_calcname = "0";
                 $base->sepa_same_left_calcname = "";
                 $base->sepa_same_right_calcname = "";
+                $base->is_to_moderate_photo = "0";
                 break;
         }
         if ($base->is_code_needed == "0") {

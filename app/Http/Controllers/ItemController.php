@@ -910,7 +910,6 @@ class ItemController extends Controller
 
     function ext_update(Request $request, Item $item)
     {
-        return $item->getOriginal('code');
         // Если данные изменились - выполнить проверку. оператор '??' нужны
         if (!($item->name_lang_0 ?? '' == $request->name_lang_0 ?? '')) {
             $request->validate($this->name_lang_rules());

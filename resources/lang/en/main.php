@@ -112,6 +112,7 @@ return [
     'is_recalc_code'=>'Recalculation of codes',
     'digits_num' =>'Number of digits after decimal point',
     'is_required_lst_num_str_img_doc'=>'Required',
+    'is_to_moderate_photo'=>'To moderate',
     'is_one_value_lst_str'=>'One value in all languages',
     'parent_is_parent_related'=>'Automatically populate from parent input field',
     'parent_parent_related_start_link_id'=>'What field will we take as a basis?',

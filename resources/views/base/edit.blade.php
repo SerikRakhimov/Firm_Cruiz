@@ -149,6 +149,31 @@
             </div>
         </div>
 
+        <div class="form-group row" id="is_to_moderate_photo_form_group">
+            <div class="col-sm-3 text-right">
+                <label class="form-label"
+                       for="is_to_moderate_photo">{{trans('main.is_to_moderate_photo')}}</label>
+            </div>
+            <div class="col-sm-7">
+                <input class="@error($key) is-invalid @enderror"
+                       type="checkbox"
+                       name="is_to_moderate_photo"
+                       id="linkis_to_moderate_photo"
+                       placeholder=""
+                       @if ((old('is_to_moderate_photo') ?? ($base->is_to_moderate_photo ?? false)) ==  true)
+                       checked
+                    @endif
+                >
+                @error('is_to_moderate_photo')
+                <div class="invalid-feedback">
+                    {{$message}}
+                </div>
+                @enderror
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div>
+
         <div class="form-group row" id="is_code_needed_form_group">
             <div class="col-sm-3 text-right">
                 <label class="form-label"
@@ -531,6 +556,7 @@
         var is_suggest_max_code = document.getElementById('is_suggest_max_code_form_group');
         var is_recalc_code = document.getElementById('is_recalc_code_form_group');
         var is_required_lst_num_str_img_doc = document.getElementById('is_required_lst_num_str_img_doc_form_group');
+        var is_tomoderate_img = document.getElementById('is_to_moderate_photo_form_group');
         var is_onevalue_str = document.getElementById('is_one_value_lst_str_form_group');
         var is_calcname_lst = document.getElementById('is_calcname_lst_form_group');
         var sepa_calcname = document.getElementById('sepa_calcname_form_group');
@@ -575,6 +601,7 @@
             val_recalc_code = "hidden";
             val_digits_num = "hidden";
             val_required_num_str = "hidden";
+            val_is_tomoderate_img = "hidden";
             val_onevalue_str = "hidden";
             val_calcname_lst = "hidden";
             val_sepa_calcname = "hidden";
@@ -614,6 +641,7 @@
                 // Фото
                 case "5":
                     val_required_num_str = "visible";
+                    val_is_tomoderate_img = "visible";
                     break;
                 // Документ
                 case "6":
@@ -633,6 +661,7 @@
             is_recalc_code.style.visibility = val_recalc_code;
             digits_num.style.visibility = val_digits_num;
             is_required_lst_num_str_img_doc.style.visibility = val_required_num_str;
+            is_tomoderate_img.style.visibility = val_is_tomoderate_img;
             is_onevalue_str.style.visibility = val_onevalue_str;
             is_calcname_lst.style.visibility = val_calcname_lst;
             sepa_calcname.style.visibility = val_sepa_calcname;

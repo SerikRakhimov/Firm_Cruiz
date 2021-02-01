@@ -112,6 +112,7 @@ return [
     'is_recalc_code'=>'Перерасчет кодов',
     'digits_num' =>'Количество цифр после запятой',
     'is_required_lst_num_str_img_doc'=>'Обязательно к заполнению',
+    'is_to_moderate_photo'=>'Модерировать',
     'is_one_value_lst_str'=>'Одно значение на всех языках',
     'parent_is_parent_related'=>'Автоматически заполнять из родительского поля ввода',
     'parent_parent_related_start_link_id'=>'Какое поле возьмем за основу?',

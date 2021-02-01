@@ -28,6 +28,7 @@
 
     <p>{{trans('main.type')}}: <b>{{$base->type_name()}}</b></p>
     <p>{{trans('main.is_code_needed')}}: <b>{{$base->is_code_needed}}</b></p>
+    <p>{{trans('main.is_to_moderate_photo')}}: <b>{{$base->is_to_moderate_photo}}</b></p>
     <p>{{trans('main.is_code_number')}}: <b>{{$base->is_code_number}}</b></p>
     <p>{{trans('main.is_limit_sign_code')}}: <b>{{$base->is_limit_sign_code}}</b></p>
     <p>{{trans('main.significance_code')}}: <b>{{$base->significance_code}}</b></p>

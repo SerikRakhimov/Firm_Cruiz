@@ -112,6 +112,7 @@ return [
     'is_recalc_code'=>'Кодтарды қайта есептеу',
     'digits_num' =>'Ондық үтірден кейінгі цифрлар саны',
     'is_required_lst_num_str_img_doc'=>'Қажет',
+    'is_to_moderate_photo'=>'Tүрлендіру',
     'is_one_value_lst_str'=>'Барлық тілдерде бір мән',
     'parent_is_parent_related'=>'Енгізу тектік өрісінен автоматты түрде толтыру',
     'parent_parent_related_start_link_id'=>'Қай даланы(поле) негізге аламыз?',
