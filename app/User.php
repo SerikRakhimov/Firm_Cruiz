@@ -41,6 +41,10 @@ class User extends Authenticatable
         return $this->is_admin == true;
     }
 
+    function isModerator(): bool {
+        return $this->is_moderator == true;
+    }
+
     function count() {
         return $this->count;
     }

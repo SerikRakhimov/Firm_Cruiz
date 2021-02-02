@@ -127,6 +127,8 @@ class TemplateController extends Controller
             return null;
         };
 
+        $template->delete();
+
         if ($request->session()->has('templates_previous_url')) {
             return redirect(session('templates_previous_url'));
         } else {

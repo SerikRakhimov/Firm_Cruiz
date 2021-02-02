@@ -46,6 +46,7 @@ class Base extends Model
 
     // Похожие строки в BaseController.php (function store() и edit())
     // и base/edit.blade.php
+    // и ModerationController (function index())
     static function get_types()
     {
         return array(

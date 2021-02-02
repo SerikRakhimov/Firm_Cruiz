@@ -62,6 +62,7 @@ Route::get('/', function () {
         $user->email = 'admin@online.kz';
         $user->password = Hash::make('admin');
         $user->is_admin = true;
+        $user->is_moderator = true;
         $user->save();
     }
 
@@ -127,6 +128,31 @@ Route::get('/template/delete_question/{template}', 'TemplateController@delete_qu
 
 Route::delete('/template/delete/{template}', 'TemplateController@delete')
     ->name('template.delete')
+    ->middleware('auth');
+
+// Moderations
+Route::get('/moderation/index', 'ModerationController@index')
+    ->name('moderation.index')
+    ->middleware('auth');
+
+Route::get('/moderation/show/{item}', 'ModerationController@show')
+    ->name('moderation.show')
+    ->middleware('auth');
+
+Route::get('/moderation/edit/{item}', 'ModerationController@edit')
+    ->name('moderation.edit')
+    ->middleware('auth');
+
+Route::put('/moderation/edit/{item}', 'ModerationController@update')
+    ->name('moderation.update')
+    ->middleware('auth');
+
+Route::get('/moderation/delete_question/{item}', 'ModerationController@delete_question')
+    ->name('moderation.delete_question')
+    ->middleware('auth');
+
+Route::delete('/moderation/delete/{item}', 'ModerationController@delete')
+    ->name('moderation.delete')
     ->middleware('auth');
 
 // Users

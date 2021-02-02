@@ -123,7 +123,6 @@
                                id="name_lang_0" ;
                                class="form-control @error('name_lang_0') is-invalid @enderror"
                                placeholder=""
-                               текущая дата
                                value="{{old('name_lang_0') ?? ($item['name_lang_0'] ?? date('Y-m-d')) }}">
                         @error('name_lang_0')
                         <div class="invalid-feedback">

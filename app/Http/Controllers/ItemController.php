@@ -447,9 +447,17 @@ class ItemController extends Controller
             if ($request->hasFile('name_lang_0')) {
                 $path = $request->name_lang_0->store('public/' . $item->project_id . '/' . $base->id);
                 $item->name_lang_0 = $path;
-                $item->name_lang_1 = $item->name_lang_0;
-                $item->name_lang_2 = $item->name_lang_0;
-                $item->name_lang_3 = $item->name_lang_0;
+                if ($base->type_is_photo()) {
+                    if ($item->base->is_to_moderate_photo == true) {
+                        $item->name_lang_1 = "3";
+                    } else {
+                        $item->name_lang_1 = "0";
+                    }
+                } else {
+                    $item->name_lang_1 = "";
+                }
+                $item->name_lang_2 = "";
+                $item->name_lang_3 = "";
             }
         }
         $excepts = array('_token', 'base_id', 'project_id', 'code', '_method', 'name_lang_0', 'name_lang_1', 'name_lang_2', 'name_lang_3');
@@ -508,7 +516,6 @@ class ItemController extends Controller
                 // Тип - фото
                 if ($link->parent_base->type_is_photo() || $link->parent_base->type_is_document()) {
                     // Проверка на обязательность ввода
-                    return $link->id;
                     if ($link->parent_base->is_required_lst_num_str_img_doc == true) {
                         $errors = false;
                         if (!$request->hasFile($link->id)) {
@@ -1043,9 +1050,18 @@ class ItemController extends Controller
             if ($request->hasFile('name_lang_0')) {
                 $path = $request->name_lang_0->store('public/' . $item->project_id . '/' . $item->base->id);
                 $item->name_lang_0 = $path;
-                $item->name_lang_1 = $item->name_lang_0;
-                $item->name_lang_2 = $item->name_lang_0;
-                $item->name_lang_3 = $item->name_lang_0;
+                if ($item->base->type_is_photo()) {
+                    if ($item->base->is_to_moderate_photo == true) {
+                        $item->name_lang_1 = "3";
+                    } else {
+                        $item->name_lang_1 = "0";
+                    }
+                } else {
+                    $item->name_lang_1 = "";
+                }
+                $item->name_lang_2 = "";
+                $item->name_lang_3 = "";
+
             }
         }
         $excepts = array('_token', 'base_id', 'project_id', 'code', '_method', 'name_lang_0', 'name_lang_1', 'name_lang_2', 'name_lang_3');
@@ -1666,7 +1682,7 @@ class ItemController extends Controller
                         $result_item = $item;
                         $result_item_id = $item->id;
                         if ($item->base->type_is_photo() || $item->base->type_is_document()) {
-                            $result_item_name = "<a href='" . Storage::url($item->filename()) . "'><img src='" . Storage::url($item->filename()) . "' height='50' alt='' title='".$item->filename()."'></a>";
+                            $result_item_name = "<a href='" . Storage::url($item->filename()) . "'><img src='" . Storage::url($item->filename()) . "' height='50' alt='' title='" . $item->filename() . "'></a>";
                         } else {
                             $result_item_name = $item->name();
                         }

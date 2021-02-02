@@ -11,7 +11,7 @@ use App\Observers\ItemObserver;
 
 class Item extends Model
 {
-    protected $fillable = ['base_id', 'project_id', 'updated_user_id','code', 'name_lang_0', 'name_lang_1', 'name_lang_2', 'name_lang_3'];
+    protected $fillable = ['base_id', 'project_id', 'updated_user_id', 'code', 'name_lang_0', 'name_lang_1', 'name_lang_2', 'name_lang_3'];
 
     function base()
     {
@@ -31,6 +31,16 @@ class Item extends Model
     function updated_user()
     {
         return $this->belongsTo(User::class, 'updated_user_id');
+    }
+
+    function created_user_date()
+    {
+        return $this->created_user->name() . ", " . $this->created_at->Format(trans('main.format_date'));
+    }
+
+    function updated_user_date()
+    {
+        return $this->updated_user->name() . ", " . $this->updated_at->Format(trans('main.format_date'));
     }
 
     function name()
@@ -105,9 +115,10 @@ class Item extends Model
 
     function code_add_zeros()
     {
-        if($this->base->is_code_zeros == true){
-        // Дополнить код слева нулями
-        $this->code = str_pad($this->code, $this->base->significance_code, '0', STR_PAD_LEFT);}
+        if ($this->base->is_code_zeros == true) {
+            // Дополнить код слева нулями
+            $this->code = str_pad($this->code, $this->base->significance_code, '0', STR_PAD_LEFT);
+        }
     }
 
     function info_full()
@@ -125,13 +136,83 @@ class Item extends Model
         return $this->hasMany(Main::class, 'parent_item_id');
     }
 
-    // Для типов полей Фотография, Документ
-    function filename()
+    // Для типов полей Изображение, Документ
+    // '$moderation = true' -  показывать имя файла, независимо прошло/не прошло модерацию
+    function filename($moderation = false)
     {
-        return $this->name_lang_0;
+        $result = $this->name_lang_0;
+        if ($this->base->type_is_photo() == true) {
+            if ($moderation == false) {
+                if ($this->base->is_to_moderate_photo == true) {
+                    // На модерации
+                    if ($this->name_lang_1 == "3") {
+                        $result = "public/on_moderation.png";
+                    } // Не прошло модерацию
+                    elseif ($this->name_lang_1 == "2") {
+                        $result = "public/did_not_pass_the_moderation.png";
+                    }
+                }
+            }
+        }
+        return $result;
     }
 
-    // Для типов полей Фотография, Документ
+    // Для типов полей Изображение
+    function title_img()
+    {
+        $result = trans('main.сlick_to_view');
+        if ($this->base->type_is_photo() == true) {
+            if ($this->base->is_to_moderate_photo == true) {
+                // На модерации
+                if ($this->name_lang_1 == "3") {
+                    $result = trans('main.on_moderation');
+                } // Не прошло модерацию
+                elseif ($this->name_lang_1 == "2") {
+                    $result = trans('main.did_not_pass_the_moderation');
+                    if ($this->name_lang_2 != "") {
+                        $result = $result . ": " . $this->name_lang_2;
+                    }
+                }
+            }
+        }
+        return $result;
+    }
+
+    // Для типов полей Изображение
+    function status_img()
+    {
+        $result = "";
+        if ($this->base->type_is_photo() == true) {
+            if ($this->base->is_to_moderate_photo == true) {
+                // На модерации
+                if ($this->name_lang_1 == "3") {
+                    $result = trans('main.on_moderation');
+                } // Не прошло модерацию
+                elseif ($this->name_lang_1 == "2") {
+                    $result = trans('main.did_not_pass_the_moderation');
+                    if ($this->name_lang_2 != "") {
+                        $result = $result . ": " . $this->name_lang_2;
+                    }
+                } elseif ($this->name_lang_1 == "1") {
+                    $result = trans('main.moderated');
+                } elseif ($this->name_lang_1 == "0") {
+                    $result = trans('main.without_moderation');
+                }
+            }
+        }
+        return $result;
+    }
+
+    static function get_img_statuses()
+    {
+        return array(
+            "0" => trans('main.without_moderation'),
+            "1" => trans('main.moderated'),
+            "2" => trans('main.did_not_pass_the_moderation'),
+            "3" => trans('main.on_moderation')
+        );
+    }
+    // Для типов полей Изображение, Документ
     function image_exist()
     {
         return $this->name_lang_0 != "";
