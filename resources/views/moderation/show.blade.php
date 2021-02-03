@@ -12,16 +12,15 @@
 
     <p>Id: <b>{{$item->id}}</b></p>
     <p>{{$item->base->name()}}:
-        <a href="{{Storage::url($item->filename())}}">
+        <a href="{{Storage::url($item->filename(true))}}">
             <img src="{{Storage::url($item->filename(true))}}" height="250"
-                 alt="" title="{{$item->filename(true)}}"></a>
+                 alt="" title="{{$item->title_img()}}"></a>
     </p>
-    <p>{{trans('main.status')}}: <b>{{$item->name_lang_2}}</b></p>
     <p>{{trans('main.status')}}: <b>{{$item->status_img()}}</b></p>
-    <p>{{trans('main.project')}}: <b>{{$item->project->name()}}</b></p>
-    <p>{{trans('main.template')}}: <b>{{$item->project->template->name()}}</b></p>
-    <p>{{trans('main.created_user_date')}}: <b>{{$item->created_user_date()}}</b></p>
-    <p>{{trans('main.updated_user_date')}}: <b>{{$item->updated_user_date()}}</b></p>
+    <p>{{trans('main.project')}}: <b>{{$item->project->name_id()}}</b></p>
+    <p>{{trans('main.template')}}: <b>{{$item->project->template->name_id()}}</b></p>
+    <p>{{trans('main.created_user_date_time')}}: <b>{{$item->created_user_date_time()}}</b></p>
+    <p>{{trans('main.updated_user_date_time')}}: <b>{{$item->updated_user_date_time()}}</b></p>
 
     @if ($type_form == 'show')
         <p>

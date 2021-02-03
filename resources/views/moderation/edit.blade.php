@@ -21,7 +21,14 @@
         @if ($update)
             @method('PUT')
         @endif
-
+        <div class="form-group row">
+            <div class="col-sm-3 text-right">
+                <label>Id</label>
+            </div>
+            <div class="col-sm-9">
+                <label>{{$item->id}}</label>
+            </div>
+        </div>
         <div class="form-group row">
             <div class="col-sm-3 text-right">
                 {{--                            Выберите файл - изображение, размером не более 500 Кб--}}
@@ -31,9 +38,9 @@
             <div class="col-sm-4">
                 @if($update)
                     @if($item->image_exist())
-                        <a href="{{Storage::url($item->filename())}}">
+                        <a href="{{Storage::url($item->filename(true))}}">
                             <img src="{{Storage::url($item->filename(true))}}" height="450"
-                                 alt="" title="{{$item->filename()}}">
+                                 alt="" title="{{$item->title_img()}}">
                         </a>
                         @endif
                         @endif
@@ -111,7 +118,22 @@
             </div>
             @enderror
         </div>
-
+        <div class="form-group row">
+            <div class="col-sm-3 text-right">
+                <label>{{trans('main.project')}}</label>
+            </div>
+            <div class="col-sm-9">
+                <label>{{$item->project->name_id()}}</label>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-3 text-right">
+                <label>{{trans('main.template')}}</label>
+            </div>
+            <div class="col-sm-9">
+                <label>{{$item->project->template->name_id()}}</label>
+            </div>
+        </div>
         <br>
         <div class="container-fluid">
             <div class="row text-center">

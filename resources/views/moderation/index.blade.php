@@ -24,8 +24,8 @@
             <th class="text-center">{{trans('main.status')}}</th>
             <th class="text-left">{{trans('main.project')}}</th>
             <th class="text-left">{{trans('main.template')}}</th>
-            <th class="text-left">{{trans('main.created_user_date')}}</th>
-            <th class="text-left">{{trans('main.updated_user_date')}}</th>
+            <th class="text-left">{{trans('main.created_user_date_time')}}</th>
+            <th class="text-left">{{trans('main.updated_user_date_time')}}</th>
         </tr>
         </thead>
         <tbody>
@@ -69,12 +69,12 @@
                 </td>
                 <td class="text-left">
                     <a href="{{route('moderation.show',$item)}}" title="{{trans('main.show')}}">
-                        {{$item->created_user_date()}}
+                        {{$item->created_user_date_time()}}
                     </a>
                 </td>
                 <td class="text-left">
                     <a href="{{route('moderation.show',$item)}}" title="{{trans('main.show')}}">
-                        {{$item->updated_user_date()}}
+                        {{$item->updated_user_date_time()}}
                     </a>
                 </td>
             </tr>

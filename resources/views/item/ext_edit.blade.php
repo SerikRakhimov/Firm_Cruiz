@@ -51,6 +51,16 @@
         @endif
         <input type="hidden" name="base_id" value="{{$base->id}}">
         <input type="hidden" name="project_id" value="{{GlobalController::glo_project_id()}}">
+        @if ($update)
+            <div class="form-group row">
+                <div class="col-sm-3 text-right">
+                    <label>Id</label>
+                </div>
+                <div class="col-sm-9">
+                    <label>{{$item->id}}</label>
+                </div>
+            </div>
+        @endif
         @if($base_right['is_edit_base_enable'] == true)
             {{--        код--}}
             @if($base->is_code_needed == true)
@@ -168,7 +178,7 @@
                                 @if($item->image_exist())
                                     (сейчас:<a href="{{Storage::url($item->filename())}}">
                                         <img src="{{Storage::url($item->filename())}}" height="50"
-                                             alt="" title="{{$item->filename()}}">
+                                             alt="" title="{{$title_img()}}">
                                     </a>)
                                 @endif
                             @endif
@@ -295,14 +305,14 @@
                             <span class=""
                                   name="calc{{$key}}"
                                   id="link{{$key}}"></span>
-{{--                            <a href="{{Storage::url($item_find->filename())}}">--}}
-{{--                                <img src="{{Storage::url($item_find->filename())}}" height="50"--}}
-{{--                                     alt="" title="{{$item_find->filename()}}">--}}
-{{--                            </a>--}}
-{{--                        @elseif($link->parent_base->type_is_document())--}}
-{{--                            <a href="{{Storage::url($item_find->filename())}}" target="_blank">--}}
-{{--                                Открыть документ--}}
-{{--                            </a>--}}
+                            {{--                            <a href="{{Storage::url($item_find->filename())}}">--}}
+                            {{--                                <img src="{{Storage::url($item_find->filename())}}" height="50"--}}
+                            {{--                                     alt="" title="{{$item_find->filename()}}">--}}
+                            {{--                            </a>--}}
+                            {{--                        @elseif($link->parent_base->type_is_document())--}}
+                            {{--                            <a href="{{Storage::url($item_find->filename())}}" target="_blank">--}}
+                            {{--                                Открыть документ--}}
+                            {{--                            </a>--}}
                         @else
                             <span class="form-label text-success"
                                   name="calc{{$key}}"
@@ -595,7 +605,7 @@
                                         @if ($item_image != null)
                                             (сейчас:<a href="{{Storage::url($item_image->filename())}}">
                                                 <img src="{{Storage::url($item_image->filename())}}" height="50"
-                                                     alt="" title="{{$item_image->filename()}}">
+                                                     alt="" title="{{$item_image->title_img()}}">
                                             </a>)
                                         @endif
                                     @endif

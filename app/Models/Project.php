@@ -34,4 +34,9 @@ class Project extends Model
         return $result;
     }
 
+    function name_id()
+    {
+        return $this->name() . " (Id = " . strval($this->id) . ")";
+    }
+
 }

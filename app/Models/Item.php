@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\User;
 use App\Models\Project;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use App\Observers\ItemObserver;
@@ -41,6 +42,16 @@ class Item extends Model
     function updated_user_date()
     {
         return $this->updated_user->name() . ", " . $this->updated_at->Format(trans('main.format_date'));
+    }
+
+    function created_user_date_time()
+    {
+        return $this->created_user->name() . ", " . $this->created_at->Format(trans('main.format_date_time'));
+    }
+
+    function updated_user_date_time()
+    {
+        return $this->updated_user->name() . ", " . $this->updated_at->Format(trans('main.format_date_time'));
     }
 
     function name()
@@ -142,14 +153,16 @@ class Item extends Model
     {
         $result = $this->name_lang_0;
         if ($this->base->type_is_photo() == true) {
-            if ($moderation == false) {
-                if ($this->base->is_to_moderate_photo == true) {
-                    // На модерации
-                    if ($this->name_lang_1 == "3") {
-                        $result = "public/on_moderation.png";
-                    } // Не прошло модерацию
-                    elseif ($this->name_lang_1 == "2") {
-                        $result = "public/did_not_pass_the_moderation.png";
+            if ($this->created_user_id != Auth::user()->id) {
+                if ($moderation == false) {
+                    if ($this->base->is_to_moderate_photo == true) {
+                        // На модерации
+                        if ($this->name_lang_1 == "3") {
+                            $result = "public/on_moderation.png";
+                        } // Не прошло модерацию
+                        elseif ($this->name_lang_1 == "2") {
+                            $result = "public/did_not_pass_the_moderation.png";
+                        }
                     }
                 }
             }
@@ -212,6 +225,7 @@ class Item extends Model
             "3" => trans('main.on_moderation')
         );
     }
+
     // Для типов полей Изображение, Документ
     function image_exist()
     {

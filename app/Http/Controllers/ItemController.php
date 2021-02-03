@@ -787,9 +787,20 @@ class ItemController extends Controller
 //                $i = $i + 1;
 //            }
             $item_find->name_lang_0 = $values[$index];
-            $item_find->name_lang_1 = $item_find->name_lang_0;
-            $item_find->name_lang_2 = $item_find->name_lang_0;
-            $item_find->name_lang_3 = $item_find->name_lang_0;
+            $item_find->name_lang_1 = "";
+            if ($item_find->base->type_is_photo() == true) {
+                if ($item_find->base->is_to_moderate_photo == true) {
+                    // На модерации
+                    $item_find->name_lang_1 = "3";
+                }
+                else{
+                    // Без модерации
+                    $item_find->name_lang_1 = "0";
+                }
+            }
+            $item_find->name_lang_2 = "";
+            $item_find->name_lang_3 = "";
+
             $item_find->project_id = GlobalController::glo_project_id();
             // при создании записи "$item->created_user_id" заполняется
             $item_find->created_user_id = Auth::user()->id;

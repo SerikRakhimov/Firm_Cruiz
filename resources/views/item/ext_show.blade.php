@@ -33,7 +33,7 @@
             @if($base->type_is_photo)
                 <a href="{{Storage::url($item->filename())}}">
                     <img src="{{Storage::url($item->filename())}}" height="250"
-                         alt="" title="{{$item->filename()}}">
+                         alt="" title="{{$item->title_img()}}">
                 </a>
             @elseif($base->type_is_document)
                 <a href="{{Storage::url($item->filename())}}" target="_blank">
@@ -77,7 +77,7 @@
                             <br>
                             <a href="{{Storage::url($item_find->filename())}}">
                                 <img src="{{Storage::url($item_find->filename())}}" height="250"
-                                     alt="" title="{{$item_find->filename()}}">
+                                     alt="" title="{{$item_find->title_img()}}">
                             </a>
                         @elseif($link->parent_base->type_is_document)
                             <a href="{{Storage::url($item_find->filename())}}" target="_blank">
