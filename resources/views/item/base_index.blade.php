@@ -121,15 +121,17 @@
                 @endif
                 <td @include('layouts.class_from_base',['base'=>$base])>
                     @if($base->type_is_photo)
-                        <a href="{{Storage::url($item->filename())}}">
-                            <img src="{{Storage::url($item->filename())}}" height="50"
-                                 alt="" title="{{$item->title_img()}}">
-                        </a>
+                        @include('layouts.view_img',['item'=>$item, 'size'=>"small"])
+{{--                        <a href="{{Storage::url($item->filename())}}">--}}
+{{--                            <img src="{{Storage::url($item->filename())}}" height="50"--}}
+{{--                                 alt="" title="{{$item->title_img()}}">--}}
+{{--                        </a>--}}
                     @elseif($base->type_is_document)
-                        <a href="{{Storage::url($item->filename())}}" target="_blank"
-                           alt="" title="{{$item->title_img()}}">
-                            Открыть документ
-                        </a>
+                        @include('layouts.view_doc',['item'=>$item])
+{{--                        <a href="{{Storage::url($item->filename())}}" target="_blank"--}}
+{{--                           alt="" title="{{$item->title_img()}}">--}}
+{{--                            Открыть документ--}}
+{{--                        </a>--}}
                     @else
                         <a href="{{route('item.item_index', $item)}}">
                             {{$item->name()}}
@@ -150,15 +152,17 @@
                             ?>
                             @if($item_find)
                                 @if($link->parent_base->type_is_photo())
-                                    <a href="{{Storage::url($item_find->filename())}}">
-                                        <img src="{{Storage::url($item_find->filename())}}" height="50"
-                                             alt="" title="{{$item_find->title_img()}}">
-                                    </a>
+                                        @include('layouts.view_img',['item'=>$item_find, 'size'=>"small"])
+{{--                                    <a href="{{Storage::url($item_find->filename())}}">--}}
+{{--                                        <img src="{{Storage::url($item_find->filename())}}" height="50"--}}
+{{--                                             alt="" title="{{$item_find->title_img()}}">--}}
+{{--                                    </a>--}}
                                 @elseif($link->parent_base->type_is_document())
-                                    <a href="{{Storage::url($item_find->filename())}}" target="_blank"
-                                       alt="" title="{{$item_find->title_img()}}">
-                                        Открыть документ
-                                    </a>
+                                        @include('layouts.view_doc',['item'=>$item_find])
+{{--                                    <a href="{{Storage::url($item_find->filename())}}" target="_blank"--}}
+{{--                                       alt="" title="{{$item_find->title_img()}}">--}}
+{{--                                        Открыть документ--}}
+{{--                                    </a>--}}
                                 @else
                                     {{--                                проверка, если link - вычисляемое поле--}}
                                     @if ($link->parent_is_parent_related == true || $link->parent_is_numcalc == true)

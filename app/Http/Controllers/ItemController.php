@@ -41,6 +41,7 @@ class ItemController extends Controller
 //        ];
         // exists:table,column
         // поле должно существовать в заданной таблице базе данных.
+        // 1000 - размер картинки и файла
         return [
             'code' => ['required', 'unique_with: items, base_id, project_id, code'],
             'name_lang_0' => ['max:1000']
@@ -379,6 +380,10 @@ class ItemController extends Controller
                 // Тип - фото
             } elseif ($base->type_is_photo()) {
                 $errors = false;
+
+//                $gs = $request->file('name_lang_0')->getSize();
+//                return $gs;
+
                 if (!$request->hasFile('name_lang_0')) {
                     $array_mess['name_lang_0'] = trans('main.is_required_lst_num_str_img_doc') . '!';
                     $errors = true;
@@ -442,24 +447,9 @@ class ItemController extends Controller
             $item->name_lang_2 = $item->name_lang_0;
             $item->name_lang_3 = $item->name_lang_0;
         }
-        if ($base->type_is_photo() || $base->type_is_document()) {
-            $path = "";
-            if ($request->hasFile('name_lang_0')) {
-                $path = $request->name_lang_0->store('public/' . $item->project_id . '/' . $base->id);
-                $item->name_lang_0 = $path;
-                if ($base->type_is_photo()) {
-                    if ($item->base->is_to_moderate_photo == true) {
-                        $item->name_lang_1 = "3";
-                    } else {
-                        $item->name_lang_1 = "0";
-                    }
-                } else {
-                    $item->name_lang_1 = "";
-                }
-                $item->name_lang_2 = "";
-                $item->name_lang_3 = "";
-            }
-        }
+
+        $this::save_img_doc($request, $item);
+
         $excepts = array('_token', 'base_id', 'project_id', 'code', '_method', 'name_lang_0', 'name_lang_1', 'name_lang_2', 'name_lang_3');
         $string_langs = $this->get_child_links($base);
         // Формируется массив $code_names - названия полей кодов
@@ -792,8 +782,7 @@ class ItemController extends Controller
                 if ($item_find->base->is_to_moderate_photo == true) {
                     // На модерации
                     $item_find->name_lang_1 = "3";
-                }
-                else{
+                } else {
                     // Без модерации
                     $item_find->name_lang_1 = "0";
                 }
@@ -879,6 +868,29 @@ class ItemController extends Controller
         }
         $main->updated_user_id = Auth::user()->id;
         $main->save();
+    }
+
+    function save_img_doc(Request $request, Item &$item)
+    {
+        $base = $item->base;
+        if ($base->type_is_photo() || $base->type_is_document()) {
+            $path = "";
+            if ($request->hasFile('name_lang_0')) {
+                $path = $item->name_lang_0->store('public/' . $item->project_id . '/' . $base->id);
+                $item->name_lang_0 = $path;
+                if ($base->type_is_photo()) {
+                    if ($item->base->is_to_moderate_photo == true) {
+                        $item->name_lang_1 = "3";
+                    } else {
+                        $item->name_lang_1 = "0";
+                    }
+                } else {
+                    $item->name_lang_1 = "";
+                }
+                $item->name_lang_2 = "";
+                $item->name_lang_3 = "";
+            }
+        }
     }
 
     function store(Request $request)
@@ -1032,12 +1044,22 @@ class ItemController extends Controller
         // нужно по порядку: сначала этот блок
         // значения null в ""
         // у строк могут быть пустые значения, поэтому нужно так: '$item->name_lang_0 = isset($request->name_lang_0) ? $request->name_lang_0 : ""'
-        if (!($item->base->type_is_photo() || $item->base->type_is_document())) {
-            $item->name_lang_0 = isset($request->name_lang_0) ? $request->name_lang_0 : "";
-            $item->name_lang_1 = isset($request->name_lang_1) ? $request->name_lang_1 : "";
-            $item->name_lang_2 = isset($request->name_lang_2) ? $request->name_lang_2 : "";
-            $item->name_lang_3 = isset($request->name_lang_3) ? $request->name_lang_3 : "";
-        }
+//        if (!($item->base->type_is_photo() || $item->base->type_is_document())) {
+//            $item->name_lang_0 = isset($request->name_lang_0) ? $request->name_lang_0 : "";
+//            $item->name_lang_1 = isset($request->name_lang_1) ? $request->name_lang_1 : "";
+//            $item->name_lang_2 = isset($request->name_lang_2) ? $request->name_lang_2 : "";
+//            $item->name_lang_3 = isset($request->name_lang_3) ? $request->name_lang_3 : "";
+//        }
+
+        // нужно по порядку: сначала этот блок
+        // значения null в ""
+        // у строк могут быть пустые значения, поэтому нужно так: '$item->name_lang_0 = isset($request->name_lang_0) ? $request->name_lang_0 : ""'
+        $item->name_lang_0 = isset($request->name_lang_0) ? $request->name_lang_0 : "";
+        $item->name_lang_1 = isset($request->name_lang_1) ? $request->name_lang_1 : "";
+        $item->name_lang_2 = isset($request->name_lang_2) ? $request->name_lang_2 : "";
+        $item->name_lang_3 = isset($request->name_lang_3) ? $request->name_lang_3 : "";
+        //$item->project_id = GlobalController::glo_project_id();
+
         // далее этот блок
         // похожая формула ниже (в этой же процедуре)
         if ($item->base->type_is_boolean()) {
@@ -1056,25 +1078,9 @@ class ItemController extends Controller
             $item->name_lang_2 = $item->name_lang_0;
             $item->name_lang_3 = $item->name_lang_0;
         }
-        if ($item->base->type_is_photo() || $item->base->type_is_document()) {
-            $path = "";
-            if ($request->hasFile('name_lang_0')) {
-                $path = $request->name_lang_0->store('public/' . $item->project_id . '/' . $item->base->id);
-                $item->name_lang_0 = $path;
-                if ($item->base->type_is_photo()) {
-                    if ($item->base->is_to_moderate_photo == true) {
-                        $item->name_lang_1 = "3";
-                    } else {
-                        $item->name_lang_1 = "0";
-                    }
-                } else {
-                    $item->name_lang_1 = "";
-                }
-                $item->name_lang_2 = "";
-                $item->name_lang_3 = "";
 
-            }
-        }
+        $this::save_img_doc($request, $item);
+
         $excepts = array('_token', 'base_id', 'project_id', 'code', '_method', 'name_lang_0', 'name_lang_1', 'name_lang_2', 'name_lang_3');
         $string_langs = $this->get_child_links($item->base);
 

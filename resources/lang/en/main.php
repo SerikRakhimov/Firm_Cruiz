@@ -191,4 +191,5 @@ return [
     'created_user_date_time'=>'Created by user, date, time',
     'updated_user_date_time'=>'Updated User, date, time',
     'explanation'=>'Explanation',
+    'open_document'=>'Open document',
 ];

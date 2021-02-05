@@ -191,4 +191,5 @@ return [
     'created_user_date_time'=>'Создал пользователь, дата, время',
     'updated_user_date_time'=>'Обновил пользователь, дата, время',
     'explanation'=>'Пояснение',
+    'open_document'=>'Открыть документ',
 ];

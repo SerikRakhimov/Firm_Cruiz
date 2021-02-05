@@ -190,4 +190,5 @@ return [
     'created_user_date_time'=>'Пайдаланушы жасады, күні, уақыт',
     'updated_user_date_time'=>'Пайдаланушы жаңартылды, күні, уақыт',
     'explanation'=>'Түсіндірме',
+    'open_document'=>'Құжатты ашу',
 ];
