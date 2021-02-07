@@ -148,7 +148,7 @@ class Item extends Model
     }
 
     // Для типов полей Изображение, Документ
-    // '$moderation = true' -  показывать имя файла, независимо прошло/не прошло модерацию
+    // '$moderation = true' -  возвращать имя файла, независимо прошло/не прошло модерацию
     function filename($moderation = false)
     {
         $result = $this->name_lang_0;

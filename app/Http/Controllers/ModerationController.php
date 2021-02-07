@@ -39,7 +39,7 @@ class ModerationController extends Controller
         }
 
         $data = $request->except('_token', '_method');
-
+        date_default_timezone_set('Asia/Almaty');
         $item->fill($data);
 
         $this->set($request, $item);

@@ -14,7 +14,7 @@ use App\Models\Item;
                         ?>
                         @if ($item_image != null)
                             ({{mb_strtolower(trans('main.now'))}}:<a href="{{Storage::url($item_image->filename())}}">
-                                <img src="{{Storage::url($item_image->filename())}}" height="50"
+                                <img src="{{Storage::url($item_image->filename())}}" height=@include('types.img.height',['size'=>$size])
                                      alt="" title="{{$item_image->title_img()}}">
                             </a>)
                         @endif

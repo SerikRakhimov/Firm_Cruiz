@@ -27,6 +27,14 @@ class BaseController extends Controller
         ];
     }
 
+    protected function maxfilesize_rules()
+    {
+        return [
+            'maxfilesize_img_doc' => ['required', 'gte:100000', 'lte:1048576'],
+            'maxfilesize_title_img_doc' => ['required', 'max:25'],
+        ];
+    }
+
     function index(Template $template)
     {
         $bases = Base::where('template_id', $template->id);
@@ -139,6 +147,9 @@ class BaseController extends Controller
         $base->sepa_same_left_calcname = isset($request->sepa_same_left_calcname) ? $request->sepa_same_left_calcname : "";
         $base->sepa_same_right_calcname = isset($request->sepa_same_left_calcname) ? $request->sepa_same_right_calcname : "";
 
+        $base->maxfilesize_img_doc = $request->maxfilesize_img_doc;
+        $base->maxfilesize_title_img_doc = isset($request->maxfilesize_title_img_doc) ? $request->maxfilesize_title_img_doc : "";
+
         // Похожие строки в BaseController.php (functions: store(), edit())
         // и в Base.php (functions: get_types(), type(), type_name())
         // и в Base/edit.blade.php
@@ -154,6 +165,8 @@ class BaseController extends Controller
                 $base->type_is_document = false;
                 $base->digits_num = 0;
                 $base->is_to_moderate_photo = "0";
+                $base->maxfilesize_img_doc = 0;
+                $base->maxfilesize_title_img_doc = "";
                 break;
             // Число
             case 1:
@@ -172,6 +185,8 @@ class BaseController extends Controller
                 $base->sepa_same_left_calcname = "";
                 $base->sepa_same_right_calcname = "";
                 $base->is_to_moderate_photo = "0";
+                $base->maxfilesize_img_doc = 0;
+                $base->maxfilesize_title_img_doc = "";
                 break;
             // Строка
             case 2:
@@ -190,6 +205,8 @@ class BaseController extends Controller
                 $base->sepa_same_left_calcname = "";
                 $base->sepa_same_right_calcname = "";
                 $base->is_to_moderate_photo = "0";
+                $base->maxfilesize_img_doc = 0;
+                $base->maxfilesize_title_img_doc = "";
                 break;
             // Дата
             case 3:
@@ -210,6 +227,8 @@ class BaseController extends Controller
                 $base->is_same_small_calcname = "0";
                 $base->sepa_same_left_calcname = "";
                 $base->sepa_same_right_calcname = "";
+                $base->maxfilesize_img_doc = 0;
+                $base->maxfilesize_title_img_doc = "";
                 break;
             // Логический
             case 4:
@@ -230,9 +249,12 @@ class BaseController extends Controller
                 $base->is_same_small_calcname = "0";
                 $base->sepa_same_left_calcname = "";
                 $base->sepa_same_right_calcname = "";
+                $base->maxfilesize_img_doc = 0;
+                $base->maxfilesize_title_img_doc = "";
                 break;
             // Фото
             case 5:
+                $request->validate($this->maxfilesize_rules());
                 $base->type_is_list = false;
                 $base->type_is_number = false;
                 $base->type_is_string = false;
@@ -251,6 +273,7 @@ class BaseController extends Controller
                 break;
             // Документ
             case 6:
+                $request->validate($this->maxfilesize_rules());
                 $base->type_is_list = false;
                 $base->type_is_number = false;
                 $base->type_is_string = false;
@@ -306,9 +329,9 @@ class BaseController extends Controller
         if (!Auth::user()->isAdmin()) {
             return null;
         }
-        if (!(($base->name_lang_0 == $request->name_lang_0) && ($base->name_lang_0 == $request->name_lang_0))) {
-            $request->validate($this->rules());
-        }
+        //if (!(($base->name_lang_0 == $request->name_lang_0) && ($base->name_lang_0 == $request->name_lang_0))) {
+        $request->validate($this->rules());
+        //}
 
         $data = $request->except('_token', '_method');
 
@@ -348,6 +371,9 @@ class BaseController extends Controller
         $base->sepa_same_left_calcname = isset($request->sepa_same_left_calcname) ? $request->sepa_same_left_calcname : "";
         $base->sepa_same_right_calcname = isset($request->sepa_same_left_calcname) ? $request->sepa_same_right_calcname : "";
 
+        $base->maxfilesize_img_doc = $request->maxfilesize_img_doc;
+        $base->maxfilesize_title_img_doc = isset($request->maxfilesize_title_img_doc) ? $request->maxfilesize_title_img_doc : "";
+
         // Похожие строки в BaseController.php (functions: store(), edit())
         // и в Base.php (functions: get_types(), type(), type_name())
         // и в Base/edit.blade.php
@@ -363,6 +389,8 @@ class BaseController extends Controller
                 $base->type_is_document = false;
                 $base->digits_num = 0;
                 $base->is_to_moderate_photo = "0";
+                $base->maxfilesize_img_doc = 0;
+                $base->maxfilesize_title_img_doc = "";
                 break;
             // Число
             case 1:
@@ -381,6 +409,8 @@ class BaseController extends Controller
                 $base->sepa_same_left_calcname = "";
                 $base->sepa_same_right_calcname = "";
                 $base->is_to_moderate_photo = "0";
+                $base->maxfilesize_img_doc = 0;
+                $base->maxfilesize_title_img_doc = "";
                 break;
             // Строка
             case 2:
@@ -399,6 +429,8 @@ class BaseController extends Controller
                 $base->sepa_same_left_calcname = "";
                 $base->sepa_same_right_calcname = "";
                 $base->is_to_moderate_photo = "0";
+                $base->maxfilesize_img_doc = 0;
+                $base->maxfilesize_title_img_doc = "";
                 break;
             // Дата
             case 3:
@@ -419,6 +451,8 @@ class BaseController extends Controller
                 $base->is_same_small_calcname = "0";
                 $base->sepa_same_left_calcname = "";
                 $base->sepa_same_right_calcname = "";
+                $base->maxfilesize_img_doc = 0;
+                $base->maxfilesize_title_img_doc = "";
                 break;
             // Логический
             case 4:
@@ -439,9 +473,12 @@ class BaseController extends Controller
                 $base->is_same_small_calcname = "0";
                 $base->sepa_same_left_calcname = "";
                 $base->sepa_same_right_calcname = "";
+                $base->maxfilesize_img_doc = 0;
+                $base->maxfilesize_title_img_doc = "";
                 break;
             // Фото
             case 5:
+                $request->validate($this->maxfilesize_rules());
                 $base->type_is_list = false;
                 $base->type_is_number = false;
                 $base->type_is_string = false;
@@ -460,6 +497,7 @@ class BaseController extends Controller
                 break;
             // Документ
             case 6:
+                $request->validate($this->maxfilesize_rules());
                 $base->type_is_list = false;
                 $base->type_is_number = false;
                 $base->type_is_string = false;

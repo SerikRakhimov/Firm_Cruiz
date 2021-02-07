@@ -44,6 +44,8 @@
     <p>{{trans('main.is_same_small_calcname')}}: <b>{{$base->name_is_same_small_calcname()}}</b></p>
     <p>{{trans('main.sepa_same_left_calcname')}}: <b>{{$base->sepa_same_left_calcname}}</b></p>
     <p>{{trans('main.sepa_same_right_calcname')}}: <b>{{$base->name_sepa_same_right_calcname}}</b></p>
+    <p>{{trans('main.maxfilesize_img_doc')}}: <b>{{$base->maxfilesize_img_doc}}</b></p>
+    <p>{{trans('main.maxfilesize_title_img_doc')}}: <b>{{$base->maxfilesize_title_img_doc}}</b></p>
     <p>{{trans('main.date_created')}}: <b>{{$base->created_at}}</b></p>
     <p>{{trans('main.date_updated')}}: <b>{{$base->updated_at}}</b></p>
 

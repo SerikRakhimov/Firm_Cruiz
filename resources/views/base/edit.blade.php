@@ -174,6 +174,50 @@
             </div>
         </div>
 
+        <div class="form-group row" id="maxfilesize_img_doc_form_group">
+            <div class="col-sm-3 text-right">
+                <label for="maxfilesize_img_doc">{{trans('main.maxfilesize_img_doc')}}<span
+                        class="text-danger">*</span></label>
+            </div>
+            <div class="col-sm-2">
+                <input type="number"
+                       name="maxfilesize_img_doc"
+                       id="maxfilesize_img_doc"
+                       class="form-control @error('maxfilesize_img_doc') is-invalid @enderror"
+                       placeholder=""
+                       value="{{ old('maxfilesize_img_doc') ?? ($base['maxfilesize_img_doc'] ?? '0') }}">
+                @error('maxfilesize_img_doc')
+                <div class="text-danger">
+                    {{$message}}
+                </div>
+                @enderror
+            </div>
+            <div class="col-sm-7">
+            </div>
+        </div>
+
+        <div class="form-group row" id="maxfilesize_title_img_doc_form_group">
+            <div class="col-sm-3 text-right">
+                <label for="maxfilesize_title_img_doc">{{trans('main.maxfilesize_title_img_doc')}}<span
+                        class="text-danger">*</span></label>
+            </div>
+            <div class="col-sm-2">
+                <input type="text"
+                       name="maxfilesize_title_img_doc"
+                       id="maxfilesize_title_img_doc"
+                       class="form-control @error('maxfilesize_title_img_doc') is-invalid @enderror"
+                       placeholder=""
+                       value="{{ old('maxfilesize_title_img_doc') ?? ($base['maxfilesize_title_img_doc'] ?? '') }}">
+                @error('maxfilesize_title_img_doc')
+                <div class="text-danger">
+                    {{$message}}
+                </div>
+                @enderror
+            </div>
+            <div class="col-sm-7">
+            </div>
+        </div>
+
         <div class="form-group row" id="is_code_needed_form_group">
             <div class="col-sm-3 text-right">
                 <label class="form-label"
@@ -557,6 +601,8 @@
         var is_recalc_code = document.getElementById('is_recalc_code_form_group');
         var is_required_lst_num_str_img_doc = document.getElementById('is_required_lst_num_str_img_doc_form_group');
         var is_tomoderate_img = document.getElementById('is_to_moderate_photo_form_group');
+        var maxfilesize_img_doc = document.getElementById('maxfilesize_img_doc_form_group');
+        var maxfilesize_title_img_doc = document.getElementById('maxfilesize_title_img_doc_form_group');
         var is_onevalue_str = document.getElementById('is_one_value_lst_str_form_group');
         var is_calcname_lst = document.getElementById('is_calcname_lst_form_group');
         var sepa_calcname = document.getElementById('sepa_calcname_form_group');
@@ -601,11 +647,13 @@
             val_recalc_code = "hidden";
             val_digits_num = "hidden";
             val_required_num_str = "hidden";
-            val_is_tomoderate_img = "hidden";
+            val_tomoderate_img = "hidden";
+            val_maxfilesize_img_doc = "hidden";
+            val_maxfilesize_title_img_doc = "hidden";
             val_onevalue_str = "hidden";
             val_calcname_lst = "hidden";
             val_sepa_calcname = "hidden";
-            val_is_same_small_calcname = "hidden";
+            val_same_small_calcname = "hidden";
             val_sepa_same_left_calcname = "hidden";
             val_sepa_same_right_calcname = "hidden";
 
@@ -624,7 +672,7 @@
                     val_onevalue_str = "visible";
                     val_calcname_lst = "visible";
                     val_sepa_calcname = "visible";
-                    val_is_same_small_calcname = "visible";
+                    val_same_small_calcname = "visible";
                     val_sepa_same_left_calcname = "visible";
                     val_sepa_same_right_calcname = "visible";
                     break;
@@ -641,11 +689,15 @@
                 // Фото
                 case "5":
                     val_required_num_str = "visible";
-                    val_is_tomoderate_img = "visible";
+                    val_tomoderate_img = "visible";
+                    val_maxfilesize_img_doc = "visible";
+                    val_maxfilesize_title_img_doc = "visible";
                     break;
                 // Документ
                 case "6":
                     val_required_num_str = "visible";
+                    val_maxfilesize_img_doc = "visible";
+                    val_maxfilesize_title_img_doc = "visible";
                     break;
             }
             // digits_num.style.display = val_digits_num;
@@ -661,11 +713,13 @@
             is_recalc_code.style.visibility = val_recalc_code;
             digits_num.style.visibility = val_digits_num;
             is_required_lst_num_str_img_doc.style.visibility = val_required_num_str;
-            is_tomoderate_img.style.visibility = val_is_tomoderate_img;
+            is_tomoderate_img.style.visibility = val_tomoderate_img;
+            maxfilesize_img_doc.style.visibility = val_maxfilesize_img_doc;
+            maxfilesize_title_img_doc.style.visibility = val_maxfilesize_title_img_doc;
             is_onevalue_str.style.visibility = val_onevalue_str;
             is_calcname_lst.style.visibility = val_calcname_lst;
             sepa_calcname.style.visibility = val_sepa_calcname;
-            is_same_small_calcname.style.visibility = val_is_same_small_calcname;
+            is_same_small_calcname.style.visibility = val_same_small_calcname;
             sepa_same_left_calcname.style.visibility = val_sepa_same_left_calcname;
             sepa_same_right_calcname.style.visibility = val_sepa_same_right_calcname;
             //     // только если запуск функции при загрузке страницы

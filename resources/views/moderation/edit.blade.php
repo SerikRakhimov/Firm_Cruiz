@@ -29,45 +29,7 @@
                 <label>{{$item->id}}</label>
             </div>
         </div>
-        <div class="form-group row">
-            <div class="col-sm-3 text-right">
-                {{--                            Выберите файл - изображение, размером не более 500 Кб--}}
-                <label for="name_lang_0">{{$item->base->name()}}<span
-                        class="text-danger">*</span></label>
-            </div>
-            <div class="col-sm-4">
-                @if($update)
-                    @if($item->image_exist())
-                        <a href="{{Storage::url($item->filename(true))}}">
-                            <img src="{{Storage::url($item->filename(true))}}" height="450"
-                                 alt="" title="{{$item->title_img()}}">
-                        </a>
-                        @endif
-                        @endif
-                        </label>
-            </div>
-        </div>
-
-        <div class="form-group row">
-            <div class="col-sm-3 text-right">
-                {{--                            Выберите файл - изображение, размером не более 500 Кб--}}
-            </div>
-            <div class="col-sm-4">
-                <input type="file"
-                       name="name_lang_0" id="name_lang_0"
-                       class="@error('name_lang_0') is-invalid @enderror"
-                       accept="image/*">
-                @error('name_lang_0')
-                <div class="text-danger">
-                    {{$message}}
-                </div>
-                @enderror
-            </div>
-            <div class="col-sm-5-left">
-                <label>Выберите другую картинку для изменения, или оставьте существующую</label>
-            </div>
-        </div>
-
+        @include('edit.img_moderation',['item'=>$item ?? null, 'name'=>"name_lang_0",'id'=>"name_lang_0", 'size'=>"big"])
         <div class="form-group row">
             <div class="col-sm-3 text-right">
                 <label for="name_lang_1" class="col-form-label">{{trans('main.status')}}<span

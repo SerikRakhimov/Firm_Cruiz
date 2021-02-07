@@ -7,7 +7,7 @@
                 @if($update)
                     @if($item->image_exist())
                         ({{mb_strtolower(trans('main.now'))}}:<a href="{{Storage::url($item->filename())}}">
-                            <img src="{{Storage::url($item->filename())}}" height="50"
+                            <img src="{{Storage::url($item->filename())}}" height=@include('types.img.height',['size'=>$size])
                                  alt="" title="{{$item->title_img()}}">
                         </a>)
                     @endif

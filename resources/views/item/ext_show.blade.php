@@ -31,13 +31,13 @@
             {{--            {{trans('main.name')}} ({{trans('main.' . $value)}}): <b>{{$item['name_lang_' . $key]}}</b><br>--}}
             {{--        @endforeach--}}
             @if($base->type_is_photo)
-                @include('layouts.view_img',['item'=>$item, 'size'=>"big"])
+                @include('view.img',['item'=>$item, 'size'=>"medium", 'filenametrue'=>false])
 {{--                <a href="{{Storage::url($item->filename())}}">--}}
 {{--                    <img src="{{Storage::url($item->filename())}}" height="250"--}}
 {{--                         alt="" title="{{$item->title_img()}}">--}}
 {{--                </a>--}}
             @elseif($base->type_is_document)
-                @include('layouts.view_doc',['item'=>$item])
+                @include('view.doc',['item'=>$item])
 {{--                <a href="{{Storage::url($item->filename())}}" target="_blank">--}}
 {{--                    Открыть документ--}}
 {{--                </a>--}}
@@ -77,13 +77,13 @@
                     {{$link->parent_label()}}:
                         @if($link->parent_base->type_is_photo)
 {{--                            <br>--}}
-                            @include('layouts.view_img',['item'=>$item_find, 'size'=>"big"])
+                            @include('view.img',['item'=>$item_find, 'size'=>"medium", 'filenametrue'=>false])
 {{--                            <a href="{{Storage::url($item_find->filename())}}">--}}
 {{--                                <img src="{{Storage::url($item_find->filename())}}" height="250"--}}
 {{--                                     alt="" title="{{$item_find->title_img()}}">--}}
 {{--                            </a>--}}
                         @elseif($link->parent_base->type_is_document)
-                            @include('layouts.view_doc',['item'=>$item_find])
+                            @include('view.doc',['item'=>$item_find])
 {{--                            <a href="{{Storage::url($item_find->filename())}}" target="_blank">--}}
 {{--                                Открыть документ--}}
 {{--                            </a>--}}

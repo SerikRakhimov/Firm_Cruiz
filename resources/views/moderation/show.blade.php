@@ -12,9 +12,11 @@
 
     <p>Id: <b>{{$item->id}}</b></p>
     <p>{{$item->base->name()}}:
-        <a href="{{Storage::url($item->filename(true))}}">
-            <img src="{{Storage::url($item->filename(true))}}" height="250"
-                 alt="" title="{{$item->title_img()}}"></a>
+        @include('view.img',['item'=>$item, 'size'=>"medium", 'filenametrue'=>true])
+
+{{--        <a href="{{Storage::url($item->filename(true))}}">--}}
+{{--            <img src="{{Storage::url($item->filename(true))}}" height="250"--}}
+{{--                 alt="" title="{{$item->title_img()}}"></a>--}}
     </p>
     <p>{{trans('main.status')}}: <b>{{$item->status_img()}}</b></p>
     <p>{{trans('main.project')}}: <b>{{$item->project->name_id()}}</b></p>

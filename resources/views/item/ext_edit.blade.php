@@ -169,7 +169,7 @@
                     </div>
                 </div>
             @elseif($base->type_is_photo())
-                @include('edit.img_base',['update'=>$update, 'base'=>$base,'item'=>$item ?? null, 'name'=>"name_lang_0",'id'=>"name_lang_0"])
+                @include('edit.img_base',['update'=>$update, 'base'=>$base,'item'=>$item ?? null, 'name'=>"name_lang_0",'id'=>"name_lang_0", 'size'=>"small"])
                 {{--                <div class="form-group row">--}}
                 {{--                    <div class="col-sm-3 text-right">--}}
                 {{--                        --}}{{--                            Выберите файл - изображение, размером не более 500 Кб--}}
@@ -593,7 +593,7 @@
                     </fieldset>
                     {{--                            если тип корректировки поля - фото--}}
                 @elseif($link->parent_base->type_is_photo())
-                    @include('edit.img_link',['update'=>$update, 'base'=>$link->parent_base,'result'=>$result,'value'=>$value, 'name'=>$key,'id'=>"link".$key])
+                    @include('edit.img_link',['update'=>$update, 'base'=>$link->parent_base,'result'=>$result,'value'=>$value, 'name'=>$key,'id'=>"link".$key, 'size'=>"small"])
                     {{--                    <div class="form-group row">--}}
                     {{--                        <div class="col-sm-3 text-right">--}}
                     {{--                            --}}{{--                            Выберите файл - изображение, размером не более 500 Кб--}}

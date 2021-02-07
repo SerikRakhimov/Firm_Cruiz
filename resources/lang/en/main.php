@@ -194,4 +194,6 @@ return [
     'open_document' => 'Open document',
     'now' => 'Now',
     'explanation_img' => 'Select another image to edit, or leave an existing',
+    'maxfilesize_img_doc' => 'Maximum file size, in bytes',
+    'maxfilesize_title_img_doc' => 'Maximum file size, explanation',
 ];

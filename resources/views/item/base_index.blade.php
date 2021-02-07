@@ -121,13 +121,13 @@
                 @endif
                 <td @include('layouts.class_from_base',['base'=>$base])>
                     @if($base->type_is_photo)
-                        @include('layouts.view_img',['item'=>$item, 'size'=>"small"])
+                        @include('view.img',['item'=>$item, 'size'=>"small", 'filenametrue'=>false])
 {{--                        <a href="{{Storage::url($item->filename())}}">--}}
 {{--                            <img src="{{Storage::url($item->filename())}}" height="50"--}}
 {{--                                 alt="" title="{{$item->title_img()}}">--}}
 {{--                        </a>--}}
                     @elseif($base->type_is_document)
-                        @include('layouts.view_doc',['item'=>$item])
+                        @include('view.doc',['item'=>$item])
 {{--                        <a href="{{Storage::url($item->filename())}}" target="_blank"--}}
 {{--                           alt="" title="{{$item->title_img()}}">--}}
 {{--                            Открыть документ--}}
@@ -152,13 +152,13 @@
                             ?>
                             @if($item_find)
                                 @if($link->parent_base->type_is_photo())
-                                        @include('layouts.view_img',['item'=>$item_find, 'size'=>"small"])
+                                        @include('view.img',['item'=>$item_find, 'size'=>"small", 'filenametrue'=>false])
 {{--                                    <a href="{{Storage::url($item_find->filename())}}">--}}
 {{--                                        <img src="{{Storage::url($item_find->filename())}}" height="50"--}}
 {{--                                             alt="" title="{{$item_find->title_img()}}">--}}
 {{--                                    </a>--}}
                                 @elseif($link->parent_base->type_is_document())
-                                        @include('layouts.view_doc',['item'=>$item_find])
+                                        @include('view.doc',['item'=>$item_find])
 {{--                                    <a href="{{Storage::url($item_find->filename())}}" target="_blank"--}}
 {{--                                       alt="" title="{{$item_find->title_img()}}">--}}
 {{--                                        Открыть документ--}}
