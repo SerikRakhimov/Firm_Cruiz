@@ -67,6 +67,17 @@ class ItemController extends Controller
         ];
     }
 
+
+//    protected function img_rules($input_img, $maxfilesize)
+//    {
+////        return [
+////            $input_img => ['max:' . $maxfilesize]
+////        ];
+//        return [
+//            '16' => ['max:25']
+//        ];
+//    }
+
     protected function name_lang_rules()
     {
         return [
@@ -1115,6 +1126,36 @@ class ItemController extends Controller
         // если при вводе формы пометка checkbox не установлена, в $request записи про элемент checkbox вообще нет
         // если при вводе формы пометка checkbox установлена, в $request есть запись со значеним "on"
         // см. https://webformyself.com/kak-v-php-poluchit-znachenie-checkbox/
+        foreach ($inputs as $key => $value) {
+            $link = Link::findOrFail($key);
+            if ($link->parent_base->type_is_photo() || $link->parent_base->type_is_document()) {
+                //$request->validate($this->img_rules(strval($link->id), strval($link->parent_base->maxfilesize_img_doc)));
+                $fs = $request->file($link->id)->getSize();
+                $mx = $link->parent_base->maxfilesize_img_doc;
+                if ($fs > $mx) {
+                    //echo "fs = ".intval($fs);
+
+                    $errors = false;
+                    if ($request->hasFile($link->id)) {
+                        if ($request->file($link->id)->isValid()) {
+                            $array_mess[$link->id] = 'Размер выбранного файла(' . $fs . ')' . ' должен быть меньше (' . $mx . ') !';
+                            $errors = true;
+                        }
+                    }
+                    if ($errors) {
+                        // повторный вызов формы
+                        return redirect()->back()
+                            ->withInput()
+                            ->withErrors($array_mess);
+                    }
+                }
+
+//                echo "15155" . strval($link->id) . strval($link->parent_base->maxfilesize_img_doc)
+//                . ' '.$request->file('16')->getSize();
+//                return;
+            }
+        }
+
 
         foreach ($inputs as $key => $value) {
             $link = Link::findOrFail($key);
