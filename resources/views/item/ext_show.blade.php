@@ -25,7 +25,7 @@
     ?>
     <p>Id: <b>{{$item->id}}</b></p>
     @if($base_right['is_show_base_enable'] == true)
-        <p>и
+        <p>
             {{trans('main.code')}}: <b>{{$item->code}}</b><br>
             {{--        @foreach (session('glo_menu_save') as $key=>$value)--}}
             {{--            {{trans('main.name')}} ({{trans('main.' . $value)}}): <b>{{$item['name_lang_' . $key]}}</b><br>--}}
