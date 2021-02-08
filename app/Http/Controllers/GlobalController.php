@@ -188,6 +188,7 @@ class GlobalController extends Controller
             $is_roba_list_base_byuser = $roba->is_list_base_byuser;
             $is_roba_edit_base_read = $roba->is_edit_base_read;
             $is_roba_edit_base_update = $roba->is_edit_base_update;
+            $is_roba_list_base_enable = $roba->is_list_base_enable;
             $is_roba_list_link_enable = $roba->is_list_link_enable;
             $is_roba_show_base_enable = $roba->is_show_base_enable;
             $is_roba_show_link_enable = $roba->is_show_link_enable;
@@ -213,6 +214,7 @@ class GlobalController extends Controller
 //            $is_edit_base_enable = $is_roba_edit_base_enable;
             $is_edit_base_read = $is_roba_edit_base_read;
             $is_edit_base_update = $is_roba_edit_base_update;
+            $is_list_base_enable = $is_roba_list_base_enable;
             $is_list_link_enable = $is_roba_list_link_enable;
 //            $is_edit_link_enable = $is_roba_edit_link_enable;
             $is_show_base_enable = $is_roba_show_base_enable;
