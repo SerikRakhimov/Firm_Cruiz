@@ -194,6 +194,11 @@ return [
     'open_document' => 'Open document',
     'now' => 'Now',
     'explanation_img' => 'Select another image to edit, or leave an existing',
+    'explanation_doc' => 'Select another document to modify, or leave an existing one',
     'maxfilesize_img_doc' => 'Maximum file size, in bytes',
     'maxfilesize_title_img_doc' => 'Maximum file size, explanation',
+    'size_selected_file' => 'The size of the selected file',
+    'byte' => 'Byte',
+    'must_less_equal' => 'Must be less than or equal to',
+    'maximum' => 'Maximum',
 ];

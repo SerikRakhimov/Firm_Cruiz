@@ -1,7 +1,15 @@
+<?php
+use \App\Http\Controllers\GlobalController;
+?>
 @if($item->base->type_is_document())
-    <a href="{{Storage::url($item->filename())}}" target="_blank"
-       alt="" title="{{$item->title_img()}}">
-        {{trans('main.open_document')}}
-    </a>
+    @if($item->img_doc_exist())
+        <a href="{{Storage::url($item->filename())}}" target="_blank"
+           alt="" title="{{$item->title_img()}}">
+            {{trans('main.open_document')}}
+        </a>
+    @else
+        <div class="text-danger">
+            {{GlobalController::empty_html()}}</div>
+    @endif
 @endif
 

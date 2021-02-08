@@ -392,9 +392,6 @@ class ItemController extends Controller
             } elseif ($base->type_is_photo()) {
                 $errors = false;
 
-//                $gs = $request->file('name_lang_0')->getSize();
-//                return $gs;
-
                 if (!$request->hasFile('name_lang_0')) {
                     $array_mess['name_lang_0'] = trans('main.is_required_lst_num_str_img_doc') . '!';
                     $errors = true;
@@ -420,6 +417,27 @@ class ItemController extends Controller
                 }
             }
         }
+
+        if ($base->type_is_photo() || $base->type_is_document()) {
+            if ($request->hasFile('name_lang_0')) {
+                $fs = $request->file('name_lang_0')->getSize();
+                $mx = $base->maxfilesize_img_doc;
+                if ($fs > $mx) {
+                    $errors = false;
+                    if ($request->file('name_lang_0')->isValid()) {
+                        $array_mess['name_lang_0'] = self::filesize_message($fs, $mx);
+                        $errors = true;
+                    }
+                    if ($errors) {
+                        // повторный вызов формы
+                        return redirect()->back()
+                            ->withInput()
+                            ->withErrors($array_mess);
+                    }
+                }
+            }
+        }
+
         // установка часового пояса нужно для сохранения времени
         date_default_timezone_set('Asia/Almaty');
 
@@ -490,6 +508,29 @@ class ItemController extends Controller
         }
         // загрузить в $inputs все поля ввода, кроме $excepts, $string_names, $string_codes, array_merge() - функция суммирования двух и более массивов
         $inputs = $request->except(array_merge($excepts, $string_names, $code_names));
+
+        foreach ($inputs as $key => $value) {
+            $link = Link::findOrFail($key);
+            if ($link->parent_base->type_is_photo() || $link->parent_base->type_is_document()) {
+                if ($request->hasFile($link->id)) {
+                    $fs = $request->file($link->id)->getSize();
+                    $mx = $link->parent_base->maxfilesize_img_doc;
+                    if ($fs > $mx) {
+                        $errors = false;
+                        if ($request->file($link->id)->isValid()) {
+                            $array_mess[$link->id] = self::filesize_message($fs, $mx);
+                            $errors = true;
+                        }
+                        if ($errors) {
+                            // повторный вызов формы
+                            return redirect()->back()
+                                ->withInput()
+                                ->withErrors($array_mess);
+                        }
+                    }
+                }
+            }
+        }
 
         // обработка для логических полей
         // если при вводе формы пометка checkbox не установлена, в $request записи про элемент checkbox вообще нет
@@ -1005,7 +1046,7 @@ class ItemController extends Controller
                 // Тип - фото
             } elseif ($item->base->type_is_photo()) {
                 $errors = false;
-                if (!$item->image_exist()) {
+                if (!$item->img_doc_exist()) {
                     if (!$request->hasFile('name_lang_0')) {
                         $array_mess['name_lang_0'] = trans('main.is_required_lst_num_str_img_doc') . '!';
                         $errors = true;
@@ -1020,7 +1061,7 @@ class ItemController extends Controller
                 // Тип - документ
             } elseif ($item->base->type_is_document()) {
                 $errors = false;
-                if (!$item->image_exist()) {
+                if (!$item->img_doc_exist()) {
                     if (!$request->hasFile('name_lang_0')) {
                         $array_mess['name_lang_0'] = trans('main.is_required_lst_num_str_img_doc') . '!';
                         $errors = true;
@@ -1034,15 +1075,37 @@ class ItemController extends Controller
                 }
             }
         }
+
+        if ($item->base->type_is_photo() || $item->base->type_is_document()) {
+            if ($request->hasFile('name_lang_0')) {
+                $fs = $request->file('name_lang_0')->getSize();
+                $mx = $item->base->maxfilesize_img_doc;
+                if ($fs > $mx) {
+                    $errors = false;
+                    if ($request->file('name_lang_0')->isValid()) {
+                        $array_mess['name_lang_0'] = self::filesize_message($fs, $mx);
+                        $errors = true;
+                    }
+                    if ($errors) {
+                        // повторный вызов формы
+                        return redirect()->back()
+                            ->withInput()
+                            ->withErrors($array_mess);
+                    }
+                }
+            }
+        }
         if ($item->base->type_is_photo() || $item->base->type_is_document()) {
             if ($request->hasFile('name_lang_0')) {
                 Storage::delete($item->filename());
             }
         }
+
         $data = $request->except('_token', '_method');
         $item->fill($data);
         $item->project_id = GlobalController::glo_project_id();
         $item->updated_user_id = Auth::user()->id;
+
         // Похожая проверка в ext_edit.blade.php
 //        if ($item->base->is_code_needed == true && $item->base->is_code_number == true && $item->base->is_limit_sign_code == true
 //            && $item->base->is_code_zeros == true && $item->base->is_code_zeros > 0) {
@@ -1055,22 +1118,15 @@ class ItemController extends Controller
         // нужно по порядку: сначала этот блок
         // значения null в ""
         // у строк могут быть пустые значения, поэтому нужно так: '$item->name_lang_0 = isset($request->name_lang_0) ? $request->name_lang_0 : ""'
-//        if (!($item->base->type_is_photo() || $item->base->type_is_document())) {
-//            $item->name_lang_0 = isset($request->name_lang_0) ? $request->name_lang_0 : "";
-//            $item->name_lang_1 = isset($request->name_lang_1) ? $request->name_lang_1 : "";
-//            $item->name_lang_2 = isset($request->name_lang_2) ? $request->name_lang_2 : "";
-//            $item->name_lang_3 = isset($request->name_lang_3) ? $request->name_lang_3 : "";
-//        }
+        // Проверка "if (!($item->base->type_is_photo() || $item->base->type_is_document()))" нужна
+        if (!($item->base->type_is_photo() || $item->base->type_is_document())) {
+            $item->name_lang_0 = isset($request->name_lang_0) ? $request->name_lang_0 : "";
+            $item->name_lang_1 = isset($request->name_lang_1) ? $request->name_lang_1 : "";
+            $item->name_lang_2 = isset($request->name_lang_2) ? $request->name_lang_2 : "";
+            $item->name_lang_3 = isset($request->name_lang_3) ? $request->name_lang_3 : "";
+        }
 
-        // нужно по порядку: сначала этот блок
-        // значения null в ""
-        // у строк могут быть пустые значения, поэтому нужно так: '$item->name_lang_0 = isset($request->name_lang_0) ? $request->name_lang_0 : ""'
-        $item->name_lang_0 = isset($request->name_lang_0) ? $request->name_lang_0 : "";
-        $item->name_lang_1 = isset($request->name_lang_1) ? $request->name_lang_1 : "";
-        $item->name_lang_2 = isset($request->name_lang_2) ? $request->name_lang_2 : "";
-        $item->name_lang_3 = isset($request->name_lang_3) ? $request->name_lang_3 : "";
         //$item->project_id = GlobalController::glo_project_id();
-
         // далее этот блок
         // похожая формула ниже (в этой же процедуре)
         if ($item->base->type_is_boolean()) {
@@ -1122,41 +1178,34 @@ class ItemController extends Controller
 
         // загрузить в $inputs все поля ввода, кроме $excepts, $string_names, $string_codes, array_merge() - функция суммирования двух и более массивов
         $inputs = $request->except(array_merge($excepts, $string_names, $code_names));
+
+        foreach ($inputs as $key => $value) {
+            $link = Link::findOrFail($key);
+            if ($link->parent_base->type_is_photo() || $link->parent_base->type_is_document()) {
+                if ($request->hasFile($link->id)) {
+                    $fs = $request->file($link->id)->getSize();
+                    $mx = $link->parent_base->maxfilesize_img_doc;
+                    if ($fs > $mx) {
+                        $errors = false;
+                        if ($request->file($link->id)->isValid()) {
+                            $array_mess[$link->id] = self::filesize_message($fs, $mx);
+                            $errors = true;
+                        }
+                        if ($errors) {
+                            // повторный вызов формы
+                            return redirect()->back()
+                                ->withInput()
+                                ->withErrors($array_mess);
+                        }
+                    }
+                }
+            }
+        }
+
         // обработка для логических полей
         // если при вводе формы пометка checkbox не установлена, в $request записи про элемент checkbox вообще нет
         // если при вводе формы пометка checkbox установлена, в $request есть запись со значеним "on"
         // см. https://webformyself.com/kak-v-php-poluchit-znachenie-checkbox/
-        foreach ($inputs as $key => $value) {
-            $link = Link::findOrFail($key);
-            if ($link->parent_base->type_is_photo() || $link->parent_base->type_is_document()) {
-                //$request->validate($this->img_rules(strval($link->id), strval($link->parent_base->maxfilesize_img_doc)));
-                $fs = $request->file($link->id)->getSize();
-                $mx = $link->parent_base->maxfilesize_img_doc;
-                if ($fs > $mx) {
-                    //echo "fs = ".intval($fs);
-
-                    $errors = false;
-                    if ($request->hasFile($link->id)) {
-                        if ($request->file($link->id)->isValid()) {
-                            $array_mess[$link->id] = 'Размер выбранного файла(' . $fs . ')' . ' должен быть меньше (' . $mx . ') !';
-                            $errors = true;
-                        }
-                    }
-                    if ($errors) {
-                        // повторный вызов формы
-                        return redirect()->back()
-                            ->withInput()
-                            ->withErrors($array_mess);
-                    }
-                }
-
-//                echo "15155" . strval($link->id) . strval($link->parent_base->maxfilesize_img_doc)
-//                . ' '.$request->file('16')->getSize();
-//                return;
-            }
-        }
-
-
         foreach ($inputs as $key => $value) {
             $link = Link::findOrFail($key);
             if ($link->parent_base->type_is_photo() || $link->parent_base->type_is_document()) {
@@ -1193,7 +1242,7 @@ class ItemController extends Controller
                         $item_seek = MainController::get_parent_item_from_main($item->id, $link->id);
                         $check = false;
                         if ($item_seek) {
-                            if (!$item_seek->image_exist()) {
+                            if (!$item_seek->img_doc_exist()) {
                                 $check = true;
                             }
                         } else {
@@ -1320,6 +1369,7 @@ class ItemController extends Controller
         // сохранение предыдущих значений $array_plan
         // до начала выполнения транзакции
         $array_calc = $this->get_array_calc_edit($item)['array_calc'];
+
         try {
             // начало транзакции
             // $array_plan передается при корректировке
@@ -1331,23 +1381,6 @@ class ItemController extends Controller
                 // индекс массива = link_id (для занесения в links->id)
                 // значение массива = item_id (для занесения в mains->parent_item_id)
                 $i_max = count($keys);
-
-
-//                // Предыдущий вариант
-//                $mains = Main::where('child_item_id', $item->id)->get();
-//                $i = 0;
-//                foreach ($mains as $main) {
-//                    if ($i < $i_max) {
-//                        $this->save_main($main, $item, $keys, $values, $i, $strings_inputs);
-//                        $i = $i + 1;
-//                    } else {
-//                        $main->delete();
-//                    }
-//                }
-//                for ($i; $i < $i_max; $i++) {
-//                    $main = new Main();
-//                    $this->save_main($main, $item, $keys, $values, $i, $strings_inputs);
-//                }
 
                 // Новый вариант
                 // Сначала проверка, потом присвоение
@@ -2009,6 +2042,12 @@ class ItemController extends Controller
             $item_name = $item->name();
         }
         return ['item_id' => $item_id, 'item_name' => $item_name];
+    }
+
+    function filesize_message($fs, $mx)
+    {
+        return trans('main.size_selected_file') . ' (' . $fs . ' ' . mb_strtolower(trans('main.byte')) . ') '
+            . mb_strtolower(trans('main.must_less_equal')) . ' (' . $mx . ' ' . mb_strtolower(trans('main.byte')) . ') !';
     }
 
 }

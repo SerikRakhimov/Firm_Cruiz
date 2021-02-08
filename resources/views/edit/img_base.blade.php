@@ -5,7 +5,7 @@
             <label for="{{$name}}">{{$base->name()}}<span
                     class="text-danger">*</span>
                 @if($update)
-                    @if($item->image_exist())
+                    @if($item->img_doc_exist())
                         ({{mb_strtolower(trans('main.now'))}}:<a href="{{Storage::url($item->filename())}}">
                             <img src="{{Storage::url($item->filename())}}" height=@include('types.img.height',['size'=>$size])
                                  alt="" title="{{$item->title_img()}}">
@@ -26,7 +26,7 @@
             @enderror
         </div>
         <div class="col-sm-5-left">
-            <label>{{trans('main.explanation_img')}}{{$base->maxfilesize_title_img_doc}}</label>
+            <label>{{trans('main.explanation_img')}} ({{mb_strtolower(trans('main.maximum'))}} {{$base->maxfilesize_title_img_doc}})</label>
         </div>
     </div>
 @endif

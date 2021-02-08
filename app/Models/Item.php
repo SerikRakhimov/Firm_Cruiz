@@ -227,7 +227,7 @@ class Item extends Model
     }
 
     // Для типов полей Изображение, Документ
-    function image_exist()
+    function img_doc_exist()
     {
         return $this->name_lang_0 != "";
     }
