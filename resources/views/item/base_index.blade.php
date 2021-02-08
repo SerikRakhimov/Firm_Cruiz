@@ -120,7 +120,7 @@
                     @endif
                 @endif
                 <td @include('layouts.class_from_base',['base'=>$base])>
-                    @if($base->type_is_photo)
+                    @if($base->type_is_image)
                         @include('view.img',['item'=>$item, 'size'=>"small", 'filenametrue'=>false])
 {{--                        <a href="{{Storage::url($item->filename())}}">--}}
 {{--                            <img src="{{Storage::url($item->filename())}}" height="50"--}}
@@ -151,7 +151,7 @@
                             $item_find = MainController::view_info($item->id, $link->id);
                             ?>
                             @if($item_find)
-                                @if($link->parent_base->type_is_photo())
+                                @if($link->parent_base->type_is_image())
                                         @include('view.img',['item'=>$item_find, 'size'=>"small", 'filenametrue'=>false])
 {{--                                    <a href="{{Storage::url($item_find->filename())}}">--}}
 {{--                                        <img src="{{Storage::url($item_find->filename())}}" height="50"--}}

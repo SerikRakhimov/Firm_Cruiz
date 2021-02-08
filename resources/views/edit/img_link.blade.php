@@ -1,7 +1,7 @@
 <?php
 use App\Models\Item;
 ?>
-@if($base->type_is_photo())
+@if($base->type_is_image())
     <div class="form-group row">
         <div class="col-sm-3 text-right">
             {{--                            Выберите файл - изображение, размером не более 500 Кб--}}

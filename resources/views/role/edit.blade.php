@@ -114,21 +114,21 @@
             </div>
         </div>
 
-        <div class="form-group row" id="is_list_base_pd_form_group">
+        <div class="form-group row" id="is_list_base_id_form_group">
             <div class="col-sm-3 text-right">
                 <label class="form-label"
-                       for="is_list_base_pd">{{trans('main.is_list_base_pd')}}</label>
+                       for="is_list_base_id">{{trans('main.is_list_base_id')}}</label>
             </div>
             <div class="col-sm-7">
-                <input class="@error('is_list_base_pd') is-invalid @enderror"
+                <input class="@error('is_list_base_id') is-invalid @enderror"
                        type="checkbox"
-                       name="is_list_base_pd"
+                       name="is_list_base_id"
                        placeholder=""
-                       @if ((old('is_list_base_pd') ?? ($role->is_list_base_pd ?? false)) ==  true)
+                       @if ((old('is_list_base_id') ?? ($role->is_list_base_id ?? false)) ==  true)
                        checked
                     @endif
                 >
-                @error('is_list_base_pd')
+                @error('is_list_base_id')
                 <div class="invalid-feedback">
                     {{$message}}
                 </div>

@@ -149,22 +149,22 @@
             </div>
         </div>
 
-        <div class="form-group row" id="is_to_moderate_photo_form_group">
+        <div class="form-group row" id="is_to_moderate_image_form_group">
             <div class="col-sm-3 text-right">
                 <label class="form-label"
-                       for="is_to_moderate_photo">{{trans('main.is_to_moderate_photo')}}</label>
+                       for="is_to_moderate_image">{{trans('main.is_to_moderate_image')}}</label>
             </div>
             <div class="col-sm-7">
                 <input class="@error($key) is-invalid @enderror"
                        type="checkbox"
-                       name="is_to_moderate_photo"
-                       id="linkis_to_moderate_photo"
+                       name="is_to_moderate_image"
+                       id="linkis_to_moderate_image"
                        placeholder=""
-                       @if ((old('is_to_moderate_photo') ?? ($base->is_to_moderate_photo ?? false)) ==  true)
+                       @if ((old('is_to_moderate_image') ?? ($base->is_to_moderate_image ?? false)) ==  true)
                        checked
                     @endif
                 >
-                @error('is_to_moderate_photo')
+                @error('is_to_moderate_image')
                 <div class="invalid-feedback">
                     {{$message}}
                 </div>
@@ -600,7 +600,7 @@
         var is_suggest_max_code = document.getElementById('is_suggest_max_code_form_group');
         var is_recalc_code = document.getElementById('is_recalc_code_form_group');
         var is_required_lst_num_str_img_doc = document.getElementById('is_required_lst_num_str_img_doc_form_group');
-        var is_tomoderate_img = document.getElementById('is_to_moderate_photo_form_group');
+        var is_tomoderate_img = document.getElementById('is_to_moderate_image_form_group');
         var maxfilesize_img_doc = document.getElementById('maxfilesize_img_doc_form_group');
         var maxfilesize_title_img_doc = document.getElementById('maxfilesize_title_img_doc_form_group');
         var is_onevalue_str = document.getElementById('is_one_value_lst_str_form_group');
@@ -686,7 +686,7 @@
                     val_required_num_str = "visible";
                     val_onevalue_str = "visible";
                     break;
-                // Фото
+                // Изображение
                 case "5":
                     val_required_num_str = "visible";
                     val_tomoderate_img = "visible";

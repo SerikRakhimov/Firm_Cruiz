@@ -4,6 +4,8 @@
     <?php
     use App\Models\Item;
     use App\Http\Controllers\GlobalController;
+    // https://ru.coredump.biz/questions/41704091/laravel-file-uploads-failing-when-file-size-is-larger-than-2mb
+    //phpinfo(); - для поиска php.ini
     ?>
 {{--    @include('layouts.template.show_name',['template'=>$template])--}}
     <div class="container-fluid">

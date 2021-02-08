@@ -152,10 +152,10 @@ class Item extends Model
     function filename($moderation = false)
     {
         $result = $this->name_lang_0;
-        if ($this->base->type_is_photo() == true) {
+        if ($this->base->type_is_image() == true) {
             if ($this->created_user_id != Auth::user()->id) {
                 if ($moderation == false) {
-                    if ($this->base->is_to_moderate_photo == true) {
+                    if ($this->base->is_to_moderate_image == true) {
                         // На модерации
                         if ($this->name_lang_1 == "3") {
                             $result = "public/on_moderation.png";
@@ -174,8 +174,8 @@ class Item extends Model
     function title_img()
     {
         $result = trans('main.сlick_to_view');
-        if ($this->base->type_is_photo() == true) {
-            if ($this->base->is_to_moderate_photo == true) {
+        if ($this->base->type_is_image() == true) {
+            if ($this->base->is_to_moderate_image == true) {
                 // На модерации
                 if ($this->name_lang_1 == "3") {
                     $result = trans('main.on_moderation');
@@ -195,8 +195,8 @@ class Item extends Model
     function status_img()
     {
         $result = "";
-        if ($this->base->type_is_photo() == true) {
-            if ($this->base->is_to_moderate_photo == true) {
+        if ($this->base->type_is_image() == true) {
+            if ($this->base->is_to_moderate_image == true) {
                 // На модерации
                 if ($this->name_lang_1 == "3") {
                     $result = trans('main.on_moderation');

@@ -162,8 +162,8 @@ class GlobalController extends Controller
                     $is_list_base_enable = false;
                 }
             }
-            if ($role->is_list_base_pd == false) {
-                if ($base->type_is_photo == true || $base->type_is_document == true ) {
+            if ($role->is_list_base_id == false) {
+                if ($base->type_is_image == true || $base->type_is_document == true ) {
                     $is_list_base_enable = false;
                 }
             }

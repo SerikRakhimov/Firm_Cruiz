@@ -131,7 +131,7 @@ use App\Models\Project;
                                     @if(Auth::user()->isModerator())
                                         <a class="dropdown-item" href="{{route('moderation.index')}}">
                                             {{trans('main.moderation')}}(<span
-                                                class="badge badge-primary">{{trans('main.moderation')}}</span>)
+                                                class="badge badge-primary">{{trans('main.moderator')}}</span>)
                                         </a>
                                     @endif
                                     @if(Auth::user()->isAdmin())

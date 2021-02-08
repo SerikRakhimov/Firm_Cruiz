@@ -168,7 +168,7 @@
                     <div class="col-sm-2">
                     </div>
                 </div>
-            @elseif($base->type_is_photo())
+            @elseif($base->type_is_image())
                 @include('edit.img_base',['update'=>$update, 'base'=>$base,'item'=>$item ?? null, 'name'=>"name_lang_0",'id'=>"name_lang_0", 'size'=>"small"])
                 {{--                <div class="form-group row">--}}
                 {{--                    <div class="col-sm-3 text-right">--}}
@@ -303,7 +303,7 @@
                         </label>
                     </div>
                     <div class="col-sm-7">
-                        @if($link->parent_base->type_is_photo())
+                        @if($link->parent_base->type_is_image())
                             <span class=""
                                   name="calc{{$key}}"
                                   id="link{{$key}}"></span>
@@ -592,8 +592,8 @@
                             @endforeach
                         </div>
                     </fieldset>
-                    {{--                            если тип корректировки поля - фото--}}
-                @elseif($link->parent_base->type_is_photo())
+                    {{--                            если тип корректировки поля - изображение--}}
+                @elseif($link->parent_base->type_is_image())
                     @include('edit.img_link',['update'=>$update, 'base'=>$link->parent_base,'result'=>$result,'value'=>$value, 'name'=>$key,'id'=>"link".$key, 'size'=>"small"])
                     {{--                    <div class="form-group row">--}}
                     {{--                        <div class="col-sm-3 text-right">--}}

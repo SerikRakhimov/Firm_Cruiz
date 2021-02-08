@@ -40,12 +40,12 @@ class ItemObserver
     public function deleting($item)
     {
         // предварительное удаление файлов с диска
-        if ($item->base->type_is_photo() || $item->base->type_is_document()) {
+        if ($item->base->type_is_image() || $item->base->type_is_document()) {
             Storage::delete($item->filename());
         }
         $mains = Main::where('child_item_id', $item->id)->get();
         foreach ($mains as $main) {
-            if ($main->parent_item->base->type_is_photo() || $main->parent_item->base->type_is_document()) {
+            if ($main->parent_item->base->type_is_image() || $main->parent_item->base->type_is_document()) {
                 //Storage::delete($main->parent_item->filename());
                 // нужно удалять, "Storage::delete()" выполнится, т.к. это рекурсивный вызов этой же функции "public function deleting($item)"
                 $main->parent_item->delete();

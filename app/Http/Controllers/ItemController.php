@@ -42,9 +42,9 @@ class ItemController extends Controller
         // exists:table,column
         // поле должно существовать в заданной таблице базе данных.
         // 1000 - размер картинки и файла
+        //'name_lang_0' => ['max:1000'] не использовать, т.к. при загрузке изображений и документов мешает
         return [
-            'code' => ['required', 'unique_with: items, base_id, project_id, code'],
-            'name_lang_0' => ['max:1000']
+            'code' => ['required', 'unique_with: items, base_id, project_id, code']
         ];
     }
 
@@ -388,8 +388,8 @@ class ItemController extends Controller
                         ->withInput()
                         ->withErrors($array_mess);
                 }
-                // Тип - фото
-            } elseif ($base->type_is_photo()) {
+                // Тип - изображение
+            } elseif ($base->type_is_image()) {
                 $errors = false;
 
                 if (!$request->hasFile('name_lang_0')) {
@@ -418,7 +418,7 @@ class ItemController extends Controller
             }
         }
 
-        if ($base->type_is_photo() || $base->type_is_document()) {
+        if ($base->type_is_image() || $base->type_is_document()) {
             if ($request->hasFile('name_lang_0')) {
                 $fs = $request->file('name_lang_0')->getSize();
                 $mx = $base->maxfilesize_img_doc;
@@ -511,7 +511,7 @@ class ItemController extends Controller
 
         foreach ($inputs as $key => $value) {
             $link = Link::findOrFail($key);
-            if ($link->parent_base->type_is_photo() || $link->parent_base->type_is_document()) {
+            if ($link->parent_base->type_is_image() || $link->parent_base->type_is_document()) {
                 if ($request->hasFile($link->id)) {
                     $fs = $request->file($link->id)->getSize();
                     $mx = $link->parent_base->maxfilesize_img_doc;
@@ -555,8 +555,8 @@ class ItemController extends Controller
         $array_mess = array();
         foreach ($string_langs as $link) {
             if ($link->parent_is_parent_related == false) {
-                // Тип - фото
-                if ($link->parent_base->type_is_photo() || $link->parent_base->type_is_document()) {
+                // Тип - изображение
+                if ($link->parent_base->type_is_image() || $link->parent_base->type_is_document()) {
                     // Проверка на обязательность ввода
                     if ($link->parent_base->is_required_lst_num_str_img_doc == true) {
                         $errors = false;
@@ -585,7 +585,7 @@ class ItemController extends Controller
 
         foreach ($inputs as $key => $value) {
             $link = Link::findOrFail($key);
-            if ($link->parent_base->type_is_photo() || $link->parent_base->type_is_document()) {
+            if ($link->parent_base->type_is_image() || $link->parent_base->type_is_document()) {
                 $path = "";
                 if ($request->hasFile($key)) {
                     $path = $request[$key]->store('public/' . $item->project_id . '/' . $link->parent_base_id);
@@ -755,7 +755,7 @@ class ItemController extends Controller
                         $main->created_user_id = Auth::user()->id;
                     } else {
                         // удалить файл-предыдущее значение при корректировке
-                        if ($main->parent_item->base->type_is_photo() || $main->parent_item->base->type_is_document()) {
+                        if ($main->parent_item->base->type_is_image() || $main->parent_item->base->type_is_document()) {
                             if ($values[$i] != "") {
                                 Storage::delete($main->parent_item->filename());
                             }
@@ -803,8 +803,8 @@ class ItemController extends Controller
             $main->parent_item_id = $values[$index];
 
 
-        } // тип корректировки поля - фото или документ
-        elseif ($link->parent_base->type_is_photo() || $link->parent_base->type_is_document()) {
+        } // тип корректировки поля - изображение или документ
+        elseif ($link->parent_base->type_is_image() || $link->parent_base->type_is_document()) {
             $item_find = Item::find($main->parent_item_id);
             if (!$item_find) {
                 // создание новой записи в items
@@ -830,8 +830,8 @@ class ItemController extends Controller
 //            }
             $item_find->name_lang_0 = $values[$index];
             $item_find->name_lang_1 = "";
-            if ($item_find->base->type_is_photo() == true) {
-                if ($item_find->base->is_to_moderate_photo == true) {
+            if ($item_find->base->type_is_image() == true) {
+                if ($item_find->base->is_to_moderate_image == true) {
                     // На модерации
                     $item_find->name_lang_1 = "3";
                 } else {
@@ -925,13 +925,13 @@ class ItemController extends Controller
     function save_img_doc(Request $request, Item &$item)
     {
         $base = $item->base;
-        if ($base->type_is_photo() || $base->type_is_document()) {
+        if ($base->type_is_image() || $base->type_is_document()) {
             $path = "";
             if ($request->hasFile('name_lang_0')) {
                 $path = $item->name_lang_0->store('public/' . $item->project_id . '/' . $base->id);
                 $item->name_lang_0 = $path;
-                if ($base->type_is_photo()) {
-                    if ($item->base->is_to_moderate_photo == true) {
+                if ($base->type_is_image()) {
+                    if ($item->base->is_to_moderate_image == true) {
                         $item->name_lang_1 = "3";
                     } else {
                         $item->name_lang_1 = "0";
@@ -1043,8 +1043,8 @@ class ItemController extends Controller
                         ->withInput()
                         ->withErrors($array_mess);
                 }
-                // Тип - фото
-            } elseif ($item->base->type_is_photo()) {
+                // Тип - изображение
+            } elseif ($item->base->type_is_image()) {
                 $errors = false;
                 if (!$item->img_doc_exist()) {
                     if (!$request->hasFile('name_lang_0')) {
@@ -1076,7 +1076,7 @@ class ItemController extends Controller
             }
         }
 
-        if ($item->base->type_is_photo() || $item->base->type_is_document()) {
+        if ($item->base->type_is_image() || $item->base->type_is_document()) {
             if ($request->hasFile('name_lang_0')) {
                 $fs = $request->file('name_lang_0')->getSize();
                 $mx = $item->base->maxfilesize_img_doc;
@@ -1095,7 +1095,7 @@ class ItemController extends Controller
                 }
             }
         }
-        if ($item->base->type_is_photo() || $item->base->type_is_document()) {
+        if ($item->base->type_is_image() || $item->base->type_is_document()) {
             if ($request->hasFile('name_lang_0')) {
                 Storage::delete($item->filename());
             }
@@ -1118,8 +1118,8 @@ class ItemController extends Controller
         // нужно по порядку: сначала этот блок
         // значения null в ""
         // у строк могут быть пустые значения, поэтому нужно так: '$item->name_lang_0 = isset($request->name_lang_0) ? $request->name_lang_0 : ""'
-        // Проверка "if (!($item->base->type_is_photo() || $item->base->type_is_document()))" нужна
-        if (!($item->base->type_is_photo() || $item->base->type_is_document())) {
+        // Проверка "if (!($item->base->type_is_image() || $item->base->type_is_document()))" нужна
+        if (!($item->base->type_is_image() || $item->base->type_is_document())) {
             $item->name_lang_0 = isset($request->name_lang_0) ? $request->name_lang_0 : "";
             $item->name_lang_1 = isset($request->name_lang_1) ? $request->name_lang_1 : "";
             $item->name_lang_2 = isset($request->name_lang_2) ? $request->name_lang_2 : "";
@@ -1181,7 +1181,7 @@ class ItemController extends Controller
 
         foreach ($inputs as $key => $value) {
             $link = Link::findOrFail($key);
-            if ($link->parent_base->type_is_photo() || $link->parent_base->type_is_document()) {
+            if ($link->parent_base->type_is_image() || $link->parent_base->type_is_document()) {
                 if ($request->hasFile($link->id)) {
                     $fs = $request->file($link->id)->getSize();
                     $mx = $link->parent_base->maxfilesize_img_doc;
@@ -1208,7 +1208,7 @@ class ItemController extends Controller
         // см. https://webformyself.com/kak-v-php-poluchit-znachenie-checkbox/
         foreach ($inputs as $key => $value) {
             $link = Link::findOrFail($key);
-            if ($link->parent_base->type_is_photo() || $link->parent_base->type_is_document()) {
+            if ($link->parent_base->type_is_image() || $link->parent_base->type_is_document()) {
                 $path = "";
                 if ($request->hasFile($key)) {
                     $path = $request[$key]->store('public/' . $item->project_id . '/' . $link->parent_base_id);
@@ -1235,8 +1235,8 @@ class ItemController extends Controller
         $array_mess = array();
         foreach ($string_langs as $link) {
             if ($link->parent_is_parent_related == false) {
-                // Тип - фото
-                if ($link->parent_base->type_is_photo() || $link->parent_base->type_is_document()) {
+                // Тип - изображение
+                if ($link->parent_base->type_is_image() || $link->parent_base->type_is_document()) {
                     // Проверка на обязательность ввода
                     if ($link->parent_base->is_required_lst_num_str_img_doc == true) {
                         $item_seek = MainController::get_parent_item_from_main($item->id, $link->id);
@@ -1412,7 +1412,7 @@ class ItemController extends Controller
                         $main->created_user_id = Auth::user()->id;
                     } else {
                         // удалить файл-предыдущее значение при корректировке
-                        if ($main->parent_item->base->type_is_photo() || $main->parent_item->base->type_is_document()) {
+                        if ($main->parent_item->base->type_is_image() || $main->parent_item->base->type_is_document()) {
                             if ($values[$i] != "") {
                                 Storage::delete($main->parent_item->filename());
                                 //$main->parent_item->delete();
@@ -1511,13 +1511,13 @@ class ItemController extends Controller
 
     function ext_delete(Item $item, $heading = false)
     {
-//        if ($item->base->type_is_photo() || $item->base->type_is_document()) {
+//        if ($item->base->type_is_image() || $item->base->type_is_document()) {
 //            Storage::delete($item->filename());
 //        }
 //
 //        $mains = Main::where('child_item_id', $item->id)->get();
 //        foreach ($mains as $main) {
-//            if ($main->parent_item->base->type_is_photo() || $main->parent_item->base->type_is_document()) {
+//            if ($main->parent_item->base->type_is_image() || $main->parent_item->base->type_is_document()) {
 //                Storage::delete($main->parent_item->filename());
 //                $main->parent_item->delete();
 //            }
@@ -1772,7 +1772,7 @@ class ItemController extends Controller
                     if (!$error && $item) {
                         $result_item = $item;
                         $result_item_id = $item->id;
-                        if ($item->base->type_is_photo() || $item->base->type_is_document()) {
+                        if ($item->base->type_is_image() || $item->base->type_is_document()) {
                             $result_item_name = "<a href='" . Storage::url($item->filename()) . "'><img src='" . Storage::url($item->filename()) . "' height='50' alt='' title='" . $item->filename() . "'></a>";
                         } else {
                             $result_item_name = $item->name();

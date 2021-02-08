@@ -42,7 +42,7 @@ class BaseObserver
         // эти записи items потом удалятся автоматически, т.к. связаны с bases
         $items = Item::where('base_id', $base->id)->get();
         foreach ($items as $item) {
-            if ($item->base->type_is_photo() || $item->base->type_is_document()) {
+            if ($item->base->type_is_image() || $item->base->type_is_document()) {
                 Storage::delete($item->filename());
             }
         }

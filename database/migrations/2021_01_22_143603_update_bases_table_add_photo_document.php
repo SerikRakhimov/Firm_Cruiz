@@ -14,9 +14,9 @@ class UpdateBasesTableAddPhotoDocument extends Migration
     public function up()
     {
         Schema::table('bases', function (Blueprint $table) {
-            $table->boolean('type_is_photo')->default(false);
+            $table->boolean('type_is_image')->default(false);
             $table->boolean('type_is_document')->default(false);
-            $table->boolean('is_to_moderate_photo')->default(true);
+            $table->boolean('is_to_moderate_image')->default(true);
         });
     }
 

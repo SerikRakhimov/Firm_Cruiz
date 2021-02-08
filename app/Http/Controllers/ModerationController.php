@@ -17,8 +17,8 @@ class ModerationController extends Controller
     {
         $items = Item::select(DB::Raw('items.*'))
             ->join('bases', 'items.base_id', '=', 'bases.id')
-            ->where('bases.type_is_photo', true)
-            ->where('bases.is_to_moderate_photo', true)
+            ->where('bases.type_is_image', true)
+            ->where('bases.is_to_moderate_image', true)
             ->orderBy('items.name_lang_1', 'desc')
             ->orderBy('items.created_at', 'desc');
 

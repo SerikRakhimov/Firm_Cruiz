@@ -1,7 +1,7 @@
 <?php
 use \App\Http\Controllers\GlobalController;
 ?>
-@if($item->base->type_is_photo())
+@if($item->base->type_is_image())
     @if($item->img_doc_exist())
         @if($filenametrue == true)
             <a href="{{Storage::url($item->filename(true))}}">

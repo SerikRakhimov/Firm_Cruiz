@@ -25,12 +25,12 @@
     ?>
     <p>Id: <b>{{$item->id}}</b></p>
     @if($base_right['is_show_base_enable'] == true)
-        <p>
+        <p>и
             {{trans('main.code')}}: <b>{{$item->code}}</b><br>
             {{--        @foreach (session('glo_menu_save') as $key=>$value)--}}
             {{--            {{trans('main.name')}} ({{trans('main.' . $value)}}): <b>{{$item['name_lang_' . $key]}}</b><br>--}}
             {{--        @endforeach--}}
-            @if($base->type_is_photo)
+            @if($base->type_is_image)
                 @include('view.img',['item'=>$item, 'size'=>"medium", 'filenametrue'=>false])
 {{--                <a href="{{Storage::url($item->filename())}}">--}}
 {{--                    <img src="{{Storage::url($item->filename())}}" height="250"--}}
@@ -75,7 +75,7 @@
                 ?>
                 @if($base_link_right['is_show_link_enable'] == true)
                     {{$link->parent_label()}}:
-                        @if($link->parent_base->type_is_photo)
+                        @if($link->parent_base->type_is_image)
 {{--                            <br>--}}
                             @include('view.img',['item'=>$item_find, 'size'=>"medium", 'filenametrue'=>false])
 {{--                            <a href="{{Storage::url($item_find->filename())}}">--}}
