@@ -143,7 +143,7 @@ class BaseController extends Controller
         $base->is_calcname_lst = isset($request->is_calcname_lst) ? "1" : "0";
         $base->is_same_small_calcname = isset($request->is_same_small_calcname) ? "1" : "0";
 
-        $base->digits_num = $request->digits_num;
+        $base->digits_num = isset($request->digits_num) ? $request->digits_num : "0";
         $base->sepa_calcname = isset($request->sepa_calcname) ? $request->sepa_calcname : "";
         $base->sepa_same_left_calcname = isset($request->sepa_same_left_calcname) ? $request->sepa_same_left_calcname : "";
         $base->sepa_same_right_calcname = isset($request->sepa_same_left_calcname) ? $request->sepa_same_right_calcname : "";
@@ -367,7 +367,7 @@ class BaseController extends Controller
         $base->is_calcname_lst = isset($request->is_calcname_lst) ? "1" : "0";
         $base->is_same_small_calcname = isset($request->is_same_small_calcname) ? "1" : "0";
 
-        $base->digits_num = $request->digits_num;
+        $base->digits_num = isset($request->digits_num) ? $request->digits_num : "0";
         $base->sepa_calcname = isset($request->sepa_calcname) ? $request->sepa_calcname : "";
         $base->sepa_same_left_calcname = isset($request->sepa_same_left_calcname) ? $request->sepa_same_left_calcname : "";
         $base->sepa_same_right_calcname = isset($request->sepa_same_left_calcname) ? $request->sepa_same_right_calcname : "";

@@ -64,9 +64,9 @@
                 @if($base->is_code_needed == true)
                     <th class="text-center">{{trans('main.code')}}</th>
                 @endif
+                <th @include('layouts.class_from_base',['base'=>$base])>
+                    {{trans('main.name')}}</th>
             @endif
-            <th @include('layouts.class_from_base',['base'=>$base])>
-                {{trans('main.name')}}</th>
             @foreach($links as $link)
                 <?php
                 $base_link_right = GlobalController::base_link_right($link);
@@ -118,26 +118,26 @@
                             </a>
                         </td>
                     @endif
+                    <td @include('layouts.class_from_base',['base'=>$base])>
+                        @if($base->type_is_image)
+                            @include('view.img',['item'=>$item, 'size'=>"small", 'filenametrue'=>false])
+                            {{--                        <a href="{{Storage::url($item->filename())}}">--}}
+                            {{--                            <img src="{{Storage::url($item->filename())}}" height="50"--}}
+                            {{--                                 alt="" title="{{$item->title_img()}}">--}}
+                            {{--                        </a>--}}
+                        @elseif($base->type_is_document)
+                            @include('view.doc',['item'=>$item])
+                            {{--                        <a href="{{Storage::url($item->filename())}}" target="_blank"--}}
+                            {{--                           alt="" title="{{$item->title_img()}}">--}}
+                            {{--                            Открыть документ--}}
+                            {{--                        </a>--}}
+                        @else
+                            <a href="{{route('item.item_index', $item)}}">
+                                {{$item->name()}}
+                            </a>
+                        @endif
+                    </td>
                 @endif
-                <td @include('layouts.class_from_base',['base'=>$base])>
-                    @if($base->type_is_image)
-                        @include('view.img',['item'=>$item, 'size'=>"small", 'filenametrue'=>false])
-{{--                        <a href="{{Storage::url($item->filename())}}">--}}
-{{--                            <img src="{{Storage::url($item->filename())}}" height="50"--}}
-{{--                                 alt="" title="{{$item->title_img()}}">--}}
-{{--                        </a>--}}
-                    @elseif($base->type_is_document)
-                        @include('view.doc',['item'=>$item])
-{{--                        <a href="{{Storage::url($item->filename())}}" target="_blank"--}}
-{{--                           alt="" title="{{$item->title_img()}}">--}}
-{{--                            Открыть документ--}}
-{{--                        </a>--}}
-                    @else
-                        <a href="{{route('item.item_index', $item)}}">
-                            {{$item->name()}}
-                        </a>
-                    @endif
-                </td>
                 {{--                <td class="text-center">&#8594;</td>--}}
                 @foreach($links as $link)
                     <?php
@@ -152,17 +152,17 @@
                             ?>
                             @if($item_find)
                                 @if($link->parent_base->type_is_image())
-                                        @include('view.img',['item'=>$item_find, 'size'=>"small", 'filenametrue'=>false])
-{{--                                    <a href="{{Storage::url($item_find->filename())}}">--}}
-{{--                                        <img src="{{Storage::url($item_find->filename())}}" height="50"--}}
-{{--                                             alt="" title="{{$item_find->title_img()}}">--}}
-{{--                                    </a>--}}
+                                    @include('view.img',['item'=>$item_find, 'size'=>"small", 'filenametrue'=>false])
+                                    {{--                                    <a href="{{Storage::url($item_find->filename())}}">--}}
+                                    {{--                                        <img src="{{Storage::url($item_find->filename())}}" height="50"--}}
+                                    {{--                                             alt="" title="{{$item_find->title_img()}}">--}}
+                                    {{--                                    </a>--}}
                                 @elseif($link->parent_base->type_is_document())
-                                        @include('view.doc',['item'=>$item_find])
-{{--                                    <a href="{{Storage::url($item_find->filename())}}" target="_blank"--}}
-{{--                                       alt="" title="{{$item_find->title_img()}}">--}}
-{{--                                        Открыть документ--}}
-{{--                                    </a>--}}
+                                    @include('view.doc',['item'=>$item_find])
+                                    {{--                                    <a href="{{Storage::url($item_find->filename())}}" target="_blank"--}}
+                                    {{--                                       alt="" title="{{$item_find->title_img()}}">--}}
+                                    {{--                                        Открыть документ--}}
+                                    {{--                                    </a>--}}
                                 @else
                                     {{--                                проверка, если link - вычисляемое поле--}}
                                     @if ($link->parent_is_parent_related == true || $link->parent_is_numcalc == true)
