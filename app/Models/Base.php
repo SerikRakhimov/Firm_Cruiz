@@ -8,6 +8,11 @@ class Base extends Model
 {
     protected $fillable = ['name_lang_0', 'name_lang_1', 'name_lang_2', 'name_lang_3'];
 
+    function items()
+    {
+        return $this->hasMany(Item::class, 'base_id');
+    }
+
     function child_links()
     {
         return $this->hasMany(Link::class, 'child_base_id');

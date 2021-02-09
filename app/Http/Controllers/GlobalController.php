@@ -307,12 +307,23 @@ class GlobalController extends Controller
         if ($base_right['is_list_base_byuser'] == true) {
             $items = $items->where('created_user_id', GlobalController::glo_user_id());
         }
+
+//
+//        $items = $items->whereHas('child_mains', function ($query) {
+//            $query->where('parent_item_id', 358);
+//        });
+//        $items = $items->whereHas('child_mains', function ($query) {
+//            $query->where('link_id', 11)->where('parent_item_id', 152);
+//        });
+
+
         $name = "";  // нужно, не удалять
         $index = array_search(session('locale'), session('glo_menu_save'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
             $name = 'name_lang_' . $index;
             $items = $items->orderBy($name);
         }
+
         $itget = $items->get();
         return ['items' => $items, 'itget' => $itget];
     }

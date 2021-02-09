@@ -2,6 +2,8 @@
 
 @section('content')
     <?php
+    use App\Models\Base;
+    use App\Models\Item;
     use App\Models\Link;
     use App\Models\Main;
     use \App\Http\Controllers\GlobalController;
@@ -9,7 +11,54 @@
     use \App\Http\Controllers\MainController;
     $links = $base->child_links->sortBy('parent_base_number');
     $base_right = GlobalController::base_right($base);
+
+    $list = $items;
+
+    //->where('approved', 1)->orderBy('email')
     ?>
+
+    @foreach($items as $item)
+        <br><p>{{$item->id}}: {{$item->name()}}</p>
+        <?php
+        $list2 = $item->child_mains()->where('parent_item_id', 358)->get();
+        //$list3 = $base->items()->has('child_mains.id')->get();
+
+        //Post::has('comments')->get();
+        ?>
+        {{count($list2)}}
+        @foreach ($list2 as $value)
+            <p>{{$value->id}}: {{$value->parent_item->name()}}</p>
+        @endforeach
+    @endforeach
+    <?php
+    $list3 = Base::has('items')->get();
+    ?>
+    <br>
+      {{count($list3)}}
+        @foreach ($list3 as $value)
+            <p>{{$value->id}}: {{$value->id}}</p>
+        @endforeach
+
+    <?php
+//    $list5 = Item::whereHas('child_mains', function ($query) {
+//        $query->where('parent_item_id', 358);
+//    })->get();
+    $list5 = Item::whereHas('child_mains', function ($query) {
+        $query->where('parent_item_id', 358);
+    });
+    $list5 = $list5->whereHas('child_mains', function ($query) {
+        $query->where('link_id', 11)->where('parent_item_id', 152);
+    })->get();
+
+
+    ?>
+    <br>
+    {{count($list5)}}
+    @foreach ($list5 as $value)
+        <p>{{$value->id}}: {{$value->name()}}</p>
+    @endforeach
+
+
     <p>
     <div class="container-fluid">
         <div class="row">
