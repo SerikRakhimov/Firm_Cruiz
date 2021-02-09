@@ -308,7 +308,6 @@ class GlobalController extends Controller
             $items = $items->where('created_user_id', GlobalController::glo_user_id());
         }
 
-//
 //        $items = $items->whereHas('child_mains', function ($query) {
 //            $query->where('parent_item_id', 358);
 //        });
