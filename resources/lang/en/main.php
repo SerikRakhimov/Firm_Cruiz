@@ -85,6 +85,8 @@ return [
     'roli' => 'Links setting',
     'accesses' => 'Accesses',
     'access' => 'Access',
+    'sets' => 'Assignments',
+    'set' => 'Assignment',
     'date_created' => 'Creation date',
     'date_updated' => 'Date of change',
     'code' => 'Code',
