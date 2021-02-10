@@ -16,7 +16,7 @@
             <div class="col-5 text-right">
                 <button type="button" class="btn btn-dreamer" title="{{trans('main.add')}}"
                         onclick="document.location='{{route('role.create', ['template'=>$template])}}'">
-                    {{--                    <i class="fas fa-plus fa-fw d-none d-sm-block "></i>--}}
+                    <i class="fas fa-plus d-inline"></i>
                     {{trans('main.add')}}
                 </button>
             </div>

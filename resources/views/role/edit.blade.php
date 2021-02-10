@@ -492,11 +492,11 @@
                     <button type="submit" class="btn btn-dreamer"
                             @if (!$update)
                             title="{{trans('main.add')}}">
-                        {{--                    <i class="fas fa-save"></i>--}}
+                        <i class="fas fa-save d-inline"></i>
                         {{trans('main.add')}}
                         @else
                             title="{{trans('main.save')}}">
-                            {{--                        <i class="fas fa-save"></i>--}}
+                            <i class="fas fa-save d-inline"></i>
                             {{trans('main.save')}}
                         @endif
                     </button>
@@ -507,7 +507,7 @@
                     <button type="button" class="btn btn-dreamer" title="{{trans('main.cancel')}}"
                         @include('layouts.role.previous_url')
                     >
-                        {{--                    <i class="fas fa-arrow-left"></i>--}}
+                        <i class="fas fa-arrow-left d-inline"></i>
                         {{trans('main.cancel')}}
                     </button>
                 </div>

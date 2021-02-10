@@ -29,6 +29,7 @@
             <th class="text-center">{{trans('main.projects')}}</th>
             <th class="text-center">{{trans('main.roles')}}</th>
             <th class="text-center">{{trans('main.bases')}}</th>
+            <th class="text-center">{{trans('main.sets')}}</th>
         </tr>
         </thead>
         <tbody>
@@ -63,6 +64,11 @@
                 <td class="text-center">
                     <a href="{{route('base.index', $template)}}" title="{{trans('main.bases')}}">
                         <i class="fas fa-atom"></i>
+                    </a>
+                </td>
+                <td class="text-center">
+                    <a href="{{route('set.index', $template)}}" title="{{trans('main.sets')}}">
+                        <i class="fas fa-equals"></i>
                     </a>
                 </td>
             </tr>

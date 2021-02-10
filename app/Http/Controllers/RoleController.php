@@ -57,7 +57,6 @@ class RoleController extends Controller
         date_default_timezone_set('Asia/Almaty');
 
         $role = new Role($request->except('_token', '_method'));
-        $role->template_id = $request->template_id;
 
         $this->set($request, $role);
         //https://laravel.demiart.ru/laravel-sessions/
@@ -117,6 +116,7 @@ class RoleController extends Controller
 
     function set(Request $request, Role &$role)
     {
+        $role->template_id = $request->template_id;
         $role->name_lang_0 = $request->name_lang_0;
         $role->name_lang_1 = isset($request->name_lang_1) ? $request->name_lang_1 : "";
         $role->name_lang_2 = isset($request->name_lang_2) ? $request->name_lang_2 : "";

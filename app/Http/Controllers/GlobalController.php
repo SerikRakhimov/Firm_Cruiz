@@ -308,12 +308,26 @@ class GlobalController extends Controller
             $items = $items->where('created_user_id', GlobalController::glo_user_id());
         }
 
-//        $items = $items->whereHas('child_mains', function ($query) {
-//            $query->where('parent_item_id', 358);
-//        });
+        $items = $items->whereHas('child_mains', function ($query) {
+            $query->where('parent_item_id', 358);
+        });
 //        $items = $items->whereHas('child_mains', function ($query) {
 //            $query->where('link_id', 11)->where('parent_item_id', 152);
 //        });
+//        $items = $items->whereHas('child_mains', function ($query) {
+//            $query->where('link_id', 11)->whereHas('parent_item', function ($query) {
+//                $query->where(strval('name_lang_0'), '<=',500);});
+//        });
+
+        $items = $items->whereHas('child_mains', function ($query) {
+            $query->where('link_id', 11)->whereHas('parent_item', function ($query) {
+                $query->where(strval('name_lang_0'), '<=',500);});
+        })->whereHas('child_mains', function ($query) {
+            $query->where('link_id', 3)->whereHas('parent_item', function ($query) {
+                $query->whereDate('name_lang_0', '>','2020-02-09');});
+        });
+
+
 
 
         $name = "";  // нужно, не удалять

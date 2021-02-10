@@ -54,6 +54,16 @@ class Item extends Model
         return $this->updated_user->name() . ", " . $this->updated_at->Format(trans('main.format_date_time'));
     }
 
+    function child_mains()
+    {
+        return $this->hasMany(Main::class, 'child_item_id');
+    }
+
+    function parent_mains()
+    {
+        return $this->hasMany(Main::class, 'parent_item_id');
+    }
+
     function name()
     {
         $result = "";  // нужно, не удалять
@@ -135,16 +145,6 @@ class Item extends Model
     function info_full()
     {
         return trans('main.item') . " (" . $this->id . ") _ " . $this->base->name() . " _ " . $this->name();
-    }
-
-    function child_mains()
-    {
-        return $this->hasMany(Main::class, 'child_item_id');
-    }
-
-    function parent_mains()
-    {
-        return $this->hasMany(Main::class, 'parent_item_id');
     }
 
     // Для типов полей Изображение, Документ

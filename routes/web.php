@@ -274,6 +274,39 @@ Route::delete('/roba/delete/{roba}', 'RobaController@delete')
     ->name('roba.delete')
     ->middleware('auth');
 
+// Sets
+Route::get('/set/index/{template}', 'SetController@index')
+    ->name('set.index')
+    ->middleware('auth');
+
+Route::get('/set/show/{set}', 'SetController@show')
+    ->name('set.show')
+    ->middleware('auth');
+
+Route::get('/set/create/{template}', 'SetController@create')
+    ->name('set.create')
+    ->middleware('auth');
+
+Route::get('/set/edit/{set}', 'SetController@edit')
+    ->name('set.edit')
+    ->middleware('auth');
+
+Route::post('/set/store', 'SetController@store')
+    ->name('set.store')
+    ->middleware('auth');
+
+Route::put('/set/edit/{set}', 'SetController@update')
+    ->name('set.update')
+    ->middleware('auth');
+
+Route::get('/set/delete_question/{set}', 'SetController@delete_question')
+    ->name('set.delete_question')
+    ->middleware('auth');
+
+Route::delete('/set/delete/{set}', 'SetController@delete')
+    ->name('set.delete')
+    ->middleware('auth');
+
 // Rolis
 Route::get('/roli/index_role/{role}', 'RoliController@index_role')
     ->name('roli.index_role')

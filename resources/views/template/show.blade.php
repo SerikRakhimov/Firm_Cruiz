@@ -35,13 +35,13 @@
         @endif
         <p>
             @if(Auth::user()->isAdmin() == true)
-            {{--            "mb-1 mb-sm-0" нужно чтобы на маленьких экранах кнопки не слипались (margin-botton - 1px) --}}
-            <button type="button" class="btn btn-dreamer mb-1 mb-sm-0" title="{{trans('main.projects')}}"
-                    onclick="document.location='{{route('project.index_template', $template)}}'">
-                <i class="fas fa-cube"></i>
-                {{trans('main.projects')}}
-            </button>
-                @else
+                {{--            "mb-1 mb-sm-0" нужно чтобы на маленьких экранах кнопки не слипались (margin-botton - 1px) --}}
+                <button type="button" class="btn btn-dreamer mb-1 mb-sm-0" title="{{trans('main.projects')}}"
+                        onclick="document.location='{{route('project.index_template', $template)}}'">
+                    <i class="fas fa-cube"></i>
+                    {{trans('main.projects')}}
+                </button>
+            @else
                 <button type="button" class="btn btn-dreamer mb-1 mb-sm-0" title="{{trans('main.projects')}}"
                         onclick="document.location='{{route('project.index_user', Auth::user())}}'">
                     <i class="fas fa-cube"></i>
@@ -57,6 +57,11 @@
                     onclick="document.location='{{route('base.index', $template)}}'">
                 <i class="fas fa-atom"></i>
                 {{trans('main.bases')}}
+            </button>
+            <button type="button" class="btn btn-dreamer  mb-1 mb-sm-0" title="{{trans('main.sets')}}"
+                    onclick="document.location='{{route('set.index', $template)}}'">
+                <i class="fas fa-equals"></i>
+                {{trans('main.sets')}}
             </button>
             <button type="button" class="btn btn-dreamer mb-1 mb-sm-0"
                     title="{{trans('main.cancel')}}" @include('layouts.template.previous_url')>
