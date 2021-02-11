@@ -213,4 +213,5 @@ return [
     'ua_replace' => 'Заменить',
     'the_same_values_are_not_valid'=>'Одинаковые значения недопустимы',
     'and'=>'И',
+    'image_is_missing'=>'Изображение отсутствует',
 ];

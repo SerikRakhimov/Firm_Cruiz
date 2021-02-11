@@ -32,7 +32,7 @@
             @enderror
         </div>
         <div class="col-sm-5-left">
-            <label>{{trans('main.explanation_img')}} ({{mb_strtolower(trans('main.maximum'))}} {{$base->maxfilesize_title_img_doc}})</label>
+            <label>{{trans('main.explanation_img')}} ({{mb_strtolower(trans('main.maximum'))}} {{$item->base->maxfilesize_title_img_doc}})</label>
         </div>
     </div>
 

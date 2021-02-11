@@ -131,10 +131,10 @@
                     </th>
                 @endif
             @endforeach
-            <th class="text-center">{{trans('main.user')}}</th>
-            <th class="text-center">{{trans('main.user')}}</th>
-            <th class="text-center"></th>
-            <th class="text-center"></th>
+{{--            <th class="text-center">{{trans('main.user')}}</th>--}}
+{{--            <th class="text-center">{{trans('main.user')}}</th>--}}
+{{--            <th class="text-center"></th>--}}
+{{--            <th class="text-center"></th>--}}
             <th class="text-center"></th>
             <th class="text-center"></th>
             @if($base_right['is_list_base_update'] == true)
@@ -229,49 +229,49 @@
                         </td>
                     @endif
                 @endforeach
-                <td>{{$item->created_user->name()}}
-                </td>
-                <td>{{$item->updated_user->name()}}
-                </td>
-                <td class="text-left">
-                    <?php
-                    //                    $link = Link::where('child_base_id', $item->base_id)->first();
-                    //                    $main = Main::where('child_item_id', $item->id)->first();
-                    $link = Link::where('child_base_id', $item->base_id)->exists();
-                    $main = Main::where('child_item_id', $item->id)->exists();
-                    ?>
-                    @if ($link != null)
-                        @if ($main != null)
-                            {{trans('main.full')}}
-                        @endif
-                    @else
-                        <span class="text-danger font-weight-bold">{{trans('main.empty')}}</span>
-                    @endif
-                </td>
-                <td class="text-left">
-                    <?php
-                    //                  $link = Link::where('parent_base_id', $item->base_id)->first();
-                    //                  $main = Main::where('parent_item_id', $item->id)->first();
-                    //                  $link = Link::all()->contains('parent_base_id', $item->base_id);
-                    //                  $main = Main::all()->contains('parent_item_id', $item->id);
-                    $link = Link::where('parent_base_id', $item->base_id)->exists();
-                    $main = Main::where('parent_item_id', $item->id)->exists();
-                    ?>
-                    @if ($link != null)
-                        @if ($main != null)
-                            {{trans('main.used')}}
-                        @else
-                            {{trans('main.not_used')}}
-                        @endif
-                    @endif
-                    {{--                        /--}}
-                    {{--                        @if  (count($item->parent_mains) == 0)--}}
-                    {{--                            <b>{{trans('main.not_used')}}</b>--}}
-                    {{--                        @else--}}
-                    {{--                            {{trans('main.used')}}--}}
-                    {{--                        @endif--}}
+{{--                <td>{{$item->created_user->name()}}--}}
+{{--                </td>--}}
+{{--                <td>{{$item->updated_user->name()}}--}}
+{{--                </td>--}}
+{{--                <td class="text-left">--}}
+{{--                    <?php--}}
+{{--                    //                    $link = Link::where('child_base_id', $item->base_id)->first();--}}
+{{--                    //                    $main = Main::where('child_item_id', $item->id)->first();--}}
+{{--                    $link = Link::where('child_base_id', $item->base_id)->exists();--}}
+{{--                    $main = Main::where('child_item_id', $item->id)->exists();--}}
+{{--                    ?>--}}
+{{--                    @if ($link != null)--}}
+{{--                        @if ($main != null)--}}
+{{--                            {{trans('main.full')}}--}}
+{{--                        @endif--}}
+{{--                    @else--}}
+{{--                        <span class="text-danger font-weight-bold">{{trans('main.empty')}}</span>--}}
+{{--                    @endif--}}
+{{--                </td>--}}
+{{--                <td class="text-left">--}}
+{{--                    <?php--}}
+{{--                    //                  $link = Link::where('parent_base_id', $item->base_id)->first();--}}
+{{--                    //                  $main = Main::where('parent_item_id', $item->id)->first();--}}
+{{--                    //                  $link = Link::all()->contains('parent_base_id', $item->base_id);--}}
+{{--                    //                  $main = Main::all()->contains('parent_item_id', $item->id);--}}
+{{--                    $link = Link::where('parent_base_id', $item->base_id)->exists();--}}
+{{--                    $main = Main::where('parent_item_id', $item->id)->exists();--}}
+{{--                    ?>--}}
+{{--                    @if ($link != null)--}}
+{{--                        @if ($main != null)--}}
+{{--                            {{trans('main.used')}}--}}
+{{--                        @else--}}
+{{--                            {{trans('main.not_used')}}--}}
+{{--                        @endif--}}
+{{--                    @endif--}}
+{{--                    --}}{{--                        /--}}
+{{--                    --}}{{--                        @if  (count($item->parent_mains) == 0)--}}
+{{--                    --}}{{--                            <b>{{trans('main.not_used')}}</b>--}}
+{{--                    --}}{{--                        @else--}}
+{{--                    --}}{{--                            {{trans('main.used')}}--}}
+{{--                    --}}{{--                        @endif--}}
 
-                </td>
+{{--                </td>--}}
                 <td class="text-center">
                     <a href="{{route('item.ext_show',$item)}}" title="{{trans('main.view')}}">
                         <img src="{{Storage::url('view_record.png')}}" width="15" height="15"

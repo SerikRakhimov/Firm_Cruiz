@@ -212,4 +212,5 @@ return [
     'ua_replace' => 'Ауыстыру',
     'the_same_values_are_not_valid'=>'Бірдей мәндер жарамсыз',
     'and'=>'Және',
+    'image_is_missing'=>'Сурет жоқ',
 ];

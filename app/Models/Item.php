@@ -191,6 +191,24 @@ class Item extends Model
         return $result;
     }
 
+    // Возвращает true, если статус =  "не прошло модерацию"  и есть комментарий
+    function is_no_moderation_info()
+    {
+        $result = false;
+        if ($this->base->type_is_image() == true) {
+            if ($this->base->is_to_moderate_image == true) {
+                 // Не прошло модерацию
+                if ($this->name_lang_1 == "2") {
+                    $result = trans('main.did_not_pass_the_moderation');
+                    if ($this->name_lang_2 != "") {
+                        $result = true;
+                    }
+                }
+            }
+        }
+        return $result;
+    }
+
     // Для типов полей Изображение
     function status_img()
     {
@@ -206,8 +224,10 @@ class Item extends Model
                     if ($this->name_lang_2 != "") {
                         $result = $result . ": " . $this->name_lang_2;
                     }
+                    // Прошло модерацию
                 } elseif ($this->name_lang_1 == "1") {
                     $result = trans('main.moderated');
+                    // Без модерации
                 } elseif ($this->name_lang_1 == "0") {
                     $result = trans('main.without_moderation');
                 }

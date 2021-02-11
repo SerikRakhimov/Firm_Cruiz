@@ -213,4 +213,5 @@ return [
     'ua_replace' => 'Replace',
     'the_same_values_are_not_valid'=>'The same values are not valid',
     'and'=>'And',
+    'image_is_missing'=>'Image is missing',
 ];

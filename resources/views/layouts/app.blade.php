@@ -170,9 +170,9 @@ use App\Models\Project;
             </div>
             </p>
         @endif
-        {{--        <div class="mx-auto" style="width: 1200px;">--}}
+{{--                <div class="mx-auto" style="width: 1200px;">--}}
         @yield('content')
-        {{--        </div>--}}
+{{--                </div>--}}
     </main>
 </div>
 <!-- Ajax -->
