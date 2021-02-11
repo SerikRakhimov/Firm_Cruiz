@@ -730,11 +730,9 @@
             <div class="col-sm-5 text-right">
                 <button type="submit" class="btn btn-dreamer"
                         @if (!$update)
-                        title="{{trans('main.add')}}">
-                    {{trans('main.add')}}
+                        title="{{trans('main.add')}}"><i class="fas fa-save d-inline"></i> {{trans('main.add')}}
                     @else
-                        title="{{trans('main.save')}}">
-                        {{trans('main.save')}}
+                        title="{{trans('main.save')}}"><i class="fas fa-save d-inline"></i> {{trans('main.save')}}
                     @endif
                 </button>
             </div>
@@ -744,7 +742,7 @@
                 <button type="button" class="btn btn-dreamer" title="{{trans('main.cancel')}}"
                         onclick="document.location='{{session('links')}}';"
                 >
-                    <i class="fas fa-arrow-left"></i>
+                    <i class="fas fa-arrow-left d-inline"></i>
                     {{trans('main.cancel')}}
                 </button>
             </div>
