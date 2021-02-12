@@ -212,6 +212,8 @@ return [
     'ua_minus' => 'Take',
     'ua_replace' => 'Replace',
     'the_same_values_are_not_valid'=>'The same values are not valid',
+    'parent_bases_must_be_the_same'=>'Parent bases must be the same',
+    'parent_bases_must_be_number'=>'Parent bases must be Number',
     'and'=>'And',
     'image_is_missing'=>'Image is missing',
 ];

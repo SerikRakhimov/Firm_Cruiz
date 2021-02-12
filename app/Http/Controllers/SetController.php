@@ -118,6 +118,35 @@ class SetController extends Controller
                 ' "' . trans('main.link_to') . '")!';;
             $array_mess['link_from_id'] = $message;
             $array_mess['link_to_id'] = $message;
+            return;
+        }
+        $link_from = Link::find($request->link_from_id);
+        $link_to = Link::find($request->link_to_id);
+        if ($link_from) {
+            if ($link_to) {
+                if ($link_from->parent_base_id != $link_to->parent_base_id) {
+                    $message = trans('main.parent_bases_must_be_the_same')
+                        . ' ("' . $link_from->parent_base->name() . '" ' . mb_strtolower(trans('main.and')) .
+                        ' "' . $link_to->parent_base->name() . '")!';;
+                    $array_mess['link_from_id'] = $message;
+                    $array_mess['link_to_id'] = $message;
+                    return;
+                }
+            }
+        }
+        // Обновление
+        if ($request->forwhat == 1) {
+            // Добавить, Отнять
+            if (($request->updaction == 0) || ($request->updaction == 1)) {
+                if (($link_from->parent_base->type_is_number() == false) || ($link_to->parent_base->type_is_number() == false)) {
+                    $message = trans('main.parent_bases_must_be_number')
+                        . ' ("' . $link_from->parent_base->name() . '" ' . mb_strtolower(trans('main.and')) .
+                        ' "' . $link_to->parent_base->name() . '")!';;
+                    $array_mess['link_from_id'] = $message;
+                    $array_mess['link_to_id'] = $message;
+                    return;
+                }
+            }
         }
     }
 
@@ -133,7 +162,7 @@ class SetController extends Controller
         $set->is_upd_minus = false;
         $set->is_upd_replace = false;
 
-        // Похожие строки в SetController.php (functions: store(), edit())
+        // Похожие строки в SetController.php (functions: store(), edit(), check())
         // и в Set.php (functions: get_types(), type(), type_name())
         // и в Set/edit.blade.php
         switch ($request->forwhat) {

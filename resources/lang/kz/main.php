@@ -211,6 +211,8 @@ return [
     'ua_minus' => 'Алу',
     'ua_replace' => 'Ауыстыру',
     'the_same_values_are_not_valid'=>'Бірдей мәндер жарамсыз',
+    'parent_bases_must_be_the_same'=>'Ата-ананың негіздері бірдей болуы тиіс',
+    'parent_bases_must_be_number'=>'Тектік негіздер Нөмір болуы тиіс',
     'and'=>'Және',
     'image_is_missing'=>'Сурет жоқ',
 ];

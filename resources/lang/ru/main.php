@@ -212,6 +212,8 @@ return [
     'ua_minus' => 'Отнять',
     'ua_replace' => 'Заменить',
     'the_same_values_are_not_valid'=>'Одинаковые значения недопустимы',
+    'parent_bases_must_be_the_same'=>'Родительские основы должны быть одинаковыми',
+    'parent_bases_must_be_number'=>'Родительские основы должны быть Число',
     'and'=>'И',
     'image_is_missing'=>'Изображение отсутствует',
 ];

@@ -152,7 +152,7 @@ use App\Models\Project;
             </div>
         </div>
     </nav>
-    <main class="py-4 w-75 mx-auto">
+    <main class="py-4 w-75 mw-75 mx-auto">
         <?php
         $glo_project_role_is_null = GlobalController::glo_project_role_is_null();
         ?>
