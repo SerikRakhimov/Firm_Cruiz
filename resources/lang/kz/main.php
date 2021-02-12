@@ -126,7 +126,7 @@ return [
     'parent_is_child_related' => 'Кіріс өрістерін(поле) автоматты түрде сүзеді',
     'parent_child_related_start_link_id' => 'Сүзгіге арналған өріс(поле)',
     'parent_child_related_result_link_id' => 'Маршрут',
-    'is_calcname_lst' => 'Есептелген өріс',
+    'is_calcname_lst' => 'Есептелетін атау',
     'sepa_calcname' => 'Есептелген атау үшін бөлгіш таңба',
     'is_same_small_calcname' => 'Біртекті (бірдей Негіздер) тәуелділіктермен есептелген атаудың қысқа формасын қолданыңыз, әйтпесе - негізгі форма',
     'sepa_same_left_calcname' => 'Біртекті (бірдей Негізге) тәуелділіктері бар есептелген номиналға арналған солға бөлінетін белгі',
@@ -213,6 +213,7 @@ return [
     'the_same_values_are_not_valid'=>'Бірдей мәндер жарамсыз',
     'parent_bases_must_be_the_same'=>'Ата-ананың негіздері бірдей болуы тиіс',
     'parent_bases_must_be_number'=>'Тектік негіздер Нөмір болуы тиіс',
+    'childrens_bases_must_be_with_the_characteristic_calculated_name'=>'Балалар негіздері «Есептелетін атауы» белгісімен болуы тиіс',
     'and'=>'Және',
     'image_is_missing'=>'Сурет жоқ',
 ];

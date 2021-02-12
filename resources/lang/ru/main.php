@@ -125,7 +125,7 @@ return [
     'parent_is_child_related'=>'Автоматически фильтровать поля ввода',
     'parent_child_related_start_link_id'=>'Поле для фильтрования',
     'parent_child_related_result_link_id'=>'Маршрут',
-    'is_calcname_lst'=>'Вычисляемое поле',
+    'is_calcname_lst'=>'Вычисляемое наименование',
     'sepa_calcname'=>'Символ разделения для вычисляемого наименования',
     'is_same_small_calcname'=>'Использовать краткий вид вычисляемого наименования при однородных (одинаковые Основы) зависимостях, иначе - основной вид',
     'sepa_same_left_calcname'=>'Левый символ разделения для вычисляемого наименования при однородных (одинаковые Основы) зависимостях',
@@ -214,6 +214,7 @@ return [
     'the_same_values_are_not_valid'=>'Одинаковые значения недопустимы',
     'parent_bases_must_be_the_same'=>'Родительские основы должны быть одинаковыми',
     'parent_bases_must_be_number'=>'Родительские основы должны быть Число',
+    'childrens_bases_must_be_with_the_characteristic_calculated_name'=>'Детские Основы должны быть с признаком "Вычисляемое наименование"',
     'and'=>'И',
     'image_is_missing'=>'Изображение отсутствует',
 ];

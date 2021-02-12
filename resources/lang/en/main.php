@@ -125,7 +125,7 @@ return [
     'parent_is_child_related' => 'Automatically filter input fields',
     'parent_child_related_start_link_id' => 'Filter field',
     'parent_child_related_result_link_id' => 'Route',
-    'is_calcname_lst' => 'Calculated field',
+    'is_calcname_lst' => 'Calculated name',
     'sepa_calcname' => 'Separator character for computed name',
     'is_same_small_calcname' => 'Use a short form of the calculated name with homogeneous (identical Bases) dependencies, otherwise - the main view',
     'sepa_same_left_calcname' => 'Left delimiter symbol for a computed denomination with homogeneous (same Bases) dependencies',
@@ -214,6 +214,7 @@ return [
     'the_same_values_are_not_valid'=>'The same values are not valid',
     'parent_bases_must_be_the_same'=>'Parent bases must be the same',
     'parent_bases_must_be_number'=>'Parent bases must be Number',
+    'childrens_bases_must_be_with_the_characteristic_calculated_name'=>'Children\'s Bases must be with the characteristic "Calculated name"',
     'and'=>'And',
     'image_is_missing'=>'Image is missing',
 ];

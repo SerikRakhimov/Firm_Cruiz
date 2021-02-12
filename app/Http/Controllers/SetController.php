@@ -112,6 +112,7 @@ class SetController extends Controller
 
     function check(Request $request, &$array_mess)
     {
+        // Одинаковые значения недопустимы
         if ($request->link_from_id == $request->link_to_id) {
             $message = trans('main.the_same_values_are_not_valid')
                 . ' ("' . trans('main.link_from') . '" ' . mb_strtolower(trans('main.and')) .
@@ -120,8 +121,23 @@ class SetController extends Controller
             $array_mess['link_to_id'] = $message;
             return;
         }
+
         $link_from = Link::find($request->link_from_id);
         $link_to = Link::find($request->link_to_id);
+        //Детские Основы должны быть с признаком "Вычисляемое наименование"
+        if ($link_from) {
+            if ($link_to) {
+                if (($link_from->child_base->is_calcname_lst == false) || ($link_to->child_base->is_calcname_lst == false)) {
+                    $message = trans('main.childrens_bases_must_be_with_the_characteristic_calculated_name')
+                        . ' ("' . $link_from->child_base->name() . '" ' . mb_strtolower(trans('main.and')) .
+                        ' "' . $link_to->child_base->name() . '")!';;
+                    $array_mess['link_from_id'] = $message;
+                    $array_mess['link_to_id'] = $message;
+                    return;
+                }
+            }
+        }
+        // Родительские основы должны быть одинаковыми
         if ($link_from) {
             if ($link_to) {
                 if ($link_from->parent_base_id != $link_to->parent_base_id) {
@@ -134,6 +150,7 @@ class SetController extends Controller
                 }
             }
         }
+        //Родительские основы должны быть Число
         // Обновление
         if ($request->forwhat == 1) {
             // Добавить, Отнять
