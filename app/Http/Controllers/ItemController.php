@@ -6,7 +6,7 @@ use App\Models\Base;
 use App\Models\Item;
 use App\Models\Link;
 use App\Models\Main;
-use App\Models\Project;
+use App\Models\Set;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -774,7 +774,7 @@ class ItemController extends Controller
                     $item->name_lang_3 = $rs['calc_lang_3'];
                 }
 
-
+                $this->save_sets($item, false);
                 $item->save();
 
             }, 3);  // Повторить три раза, прежде чем признать неудачу
@@ -787,6 +787,21 @@ class ItemController extends Controller
         return $heading ? redirect()->route('item.item_index', $item) : redirect(session('links'));
 
 //      return redirect()->back()->withInput();                 # Редиректим его <s>взад</s> на ту же страницу
+    }
+
+    private
+    function save_sets(Item $item, bool $reverse)
+    {
+        $table1 = Set::select(DB::Raw('sets.*'))
+            ->join('links', 'sets.link_from_id', '=', 'links.id')
+            ->join('bases', 'links.child_base_id', '=', $item->base_id)
+            ->orderBy('sets.link_from_id')
+            ->orderBy('sets.link_to_id');
+//        $table2 = Set::select(DB::Raw('table1.*'))
+//            ->join('table1', 'sets.link_from_id', '=', 'links.id')
+//            ->join('bases', 'links.child_base_id', '=', $item->base_id)
+//            ->orderBy('sets.link_from_id')
+//            ->orderBy('sets.link_to_id');
     }
 
     private
