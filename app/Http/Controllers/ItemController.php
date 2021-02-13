@@ -784,7 +784,7 @@ class ItemController extends Controller
             return trans('transaction_not_completed') . ": " . $exc->getMessage();
         }
 
-        //return $heading ? redirect()->route('item.item_index', $item) : redirect(session('links'));
+        return $heading ? redirect()->route('item.item_index', $item) : redirect(session('links'));
 
     }
 
@@ -811,7 +811,7 @@ class ItemController extends Controller
 
         //$results = Set::select( DB::raw("SELECT * FROM :some_table"), array('some_table' => $table1));
 //        $results = Set::select(DB::Raw('table1.*'))->get();
-        echo "".var_dump($set_group_by_base_to);
+        //echo "".var_dump($set_group_by_base_to);
 
     }
 
