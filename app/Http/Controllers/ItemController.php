@@ -784,7 +784,7 @@ class ItemController extends Controller
             return trans('transaction_not_completed') . ": " . $exc->getMessage();
         }
 
-        return $heading ? redirect()->route('item.item_index', $item) : redirect(session('links'));
+        //return $heading ? redirect()->route('item.item_index', $item) : redirect(session('links'));
 
     }
 
@@ -797,21 +797,41 @@ class ItemController extends Controller
 //            ->orderBy('sets.link_from_id')
 //            ->orderBy('sets.link_to_id')->get();
 
-        $set_main = Set::select(DB::Raw('sets.*, lt.parent_base_id as base_to_id'))
+        $set_main = Set::select(DB::Raw('sets.*, lt.child_base_id as to_child_base_id, lt.parent_base_id as to_parent_base_id'))
             ->join('links as lf', 'sets.link_from_id', '=', 'lf.id')
             ->join('links as lt', 'sets.link_to_id', '=', 'lt.id')
             ->where('lf.child_base_id', '=', $item->base_id)
             ->orderBy('sets.link_from_id')
             ->orderBy('sets.link_to_id')->get();
 
-//        $set_group_by_base_to = $set_main->groupBy('base_to_id')->orderBy('base_to_id')->get();
-        $set_group_by_base_to = $set_main->groupBy('base_to_id')->sortBy('base_to_id');
+        $set_group_by_base_to = $set_main->groupBy('to_child_base_id')->sortBy('to_child_base_id');
 
         //$table2 = Set::select(DB::Raw('$table1.*'))->get();
 
-        //$results = Set::select( DB::raw("SELECT * FROM :some_table"), array('some_table' => $table1));
-//        $results = Set::select(DB::Raw('table1.*'))->get();
+
         //echo "".var_dump($set_group_by_base_to);
+        //echo "".count($set_group_by_base_to);
+        foreach ($set_group_by_base_to as $to_key => $to_value) {
+            $set_base_to = $set_main->where('to_child_base_id', '=', $to_key)->sortBy('to_parent_base_id');
+            //echo "".$value['base_to_id'];
+            //$base_to_id = $key;
+            //echo var_dump($key);
+            echo "" . count($set_base_to);
+            foreach ($set_base_to as $key => $value) {
+                $item_seek = MainController::view_info($item, $value['link_from_id']);
+                echo "item_id = " . $item->id;
+                echo "value_link_from_id = " . $value['link_from_id'];
+                if($item_seek){
+                    echo "exists";
+                }else{
+                    echo "no_exists";
+                }
+                //echo var_dump($value['link_from_id']);
+            }
+
+
+        }
+
 
     }
 
