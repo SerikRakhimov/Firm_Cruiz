@@ -784,24 +784,35 @@ class ItemController extends Controller
             return trans('transaction_not_completed') . ": " . $exc->getMessage();
         }
 
-        return $heading ? redirect()->route('item.item_index', $item) : redirect(session('links'));
+        //return $heading ? redirect()->route('item.item_index', $item) : redirect(session('links'));
 
-//      return redirect()->back()->withInput();                 # Редиректим его <s>взад</s> на ту же страницу
     }
 
     private
     function save_sets(Item $item, bool $reverse)
     {
-        $table1 = Set::select(DB::Raw('sets.*'))
-            ->join('links', 'sets.link_from_id', '=', 'links.id')
-            ->join('bases', 'links.child_base_id', '=', $item->base_id)
-            ->orderBy('sets.link_from_id')
-            ->orderBy('sets.link_to_id');
-//        $table2 = Set::select(DB::Raw('table1.*'))
-//            ->join('table1', 'sets.link_from_id', '=', 'links.id')
+//        $table1 = Set::select(DB::Raw('sets.*'))
+//            ->join('links', 'sets.link_from_id', '=', 'links.id')
 //            ->join('bases', 'links.child_base_id', '=', $item->base_id)
 //            ->orderBy('sets.link_from_id')
-//            ->orderBy('sets.link_to_id');
+//            ->orderBy('sets.link_to_id')->get();
+
+        $set_main = Set::select(DB::Raw('sets.*, lt.parent_base_id as base_to_id'))
+            ->join('links as lf', 'sets.link_from_id', '=', 'lf.id')
+            ->join('links as lt', 'sets.link_to_id', '=', 'lt.id')
+            ->where('lf.child_base_id', '=', $item->base_id)
+            ->orderBy('sets.link_from_id')
+            ->orderBy('sets.link_to_id')->get();
+
+//        $set_group_by_base_to = $set_main->groupBy('base_to_id')->orderBy('base_to_id')->get();
+        $set_group_by_base_to = $set_main->groupBy('base_to_id')->sortBy('base_to_id');
+
+        //$table2 = Set::select(DB::Raw('$table1.*'))->get();
+
+        //$results = Set::select( DB::raw("SELECT * FROM :some_table"), array('some_table' => $table1));
+//        $results = Set::select(DB::Raw('table1.*'))->get();
+        echo "".var_dump($set_group_by_base_to);
+
     }
 
     private

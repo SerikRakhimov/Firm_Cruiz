@@ -196,12 +196,15 @@ class Item extends Model
     {
         $result = false;
         if ($this->base->type_is_image() == true) {
-            if ($this->base->is_to_moderate_image == true) {
-                 // Не прошло модерацию
-                if ($this->name_lang_1 == "2") {
-                    $result = trans('main.did_not_pass_the_moderation');
-                    if ($this->name_lang_2 != "") {
-                        $result = true;
+            // Показывать для пользователя, создавшего фото
+            if ($this->created_user_id == Auth::user()->id) {
+                if ($this->base->is_to_moderate_image == true) {
+                    // Не прошло модерацию
+                    if ($this->name_lang_1 == "2") {
+                        $result = trans('main.did_not_pass_the_moderation');
+                        if ($this->name_lang_2 != "") {
+                            $result = true;
+                        }
                     }
                 }
             }
