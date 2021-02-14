@@ -774,7 +774,7 @@ class ItemController extends Controller
                     $item->name_lang_3 = $rs['calc_lang_3'];
                 }
 
-                $this->save_sets($item, false);
+                $this->save_sets($item, $keys, $values, $strings_inputs, false);
                 $item->save();
 
             }, 3);  // Повторить три раза, прежде чем признать неудачу
@@ -789,7 +789,7 @@ class ItemController extends Controller
     }
 
     private
-    function save_sets(Item $item, bool $reverse)
+    function save_sets(Item $item, $keys, $values, $strings_inputs, bool $reverse)
     {
 //        $table1 = Set::select(DB::Raw('sets.*'))
 //            ->join('links', 'sets.link_from_id', '=', 'links.id')
@@ -812,27 +812,63 @@ class ItemController extends Controller
         //echo "".var_dump($set_group_by_base_to);
         //echo "".count($set_group_by_base_to);
         foreach ($set_group_by_base_to as $to_key => $to_value) {
-            $set_base_to = $set_main->where('to_child_base_id', '=', $to_key)->sortBy('to_parent_base_id');
+
+            //echo " to_key = " . $to_key . " ";
+
+            $items = Item::where('base_id', $to_key)->where('project_id', GlobalController::glo_project_id());
+//            $items = $items->whereHas('child_mains', function ($query) {
+//                $query->where('link_id', 41)->where('parent_item_id', 388);
+//            });
+            //echo "items = " . var_dump($items->get()) . ", ";
+            $set_base_to = $set_main->where('to_child_base_id', '=', $to_key)->where('is_group', true)->sortBy('to_parent_base_id');
             //echo "".$value['base_to_id'];
             //$base_to_id = $key;
             //echo var_dump($key);
-            echo "" . count($set_base_to);
+            //echo "" . count($set_base_to);
             foreach ($set_base_to as $key => $value) {
                 $item_seek = MainController::view_info($item, $value['link_from_id']);
-                echo "item_id = " . $item->id;
-                echo "value_link_from_id = " . $value['link_from_id'];
-                if($item_seek){
-                    echo "exists";
-                }else{
-                    echo "no_exists";
+                //echo "item_id = " . $item->id;
+                //echo "value_link_from_id = " . $value['link_from_id'];
+                $nk = 0;
+                foreach ($keys as $k => $v) {
+                    if ($v == $value['link_from_id']) {
+                        $nk = $k;
+                        break;
+                    }
                 }
-                //echo var_dump($value['link_from_id']);
+                if ($nk != 0) {
+                    $set_to = $set_base_to->where('link_from_id', $value['link_from_id'])->first();
+                    //echo "set_base_to = " . var_dump($set_base_to) . ", ";
+                    //echo " set_to = " . var_dump($set_to) . ", ";
+                    if ($set_to) {
+                        $nt = $set_to->link_to_id;
+//                        echo " nk = " . $nk . ", ";
+//                        echo " nt = " . $nt . ", ";
+                        $nv = $values[$nk];
+//                        echo " vl = " . $values[$nk] . ", ";
+                        $nv = $values[$nk];
+                        $item_seek = $items->whereHas('child_mains', function ($query) use ($nt, $nv) {
+                            $query->where('link_id', $nt)->where('parent_item_id', $nv);
+                        })->first();
+                        //echo "count = " . count($item_seek);
+                        if ($item_seek) {
+                            echo "exists";
+                        } else {
+                            echo "no_exists";
+                        }
+                        //echo var_dump($value['link_from_id']);
+                    }
+                }
+                //echo "items = " . var_dump($items->get()).", ";
             }
+            $items = $items->get();
+//            echo "items = " . var_dump($items).", ";
 
 
         }
 
-
+        //echo var_dump($keys);
+        //echo var_dump($values);
     }
 
     private

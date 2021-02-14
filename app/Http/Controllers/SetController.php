@@ -112,6 +112,7 @@ class SetController extends Controller
 
     function check(Request $request, &$array_mess)
     {
+        //base_id  д.б. список
         // Одинаковые значения недопустимы
         if ($request->link_from_id == $request->link_to_id) {
             $message = trans('main.the_same_values_are_not_valid')
