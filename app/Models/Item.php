@@ -255,4 +255,18 @@ class Item extends Model
         return $this->name_lang_0 != "";
     }
 
+    // Для типов полей Изображение, Документ
+    function numval()
+    {
+        $result = 0;
+        if ($this->base->type_is_number()) {
+                if ($this->name_lang_0 == "") {
+                    $result = 0;
+                } else {
+                    $result = strval($this->name_lang_0);
+                }
+            }
+        return $result;
+    }
+
 }

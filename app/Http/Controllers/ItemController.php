@@ -744,6 +744,7 @@ class ItemController extends Controller
                     }
                 }
 
+                $valits = $values;
                 // Присвоение данных
                 // "$i = 0" использовать, т.к. индексы в массивах начинаются с 0
                 $i = 0;
@@ -761,7 +762,7 @@ class ItemController extends Controller
                             }
                         }
                     }
-                    $this->save_main($main, $item, $keys, $values, $i, $strings_inputs);
+                    $this->save_main($main, $item, $keys, $values, $valits, $i, $strings_inputs);
                     // "$i = $i + 1;" использовать здесь, т.к. индексы в массивах начинаются с 0
                     $i = $i + 1;
                 }
@@ -774,7 +775,8 @@ class ItemController extends Controller
                     $item->name_lang_3 = $rs['calc_lang_3'];
                 }
 
-                $this->save_sets($item, $keys, $values, $strings_inputs, false);
+                $this->save_sets($item, $keys, $values, $valits, $strings_inputs, false);
+
                 $item->save();
 
             }, 3);  // Повторить три раза, прежде чем признать неудачу
@@ -784,18 +786,19 @@ class ItemController extends Controller
             return trans('transaction_not_completed') . ": " . $exc->getMessage();
         }
 
-        //return $heading ? redirect()->route('item.item_index', $item) : redirect(session('links'));
+        return $heading ? redirect()->route('item.item_index', $item) : redirect(session('links'));
 
     }
 
     private
-    function save_sets(Item $item, $keys, $values, $strings_inputs, bool $reverse)
+    function save_sets(Item $item, $keys, $values, $valits, $strings_inputs, bool $reverse)
     {
 //        $table1 = Set::select(DB::Raw('sets.*'))
 //            ->join('links', 'sets.link_from_id', '=', 'links.id')
 //            ->join('bases', 'links.child_base_id', '=', $item->base_id)
 //            ->orderBy('sets.link_from_id')
 //            ->orderBy('sets.link_to_id')->get();
+        $kf = $reverse == true ? -1 : 1;
 
         $set_main = Set::select(DB::Raw('sets.*, lt.child_base_id as to_child_base_id, lt.parent_base_id as to_parent_base_id'))
             ->join('links as lf', 'sets.link_from_id', '=', 'lf.id')
@@ -820,7 +823,8 @@ class ItemController extends Controller
 //                $query->where('link_id', 41)->where('parent_item_id', 388);
 //            });
             //echo "items = " . var_dump($items->get()) . ", ";
-            $set_base_to = $set_main->where('to_child_base_id', '=', $to_key)->where('is_group', true)->sortBy('to_parent_base_id');
+            $set_base_to = $set_main->where('to_child_base_id', '=', $to_key)->sortBy('to_parent_base_id');
+            $set_is_group = $set_base_to->where('is_group', true);
             //echo "".$value['base_to_id'];
             //$base_to_id = $key;
             //echo var_dump($key);
@@ -828,7 +832,8 @@ class ItemController extends Controller
             $error = true;
             $found = false;
             $item_seek = null;
-            foreach ($set_base_to as $key => $value) {
+            // Поиск $item_seek
+            foreach ($set_is_group as $key => $value) {
                 //$item_seek = MainController::view_info($item, $value['link_from_id']);
                 //echo "item_id = " . $item->id;
                 //echo "value_link_from_id = " . $value['link_from_id'];
@@ -840,7 +845,7 @@ class ItemController extends Controller
                     }
                 }
                 if ($nk != 0) {
-                    $set_to = $set_base_to->where('link_from_id', $value['link_from_id'])->first();
+                    $set_to = $set_is_group->where('link_from_id', $value['link_from_id'])->first();
                     //echo "set_base_to = " . var_dump($set_base_to) . ", ";
                     //echo " set_to = " . var_dump($set_to) . ", ";
                     if ($set_to) {
@@ -867,6 +872,7 @@ class ItemController extends Controller
                 }
                 //echo "items = " . var_dump($items->get()).", ";
             }
+
             if (!$error) {
                 if (!$found) {
                     // создать новую запись для админа, если таблица users пуста
@@ -880,12 +886,15 @@ class ItemController extends Controller
                     $item_seek->name_lang_3 = "";
                     $item_seek->created_user_id = Auth::user()->id;
                     $item_seek->updated_user_id = Auth::user()->id;
+                    // Нужно, чтобы id было
                     $item_seek->save();
                 }
+                //echo ' item_seek->id = ' . $item_seek->id;
                 //$items = $items->get();
-
+                //echo 'item_seek->id = ' . $item_seek->id;
                 $error = true;
                 $found = false;
+                // Фильтры
                 foreach ($set_base_to as $key => $value) {
                     //echo "item_id = " . $item->id;
                     //echo "value_link_from_id = " . $value['link_from_id'];
@@ -897,58 +906,118 @@ class ItemController extends Controller
                         }
                     }
                     if ($nk != 0) {
-                        $set_to = $set_base_to->where('link_from_id', $value['link_from_id'])->first();
+                        //$set_to = $set_base_to->where('link_from_id', $value['link_from_id'])->first();
                         //echo "set_base_to = " . var_dump($set_base_to) . ", ";
                         //echo " set_to = " . var_dump($set_to) . ", ";
-                        if ($set_to) {
-                            $nt = $set_to->link_to_id;
+                        //if ($set_to) {
+                        $nt = $value->link_to_id;
 //                        echo " nk = " . $nk . ", ";
-                            echo " nt = " . $nt . ", ";
-                            echo " keys[nk] = " . $keys[$nk] . ", ";
-                            $nv = $values[$nk];
+                        //echo " nt = " . $nt . ", ";
+                        //echo " keys[nk] = " . $keys[$nk] . ", ";
+                        $nv = $values[$nk];
 //                        echo " vl = " . $values[$nk] . ", ";
-                            $nv = $values[$nk];
-                            $item_1 = MainController::view_info($item_seek, $nt);
-                            $error = false;
+                        $nv = $values[$nk];
+                        //$item_1 = MainController::view_info($item_seek, $nt);
+                        $main = Main::where('link_id', $nt)->where('child_item_id', $item_seek->id)->first();
+                        $error = false;
+                        $vl = 0;
+                        if (!$main) {
+                            $main = new Main();
+                            // при создании записи "$item->created_user_id" заполняется
+                            $main->created_user_id = Auth::user()->id;
 
-                            if (!$item_1) {
-                                $main = new Main();
-                                // при создании записи "$item->created_user_id" заполняется
-                                $main->created_user_id = Auth::user()->id;
-                                $main->updated_user_id = Auth::user()->id;
-                                $main->link_id = $nt;
-                                echo " ntnt = " . $nt . ", ";
-                                $main->child_item_id = $item_seek->id;
-
-                                //$item_2 = MainController::view_info($item, $set_to->link_from_id);
-                                echo 'item->id = ' . $item->id;
-                                echo 'link_from_id = ' . $set_to->link_from_id;
-                                echo 'values[nk] = ' . $values[$nk];
-                                //if ($item_2) {
-                                    echo ' found';
-                                    $main->parent_item_id = $values[$nk];
-                                    $main->save();
-                                //}
-                                //$found = false;
-                            } else {
-                                //$found = true;
-                            }
-                            //echo var_dump($value['link_from_id']);
+                            $main->link_id = $nt;
+                            //echo " ntnt = " . $nt . ", ";
+                            $main->child_item_id = $item_seek->id;
+                            $vl = 0;
+                            //$item_2 = MainController::view_info($item, $set_to->link_from_id);
+                            //echo 'item->id = ' . $item->id;
+                            //echo 'link_from_id = ' . $set_to->link_from_id;
+                            //if ($item_2) {
+                            //echo ' found';
+                        } else {
+                            $vl = $main->parent_item->numval();
                         }
+
+                        //echo ' main->child_item_id = ' . $main->child_item_id;
+                        //echo ' main->child_item = ' . $main->child_item->name_lang_0;
+                        $main->updated_user_id = Auth::user()->id;
+
+
+                        //echo "values = " . var_dump($values);
+                        $seek_item = false;
+                        $seek_value = 0;
+                        if ($value->is_group == true) {
+                            $main->parent_item_id = $valits[$nk];
+                        } elseif ($value->is_update == true) {
+                            if ($value->is_upd_plus == true) {
+                                $seek_item = true;
+                                $seek_value = $vl + $kf * $values[$nk];
+                            } elseif ($value->is_upd_minus == true) {
+                                $seek_item = true;
+                                $seek_value = $vl - $kf * $values[$nk];
+                            } elseif ($value->is_upd_replace == true) {
+                                $main->parent_item_id = $valits[$nk];
+                            }
+                        }
+                        if ($seek_item == true) {
+                            //echo ' main->parent_item->numval() = ' . $main->parent_item->numval();
+                            //echo ' kf = ' . $kf;
+                            //echo ' values[$nk] = ' . $values[$nk];
+                            //echo ' seek_value = ' . $seek_value;
+                            // поиск в таблице items значение с таким же названием и base_id
+                            $item_find = Item::where('base_id', $value->link_to->parent_base_id)->where('project_id', GlobalController::glo_project_id())->where('name_lang_0', $seek_value)->first();
+                            // если не найдено
+                            if (!$item_find) {
+                                // создание новой записи в items
+                                $item_find = new Item();
+                                $item_find->base_id = $value->link_to->parent_base_id;
+                                // Похожие строки вверху
+                                $item_find->code = uniqid($item_find->id . '_', true);
+                                // присваивание полям наименование строкового значение числа
+                                foreach (session('glo_menu_save') as $key => $value) {
+                                    $item_find['name_lang_' . $key] = $seek_value;
+                                }
+                                $item_find->project_id = GlobalController::glo_project_id();
+                                // при создании записи "$item->created_user_id" заполняется
+                                $item_find->created_user_id = Auth::user()->id;
+                                $item_find->updated_user_id = Auth::user()->id;
+                                $item_find->save();
+                            }
+                            $main->parent_item_id = $item_find->id;
+                        }
+                        $main->save();
+
                     }
-                    //echo "items = " . var_dump($items->get()).", ";
                 }
 
+                //}
+                //$found = false;
+                //echo var_dump($value['link_from_id']);
+                //}
 
+                //echo "items = " . var_dump($items->get()).", ";
             }
+
+            $rs = $this->calc_value_func($item_seek);
+            if ($rs != null) {
+                $item_seek->name_lang_0 = $rs['calc_lang_0'];
+                $item_seek->name_lang_1 = $rs['calc_lang_1'];
+                $item_seek->name_lang_2 = $rs['calc_lang_2'];
+                $item_seek->name_lang_3 = $rs['calc_lang_3'];
+            }
+
+            $item_seek->save();
+
         }
 
-        //echo var_dump($keys);
-        //echo var_dump($values);
     }
+//echo var_dump($keys);
+//echo var_dump($values);
+
 
     private
-    function save_main(Main $main, $item, $keys, $values, $index, $strings_inputs)
+    function save_main(Main $main, $item, $keys, $values, &$valits, $index, $strings_inputs)
     {
         $main->link_id = $keys[$index];
         $main->child_item_id = $item->id;
@@ -1008,6 +1077,9 @@ class ItemController extends Controller
             $item_find->updated_user_id = Auth::user()->id;
             $item_find->save();
             $main->parent_item_id = $item_find->id;
+            // заменяем значение в массиве ссылкой на $item вместо значения
+            $valits[$index] = $item_find->id;
+
         } // тип корректировки поля - строка
         elseif ($link->parent_base->type_is_string()) {
             // поиск в таблице items значение с таким же названием и base_id
@@ -1054,6 +1126,8 @@ class ItemController extends Controller
                 $item_find->save();
             }
             $main->parent_item_id = $item_find->id;
+            // заменяем значение в массиве ссылкой на $item вместо значения
+            $valits[$index] = $item_find->id;
 
             // тип корректировки поля - не строка и не список
         } else {
@@ -1077,6 +1151,8 @@ class ItemController extends Controller
                 $item_find->save();
             }
             $main->parent_item_id = $item_find->id;
+            // заменяем значение в массиве ссылкой на $item вместо значения
+            $valits[$index] = $item_find->id;
         }
         $main->updated_user_id = Auth::user()->id;
         $main->save();
@@ -1566,6 +1642,7 @@ class ItemController extends Controller
                 $i = 0;
                 foreach ($keys as $key) {
                     $main = Main::where('child_item_id', $item->id)->where('link_id', $key)->first();
+                    $valits = $values;
                     if ($main == null) {
                         $main = new Main();
                         // при создании записи "$item->created_user_id" заполняется
@@ -1579,7 +1656,7 @@ class ItemController extends Controller
                             }
                         }
                     }
-                    $this->save_main($main, $item, $keys, $values, $i, $strings_inputs);
+                    $this->save_main($main, $item, $keys, $values, $valits, $i, $strings_inputs);
                     // "$i = $i + 1;" использовать здесь, т.к. индексы в массивах начинаются с 0
                     $i = $i + 1;
                 }
@@ -1591,6 +1668,10 @@ class ItemController extends Controller
                     $item->name_lang_2 = $rs['calc_lang_2'];
                     $item->name_lang_3 = $rs['calc_lang_3'];
                 }
+
+                $itpv = Item::findOrFail($item->id);
+                $this->save_sets($itpv, $keys, $values, $valits, $strings_inputs, true);
+                $this->save_sets($item, $keys, $values, $valits, $strings_inputs, false);
 
                 $item->save();
 
@@ -1957,7 +2038,7 @@ class ItemController extends Controller
         if ($result != '') {
 //            $result = '<ul type="circle"><li>'
 //                . $item->base->name() . ' (' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b>)' . $result . '</li></ul>';
-            $result = '<ul type="circle"><li>' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b>' . $result . '</li></ul>';
+            $result = '<ul type="circle"><li>Id = ' . $item->id . ' ' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b>' . $result . '</li></ul>';
         }
         return $result;
     }
@@ -1987,7 +2068,7 @@ class ItemController extends Controller
 //            $result = $result . '<li>' . $main->link->id . ' ' . $main->link->parent_label() . ' (' . $main->link->parent_base->name() . ': ' . '<b>' . $main->parent_item->name() . '</b>)'
 //                . $str . '</li>';
             $str = self::form_tree_start($items, $main->parent_item_id, $level);
-            $result = $result . '<li>' . $main->link->parent_base->name() . ': ' . '<b>' . $main->parent_item->name() . '</b>' . $str . '</li>';
+            $result = $result . '<li>Id = ' . $main->parent_item->id . ' ' . $main->link->parent_base->name() . ': ' . '<b>' . $main->parent_item->name() . '</b>' . $str . '</li>';
         }
         $result = $result . "</ul>";
         return $result;
