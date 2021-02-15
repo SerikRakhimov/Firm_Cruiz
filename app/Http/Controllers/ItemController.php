@@ -825,8 +825,11 @@ class ItemController extends Controller
             //$base_to_id = $key;
             //echo var_dump($key);
             //echo "" . count($set_base_to);
+            $error = true;
+            $found = false;
+            $item_seek = null;
             foreach ($set_base_to as $key => $value) {
-                $item_seek = MainController::view_info($item, $value['link_from_id']);
+                //$item_seek = MainController::view_info($item, $value['link_from_id']);
                 //echo "item_id = " . $item->id;
                 //echo "value_link_from_id = " . $value['link_from_id'];
                 $nk = 0;
@@ -847,24 +850,97 @@ class ItemController extends Controller
                         $nv = $values[$nk];
 //                        echo " vl = " . $values[$nk] . ", ";
                         $nv = $values[$nk];
-                        $item_seek = $items->whereHas('child_mains', function ($query) use ($nt, $nv) {
+                        $items = $items->whereHas('child_mains', function ($query) use ($nt, $nv) {
                             $query->where('link_id', $nt)->where('parent_item_id', $nv);
-                        })->first();
+                        });
+                        $item_seek = $items->first();
                         //echo "count = " . count($item_seek);
-                        if ($item_seek) {
-                            echo "exists";
+                        $error = false;
+                        if (!$item_seek) {
+                            $found = false;
+                            break;
                         } else {
-                            echo "no_exists";
+                            $found = true;
                         }
                         //echo var_dump($value['link_from_id']);
                     }
                 }
                 //echo "items = " . var_dump($items->get()).", ";
             }
-            $items = $items->get();
-//            echo "items = " . var_dump($items).", ";
+            if (!$error) {
+                if (!$found) {
+                    // создать новую запись для админа, если таблица users пуста
+                    $item_seek = new Item();
+                    $item_seek->base_id = $to_key;
+                    $item_seek->project_id = GlobalController::glo_project_id();
+                    $item_seek->code = uniqid($item_seek->id . '_', true);
+                    $item_seek->name_lang_0 = "";
+                    $item_seek->name_lang_1 = "";
+                    $item_seek->name_lang_2 = "";
+                    $item_seek->name_lang_3 = "";
+                    $item_seek->created_user_id = Auth::user()->id;
+                    $item_seek->updated_user_id = Auth::user()->id;
+                    $item_seek->save();
+                }
+                //$items = $items->get();
+
+                $error = true;
+                $found = false;
+                foreach ($set_base_to as $key => $value) {
+                    //echo "item_id = " . $item->id;
+                    //echo "value_link_from_id = " . $value['link_from_id'];
+                    $nk = 0;
+                    foreach ($keys as $k => $v) {
+                        if ($v == $value['link_from_id']) {
+                            $nk = $k;
+                            break;
+                        }
+                    }
+                    if ($nk != 0) {
+                        $set_to = $set_base_to->where('link_from_id', $value['link_from_id'])->first();
+                        //echo "set_base_to = " . var_dump($set_base_to) . ", ";
+                        //echo " set_to = " . var_dump($set_to) . ", ";
+                        if ($set_to) {
+                            $nt = $set_to->link_to_id;
+//                        echo " nk = " . $nk . ", ";
+                            echo " nt = " . $nt . ", ";
+                            echo " keys[nk] = " . $keys[$nk] . ", ";
+                            $nv = $values[$nk];
+//                        echo " vl = " . $values[$nk] . ", ";
+                            $nv = $values[$nk];
+                            $item_1 = MainController::view_info($item_seek, $nt);
+                            $error = false;
+
+                            if (!$item_1) {
+                                $main = new Main();
+                                // при создании записи "$item->created_user_id" заполняется
+                                $main->created_user_id = Auth::user()->id;
+                                $main->updated_user_id = Auth::user()->id;
+                                $main->link_id = $nt;
+                                echo " ntnt = " . $nt . ", ";
+                                $main->child_item_id = $item_seek->id;
+
+                                //$item_2 = MainController::view_info($item, $set_to->link_from_id);
+                                echo 'item->id = ' . $item->id;
+                                echo 'link_from_id = ' . $set_to->link_from_id;
+                                echo 'values[nk] = ' . $values[$nk];
+                                //if ($item_2) {
+                                    echo ' found';
+                                    $main->parent_item_id = $values[$nk];
+                                    $main->save();
+                                //}
+                                //$found = false;
+                            } else {
+                                //$found = true;
+                            }
+                            //echo var_dump($value['link_from_id']);
+                        }
+                    }
+                    //echo "items = " . var_dump($items->get()).", ";
+                }
 
 
+            }
         }
 
         //echo var_dump($keys);
