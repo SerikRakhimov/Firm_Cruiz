@@ -258,15 +258,17 @@ class Item extends Model
     // Для типов полей Изображение, Документ
     function numval()
     {
-        $result = 0;
+        $value = 0;
+        $result = false;
         if ($this->base->type_is_number()) {
-                if ($this->name_lang_0 == "") {
-                    $result = 0;
-                } else {
-                    $result = strval($this->name_lang_0);
-                }
+            $result = true;
+            if ($this->name_lang_0 == "") {
+                $value = 0;
+            } else {
+                $value = strval($this->name_lang_0);
             }
-        return $result;
+        }
+        return ['result' => $result, 'value' => $value];
     }
 
 }

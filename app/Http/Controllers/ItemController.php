@@ -775,7 +775,7 @@ class ItemController extends Controller
                     $item->name_lang_3 = $rs['calc_lang_3'];
                 }
 
-                $this->save_sets($item, $keys, $values, $valits, $strings_inputs, false);
+                $this->save_sets($item, $keys, $values, $valits, false);
 
                 $item->save();
 
@@ -786,13 +786,60 @@ class ItemController extends Controller
             return trans('transaction_not_completed') . ": " . $exc->getMessage();
         }
 
-        return $heading ? redirect()->route('item.item_index', $item) : redirect(session('links'));
+        //return $heading ? redirect()->route('item.item_index', $item) : redirect(session('links'));
 
     }
 
     private
-    function save_sets(Item $item, $keys, $values, $valits, $strings_inputs, bool $reverse)
+    function save_reverse_sets(Item $item)
     {
+        $itpv = Item::findOrFail($item->id);
+        echo "item->id = " . $item->id;
+        $mains = $itpv->child_mains()->get();
+        echo "count() = " . count($mains);
+        $inputs_reverse = array();
+        $invals = array();
+        foreach ($mains as $key => $main) {
+            echo " main->id = " . $main->id;
+            $inputs_reverse[$main->link_id] = $main->parent_item_id;
+        }
+        echo 'inputs = ';
+        foreach ($inputs_reverse as $key => $value) {
+            echo '[' . $key . '] = ' . $value . chr(13);
+        };
+
+        foreach ($inputs_reverse as $key => $value) {
+            $item_work = Item::findOrFail($value);
+            $var = $item_work->numval();
+            if ($var['result'] == true) {
+                $invals[$key] = $var['value'];
+            } else {
+                $invals[$key] = $inputs_reverse[$key];
+            }
+        }
+        $keys_reverse = array_keys($inputs_reverse);
+        $values_reverse = array_values($invals);
+        $valits_reverse = array_values($inputs_reverse);
+        $this->save_sets($itpv, $keys_reverse, $values_reverse, $valits_reverse, true);
+    }
+
+    private
+    function save_sets(Item $item, $keys, $values, $valits, bool $reverse)
+    {
+        echo 'reverse = ' . $reverse;
+        echo 'keys = ';
+        foreach ($keys as $key => $value) {
+            echo '[' . $key . '] = ' . $value . chr(13);
+        };
+        echo "values = ";
+        foreach ($values as $key => $value) {
+            echo '[' . $key . '] = ' . $value . chr(13);
+        };
+        echo "valits = ";
+        foreach ($valits as $key => $value) {
+            echo '[' . $key . '] = ' . $value . chr(13);
+        };
+
 //        $table1 = Set::select(DB::Raw('sets.*'))
 //            ->join('links', 'sets.link_from_id', '=', 'links.id')
 //            ->join('bases', 'links.child_base_id', '=', $item->base_id)
@@ -936,7 +983,7 @@ class ItemController extends Controller
                             //if ($item_2) {
                             //echo ' found';
                         } else {
-                            $vl = $main->parent_item->numval();
+                            $vl = $main->parent_item->numval()['value'];
                         }
 
                         //echo ' main->child_item_id = ' . $main->child_item_id;
@@ -997,18 +1044,18 @@ class ItemController extends Controller
                 //}
 
                 //echo "items = " . var_dump($items->get()).", ";
+
+
+                $rs = $this->calc_value_func($item_seek);
+                if ($rs != null) {
+                    $item_seek->name_lang_0 = $rs['calc_lang_0'];
+                    $item_seek->name_lang_1 = $rs['calc_lang_1'];
+                    $item_seek->name_lang_2 = $rs['calc_lang_2'];
+                    $item_seek->name_lang_3 = $rs['calc_lang_3'];
+                }
+
+                $item_seek->save();
             }
-
-            $rs = $this->calc_value_func($item_seek);
-            if ($rs != null) {
-                $item_seek->name_lang_0 = $rs['calc_lang_0'];
-                $item_seek->name_lang_1 = $rs['calc_lang_1'];
-                $item_seek->name_lang_2 = $rs['calc_lang_2'];
-                $item_seek->name_lang_3 = $rs['calc_lang_3'];
-            }
-
-            $item_seek->save();
-
         }
 
     }
@@ -1023,6 +1070,9 @@ class ItemController extends Controller
         $main->child_item_id = $item->id;
         // поиск должен быть удачным, иначе "$main->link_id = $keys[$index]" может дать ошибку
         $link = Link::findOrFail($keys[$index]);
+        if ($index == 3) {
+            echo " index == 3: ".$link->parent_base->name();
+        }
 
         // тип корректировки поля - список
         if ($link->parent_base->type_is_list()) {
@@ -1149,6 +1199,9 @@ class ItemController extends Controller
                 $item_find->created_user_id = Auth::user()->id;
                 $item_find->updated_user_id = Auth::user()->id;
                 $item_find->save();
+            }
+            if ($index == 3) {
+                echo " item_find->id = " . $item_find->id;
             }
             $main->parent_item_id = $item_find->id;
             // заменяем значение в массиве ссылкой на $item вместо значения
@@ -1656,6 +1709,9 @@ class ItemController extends Controller
                             }
                         }
                     }
+                    foreach ($valits as $k => $v) {
+                        //echo " valits valits[" . $k . "] = " . $v;
+                    }
                     $this->save_main($main, $item, $keys, $values, $valits, $i, $strings_inputs);
                     // "$i = $i + 1;" использовать здесь, т.к. индексы в массивах начинаются с 0
                     $i = $i + 1;
@@ -1668,10 +1724,10 @@ class ItemController extends Controller
                     $item->name_lang_2 = $rs['calc_lang_2'];
                     $item->name_lang_3 = $rs['calc_lang_3'];
                 }
-
-                $itpv = Item::findOrFail($item->id);
-                $this->save_sets($itpv, $keys, $values, $valits, $strings_inputs, true);
-                $this->save_sets($item, $keys, $values, $valits, $strings_inputs, false);
+                echo "1111111111";
+                $this->save_reverse_sets($item);
+                echo "2222222222";
+                $this->save_sets($item, $keys, $values, $valits, false);
 
                 $item->save();
 
@@ -1686,7 +1742,8 @@ class ItemController extends Controller
         $this->delete_items_old($array_calc);
 
         //return redirect()->route('item.base_index', $item->base->id);
-        return redirect(session('links'));
+
+        //return redirect(session('links'));
     }
 
     private
