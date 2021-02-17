@@ -803,7 +803,7 @@ class ItemController extends Controller
             echo " main->id = " . $main->id;
             $inputs_reverse[$main->link_id] = $main->parent_item_id;
         }
-        echo 'inputs = ';
+        echo 'inputs_reverse = ';
         foreach ($inputs_reverse as $key => $value) {
             echo '[' . $key . '] = ' . $value . chr(13);
         };
@@ -817,10 +817,35 @@ class ItemController extends Controller
                 $invals[$key] = $inputs_reverse[$key];
             }
         }
+
+        echo 'invals_reverse = ';
+        foreach ($invals as $key => $value) {
+            echo '[' . $key . '] = ' . $value . chr(13);
+        };
         $keys_reverse = array_keys($inputs_reverse);
         $values_reverse = array_values($invals);
         $valits_reverse = array_values($inputs_reverse);
         $this->save_sets($itpv, $keys_reverse, $values_reverse, $valits_reverse, true);
+    }
+
+    private
+    function is_save_sets(Item $item)
+    {
+        $set_main = Set::select(DB::Raw('sets.*, lt.child_base_id as to_child_base_id, lt.parent_base_id as to_parent_base_id'))
+            ->join('links as lf', 'sets.link_from_id', '=', 'lf.id')
+            ->join('links as lt', 'sets.link_to_id', '=', 'lt.id')
+            ->where('lf.child_base_id', '=', $item->base_id)
+            ->orderBy('sets.link_from_id')
+            ->orderBy('sets.link_to_id')->get();
+        $result = null;
+        if ($set_main) {
+            if (count($set_main) > 0) {
+                $result = true;
+            }
+        }
+
+        return $result;
+
     }
 
     private
@@ -1071,7 +1096,7 @@ class ItemController extends Controller
         // поиск должен быть удачным, иначе "$main->link_id = $keys[$index]" может дать ошибку
         $link = Link::findOrFail($keys[$index]);
         if ($index == 3) {
-            echo " index == 3: ".$link->parent_base->name();
+            echo " index == 3: " . $link->parent_base->name();
         }
 
         // тип корректировки поля - список
@@ -1206,6 +1231,10 @@ class ItemController extends Controller
             $main->parent_item_id = $item_find->id;
             // заменяем значение в массиве ссылкой на $item вместо значения
             $valits[$index] = $item_find->id;
+            if ($index == 3) {
+                echo " 333 - index = " . $index;
+                echo " 333 - valits[index] = " . $valits[$index];
+            }
         }
         $main->updated_user_id = Auth::user()->id;
         $main->save();
@@ -1665,6 +1694,8 @@ class ItemController extends Controller
             DB::transaction(function ($r) use ($item, $keys, $values, $strings_inputs) {
 
                 //$item->save();
+                echo "1111111111";
+                $this->save_reverse_sets($item);
 
                 // после ввода данных в форме массив состоит:
                 // индекс массива = link_id (для занесения в links->id)
@@ -1693,9 +1724,13 @@ class ItemController extends Controller
                 // Присвоение данных
                 // "$i = 0" использовать, т.к. индексы в массивах начинаются с 0
                 $i = 0;
+                $valits = $values;
+                foreach ($valits as $key => $value) {
+                    echo " 400 - index = " . $key;
+                    echo " 400 - valits[index] = " . $valits[$key];
+                }
                 foreach ($keys as $key) {
                     $main = Main::where('child_item_id', $item->id)->where('link_id', $key)->first();
-                    $valits = $values;
                     if ($main == null) {
                         $main = new Main();
                         // при создании записи "$item->created_user_id" заполняется
@@ -1716,6 +1751,11 @@ class ItemController extends Controller
                     // "$i = $i + 1;" использовать здесь, т.к. индексы в массивах начинаются с 0
                     $i = $i + 1;
                 }
+                foreach ($valits as $key => $value) {
+                    echo " 444 - index = " . $key;
+                    echo " 444 - valits[index] = " . $valits[$key];
+                }
+
 
                 $rs = $this->calc_value_func($item);
                 if ($rs != null) {
@@ -1724,8 +1764,7 @@ class ItemController extends Controller
                     $item->name_lang_2 = $rs['calc_lang_2'];
                     $item->name_lang_3 = $rs['calc_lang_3'];
                 }
-                echo "1111111111";
-                $this->save_reverse_sets($item);
+
                 echo "2222222222";
                 $this->save_sets($item, $keys, $values, $valits, false);
 
@@ -1772,6 +1811,7 @@ class ItemController extends Controller
                         $item_old = Item::find($item_old_id);
                         if ($item_old) {
                             if (count($item_old->parent_mains) == 0) {
+                                // Проверку на присваивания - ?
                                 $item_old->delete();
                             }
                         }
@@ -1822,7 +1862,28 @@ class ItemController extends Controller
 //            }
 //        }
         if (self::is_delete($item) == true) {
-            $item->delete();
+            if ($this->is_save_sets($item)) {
+
+
+                try {
+                    // начало транзакции
+                    DB::transaction(function ($r) use ($item) {
+
+                        $this->save_reverse_sets($item);
+
+                        $item->delete();
+
+                    }, 3);  // Повторить три раза, прежде чем признать неудачу
+                    // окончание транзакции
+
+                } catch (Exception $exc) {
+                    return trans('transaction_not_completed') . ": " . $exc->getMessage();
+                }
+
+            } else {
+                $item->delete();
+            
+            }
         }
         return $heading == true ? redirect()->route('item.base_index', $item->base_id) : redirect(session('links'));
     }
