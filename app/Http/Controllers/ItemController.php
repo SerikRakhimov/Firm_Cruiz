@@ -909,14 +909,14 @@ class ItemController extends Controller
                 //$item_seek = MainController::view_info($item, $value['link_from_id']);
                 //echo "item_id = " . $item->id;
                 //echo "value_link_from_id = " . $value['link_from_id'];
-                $nk = 0;
+                $nk = -1;
                 foreach ($keys as $k => $v) {
                     if ($v == $value['link_from_id']) {
                         $nk = $k;
                         break;
                     }
                 }
-                if ($nk != 0) {
+                if ($nk != -1) {
                     $set_to = $set_is_group->where('link_from_id', $value['link_from_id'])->first();
                     //echo "set_base_to = " . var_dump($set_base_to) . ", ";
                     //echo " set_to = " . var_dump($set_to) . ", ";
@@ -924,7 +924,6 @@ class ItemController extends Controller
                         $nt = $set_to->link_to_id;
 //                        echo " nk = " . $nk . ", ";
 //                        echo " nt = " . $nt . ", ";
-                        $nv = $values[$nk];
 //                        echo " vl = " . $values[$nk] . ", ";
                         $nv = $values[$nk];
                         $items = $items->whereHas('child_mains', function ($query) use ($nt, $nv) {
@@ -947,7 +946,7 @@ class ItemController extends Controller
 
             if (!$error) {
                 if (!$found) {
-                    // создать новую запись для админа, если таблица users пуста
+                    // создать новую запись
                     $item_seek = new Item();
                     $item_seek->base_id = $to_key;
                     $item_seek->project_id = GlobalController::glo_project_id();
@@ -966,6 +965,8 @@ class ItemController extends Controller
                 //echo 'item_seek->id = ' . $item_seek->id;
                 $error = true;
                 $found = false;
+                $valnull = false;
+                echo "VALNULL START ";
                 // Фильтры
                 foreach ($set_base_to as $key => $value) {
                     //echo "item_id = " . $item->id;
@@ -1025,20 +1026,30 @@ class ItemController extends Controller
                             if ($value->is_upd_plus == true) {
                                 $seek_item = true;
                                 $seek_value = $vl + $kf * $values[$nk];
+                                if ($seek_value == 0) {
+                                    $valnull = true;
+                                    echo "plusvalnull_item_seek->id = " . $item_seek->id;
+                                }
                             } elseif ($value->is_upd_minus == true) {
                                 $seek_item = true;
                                 $seek_value = $vl - $kf * $values[$nk];
+                                if ($seek_value == 0) {
+                                    $valnull = true;
+                                    echo "minusvalnull_item_seek->id = " . $item_seek->id;
+                                }
                             } elseif ($value->is_upd_replace == true) {
                                 $main->parent_item_id = $valits[$nk];
                             }
                         }
+
                         if ($seek_item == true) {
                             //echo ' main->parent_item->numval() = ' . $main->parent_item->numval();
                             //echo ' kf = ' . $kf;
                             //echo ' values[$nk] = ' . $values[$nk];
                             //echo ' seek_value = ' . $seek_value;
                             // поиск в таблице items значение с таким же названием и base_id
-                            $item_find = Item::where('base_id', $value->link_to->parent_base_id)->where('project_id', GlobalController::glo_project_id())->where('name_lang_0', $seek_value)->first();
+                            $item_find = Item::where('base_id', $value->link_to->parent_base_id)->where('project_id', GlobalController::glo_project_id())
+                                ->where('name_lang_0', $seek_value)->first();
                             // если не найдено
                             if (!$item_find) {
                                 // создание новой записи в items
@@ -1080,6 +1091,12 @@ class ItemController extends Controller
                 }
 
                 $item_seek->save();
+
+                // Если остаток нулевой
+                if ($valnull) {
+                    echo "item_seek->id = " . $item_seek->id;
+                    $item_seek->delete();
+                }
             }
         }
 
@@ -1882,7 +1899,7 @@ class ItemController extends Controller
 
             } else {
                 $item->delete();
-            
+
             }
         }
         return $heading == true ? redirect()->route('item.base_index', $item->base_id) : redirect(session('links'));

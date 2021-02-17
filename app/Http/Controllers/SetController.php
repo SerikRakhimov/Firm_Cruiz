@@ -32,10 +32,13 @@ class SetController extends Controller
 //        }
 
         $sets = Set::select(DB::Raw('sets.*'))
-            ->join('links', 'sets.link_from_id', '=', 'links.id')
+            ->join('links as lf', 'sets.link_from_id', '=', 'lf.id')
+            ->join('links as lt', 'sets.link_to_id', '=', 'lt.id')
             ->where('sets.template_id', $template->id)
-            ->orderBy('links.child_base_id')
-            ->orderBy('links.parent_base_number');
+            ->orderBy('lf.child_base_id')
+            ->orderBy('lt.child_base_id')
+            ->orderBy('lf.parent_base_number')
+            ->orderBy('lt.parent_base_number');
 
         session(['sets_previous_url' => request()->url()]);
         return view('set/index', ['template' => $template, 'sets' => $sets->paginate(60)]);
