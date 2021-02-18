@@ -217,4 +217,7 @@ return [
     'childrens_bases_must_be_with_the_characteristic_calculated_name'=>'Детские Основы должны быть с признаком "Вычисляемое наименование"',
     'and'=>'И',
     'image_is_missing'=>'Изображение отсутствует',
+    'enter_one_word_without_spaces'=>'Введите одно слово без пробелов',
+    'only_latin_characters_numbers_and_special_characters_are_allowed'=>'Допустимы только символы латинского алфавита, цифры и спецсимволы',
+    'all_letters_must_be_lowercase'=>'Все буквы должны быть строчными',
 ];

@@ -217,4 +217,7 @@ return [
     'childrens_bases_must_be_with_the_characteristic_calculated_name'=>'Children\'s Bases must be with the characteristic "Calculated name"',
     'and'=>'And',
     'image_is_missing'=>'Image is missing',
+    'enter_one_word_without_spaces'=>'Enter one word without spaces',
+    'only_latin_characters_numbers_and_special_characters_are_allowed'=>'Only Latin characters, numbers, and special characters are allowed',
+    'all_letters_must_be_lowercase'=>'All letters must be lowercase',
 ];

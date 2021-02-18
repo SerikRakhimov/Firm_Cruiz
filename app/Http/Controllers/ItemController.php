@@ -906,41 +906,52 @@ class ItemController extends Controller
             $item_seek = null;
             // Поиск $item_seek
             foreach ($set_is_group as $key => $value) {
-                //$item_seek = MainController::view_info($item, $value['link_from_id']);
-                //echo "item_id = " . $item->id;
-                //echo "value_link_from_id = " . $value['link_from_id'];
-                $nk = -1;
-                foreach ($keys as $k => $v) {
-                    if ($v == $value['link_from_id']) {
-                        $nk = $k;
-                        break;
+                echo " keyskeys = " . $value->link_from->id;
+//                проверка, если link - вычисляемое поле
+                //if ($link->parent_is_parent_related == true || $link->parent_is_numcalc == true)
+                if ($value->link_from->parent_is_parent_related == true) {
+
+
+                } else {
+                    //$item_seek = MainController::view_info($item, $value['link_from_id']);
+                    //echo "item_id = " . $item->id;
+                    //echo "value_link_from_id = " . $value['link_from_id'];
+                    $nk = -1;
+                    foreach ($keys as $k => $v) {
+
+                        if ($v == $value['link_from_id']) {
+                            $nk = $k;
+                            break;
+                        }
                     }
-                }
-                if ($nk != -1) {
-                    $set_to = $set_is_group->where('link_from_id', $value['link_from_id'])->first();
-                    //echo "set_base_to = " . var_dump($set_base_to) . ", ";
-                    //echo " set_to = " . var_dump($set_to) . ", ";
-                    if ($set_to) {
-                        $nt = $set_to->link_to_id;
+
+                    if ($nk != -1) {
+                        $set_to = $set_is_group->where('link_from_id', $value['link_from_id'])->first();
+                        //echo "set_base_to = " . var_dump($set_base_to) . ", ";
+                        //echo " set_to = " . var_dump($set_to) . ", ";
+                        if ($set_to) {
+                            $nt = $set_to->link_to_id;
 //                        echo " nk = " . $nk . ", ";
 //                        echo " nt = " . $nt . ", ";
 //                        echo " vl = " . $values[$nk] . ", ";
-                        $nv = $values[$nk];
-                        $items = $items->whereHas('child_mains', function ($query) use ($nt, $nv) {
-                            $query->where('link_id', $nt)->where('parent_item_id', $nv);
-                        });
-                        $item_seek = $items->first();
-                        //echo "count = " . count($item_seek);
-                        $error = false;
-                        if (!$item_seek) {
-                            $found = false;
-                            break;
-                        } else {
-                            $found = true;
+                            $nv = $values[$nk];
+                            $items = $items->whereHas('child_mains', function ($query) use ($nt, $nv) {
+                                $query->where('link_id', $nt)->where('parent_item_id', $nv);
+                            });
+                            $item_seek = $items->first();
+                            //echo "count = " . count($item_seek);
+                            $error = false;
+                            if (!$item_seek) {
+                                $found = false;
+                                break;
+                            } else {
+                                $found = true;
+                            }
+                            //echo var_dump($value['link_from_id']);
                         }
-                        //echo var_dump($value['link_from_id']);
                     }
                 }
+
                 //echo "items = " . var_dump($items->get()).", ";
             }
 
