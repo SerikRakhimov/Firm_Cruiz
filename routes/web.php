@@ -68,14 +68,15 @@ Route::get('/', function () {
 
     GlobalController::glo_project_role_setnull();
 
-//        $appname = config('app.name', 'Abakus');
-//        Mail::send(['html' => 'mail/login_site'], ['remote_addr' => $_SERVER['REMOTE_ADDR'],
-//                   'http_user_agent' => $_SERVER['HTTP_USER_AGENT'],'appname' => $appname],
-//            function ($message) use ($appname) {
-//            $message->to('log@rsb0807.kz', '')->subject("Вход на сайт '" . $appname . "'");
-//            $message->from('support@rsb0807.kz', $appname);
-//        });
-
+    if (env('MAIL_ENABLED') == 'yes'){
+        $appname = config('app.name', 'Abakus');
+        Mail::send(['html' => 'mail/login_site'], ['remote_addr' => $_SERVER['REMOTE_ADDR'],
+            'http_user_agent' => $_SERVER['HTTP_USER_AGENT'],'appname' => $appname],
+            function ($message) use ($appname) {
+                $message->to('log@rsb0807.kz', '')->subject("Вход на сайт '" . $appname . "'");
+                $message->from('support@rsb0807.kz', $appname);
+            });
+    }
 
     if (Auth::check()) {
         //return view('welcome');
