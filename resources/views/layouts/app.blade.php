@@ -39,7 +39,7 @@ use App\Models\Project;
             @endforeach
 
             <a class="navbar-brand" href="{{ url('/') }}">
-                {{ config('app.name', 'Laravel') }}
+                {{ config('app.name', 'Abakus') }}
             </a>
             {{--                Этот <button> не удалять, нужен для связки с <div class="collapse navbar-collapse" id="navbarSupportedContent">--}}
             <button type="button" class="navbar-toggler" type="button" data-toggle="collapse"

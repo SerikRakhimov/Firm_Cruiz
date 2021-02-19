@@ -67,10 +67,15 @@ Route::get('/', function () {
     }
 
     GlobalController::glo_project_role_setnull();
-    	Mail::send(['html'=>'mail\mail_run'], ['remote_addr'=>$_SERVER['REMOTE_ADDR'], 'http_user_agent'=>$_SERVER['HTTP_USER_AGENT']], function($message){
-    		$message->to('s_astana@mail.ru','')->subject('Игра запущена');
-    		$message->from('admin@guess.rsb0807.kz','Игра Задумай-угадаю');
-    	});
+
+//        $appname = config('app.name', 'Abakus');
+//        Mail::send(['html' => 'mail/login_site'], ['remote_addr' => $_SERVER['REMOTE_ADDR'],
+//                   'http_user_agent' => $_SERVER['HTTP_USER_AGENT'],'appname' => $appname],
+//            function ($message) use ($appname) {
+//            $message->to('log@rsb0807.kz', '')->subject("Вход на сайт '" . $appname . "'");
+//            $message->from('support@rsb0807.kz', $appname);
+//        });
+
 
     if (Auth::check()) {
         //return view('welcome');
