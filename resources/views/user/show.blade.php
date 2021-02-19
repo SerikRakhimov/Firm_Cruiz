@@ -27,7 +27,7 @@
                                             <i class="fas fa-key"></i>
                 {{trans('main.change_password')}}
             </button>
-            @if($user->isAdmin() == false)
+            @if($is_delete)
                 <button type="button" class="btn btn-dreamer mb-1 mb-sm-0"
                         onclick="document.location='{{route('user.delete_question',$user)}}'"
                         title="{{trans('main.delete')}}">

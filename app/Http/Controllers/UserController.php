@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Item;
+use App\Models\Main;
+use App\Models\Project;
+use App\Models\Access;
 use App\User;
 use http\Env\Response;
 use Illuminate\Http\Request;
@@ -57,7 +61,31 @@ class UserController extends Controller
 
     function show(User $user)
     {
-        return view('user/show', ['type_form' => 'show', 'user' => $user]);
+        // $is_delete = true - можно удалить пользователя
+        // $is_delete = false - нельзя удалить пользователя
+        $is_delete = $user->isAdmin() == false;
+        if ($is_delete) {
+            $exists = Project::where('user_id', $user->id)->exists();
+            if ($exists) {
+                $is_delete = false;
+            } else {
+                $exists = Access::where('user_id', $user->id)->exists();
+                if ($exists) {
+                    $is_delete = false;
+                } else {
+                    $exists = Item::where('created_user_id', $user->id)->orWhere('updated_user_id', $user->id)->exists();
+                    if ($exists) {
+                        $is_delete = false;
+                    } else {
+                        $exists = Main::where('created_user_id', $user->id)->orWhere('updated_user_id', $user->id)->exists();
+                        if ($exists) {
+                            $is_delete = false;
+                        }
+                    }
+                }
+            }
+        }
+        return view('user/show', ['type_form' => 'show', 'user' => $user, 'is_delete' => $is_delete]);
     }
 
 
