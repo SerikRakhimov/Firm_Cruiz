@@ -154,6 +154,7 @@ return [
     'password' => 'Құпия сөз',
     'change_password' => 'Құпия сөзді ауыстыру',
     'confirm_password' => 'Құпия сөзді қайта енгізу',
+    'reset_password' => 'Құпия сөзді ысыру',
     'remember_me'=>'Мені есте сақтау',
     'forgot_your_password'=>'Құпия сөзді ұмыттыңыз ба',
     'uniqueness_of_fields_violated' => 'Өрістердің бірегейлігі бұзылды',

@@ -153,6 +153,7 @@ return [
     'password' => 'Password',
     'change_password' => 'Change password',
     'confirm_password' => 'Confirm password',
+    'reset_password' => 'Reset password',
     'remember_me'=>'Remember me',
     'forgot_your_password'=>'Forgot your password',
     'uniqueness_of_fields_violated' => 'Uniqueness of fields violated',
