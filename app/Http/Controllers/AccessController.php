@@ -147,13 +147,16 @@ class AccessController extends Controller
 //        if (!(Auth::user()->isAdmin() ||!($access->role->is_default_for_external == false))) {
 //            return null;
 //        }
-        $project = Project::findOrFail($access->project_id);
+        $project = $access->project;
         $users = User::orderBy('name')->get();
         $roles = Role::where('template_id', $project->template_id)->orderBy('name_lang_0')->get();
 
         if (!Auth::user()->isAdmin()) {
-            $roles = $roles->where('is_default_for_external', true);
+            if (Auth::user() != $project->user) {
+                $roles = $roles->where('is_default_for_external', true);
+            }
         }
+
 
         return view('access/edit', ['project' => $project, 'access' => $access, 'users' => $users, 'roles' => $roles]);
     }

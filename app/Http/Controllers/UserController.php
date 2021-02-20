@@ -6,43 +6,52 @@ use App\Models\Item;
 use App\Models\Main;
 use App\Models\Project;
 use App\Models\Access;
+use App\Rules\IsLatinUser;
+use App\Rules\IsLowerUser;
+use App\Rules\IsOneWordUser;
+use App\Rules\IsUniqueAccess;
 use App\User;
 use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
     protected function rules()
     {
+        // Похожие строки и в RegisterController.php
+        // В частности: в этом файле использовать такие проверки
+        //     'password' => ['required', 'string', 'min:8'],
+        //    'confirm_password' => ['min:8','same:password'],
         return [
-            'name' => 'required|unique:users,name',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'min:8',
-            'confirm_password' => 'min:8|same:password'
+            'name' => ['required', 'string', 'max:255', 'unique:users', new IsOneWordUser(), new IsLatinUser(), new IsLowerUser()],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8'],
+            'confirm_password' => ['min:8','same:password'],
         ];
     }
 
     protected function name_rules()
     {
         return [
-            'name' => 'required|unique:users,name'
+            'name' => ['required', 'string', 'max:255', 'unique:users', new IsOneWordUser(), new IsLatinUser(), new IsLowerUser()],
         ];
     }
 
     protected function email_rules()
     {
         return [
-            'email' => 'required|unique:users,email'
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
         ];
     }
 
     protected function password_rules()
     {
         return [
-            'password' => 'min:8',
-            'confirm_password' => 'min:8|same:password'
+            'password' => ['required', 'string', 'min:8'],
+            'confirm_password' => ['min:8','same:password'],
         ];
     }
 

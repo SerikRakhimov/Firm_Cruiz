@@ -52,6 +52,9 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
+        // Похожие строки и в UserController.php
+        // В частности: в этом файле использовать такие проверки
+        //    'password' => ['required', 'string', 'min:8', 'confirmed'],
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255', 'unique:users', new IsOneWordUser(), new IsLatinUser(), new IsLowerUser()],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],

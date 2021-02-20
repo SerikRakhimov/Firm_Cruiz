@@ -107,7 +107,8 @@
                            name="confirm_password"
                            class="form-control @error('confirm_password') is-invalid @enderror"
                            placeholder=""
-                           value="{{ old('confirm_password') ?? ($user->confirm_password ?? '') }}">
+                           value="{{ old('confirm_password') ?? '' }}">
+{{--                    value="{{ old('confirm_password') ?? ($user->confirm_password ?? '') }}">--}}
                 </div>
                 @error('confirm_password')
                 <div class="text-danger">
