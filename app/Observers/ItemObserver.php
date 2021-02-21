@@ -45,11 +45,15 @@ class ItemObserver
         }
         $mains = Main::where('child_item_id', $item->id)->get();
         foreach ($mains as $main) {
-            if ($main->parent_item->base->type_is_image() || $main->parent_item->base->type_is_document()) {
-                //Storage::delete($main->parent_item->filename());
-                // нужно удалять, "Storage::delete()" выполнится, т.к. это рекурсивный вызов этой же функции "public function deleting($item)"
-                $main->parent_item->delete();
-            }
+            // Эта проверка нужна, если неправильно заполнены Присваивания (sets)
+            //if (isset($main->parent_item->base_id)){
+                if ($main->parent_item->base->type_is_image() || $main->parent_item->base->type_is_document()) {
+                    //Storage::delete($main->parent_item->filename());
+                    //нужно удалять, "Storage::delete()" выполнится, т.к. это рекурсивный вызов этой же функции "public function deleting($item)"
+                    // item- картинки и документы создаются на каждую связь(Например спр-к товаров) - поэтому их нужно удалять
+                    $main->parent_item->delete();
+                }
+            //}
         }
     }
 

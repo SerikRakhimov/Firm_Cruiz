@@ -980,8 +980,6 @@ class ItemController extends Controller
                 echo "VALNULL START ";
                 // Фильтры
                 foreach ($set_base_to as $key => $value) {
-                    //echo "item_id = " . $item->id;
-                    //echo "value_link_from_id = " . $value['link_from_id'];
                     $nk = 0;
                     foreach ($keys as $k => $v) {
                         if ($v == $value['link_from_id']) {
@@ -990,18 +988,8 @@ class ItemController extends Controller
                         }
                     }
                     if ($nk != 0) {
-                        //$set_to = $set_base_to->where('link_from_id', $value['link_from_id'])->first();
-                        //echo "set_base_to = " . var_dump($set_base_to) . ", ";
-                        //echo " set_to = " . var_dump($set_to) . ", ";
-                        //if ($set_to) {
                         $nt = $value->link_to_id;
-//                        echo " nk = " . $nk . ", ";
-                        //echo " nt = " . $nt . ", ";
-                        //echo " keys[nk] = " . $keys[$nk] . ", ";
                         $nv = $values[$nk];
-//                        echo " vl = " . $values[$nk] . ", ";
-                        $nv = $values[$nk];
-                        //$item_1 = MainController::view_info($item_seek, $nt);
                         $main = Main::where('link_id', $nt)->where('child_item_id', $item_seek->id)->first();
                         $error = false;
                         $vl = 0;
@@ -1011,39 +999,39 @@ class ItemController extends Controller
                             $main->created_user_id = Auth::user()->id;
 
                             $main->link_id = $nt;
-                            //echo " ntnt = " . $nt . ", ";
                             $main->child_item_id = $item_seek->id;
                             $vl = 0;
-                            //$item_2 = MainController::view_info($item, $set_to->link_from_id);
-                            //echo 'item->id = ' . $item->id;
-                            //echo 'link_from_id = ' . $set_to->link_from_id;
-                            //if ($item_2) {
-                            //echo ' found';
                         } else {
                             $vl = $main->parent_item->numval()['value'];
                         }
-
-                        //echo ' main->child_item_id = ' . $main->child_item_id;
-                        //echo ' main->child_item = ' . $main->child_item->name_lang_0;
                         $main->updated_user_id = Auth::user()->id;
-
-
-                        //echo "values = " . var_dump($values);
                         $seek_item = false;
                         $seek_value = 0;
+
+
+                        echo " is_numeric(values[nk]) = " . is_numeric($values[$nk]);
+                        if ($value->link_to->parent_base->type_is_number() && is_numeric($values[$nk])) {
+                            $ch = $values[$nk];
+                        } else {
+                            $ch = 0;
+                        }
                         if ($value->is_group == true) {
                             $main->parent_item_id = $valits[$nk];
                         } elseif ($value->is_update == true) {
                             if ($value->is_upd_plus == true) {
                                 $seek_item = true;
-                                $seek_value = $vl + $kf * $values[$nk];
+
+                                $seek_value = $vl + $kf * $ch;
                                 if ($seek_value == 0) {
                                     $valnull = true;
                                     echo "plusvalnull_item_seek->id = " . $item_seek->id;
                                 }
                             } elseif ($value->is_upd_minus == true) {
                                 $seek_item = true;
-                                $seek_value = $vl - $kf * $values[$nk];
+                                echo " vl = " . $vl;
+                                echo " kf = " . $kf;
+                                echo " ch = " . $ch;
+                                $seek_value = $vl - $kf * $ch;
                                 if ($seek_value == 0) {
                                     $valnull = true;
                                     echo "minusvalnull_item_seek->id = " . $item_seek->id;
@@ -1054,11 +1042,6 @@ class ItemController extends Controller
                         }
 
                         if ($seek_item == true) {
-                            //echo ' main->parent_item->numval() = ' . $main->parent_item->numval();
-                            //echo ' kf = ' . $kf;
-                            //echo ' values[$nk] = ' . $values[$nk];
-                            //echo ' seek_value = ' . $seek_value;
-                            // поиск в таблице items значение с таким же названием и base_id
                             $item_find = Item::where('base_id', $value->link_to->parent_base_id)->where('project_id', GlobalController::glo_project_id())
                                 ->where('name_lang_0', $seek_value)->first();
                             // если не найдено
@@ -1085,14 +1068,6 @@ class ItemController extends Controller
                     }
                 }
 
-                //}
-                //$found = false;
-                //echo var_dump($value['link_from_id']);
-                //}
-
-                //echo "items = " . var_dump($items->get()).", ";
-
-
                 $rs = $this->calc_value_func($item_seek);
                 if ($rs != null) {
                     $item_seek->name_lang_0 = $rs['calc_lang_0'];
@@ -1105,9 +1080,11 @@ class ItemController extends Controller
 
                 // Если остаток нулевой
                 if ($valnull) {
-                    echo "item_seek->id = " . $item_seek->id;
+                    echo " valnull_item_seek->id = " . $item_seek->id;
                     $item_seek->delete();
                 }
+
+                echo "VALNULL FIN ";
             }
         }
 
@@ -1166,6 +1143,16 @@ class ItemController extends Controller
                 if ($item_find->base->is_to_moderate_image == true) {
                     // На модерации
                     $item_find->name_lang_1 = "3";
+                    // Похожие строки ниже
+                    if (env('MAIL_ENABLED') == 'yes'){
+                        $appname = config('app.name', 'Abakus');
+                        Mail::send(['html' => 'mail/login_site'], ['remote_addr' => $_SERVER['REMOTE_ADDR'],
+                            'http_user_agent' => $_SERVER['HTTP_USER_AGENT'],'appname' => $appname],
+                            function ($message) use ($appname) {
+                                $message->to('moderation@rsb0807.kz', '')->subject("Модерация '" . $appname . "'");
+                                $message->from('support@rsb0807.kz', $appname);
+                            });
+                    }
                 } else {
                     // Без модерации
                     $item_find->name_lang_1 = "0";
@@ -1278,8 +1265,22 @@ class ItemController extends Controller
                 $item->name_lang_0 = $path;
                 if ($base->type_is_image()) {
                     if ($item->base->is_to_moderate_image == true) {
+                        // На модерации
                         $item->name_lang_1 = "3";
+
+                        // Похожие строки выше
+                        if (env('MAIL_ENABLED') == 'yes'){
+                            $appname = config('app.name', 'Abakus');
+                            Mail::send(['html' => 'mail/login_site'], ['remote_addr' => $_SERVER['REMOTE_ADDR'],
+                                'http_user_agent' => $_SERVER['HTTP_USER_AGENT'],'appname' => $appname],
+                                function ($message) use ($appname) {
+                                    $message->to('moderation@rsb0807.kz', '')->subject("Модерация '" . $appname . "'");
+                                    $message->from('support@rsb0807.kz', $appname);
+                                });
+                        }
+
                     } else {
+                        // Без модерации
                         $item->name_lang_1 = "0";
                     }
                 } else {
@@ -1890,8 +1891,8 @@ class ItemController extends Controller
 //            }
 //        }
         if (self::is_delete($item) == true) {
-            if ($this->is_save_sets($item)) {
 
+            if ($this->is_save_sets($item)) {
 
                 try {
                     // начало транзакции
