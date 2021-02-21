@@ -4,12 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Project;
 use Illuminate\Support\Facades\Route;
-use Artisan;
+use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers;
-use Session;
-use Hash;
-use Auth;
-use Mail;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 /*
 |--------------------------------------------------------------------------
