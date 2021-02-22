@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\App;
 use App\Models\Base;
 use App\Models\Link;
 use App\Models\Role;
@@ -25,7 +26,7 @@ class SetController extends Controller
     {
         $sets = Set::where('template_id', $template->id);
 //        $name = "";  // нужно, не удалять
-//        $index = array_search(session('locale'), session('glo_menu_save'));
+//        $index = array_search(App::getLocale(), config('app.locales'));
 //        if ($index !== false) {   // '!==' использовать, '!=' не использовать
 //            $name = 'name_lang_' . $index;
 //            $sets = $sets->orderBy($name);

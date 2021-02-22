@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\App;
 use App\Models\Template;
 use App\Models\Task;
 use App\Models\Module;
@@ -20,7 +21,7 @@ class ModuleController extends Controller
     {
         $template = Template::findOrFail($task->template_id);
         $modules = Module::where('task_id', $task->id);
-        $index = array_search(session('locale'), session('glo_menu_save'));
+        $index = array_search(App::getLocale(), config('app.locales'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
             switch ($index) {
                 case 0:

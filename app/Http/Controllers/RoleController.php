@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\App;
 use App\Models\Role;
 use App\Models\Template;
 use Illuminate\Http\Request;
@@ -19,7 +20,7 @@ class RoleController extends Controller
     {
         $roles = Role::where('template_id', $template->id);
         $name = "";  // нужно, не удалять
-        $index = array_search(session('locale'), session('glo_menu_save'));
+        $index = array_search(App::getLocale(), config('app.locales'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
             $name = 'name_lang_' . $index;
             $roles = $roles->orderBy($name);

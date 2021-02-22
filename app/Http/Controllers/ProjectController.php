@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\App;
 use App\User;
 use App\Models\Project;
 use App\Models\Template;
@@ -25,7 +26,7 @@ class ProjectController extends Controller
         GlobalController::glo_project_role_setnull();
         $projects = Project::where('template_id', $template->id);
         $name = "";  // нужно, не удалять
-        $index = array_search(session('locale'), session('glo_menu_save'));
+        $index = array_search(App::getLocale(), config('app.locales'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
             $name = 'name_lang_' . $index;
             $projects = $projects->orderBy($name);
@@ -39,7 +40,7 @@ class ProjectController extends Controller
         GlobalController::glo_project_role_setnull();
         $projects = Project::where('user_id', $user->id);
         $name = "";  // нужно, не удалять
-        $index = array_search(session('locale'), session('glo_menu_save'));
+        $index = array_search(App::getLocale(), config('app.locales'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
             $name = 'name_lang_' . $index;
             $projects = $projects->orderBy($name);

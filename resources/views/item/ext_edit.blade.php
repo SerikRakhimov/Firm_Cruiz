@@ -178,7 +178,7 @@
             @else
                 @if($base->is_calcname_lst == false)
                     <div class="form-group row">
-                        @foreach (session('glo_menu_save') as $key=>$value)
+                        @foreach (config('app.locales') as $key=>$value)
                             @if(($base->is_one_value_lst_str == true && $key == 0) || ($base->is_one_value_lst_str == false))
                                 <div class="col-sm-3 text-right">
                                     <label for="name_lang_{{$key}}" class="col-form-label">{{trans('main.name')}}
@@ -490,7 +490,7 @@
                         @endif
                     >
                         <div class="form-group row">
-                            @foreach (session('glo_menu_save') as $lang_key=>$lang_value)
+                            @foreach (config('app.locales') as $lang_key=>$lang_value)
                                 <?php
                                 // для первого (нулевого) языка $input_name = $key
                                 // для последующих языков $input_name = $key . '_' . $lang_key;

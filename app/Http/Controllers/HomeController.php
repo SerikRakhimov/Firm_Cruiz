@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Session;
 use App\Models\Template;
 use Illuminate\Http\Request;

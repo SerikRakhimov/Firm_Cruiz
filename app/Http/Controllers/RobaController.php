@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\App;
 use App\Models\Base;
 use App\Models\Roba;
 use App\Models\Role;
@@ -51,7 +52,7 @@ class RobaController extends Controller
     {
         $bases = Base::where('template_id', $role->template_id);
         $name = "";  // нужно, не удалять
-        $index = array_search(session('locale'), session('glo_menu_save'));
+        $index = array_search(App::getLocale(), config('app.locales'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
             $name = 'name_lang_' . $index;
             $bases = $bases->orderBy($name);
@@ -64,7 +65,7 @@ class RobaController extends Controller
     {
         $roles = Role::where('template_id', $base->template_id);
         $name = "";  // нужно, не удалять
-        $index = array_search(session('locale'), session('glo_menu_save'));
+        $index = array_search(App::getLocale(), config('app.locales'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
             $name = 'name_lang_' . $index;
             $roles = $roles->orderBy($name);
@@ -173,7 +174,7 @@ class RobaController extends Controller
         $role = Role::findOrFail($roba->role_id);
         $bases = Base::where('template_id', $role->template_id);
         $name = "";  // нужно, не удалять
-        $index = array_search(session('locale'), session('glo_menu_save'));
+        $index = array_search(App::getLocale(), config('app.locales'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
             $name = 'name_lang_' . $index;
             $bases = $bases->orderBy($name);
@@ -187,7 +188,7 @@ class RobaController extends Controller
         $base = Base::findOrFail($roba->base_id);
         $roles = Role::where('template_id', $base->template_id);
         $name = "";  // нужно, не удалять
-        $index = array_search(session('locale'), session('glo_menu_save'));
+        $index = array_search(App::getLocale(), config('app.locales'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
             $name = 'name_lang_' . $index;
             $roles = $roles->orderBy($name);

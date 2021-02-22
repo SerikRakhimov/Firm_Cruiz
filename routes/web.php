@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\App;
 use App\Models\Project;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
@@ -37,18 +38,18 @@ Route::get('/', function () {
     GlobalController::start_artisan();
     // массив "glo_menu_main" показывает, что четыре поля наименований хранятся в bases и items
     // ['1', '2', '3', '4'] - тут разницы нет, какие значения хранятся; главное, чтобы что-то хранилось
-    $array = ['1', '2', '3', '4'];
-    Session::put('glo_menu_main', $array);
+    //$array = ['1', '2', '3', '4'];
+    //Session::put('glo_menu_main', $array);
 
     // массив "glo_menu_lang" показывает какие языки используются в меню
     // должно входить(не превышать) во множество 'locales'(config\app.php)
-    $array = ['ru', 'kz', 'en'];
-    Session::put('glo_menu_lang', $array);
+    //$array = ['ru', 'kz', 'en'];
+    //Session::put('glo_menu_lang', $array);
 
     // массив "glo_menu_save" показывает, какие языки хранятся в bases и items
     // должно входить(не превышать) во множество массива 'glo_menu_lang'
-    $array = ['ru', 'kz', 'en'];
-    Session::put('glo_menu_save', $array);
+    //$array = ['ru', 'kz', 'en'];
+    //Session::put('glo_menu_save', $array);
 
     // текущий язык программы
     // должен совпадать с аналогичным значением в config\app.php
@@ -97,6 +98,8 @@ Route::get('/setlocale/{locale}', function ($locale) {
     if (in_array($locale, config('app.locales'))) {   # Проверяем, что у пользователя выбран доступный язык
         Session::put('locale', $locale);                    # И устанавливаем его в сессии под именем locale
 
+        App::setLocale($locale);
+        //App::getLocale();
     }
 
     return redirect()->back()->withInput();                 # Редиректим его <s>взад</s> на ту же страницу

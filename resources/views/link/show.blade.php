@@ -19,11 +19,11 @@
     <p>{{trans('main.child')}}_{{trans('main.base')}}: <b>{{$link->child_base->name()}}</b>
     <div><b>{{$link->child_base->info_full()}}</b></div></p>
 
-    @foreach (session('glo_menu_save') as $key=>$value)
+    @foreach (config('app.locales') as $key=>$value)
         <p>{{trans('main.child_label')}} ({{trans('main.' . $value)}}): <b>{{$link['child_label_lang_' . $key]}}</b></p>
     @endforeach
 
-    @foreach (session('glo_menu_save') as $key=>$value)
+    @foreach (config('app.locales') as $key=>$value)
         <p>{{trans('main.child_labels')}} ({{trans('main.' . $value)}}): <b>{{$link['child_labels_lang_' . $key]}}</b>
         </p>
     @endforeach
@@ -33,7 +33,7 @@
     <p>{{trans('main.parent')}}_{{trans('main.base')}}: <b>{{$link->parent_base->name()}}</b>
     <div><b>{{$link->parent_base->info_full()}}</b></div></p>
 
-    @foreach (session('glo_menu_save') as $key=>$value)
+    @foreach (config('app.locales') as $key=>$value)
         <p>{{trans('main.parent_label')}} ({{trans('main.' . $value)}}): <b>{{$link['parent_label_lang_' . $key]}}</b>
         </p>
     @endforeach

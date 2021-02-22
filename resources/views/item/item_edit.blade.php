@@ -24,7 +24,7 @@
             @method('PUT')
         @endif
 
-        @foreach (session('glo_menu_save') as $key=>$value)
+        @foreach (config('app.locales') as $key=>$value)
             <div class="form-group">
                 <label for="name_lang_{{$key}}">{{trans('main.name')}} ({{trans('main.' . $value)}})<span
                         class="text-danger">*</span></label>

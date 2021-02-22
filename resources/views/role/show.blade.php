@@ -15,7 +15,7 @@
 
     <p>Id: <b>{{$role->id}}</b></p>
 
-    @foreach (session('glo_menu_save') as $key=>$value)
+    @foreach (config('app.locales') as $key=>$value)
         <p>{{trans('main.name')}} ({{trans('main.' . $value)}}): <b>{{$role['name_lang_' . $key]}}</b></p>
     @endforeach
     <p>{{trans('main.is_default_for_external')}}: <b>{{GlobalController::name_is_boolean($role->is_default_for_external)}}</b></p>

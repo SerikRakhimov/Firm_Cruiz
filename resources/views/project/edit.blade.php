@@ -60,7 +60,7 @@
         @endif
 
         <div class="form-group row">
-            @foreach (session('glo_menu_save') as $key=>$value)
+            @foreach (config('app.locales') as $key=>$value)
                 <div class="col-3 text-right">
                     <label for="name_lang_{{$key}}" class="col-form-label">{{trans('main.name')}}
                         ({{trans('main.' . $value)}})<span

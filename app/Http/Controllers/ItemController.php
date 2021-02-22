@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\App;
 use App\Models\Base;
 use App\Models\Item;
 use App\Models\Link;
@@ -124,7 +125,7 @@ class ItemController extends Controller
     function index()
     {
         $items = null;
-        $index = array_search(session('locale'), session('glo_menu_save'));
+        $index = array_search(App::getLocale(), config('app.locales'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
             switch ($index) {
                 case 0:
@@ -163,7 +164,7 @@ class ItemController extends Controller
     function item_index(Item $item, Link $par_link = null)
     {
 //        $items = null;
-//        $index = array_search(session('locale'), session('glo_menu_save'));
+//        $index = array_search(App::getLocale(), config('app.locales'));
 //        if ($index !== false) {   // '!==' использовать, '!=' не использовать
 //            switch ($index) {
 //                case 0:
@@ -358,7 +359,7 @@ class ItemController extends Controller
                 $name_lang_array[3] = isset($request->name_lang_3) ? $request->name_lang_3 : "";
                 $errors = false;
                 $i = 0;
-                foreach (session('glo_menu_save') as $lang_key => $lang_value) {
+                foreach (config('app.locales') as $lang_key => $lang_value) {
                     if (($base->is_one_value_lst_str == true && $lang_key == 0) || ($base->is_one_value_lst_str == false)) {
                         if ($name_lang_array[$i] === '') {
                             $array_mess['name_lang_' . $i] = trans('main.is_required_lst_num_str_img_doc') . '!';
@@ -468,7 +469,7 @@ class ItemController extends Controller
         // затем этот блок (используется "$base")
         if ($base->type_is_number() || $base->type_is_date() || $base->type_is_boolean()) {
             // присваивание полям наименование строкового значение числа/даты
-//            foreach (session('glo_menu_save') as $key => $value) {
+//            foreach (config('app.locales') as $key => $value) {
 //                if ($key > 0) {
 //                    $item['name_lang_' . $key] = $item->name_lang_0;
 //                }
@@ -491,7 +492,7 @@ class ItemController extends Controller
         foreach ($string_langs as $key => $link) {
             if ($link->parent_base->type_is_string()) {
                 $i = 0;
-                foreach (session('glo_menu_save') as $lang_key => $lang_value) {
+                foreach (config('app.locales') as $lang_key => $lang_value) {
                     // начиная со второго(индекс==1) элемента массива языков сохранять
                     if ($i > 0) {
                         // для первого (нулевого) языка $input_name = $key ($link->id)
@@ -642,7 +643,7 @@ class ItemController extends Controller
                     $name_lang_value = null;
                     $name_lang_key = null;
                     $i = 0;
-                    foreach (session('glo_menu_save') as $lang_key => $lang_value) {
+                    foreach (config('app.locales') as $lang_key => $lang_value) {
                         if (($work_base->is_one_value_lst_str == true && $lang_key == 0) || ($work_base->is_one_value_lst_str == false)) {
                             if ($i == 0) {
                                 $name_lang_key = $key;
@@ -1053,7 +1054,7 @@ class ItemController extends Controller
                                 // Похожие строки вверху
                                 $item_find->code = uniqid($item_find->id . '_', true);
                                 // присваивание полям наименование строкового значение числа
-                                foreach (session('glo_menu_save') as $key => $value) {
+                                foreach (config('app.locales') as $key => $value) {
                                     $item_find['name_lang_' . $key] = $seek_value;
                                 }
                                 $item_find->project_id = GlobalController::glo_project_id();
@@ -1125,7 +1126,7 @@ class ItemController extends Controller
             $item_find->code = uniqid($item_find->id . '_', true);
             //присваивание полям наименование строкового значение числа
 //            $i = 0;
-//            foreach (session('glo_menu_save') as $lang_key => $lang_value) {
+//            foreach (config('app.locales') as $lang_key => $lang_value) {
 //                if ($i == 0) {
 //                    $item_find['name_lang_' . $lang_key] = $values[$index];
 //                } else {
@@ -1177,7 +1178,7 @@ class ItemController extends Controller
             $item_find = Item::where('base_id', $link->parent_base_id)->where('project_id', GlobalController::glo_project_id())->where('name_lang_0', $values[$index]);
             if ($link->parent_base->is_one_value_lst_str == false) {
                 $i = 0;
-                foreach (session('glo_menu_save') as $lang_key => $lang_value) {
+                foreach (config('app.locales') as $lang_key => $lang_value) {
                     // начиная со второго(индекс==1) элемента массива языков учитывать
                     if ($i > 0) {
                         $item_find = $item_find->where('name_lang_' . $lang_key, $strings_inputs[$link->id . '_' . $lang_key]);
@@ -1197,7 +1198,7 @@ class ItemController extends Controller
                 $item_find->code = uniqid($item_find->id . '_', true);
                 // присваивание полям наименование строкового значение числа
                 $i = 0;
-                foreach (session('glo_menu_save') as $lang_key => $lang_value) {
+                foreach (config('app.locales') as $lang_key => $lang_value) {
                     if ($i == 0) {
                         $item_find['name_lang_' . $lang_key] = $values[$index];
                     } else {
@@ -1232,7 +1233,7 @@ class ItemController extends Controller
                 // Похожие строки вверху
                 $item_find->code = uniqid($item_find->id . '_', true);
                 // присваивание полям наименование строкового значение числа
-                foreach (session('glo_menu_save') as $key => $value) {
+                foreach (config('app.locales') as $key => $value) {
                     $item_find['name_lang_' . $key] = $values[$index];
                 }
                 $item_find->project_id = GlobalController::glo_project_id();
@@ -1360,7 +1361,7 @@ class ItemController extends Controller
                 $name_lang_array[3] = isset($request->name_lang_3) ? $request->name_lang_3 : "";
                 $errors = false;
                 $i = 0;
-                foreach (session('glo_menu_save') as $lang_key => $lang_value) {
+                foreach (config('app.locales') as $lang_key => $lang_value) {
                     if (($item->base->is_one_value_lst_str == true && $lang_key == 0) || ($item->base->is_one_value_lst_str == false)) {
                         if ($name_lang_array[$i] === '') {
                             $array_mess['name_lang_' . $i] = trans('main.is_required_lst_num_str_img_doc') . '!';
@@ -1484,7 +1485,7 @@ class ItemController extends Controller
         // затем этот блок (используется "$item->base")
         if ($item->base->type_is_number() || $item->base->type_is_date() || $item->base->type_is_boolean()) {
             // присваивание полям наименование строкового значение числа/даты
-//            foreach (session('glo_menu_save') as $key => $value) {
+//            foreach (config('app.locales') as $key => $value) {
 //                if ($key > 0) {
 //                    $item['name_lang_' . $key] = $item->name_lang_0;
 //                }
@@ -1507,7 +1508,7 @@ class ItemController extends Controller
         foreach ($string_langs as $key => $link) {
             if ($link->parent_base->type_is_string()) {
                 $i = 0;
-                foreach (session('glo_menu_save') as $lang_key => $lang_value) {
+                foreach (config('app.locales') as $lang_key => $lang_value) {
                     // начиная со второго(индекс==1) элемента массива языков сохранять
                     if ($i > 0) {
                         // для первого (нулевого) языка $input_name = $key ($link->id)
@@ -1663,7 +1664,7 @@ class ItemController extends Controller
                     $name_lang_value = null;
                     $name_lang_key = null;
                     $i = 0;
-                    foreach (session('glo_menu_save') as $lang_key => $lang_value) {
+                    foreach (config('app.locales') as $lang_key => $lang_value) {
                         if (($work_base->is_one_value_lst_str == true && $lang_key == 0) || ($work_base->is_one_value_lst_str == false)) {
                             if ($i == 0) {
                                 $name_lang_key = $key;
@@ -1959,7 +1960,7 @@ class ItemController extends Controller
             if ($link_exists == null) {
 
                 $name = "";  // нужно, не удалять
-                $index = array_search(session('locale'), session('glo_menu_save'));
+                $index = array_search(App::getLocale(), config('app.locales'));
                 if ($index !== false) {   // '!==' использовать, '!=' не использовать
                     $name = 'name_lang_' . $index;
                 }
@@ -2222,7 +2223,7 @@ class ItemController extends Controller
         return $result;
     }
 
-// Функция calc_value_func() вычисляет наимеования для записи $item
+// Функция calc_value_func() вычисляет наименования для записи $item
     private
     function calc_value_func(Item $item, $level = 0, $first_run = true)
     {

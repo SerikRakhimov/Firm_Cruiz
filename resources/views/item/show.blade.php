@@ -20,7 +20,7 @@
     <p>{{trans('main.base')}}: <b>{{$item->base->info()}}</b>
         <div><b>{{$item->base->info_full()}}</b></div></p>
 
-    @foreach (session('glo_menu_save') as $key=>$value)
+    @foreach (config('app.locales') as $key=>$value)
         <p>{{trans('main.name')}} ({{trans('main.' . $value)}}): <b>{{$item['name_lang_' . $key]}}</b></p>
     @endforeach
 

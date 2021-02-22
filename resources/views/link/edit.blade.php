@@ -46,7 +46,7 @@
             @enderror
         </div>
 
-        @foreach (session('glo_menu_save') as $key=>$value)
+        @foreach (config('app.locales') as $key=>$value)
             <div class="form-group">
                 <label for="child_label_lang_{{$key}}">{{trans('main.child_label')}} ({{trans('main.' . $value)}})<span
                         class="text-danger">*</span></label>
@@ -64,7 +64,7 @@
             </div>
         @endforeach
 
-        @foreach (session('glo_menu_save') as $key=>$value)
+        @foreach (config('app.locales') as $key=>$value)
             <div class="form-group">
                 <label for="child_labels_lang_{{$key}}">{{trans('main.child_labels')}} ({{trans('main.' . $value)}}
                     )<span class="text-danger">*</span></label>
@@ -121,7 +121,7 @@
             @enderror
         </div>
 
-        @foreach (session('glo_menu_save') as $key=>$value)
+        @foreach (config('app.locales') as $key=>$value)
             <div class="form-group">
                 <label for="parent_label_lang_{{$key}}">{{trans('main.parent_label')}} ({{trans('main.' . $value)}}
                     )<span class="text-danger">*</span></label>
@@ -139,7 +139,7 @@
             </div>
         @endforeach
 
-        @foreach (session('glo_menu_save') as $key=>$value)
+        @foreach (config('app.locales') as $key=>$value)
             <div class="form-group">
                 <label for="parent_calcname_prefix_lang_{{$key}}">{{trans('main.parent_calcname_prefix')}} ({{trans('main.' . $value)}}
                     )<span class="text-danger">*</span></label>

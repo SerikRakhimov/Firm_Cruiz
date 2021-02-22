@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Facades\App;
 use Illuminate\Database\Eloquent\Model;
 
 class Link extends Model
@@ -21,7 +22,7 @@ class Link extends Model
     function child_label()
     {
         $result = "";  // нужно, не удалять
-        $index = array_search(session('locale'), session('glo_menu_save'));
+        $index = array_search(App::getLocale(), config('app.locales'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
             $result = $this['child_label_lang_' . $index];
         }
@@ -34,7 +35,7 @@ class Link extends Model
     function child_labels()
     {
         $result = "";  // нужно, не удалять
-        $index = array_search(session('locale'), session('glo_menu_save'));
+        $index = array_search(App::getLocale(), config('app.locales'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
             $result = $this['child_labels_lang_' . $index];
         }
@@ -47,7 +48,7 @@ class Link extends Model
     function parent_label()
     {
         $result = "";  // нужно, не удалять
-        $index = array_search(session('locale'), session('glo_menu_save'));
+        $index = array_search(App::getLocale(), config('app.locales'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
             $result = $this['parent_label_lang_' . $index];
         }
@@ -60,7 +61,7 @@ class Link extends Model
     function parent_calcname_prefix()
     {
         $result = "";  // нужно, не удалять
-        $index = array_search(session('locale'), session('glo_menu_save'));
+        $index = array_search(App::getLocale(), config('app.locales'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
             $result = $this['parent_calcname_prefix_lang_' . $index];
         }

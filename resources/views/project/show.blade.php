@@ -31,7 +31,7 @@
     @if(!$is_template)
         <p>{{trans('main.template')}}: <b>{{$project->template->name()}}</b></p>
     @endif
-    @foreach (session('glo_menu_save') as $key=>$value)
+    @foreach (config('app.locales') as $key=>$value)
         <p>{{trans('main.name')}} ({{trans('main.' . $value)}}): <b>{{$project['name_lang_' . $key]}}</b></p>
     @endforeach
     @if(!$is_user)

@@ -1,5 +1,6 @@
 <!doctype html>
 <?php
+use Illuminate\Support\Facades\App;
 use App\Http\Controllers\GlobalController;
 use Illuminate\Support\Facades\Session;
 use App\Models\Project;
@@ -28,10 +29,12 @@ use App\Models\Project;
 <div id="app">
     <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
         <div class="container">
-            @foreach (session('glo_menu_lang') as $value)
+{{--            @foreach (session('glo_menu_lang') as $value)--}}
+                @foreach (config('app.locales') as $value)
                 <a class="navbar-brand" href="{{ url('/setlocale/' . $value) }}">
                     <span
-                        @if(session('locale') == $value)
+{{--                        @if(session('locale') == $value)--}}
+                        @if(App::getLocale() == $value)
                         style="text-decoration: underline"
                         @endif
                     >{{mb_strtoupper($value)}}</span>

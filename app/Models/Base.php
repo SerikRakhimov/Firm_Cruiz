@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Facades\App;
 use Illuminate\Database\Eloquent\Model;
 
 class Base extends Model
@@ -26,7 +27,8 @@ class Base extends Model
     function name()
     {
         $result = "";  // нужно, не удалять
-        $index = array_search(session('locale'), session('glo_menu_save'));
+        //$index = array_search(App::getLocale(), session('glo_menu_save'));
+        $index = array_search(App::getLocale(), config('app.locales'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
             $result = $this['name_lang_' . $index];
         }
@@ -39,7 +41,8 @@ class Base extends Model
     function names()
     {
         $result = "";  // нужно, не удалять
-        $index = array_search(session('locale'), session('glo_menu_save'));
+//      $index = array_search(App::getLocale(), config('app.locales'));
+        $index = array_search(App::getLocale(), config('app.locales'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
             $result = $this['names_lang_' . $index];
         }

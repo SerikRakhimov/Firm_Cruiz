@@ -12,7 +12,7 @@
 
     <p>Id: <b>{{$template->id}}</b></p>
 
-    @foreach (session('glo_menu_save') as $key=>$value)
+    @foreach (config('app.locales') as $key=>$value)
         <p>{{trans('main.name')}} ({{trans('main.' . $value)}}): <b>{{$template['name_lang_' . $key]}}</b></p>
     @endforeach
 

@@ -13,7 +13,7 @@
 
     <p>Id: <b>{{$task->id}}</b></p>
 
-    @foreach (session('glo_menu_save') as $key=>$value)
+    @foreach (config('app.locales') as $key=>$value)
         <p>{{trans('main.name')}} ({{trans('main.' . $value)}}): <b>{{$task['name_lang_' . $key]}}</b></p>
     @endforeach
 

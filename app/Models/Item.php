@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Facades\App;
 use Illuminate\Database\Eloquent\Model;
 use App\User;
 use App\Models\Project;
@@ -72,7 +73,7 @@ class Item extends Model
 //        if ($this->base->type_is_date()) {
 //            $result = date_create($this->name_lang_0)->Format(trans('main.format_date'));
 //        } else {
-//            $index = array_search(session('locale'), session('glo_menu_save'));
+//            $index = array_search(App::getLocale(), config('app.locales'));
 //            if ($index !== false) {   // '!==' использовать, '!=' не использовать
 //                $result = $this['name_lang_' . $index];
 //            }
@@ -93,7 +94,7 @@ class Item extends Model
                     : ($this->name_lang_0 == "0" ? html_entity_decode('&#65794;') : trans('main.empty'));
                 //
             } else {
-                $index = array_search(session('locale'), session('glo_menu_save'));
+                $index = array_search(App::getLocale(), config('app.locales'));
                 if ($index !== false) {   // '!==' использовать, '!=' не использовать
                     $result = $this['name_lang_' . $index];
                 }
@@ -108,8 +109,11 @@ class Item extends Model
     function names()
     {
         $res_array = array();
-        $d = session('glo_menu_main');
-        foreach (session('glo_menu_main') as $lang_key => $lang_value) {
+        // массив "glo_menu_main" показывает, что четыре поля наименований хранятся в bases и items
+        // ['1', '2', '3', '4'] - тут разницы нет, какие значения хранятся; главное, чтобы что-то хранилось
+        $main_array = ['1', '2', '3', '4'];
+//        foreach (session('glo_menu_main') as $lang_key => $lang_value) {
+            foreach ($main_array as $lang_key => $lang_value) {
             $name = "";  // нужно, не удалять
             $base_find = $this->base;
             if ($base_find) {

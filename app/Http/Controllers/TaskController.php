@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\App;
 use App\Models\Template;
 use App\Models\Task;
 use Illuminate\Http\Request;
@@ -18,7 +19,7 @@ class TaskController extends Controller
     function index(Template $template)
     {
         $tasks = Task::where('template_id', $template->id);
-        $index = array_search(session('locale'), session('glo_menu_save'));
+        $index = array_search(App::getLocale(), config('app.locales'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
             switch ($index) {
                 case 0:

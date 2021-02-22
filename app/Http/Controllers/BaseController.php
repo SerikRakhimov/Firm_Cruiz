@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\App;
 use App\Models\Base;
 use App\Models\Link;
 use App\Models\Template;
@@ -39,7 +40,7 @@ class BaseController extends Controller
     function index(Template $template)
     {
         $bases = Base::where('template_id', $template->id);
-        $index = array_search(session('locale'), session('glo_menu_save'));
+        $index = array_search(App::getLocale(), config('app.locales'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
             switch ($index) {
                 case 0:
@@ -66,7 +67,7 @@ class BaseController extends Controller
     function template_index(Template $template)
     {
         $bases = Base::where('template_id', $template->id);
-        $index = array_search(session('locale'), session('glo_menu_save'));
+        $index = array_search(App::getLocale(), config('app.locales'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
             switch ($index) {
                 case 0:
@@ -765,7 +766,7 @@ class BaseController extends Controller
     static function field_name()
     {
         $result = "";  // нужно, не удалять
-        $index = array_search(session('locale'), session('glo_menu_save'));
+        $index = array_search(App::getLocale(), config('app.locales'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
             $result = 'name_lang_' . $index;
         }

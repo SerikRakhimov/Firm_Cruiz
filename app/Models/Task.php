@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Facades\App;
 use Illuminate\Database\Eloquent\Model;
 
 class Task extends Model
@@ -11,7 +12,7 @@ class Task extends Model
     function name()
     {
         $result = "";  // нужно, не удалять
-        $index = array_search(session('locale'), session('glo_menu_save'));
+        $index = array_search(App::getLocale(), config('app.locales'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
             $result = $this['name_lang_' . $index];
         }

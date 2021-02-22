@@ -18,11 +18,11 @@
 
     <p>Id: <b>{{$base->id}}</b></p>
 
-    @foreach (session('glo_menu_save') as $key=>$value)
+    @foreach (config('app.locales') as $key=>$value)
         <p>{{trans('main.name')}} ({{trans('main.' . $value)}}): <b>{{$base['name_lang_' . $key]}}</b></p>
     @endforeach
 
-    @foreach (session('glo_menu_save') as $key=>$value)
+    @foreach (config('app.locales') as $key=>$value)
         <p>{{trans('main.names')}} ({{trans('main.' . $value)}}): <b>{{$base['names_lang_' . $key]}}</b></p>
     @endforeach
 
