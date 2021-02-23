@@ -8,8 +8,9 @@
     use App\Http\Controllers\GlobalController;
     use App\Http\Controllers\ItemController;
     use App\Http\Controllers\MainController;
+    $project = $item->project;
     ?>
-
+    {{$project->name()}} - {{$role->name()}}
     <h3 class="display-5">
         @if ($type_form == 'show')
             {{trans('main.viewing_record')}}
@@ -21,7 +22,7 @@
     <br>
     <?php
     $base = $item->base;
-    $base_right = GlobalController::base_right($base);
+    $base_right = GlobalController::base_right($base, $role);
     ?>
     <p>Id: <b>{{$item->id}}</b></p>
     @if($base_right['is_show_base_enable'] == true)
@@ -71,7 +72,7 @@
             ?>
             @if($link && $item_find)
                 <?php
-                $base_link_right = GlobalController::base_link_right($link);
+                $base_link_right = GlobalController::base_link_right($link, $role);
                 ?>
                 @if($base_link_right['is_show_link_enable'] == true)
                     {{$link->parent_label()}}:
@@ -113,7 +114,7 @@
             <a class="btn btn-primary" href="{{session('links')}}">{{trans('main.return')}}</a>
         </div>
     @elseif($type_form == 'delete_question')
-        <form action="{{route('item.ext_delete',['item' => $item, 'heading' => $heading])}}" method="POST"
+        <form action="{{route('item.ext_delete',['item' => $item, 'role' => $role, 'heading' => $heading])}}" method="POST"
               id='delete-form'>
             @csrf
             @method('DELETE')

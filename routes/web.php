@@ -529,7 +529,7 @@ Route::get('/base/index/{template}', 'BaseController@index')
     ->name('base.index')
     ->middleware('auth');
 
-Route::get('/base/template_index/{template}', 'BaseController@template_index')
+Route::get('/base/template_index/{project}/{role}', 'BaseController@template_index')
     ->name('base.template_index')
     ->middleware('auth');
 
@@ -626,7 +626,7 @@ Route::get('/item/index', 'ItemController@index')
     ->name('item.index')
     ->middleware('auth');
 
-Route::get('/item/base_index/{base}', 'ItemController@base_index')
+Route::get('/item/base_index/{base}/{project}/{role}', 'ItemController@base_index')
     ->name('item.base_index')
     ->middleware('auth');
 
@@ -642,11 +642,11 @@ Route::get('/item/create', 'ItemController@create')
     ->name('item.create')
     ->middleware('auth');
 
-Route::get('/item/ext_show/{item}', 'ItemController@ext_show')
+Route::get('/item/ext_show/{item}/{role}', 'ItemController@ext_show')
     ->name('item.ext_show')
     ->middleware('auth');
 
-Route::get('/item/ext_create/{base}/{heading?}/{par_link?}/{parent_item?}', 'ItemController@ext_create')
+Route::get('/item/ext_create/{base}/{project}/{role}/{heading?}/{par_link?}/{parent_item?}', 'ItemController@ext_create')
     ->name('item.ext_create')
     ->middleware('auth');
 
@@ -654,7 +654,7 @@ Route::get('/item/edit/{item}', 'ItemController@edit')
     ->name('item.edit')
     ->middleware('auth');
 
-Route::get('/item/ext_edit/{item}/{par_link?}/{parent_item?}', 'ItemController@ext_edit')
+Route::get('/item/ext_edit/{item}/{role}/{par_link?}/{parent_item?}', 'ItemController@ext_edit')
     ->name('item.ext_edit')
     ->middleware('auth');
 
@@ -662,7 +662,7 @@ Route::post('/item/store', 'ItemController@store')
     ->name('item.store')
     ->middleware('auth');
 
-Route::post('/item/ext_store/{base}/{heading?}', 'ItemController@ext_store')
+Route::post('/item/ext_store/{base}/{project}/{role}/{heading?}', 'ItemController@ext_store')
     ->name('item.ext_store')
     ->middleware('auth');
 
@@ -670,7 +670,7 @@ Route::put('/item/edit/{item}', 'ItemController@update')
     ->name('item.update')
     ->middleware('auth');
 
-Route::put('/item/ext_edit/{item}', 'ItemController@ext_update')
+Route::put('/item/ext_edit/{item}/{role}', 'ItemController@ext_update')
     ->name('item.ext_update')
     ->middleware('auth');
 
@@ -678,18 +678,18 @@ Route::get('/item/delete_question/{item}', 'ItemController@delete_question')
     ->name('item.delete_question')
     ->middleware('auth');
 
-Route::get('/item/ext_delete_question/{item}/{heading?}', 'ItemController@ext_delete_question')
+Route::get('/item/ext_delete_question/{item}/{role}/{heading?}', 'ItemController@ext_delete_question')
     ->name('item.ext_delete_question')
     ->middleware('auth');
 
-Route::delete('/item/ext_delete/{item}/{heading?}', 'ItemController@ext_delete')
+Route::delete('/item/ext_delete/{item}/{role}/{heading?}', 'ItemController@ext_delete')
     ->name('item.ext_delete')
     ->middleware('auth');
 
 Route::post('/store_link_change', 'ItemController@store_link_change')
     ->name('item.store_link_change');
 
-Route::get('/item/get_items_for_link/{link}', 'ItemController@get_items_for_link')
+Route::get('/item/get_items_for_link/{link}/{project}', 'ItemController@get_items_for_link')
     ->name('item.get_items_for_link')
     ->middleware('auth');
 
@@ -705,15 +705,15 @@ Route::get('/item/browser/{base_id}/{sort_by_code?}/{save_by_code?}/{search?}', 
     ->name('item.browser')
     ->middleware('auth');
 
-Route::get('/item/calculate_name/{base}', 'ItemController@calculate_name')
+Route::get('/item/calculate_name/{base}/{project}', 'ItemController@calculate_name')
     ->name('item.calculate_name')
     ->middleware('auth');
 
-Route::get('/item/recalculation_codes/{base}', 'ItemController@recalculation_codes')
+Route::get('/item/recalculation_codes/{base}/{project}', 'ItemController@recalculation_codes')
     ->name('item.recalculation_codes')
     ->middleware('auth');
 
-Route::get('/item/item_from_base_code/{base}/{code}', 'ItemController@item_from_base_code')
+Route::get('/item/item_from_base_code/{base}/{project}/{code}', 'ItemController@item_from_base_code')
     ->name('item.item_from_base_code')
     ->middleware('auth');
 

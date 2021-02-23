@@ -10,10 +10,15 @@
     use \App\Http\Controllers\LinkController;
     use \App\Http\Controllers\StepController;
     $update = isset($item);
-    $base_right = GlobalController::base_right($base);
+    $base_right = GlobalController::base_right($base, $role);
+    if ($update) {
+        $project = $item->project;
+    } else {
+        // Итак должен передаваться в форму $project при добавлении записи
+        //$project = $project;
+    }
     ?>
     <script>
-
         function browse(base_id, link_id) {
             // Нужно, используется в browser.blade.php
             //alert(base_id + " " + link_id);
@@ -23,6 +28,8 @@
             open('{{route('item.browser', '')}}' + '/' + base_id + '/1/1', 'browse', 'width=800, height=800');
         };
     </script>
+
+    {{$project->name()}} - {{$role->name()}}
     <h3 class="display-5 text-center">
         @if (!$update)
             {{trans('main.new_record')}}
@@ -34,7 +41,7 @@
     <br>
     {{--    https://qastack.ru/programming/1191113/how-to-ensure-a-select-form-field-is-submitted-when-it-is-disabled--}}
     <form
-        action="{{$update ? route('item.ext_update', $item):route('item.ext_store', ['base' => $base, 'heading' => $heading])}}"
+        action="{{$update ? route('item.ext_update', ['item'=>$item, 'role'=>$role]):route('item.ext_store', ['base' => $base, 'project' => $project, 'role'=>$role, 'heading' => $heading])}}"
         method="POST"
         enctype=multipart/form-data
         @if($par_link)
@@ -49,8 +56,7 @@
         @if ($update)
             @method('PUT')
         @endif
-        <input type="hidden" name="base_id" value="{{$base->id}}">
-        <input type="hidden" name="project_id" value="{{GlobalController::glo_project_id()}}">
+{{--        <input type="hidden" name="base_id" value="{{$base->id}}">--}}
         @if ($update)
             <div class="form-group row">
                 <div class="col-sm-3 text-right">
@@ -220,17 +226,16 @@
             <input type="hidden" name="code" value="{{$update ? $item->code: $code_uniqid}}">
         @endif
 
-
         @foreach($array_calc as $key=>$value)
             <?php
             $link = Link::find($key);
-            $base_link_right = GlobalController::base_link_right($link);
+            $base_link_right = GlobalController::base_link_right($link, $role);
             ?>
             @if($base_link_right['is_edit_link_enable'] == false)
                 @continue
             @endif
             <?php
-            $result = ItemController::get_items_for_link($link);
+            $result = ItemController::get_items_for_link($link, $project);
             $items = $result['result_parent_base_items'];
             $code_find = null;
             if ($value != null) {
@@ -725,7 +730,7 @@
     @foreach($array_calc as $key=>$value)
         <?php
         $link = Link::find($key);
-        $base_link_right = GlobalController::base_link_right($link);
+        $base_link_right = GlobalController::base_link_right($link, $role);
         ?>
         @if($base_link_right['is_edit_link_enable'] == false)
             @continue
@@ -891,6 +896,7 @@
                     //alert(code_{{$prefix}}{{$link->id}}.value);
                     await axios.get('/item/item_from_base_code/'
                         + '{{$link->parent_base_id}}'
+                        + '/' + '{{$project->id}}'
                         + '/' + code_{{$prefix}}{{$link->id}}.value
                     ).then(function (res) {
                             name_{{$prefix}}{{$link->id}}.innerHTML = res.data['item_name'];

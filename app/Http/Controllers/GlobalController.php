@@ -135,9 +135,9 @@ class GlobalController extends Controller
             : ($value == false ? html_entity_decode('&#65794;') : trans('main.empty'));
     }
 
-    static function base_right(Base $base, bool $is_no_sndb_pd_rule = false)
+    static function base_right(Base $base, Role $role, bool $is_no_sndb_pd_rule = false)
     {
-        $role = GlobalController::glo_role();
+        //$role = GlobalController::glo_role();
 
         $is_list_base_create = $role->is_list_base_create;
         $is_list_base_read = $role->is_list_base_read;
@@ -247,12 +247,12 @@ class GlobalController extends Controller
         ];
     }
 
-    static function base_link_right(Link $link)
+    static function base_link_right(Link $link, Role $role)
     {
-        $role = GlobalController::glo_role();
+        //$role = GlobalController::glo_role();
 
         $base = $link->parent_base;
-        $base_right = self::base_right($base, true);
+        $base_right = self::base_right($base, $role, true);
 
         $is_list_base_calc = $base_right['is_list_base_calc'];
         $is_list_base_create = $base_right['is_list_base_create'];
@@ -301,10 +301,10 @@ class GlobalController extends Controller
         ];
     }
 
-    static function items_right(Base $base)
+    static function items_right(Base $base, Project $project, Role $role)
     {
-        $base_right = self::base_right($base);
-        $items = Item::where('base_id', $base->id)->where('project_id', GlobalController::glo_project_id());
+        $base_right = self::base_right($base, $role);
+        $items = Item::where('base_id', $base->id)->where('project_id', $project->id);
         if ($base_right['is_list_base_byuser'] == true) {
             $items = $items->where('created_user_id', GlobalController::glo_user_id());
         }

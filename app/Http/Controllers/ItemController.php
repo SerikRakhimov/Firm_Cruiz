@@ -8,6 +8,8 @@ use App\Models\Item;
 use App\Models\Link;
 use App\Models\Main;
 use App\Models\Set;
+use App\Models\Project;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -151,13 +153,13 @@ class ItemController extends Controller
 //            return $item->base->name_lang_0 . $item->name_lang_0;})]);
     }
 
-    function base_index(Base $base)
+    function base_index(Base $base, Project $project, Role $role)
     {
-        $base_right = GlobalController::base_right($base);
+        $base_right = GlobalController::base_right($base, $role);
 
         session(['links' => ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/' . request()->path()]);
-        return view('item/base_index', ['base_right' => $base_right, 'base' => $base,
-            'items' => GlobalController::items_right($base)['items']->paginate(60)]);
+        return view('item/base_index', ['base_right' => $base_right, 'base' => $base, 'project' => $project, 'role' => $role,
+            'items' => GlobalController::items_right($base, $project, $role)['items']->paginate(60)]);
 
     }
 
@@ -309,23 +311,26 @@ class ItemController extends Controller
         return view('item/show', ['type_form' => 'show', 'item' => $item]);
     }
 
-    function ext_show(Item $item)
+    function ext_show(Item $item, Role $role)
     {
-        return view('item/ext_show', ['type_form' => 'show', 'item' => $item, 'array_calc' => $this->get_array_calc_edit($item)['array_calc']]);
+        return view('item/ext_show', ['type_form' => 'show', 'item' => $item, 'role' => $role, 'array_calc' => $this->get_array_calc_edit($item)['array_calc']]);
     }
 
-    function ext_create(Base $base, $heading = 0, Link $par_link = null, Item $parent_item = null)
+    function ext_create(Base $base, Project $project, Role $role, $heading = 0, Link $par_link = null, Item $parent_item = null)
         // '$heading = 0' использовать; аналог '$heading = false', в этом случае так /item/ext_create/{base}//
     {
         $arrays = $this->get_array_calc_create($base, $par_link, $parent_item);
         $array_calc = $arrays['array_calc'];
         $array_disabled = $arrays['array_disabled'];
-        $code_new = $this->calculate_new_code($base);
+        $code_new = $this->calculate_new_code($base, $project);
         // Похожая строка внизу
         $code_uniqid = uniqid($base->id . '_', true);
 
-        return view('item/ext_edit', ['base' => $base, 'code_new' => $code_new, 'code_uniqid' => $code_uniqid,
+        return view('item/ext_edit', ['base' => $base,
+            'code_new' => $code_new, 'code_uniqid' => $code_uniqid,
             'heading' => $heading,
+            'project' => $project,
+            'role' => $role,
             'array_calc' => $array_calc,
             'array_disabled' => $array_disabled,
             'par_link' => $par_link, 'parent_item' => $parent_item]);
@@ -337,7 +342,7 @@ class ItemController extends Controller
         return view('item/edit', ['bases' => Base::all()]);
     }
 
-    function ext_store(Request $request, Base $base, $heading)
+    function ext_store(Request $request, Base $base, Project $project, Role $role, $heading)
     {
 
         //https://webformyself.com/kak-v-php-poluchit-znachenie-checkbox/
@@ -445,6 +450,8 @@ class ItemController extends Controller
 
         $item = new Item($request->except('_token', '_method'));
         $item->base_id = $base->id;
+        //$project = Project::findOrFail($request->project_id);
+        //$role = Role::findOrFail($request->role_id);
         // Похожая проверка в ext_edit.blade.php
 //        if ($base->is_code_needed == true && $base->is_code_number == true && $base->is_limit_sign_code == true
 //            && $base->is_code_zeros == true && $base->is_code_zeros > 0) {
@@ -459,7 +466,7 @@ class ItemController extends Controller
         $item->name_lang_1 = isset($request->name_lang_1) ? $request->name_lang_1 : "";
         $item->name_lang_2 = isset($request->name_lang_2) ? $request->name_lang_2 : "";
         $item->name_lang_3 = isset($request->name_lang_3) ? $request->name_lang_3 : "";
-        $item->project_id = GlobalController::glo_project_id();
+        $item->project_id = $project->id;
         // далее этот блок
         // похожая формула ниже (в этой же процедуре)
         if ($base->type_is_boolean()) {
@@ -481,7 +488,7 @@ class ItemController extends Controller
 
         $this::save_img_doc($request, $item);
 
-        $excepts = array('_token', 'base_id', 'project_id', 'code', '_method', 'name_lang_0', 'name_lang_1', 'name_lang_2', 'name_lang_3');
+        $excepts = array('_token', 'code', '_method', 'name_lang_0', 'name_lang_1', 'name_lang_2', 'name_lang_3');
         $string_langs = $this->get_child_links($base);
         // Формируется массив $code_names - названия полей кодов
         // Формируется массив $string_names - названия полей наименование
@@ -540,7 +547,7 @@ class ItemController extends Controller
         // см. https://webformyself.com/kak-v-php-poluchit-znachenie-checkbox/
         foreach ($string_langs as $link) {
             // Проверка нужна
-            $base_link_right = GlobalController::base_link_right($link);
+            $base_link_right = GlobalController::base_link_right($link, $role);
             if ($base_link_right['is_edit_link_enable'] == false) {
                 continue;
             }
@@ -789,6 +796,9 @@ class ItemController extends Controller
         }
 
         //return $heading ? redirect()->route('item.item_index', $item) : redirect(session('links'));
+        return $heading ? redirect()->route('item.item_index', $item) : redirect()->route('item.base_index', ['base'=>$base, 'project'=>$project, 'role'=>$role]);
+        //return redirect()->route('item.base_index', ['base'=>$item->base, 'project'=>$item->project, 'role'=>$role]);
+
 
     }
 
@@ -873,7 +883,6 @@ class ItemController extends Controller
 //            ->orderBy('sets.link_from_id')
 //            ->orderBy('sets.link_to_id')->get();
         $kf = $reverse == true ? -1 : 1;
-
         $set_main = Set::select(DB::Raw('sets.*, lt.child_base_id as to_child_base_id, lt.parent_base_id as to_parent_base_id'))
             ->join('links as lf', 'sets.link_from_id', '=', 'lf.id')
             ->join('links as lt', 'sets.link_to_id', '=', 'lt.id')
@@ -889,10 +898,7 @@ class ItemController extends Controller
         //echo "".var_dump($set_group_by_base_to);
         //echo "".count($set_group_by_base_to);
         foreach ($set_group_by_base_to as $to_key => $to_value) {
-
-            //echo " to_key = " . $to_key . " ";
-
-            $items = Item::where('base_id', $to_key)->where('project_id', GlobalController::glo_project_id());
+            $items = Item::where('base_id', $to_key)->where('project_id', $item->project_id);
 //            $items = $items->whereHas('child_mains', function ($query) {
 //                $query->where('link_id', 41)->where('parent_item_id', 388);
 //            });
@@ -962,7 +968,7 @@ class ItemController extends Controller
                     // создать новую запись
                     $item_seek = new Item();
                     $item_seek->base_id = $to_key;
-                    $item_seek->project_id = GlobalController::glo_project_id();
+                    $item_seek->project_id = $item->project_id;
                     $item_seek->code = uniqid($item_seek->id . '_', true);
                     $item_seek->name_lang_0 = "";
                     $item_seek->name_lang_1 = "";
@@ -1044,7 +1050,7 @@ class ItemController extends Controller
                         }
 
                         if ($seek_item == true) {
-                            $item_find = Item::where('base_id', $value->link_to->parent_base_id)->where('project_id', GlobalController::glo_project_id())
+                            $item_find = Item::where('base_id', $value->link_to->parent_base_id)->where('project_id', $item->project_id)
                                 ->where('name_lang_0', $seek_value)->first();
                             // если не найдено
                             if (!$item_find) {
@@ -1057,7 +1063,7 @@ class ItemController extends Controller
                                 foreach (config('app.locales') as $key => $value) {
                                     $item_find['name_lang_' . $key] = $seek_value;
                                 }
-                                $item_find->project_id = GlobalController::glo_project_id();
+                                $item_find->project_id = $item->project_id;
                                 // при создании записи "$item->created_user_id" заполняется
                                 $item_find->created_user_id = Auth::user()->id;
                                 $item_find->updated_user_id = Auth::user()->id;
@@ -1146,10 +1152,10 @@ class ItemController extends Controller
                     // На модерации
                     $item_find->name_lang_1 = "3";
                     // Похожие строки ниже
-                    if (env('MAIL_ENABLED') == 'yes'){
+                    if (env('MAIL_ENABLED') == 'yes') {
                         $appname = config('app.name', 'Abakus');
                         Mail::send(['html' => 'mail/login_site'], ['remote_addr' => $_SERVER['REMOTE_ADDR'],
-                            'http_user_agent' => $_SERVER['HTTP_USER_AGENT'],'appname' => $appname],
+                            'http_user_agent' => $_SERVER['HTTP_USER_AGENT'], 'appname' => $appname],
                             function ($message) use ($appname) {
                                 $message->to('moderation@rsb0807.kz', '')->subject("Модерация '" . $appname . "'");
                                 $message->from('support@rsb0807.kz', $appname);
@@ -1163,7 +1169,7 @@ class ItemController extends Controller
             $item_find->name_lang_2 = "";
             $item_find->name_lang_3 = "";
 
-            $item_find->project_id = GlobalController::glo_project_id();
+            $item_find->project_id = $item->project_id;
             // при создании записи "$item->created_user_id" заполняется
             $item_find->created_user_id = Auth::user()->id;
             $item_find->updated_user_id = Auth::user()->id;
@@ -1175,7 +1181,7 @@ class ItemController extends Controller
         } // тип корректировки поля - строка
         elseif ($link->parent_base->type_is_string()) {
             // поиск в таблице items значение с таким же названием и base_id
-            $item_find = Item::where('base_id', $link->parent_base_id)->where('project_id', GlobalController::glo_project_id())->where('name_lang_0', $values[$index]);
+            $item_find = Item::where('base_id', $link->parent_base_id)->where('project_id', $item->project_id)->where('name_lang_0', $values[$index]);
             if ($link->parent_base->is_one_value_lst_str == false) {
                 $i = 0;
                 foreach (config('app.locales') as $lang_key => $lang_value) {
@@ -1211,7 +1217,7 @@ class ItemController extends Controller
                     }
                     $i = $i + 1;
                 }
-                $item_find->project_id = GlobalController::glo_project_id();
+                $item_find->project_id = $item->project_id;
                 // при создании записи "$item->created_user_id" заполняется
                 $item_find->created_user_id = Auth::user()->id;
                 $item_find->updated_user_id = Auth::user()->id;
@@ -1224,7 +1230,7 @@ class ItemController extends Controller
             // тип корректировки поля - не строка и не список
         } else {
             // поиск в таблице items значение с таким же названием и base_id
-            $item_find = Item::where('base_id', $link->parent_base_id)->where('project_id', GlobalController::glo_project_id())->where('name_lang_0', $values[$index])->first();
+            $item_find = Item::where('base_id', $link->parent_base_id)->where('project_id', $item->project_id)->where('name_lang_0', $values[$index])->first();
             // если не найдено
             if (!$item_find) {
                 // создание новой записи в items
@@ -1236,7 +1242,7 @@ class ItemController extends Controller
                 foreach (config('app.locales') as $key => $value) {
                     $item_find['name_lang_' . $key] = $values[$index];
                 }
-                $item_find->project_id = GlobalController::glo_project_id();
+                $item_find->project_id = $item->project_id;
                 // при создании записи "$item->created_user_id" заполняется
                 $item_find->created_user_id = Auth::user()->id;
                 $item_find->updated_user_id = Auth::user()->id;
@@ -1271,10 +1277,10 @@ class ItemController extends Controller
                         $item->name_lang_1 = "3";
 
                         // Похожие строки выше
-                        if (env('MAIL_ENABLED') == 'yes'){
+                        if (env('MAIL_ENABLED') == 'yes') {
                             $appname = config('app.name', 'Abakus');
                             Mail::send(['html' => 'mail/login_site'], ['remote_addr' => $_SERVER['REMOTE_ADDR'],
-                                'http_user_agent' => $_SERVER['HTTP_USER_AGENT'],'appname' => $appname],
+                                'http_user_agent' => $_SERVER['HTTP_USER_AGENT'], 'appname' => $appname],
                                 function ($message) use ($appname) {
                                     $message->to('moderation@rsb0807.kz', '')->subject("Модерация '" . $appname . "'");
                                     $message->from('support@rsb0807.kz', $appname);
@@ -1339,7 +1345,7 @@ class ItemController extends Controller
         return redirect(session('links'));
     }
 
-    function ext_update(Request $request, Item $item)
+    function ext_update(Request $request, Item $item, Role $role)
     {
         // Если данные изменились - выполнить проверку. оператор '??' нужны
         if (!($item->name_lang_0 ?? '' == $request->name_lang_0 ?? '')) {
@@ -1452,8 +1458,9 @@ class ItemController extends Controller
 
         $data = $request->except('_token', '_method');
         $item->fill($data);
-        $item->project_id = GlobalController::glo_project_id();
+        //$item->project_id = $request->project_id;
         $item->updated_user_id = Auth::user()->id;
+        //$role = Role::findOrFail($request->role_id);
 
         // Похожая проверка в ext_edit.blade.php
 //        if ($item->base->is_code_needed == true && $item->base->is_code_number == true && $item->base->is_limit_sign_code == true
@@ -1475,7 +1482,6 @@ class ItemController extends Controller
             $item->name_lang_3 = isset($request->name_lang_3) ? $request->name_lang_3 : "";
         }
 
-        //$item->project_id = GlobalController::glo_project_id();
         // далее этот блок
         // похожая формула ниже (в этой же процедуре)
         if ($item->base->type_is_boolean()) {
@@ -1497,7 +1503,7 @@ class ItemController extends Controller
 
         $this::save_img_doc($request, $item);
 
-        $excepts = array('_token', 'base_id', 'project_id', 'code', '_method', 'name_lang_0', 'name_lang_1', 'name_lang_2', 'name_lang_3');
+        $excepts = array('_token', 'code', '_method', 'name_lang_0', 'name_lang_1', 'name_lang_2', 'name_lang_3');
         $string_langs = $this->get_child_links($item->base);
 
         // Формируется массив $code_names - названия полей кодов
@@ -1568,7 +1574,7 @@ class ItemController extends Controller
 
         foreach ($string_langs as $link) {
             // Проверка нужна
-            $base_link_right = GlobalController::base_link_right($link);
+            $base_link_right = GlobalController::base_link_right($link, $role);
             if ($base_link_right['is_edit_link_enable'] == false) {
                 continue;
             }
@@ -1725,7 +1731,7 @@ class ItemController extends Controller
             DB::transaction(function ($r) use ($item, $keys, $values, $strings_inputs) {
 
                 //$item->save();
-                echo "1111111111";
+
                 $this->save_reverse_sets($item);
 
                 // после ввода данных в форме массив состоит:
@@ -1756,10 +1762,6 @@ class ItemController extends Controller
                 // "$i = 0" использовать, т.к. индексы в массивах начинаются с 0
                 $i = 0;
                 $valits = $values;
-                foreach ($valits as $key => $value) {
-                    echo " 400 - index = " . $key;
-                    echo " 400 - valits[index] = " . $valits[$key];
-                }
                 foreach ($keys as $key) {
                     $main = Main::where('child_item_id', $item->id)->where('link_id', $key)->first();
                     if ($main == null) {
@@ -1775,18 +1777,10 @@ class ItemController extends Controller
                             }
                         }
                     }
-                    foreach ($valits as $k => $v) {
-                        //echo " valits valits[" . $k . "] = " . $v;
-                    }
                     $this->save_main($main, $item, $keys, $values, $valits, $i, $strings_inputs);
                     // "$i = $i + 1;" использовать здесь, т.к. индексы в массивах начинаются с 0
                     $i = $i + 1;
                 }
-                foreach ($valits as $key => $value) {
-                    echo " 444 - index = " . $key;
-                    echo " 444 - valits[index] = " . $valits[$key];
-                }
-
 
                 $rs = $this->calc_value_func($item);
                 if ($rs != null) {
@@ -1796,7 +1790,6 @@ class ItemController extends Controller
                     $item->name_lang_3 = $rs['calc_lang_3'];
                 }
 
-                echo "2222222222";
                 $this->save_sets($item, $keys, $values, $valits, false);
 
                 $item->save();
@@ -1811,10 +1804,9 @@ class ItemController extends Controller
         // удаление неиспользуемых данных
         $this->delete_items_old($array_calc);
 
-        //return redirect()->route('item.base_index', $item->base->id);
+        return redirect()->route('item.base_index', ['base'=>$item->base, 'project'=>$item->project, 'role'=>$role]);
 
-        //return redirect(session('links'));
-    }
+     }
 
     private
     function delete_items_old($array_calc)
@@ -1857,7 +1849,7 @@ class ItemController extends Controller
         return view('item/edit', ['item' => $item, 'bases' => Base::all()]);
     }
 
-    function ext_edit(Item $item, Link $par_link = null, Item $parent_item = null)
+    function ext_edit(Item $item, Role $role, Link $par_link = null, Item $parent_item = null)
     {
         $arrays = $this->get_array_calc_edit($item, $par_link, $parent_item);
         $array_calc = $arrays['array_calc'];
@@ -1868,18 +1860,19 @@ class ItemController extends Controller
         }
 
         return view('item/ext_edit', ['base' => $item->base, 'item' => $item,
+            'role' => $role,
             'array_calc' => $array_calc,
             'array_disabled' => $array_disabled,
             'par_link' => $par_link, 'parent_item' => $parent_item]);
     }
 
-    function ext_delete_question(Item $item, $heading = false)
+    function ext_delete_question(Item $item, Role $role, $heading = false)
     {
-        return view('item/ext_show', ['type_form' => 'delete_question', 'item' => $item,
+         return view('item/ext_show', ['type_form' => 'delete_question', 'item' => $item, 'role' => $role,
             'array_calc' => $this->get_array_calc_edit($item)['array_calc'], 'heading' => $heading]);
     }
 
-    function ext_delete(Item $item, $heading = false)
+    function ext_delete(Item $item, Role $role, $heading = false)
     {
 //        if ($item->base->type_is_image() || $item->base->type_is_document()) {
 //            Storage::delete($item->filename());
@@ -1892,7 +1885,7 @@ class ItemController extends Controller
 //                $main->parent_item->delete();
 //            }
 //        }
-        if (self::is_delete($item) == true) {
+        if (self::is_delete(['item' => $item, 'role' => $role]) == true) {
 
             if ($this->is_save_sets($item)) {
 
@@ -1919,11 +1912,11 @@ class ItemController extends Controller
         return $heading == true ? redirect()->route('item.base_index', $item->base_id) : redirect(session('links'));
     }
 
-    static function is_delete(Item $item)
+    static function is_delete(Item $item, Role $role)
     {
         // Нужно "$result = false;"
         $result = false;
-        $base_right = GlobalController::base_right($item->base);
+        $base_right = GlobalController::base_right($item->base, $role);
         if ($base_right['is_list_base_delete'] == true) {
             if ($base_right['is_list_base_used_delete'] == true) {
                 $result = true;
@@ -1940,7 +1933,7 @@ class ItemController extends Controller
         return Main::where('parent_item_id', $item->id)->exists();
     }
 
-    static function get_items_for_link(Link $link)
+    static function get_items_for_link(Link $link, Project $project)
     {
         $result_parent_label = '';
         $result_child_base_name = '';
@@ -1966,13 +1959,13 @@ class ItemController extends Controller
                 }
 
                 // список items по выбранному child_base_id
-                $result_child_base_items = Item::select(['id', 'base_id', 'name_lang_0', 'name_lang_1', 'name_lang_2', 'name_lang_3'])->where('base_id', $link->child_base_id)->where('project_id', GlobalController::glo_project_id())->orderBy($name)->get();
+                $result_child_base_items = Item::select(['id', 'base_id', 'name_lang_0', 'name_lang_1', 'name_lang_2', 'name_lang_3'])->where('base_id', $link->child_base_id)->where('project_id', $project->id)->orderBy($name)->get();
                 foreach ($result_child_base_items as $item) {
                     $result_child_base_items_options = $result_child_base_items_options . "<option value='" . $item->id . "'>" . $item->name() . "</option>";
                 }
 
                 // список items по выбранному parent_base_id
-                $result_parent_base_items = Item::select(['id', 'base_id', 'name_lang_0', 'name_lang_1', 'name_lang_2', 'name_lang_3'])->where('base_id', $link->parent_base_id)->where('project_id', GlobalController::glo_project_id())->orderBy($name)->get();
+                $result_parent_base_items = Item::select(['id', 'base_id', 'name_lang_0', 'name_lang_1', 'name_lang_2', 'name_lang_3'])->where('base_id', $link->parent_base_id)->where('project_id', $project->id)->orderBy($name)->get();
                 foreach ($result_parent_base_items as $item) {
                     $result_parent_base_items_options = $result_parent_base_items_options . "<option value='" . $item->id . "'>" . $item->name() . "</option>";
 
@@ -2351,9 +2344,9 @@ class ItemController extends Controller
         return ['calc_lang_0' => $calc_lang_0, 'calc_lang_1' => $calc_lang_1, 'calc_lang_2' => $calc_lang_2, 'calc_lang_3' => $calc_lang_3];
     }
 
-    function calculate_name(Base $base)
+    function calculate_name(Base $base, Project $project)
     {
-        $items = Item::where('base_id', $base->id)->where('project_id', GlobalController::glo_project_id())->get();
+        $items = Item::where('base_id', $base->id)->where('project_id', $project->id)->get();
         $rs = false;
         foreach ($items as $item) {
             $rs = $this->calc_value_func($item);
@@ -2366,14 +2359,14 @@ class ItemController extends Controller
         return redirect()->back();
     }
 
-    function calculate_new_code(Base $base)
+    function calculate_new_code(Base $base, Project $project)
     {
         $result = 0;
         // Если предложить код при добавлении записи
         if ($base->is_suggest_code == true) {
             //Список, отсортированный по коду
 //          $items = Item::where('base_id', $base->id)->orderBy('code')->get();
-            $items = Item::all()->where('base_id', $base->id)->where('project_id', GlobalController::glo_project_id())->sortBy(function ($row) {
+            $items = Item::all()->where('base_id', $base->id)->where('project_id', $project->id)->sortBy(function ($row) {
                 return $row->code;
             })->toArray();
             if ($items == null) {
@@ -2402,9 +2395,9 @@ class ItemController extends Controller
     }
 
 
-    function recalculation_codes(Base $base)
+    function recalculation_codes(Base $base, Project $project)
     {
-        $items = Item::where('base_id', $base->id)->where('project_id', GlobalController::glo_project_id())->orderBy('name_lang_0')->get();
+        $items = Item::where('base_id', $base->id)->where('project_id', $project->id)->orderBy('name_lang_0')->get();
         // Чтобы не было ошибки уникальность кода "items:base_id, project_id, code" нарушена
         $i = 0;
         foreach ($items as $item) {
@@ -2423,11 +2416,11 @@ class ItemController extends Controller
         return redirect()->back();
     }
 
-    function item_from_base_code(Base $base, $code)
+    function item_from_base_code(Base $base, Project $project, $code)
     {
         $item_id = 0;
         $item_name = trans('main.no_information') . '!';
-        $item = Item::where('project_id', GlobalController::glo_project_id())->where('base_id', $base->id)->where('code', $code)->get()->first();
+        $item = Item::where('project_id', $project->id)->where('base_id', $base->id)->where('code', $code)->get()->first();
         if ($item != null) {
             $item_id = $item->id;
             $item_name = $item->name();

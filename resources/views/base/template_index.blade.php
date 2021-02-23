@@ -8,6 +8,7 @@
     //phpinfo(); - для поиска php.ini
     ?>
 {{--    @include('layouts.template.show_name',['template'=>$template])--}}
+    {{$project->name()}} - {{$role->name()}}
     <div class="container-fluid">
         <div class="row">
             <div class="col-5 text-center">
@@ -34,7 +35,7 @@
         ?>
         @foreach($bases as $base)
             <?php
-                $base_right = GlobalController::base_right($base);
+                $base_right = GlobalController::base_right($base, $role);
             ?>
             @if($base_right['is_list_base_calc'] == true)
                 <?php
@@ -45,10 +46,10 @@
                     <td class="text-center">{{$i}}</td>
                     <td class="text-left">
                         <a
-                            href="{{route('item.base_index',$base)}}"
+                            href="{{route('item.base_index',['base'=>$base, 'project' => $project, 'role' => $role])}}"
                            title="{{$base->names()}}">
                             {{$base->names()}}
-                            ({{count(GlobalController::items_right($base)['itget'])}})
+                            ({{count(GlobalController::items_right($base, $project, $role)['itget'])}})
                         </a>
                     </td>
                 </tr>

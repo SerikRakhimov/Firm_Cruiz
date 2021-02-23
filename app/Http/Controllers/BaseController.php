@@ -6,8 +6,8 @@ use Illuminate\Support\Facades\App;
 use App\Models\Base;
 use App\Models\Link;
 use App\Models\Template;
-use App\Models\Task;
-use App\Models\Module;
+use App\Models\Project;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -64,8 +64,9 @@ class BaseController extends Controller
     }
 
 
-    function template_index(Template $template)
+    function template_index(Project $project, Role $role)
     {
+        $template = $project->template;
         $bases = Base::where('template_id', $template->id);
         $index = array_search(App::getLocale(), config('app.locales'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
@@ -87,7 +88,7 @@ class BaseController extends Controller
             }
         }
         session(['bases_previous_url' => request()->url()]);
-        return view('base/template_index', ['template' => $template, 'bases' => $bases->paginate(60)]);
+        return view('base/template_index', ['project' => $project, 'role' => $role, 'bases' => $bases->paginate(60)]);
     }
 
     function show(Base $base)
