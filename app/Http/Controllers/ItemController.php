@@ -164,7 +164,7 @@ class ItemController extends Controller
 
     }
 
-    function item_index(Item $item, Link $par_link = null)
+    function item_index(Item $item, Role $role, Link $par_link = null)
     {
 //        $items = null;
 //        $index = array_search(App::getLocale(), config('app.locales'));
@@ -188,7 +188,7 @@ class ItemController extends Controller
 //        }
 //        return view('item/item_index', ['base'=>$base, 'items' => $items->where('base_id', $base->id)->paginate(60)]);
         session(['links' => ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/' . request()->path()]);
-        return view('item/item_index', ['item' => $item, 'par_link' => $par_link]);
+        return view('item/item_index', ['item' => $item, 'role' => $role, 'par_link' => $par_link]);
 
     }
 
