@@ -1885,7 +1885,7 @@ class ItemController extends Controller
 //                $main->parent_item->delete();
 //            }
 //        }
-        if (self::is_delete(['item' => $item, 'role' => $role]) == true) {
+        if (self::is_delete($item, $role) == true) {
 
             if ($this->is_save_sets($item)) {
 
