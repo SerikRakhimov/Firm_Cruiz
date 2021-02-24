@@ -19,8 +19,6 @@ class TemplateController extends Controller
 
     function index()
     {
-        GlobalController::glo_project_role_setnull();
-
         $templates = null;
         $index = array_search(App::getLocale(), config('app.locales'));
         $name = "";  // нужно, не удалять

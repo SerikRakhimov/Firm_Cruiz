@@ -67,8 +67,6 @@ Route::get('/', function () {
         $user->save();
     }
 
-    GlobalController::glo_project_role_setnull();
-
     if (env('MAIL_ENABLED') == 'yes'){
         $appname = config('app.name', 'Abakus');
         Mail::send(['html' => 'mail/login_site'], ['remote_addr' => $_SERVER['REMOTE_ADDR'],
@@ -621,10 +619,10 @@ Route::get('/link/base_index/{base}', 'LinkController@base_index')
 
 
 // Items
-
-Route::get('/item/index', 'ItemController@index')
-    ->name('item.index')
-    ->middleware('auth');
+//
+//Route::get('/item/index', 'ItemController@index')
+//    ->name('item.index')
+//    ->middleware('auth');
 
 Route::get('/item/base_index/{base}/{project}/{role}', 'ItemController@base_index')
     ->name('item.base_index')
@@ -701,7 +699,10 @@ Route::get('/item/get_parent_item_from_calc_child_item/{item_start}/{link_result
     ->name('item.get_parent_item_from_calc_child_item')
     ->middleware('auth');
 
-Route::get('/item/browser/{base_id}/{sort_by_code?}/{save_by_code?}/{search?}', 'ItemController@browser')
+// Использовать знак вопроса "/{project_id?}" (web.php)
+//              равенство null "$project_id = null" (ItemController.php),
+// иначе ошибка в function seach_click() - open('{{route('item.browser', '')}}' ...
+Route::get('/item/browser/{base_id}/{project_id?}/{sort_by_code?}/{save_by_code?}/{search?}', 'ItemController@browser')
     ->name('item.browser')
     ->middleware('auth');
 

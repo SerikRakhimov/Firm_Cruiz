@@ -67,7 +67,7 @@ $update = isset($item);
             {{trans('main.save')}}
         @endif
     </button>
-    <a class="btn btn-success" href="{{ route('item.index') }}">{{trans('main.cancel')}}</a>
+{{--    <a class="btn btn-success" href="{{ route('item.index') }}">{{trans('main.cancel')}}</a>--}}
     </form>
 
 @endsection

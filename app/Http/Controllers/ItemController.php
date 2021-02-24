@@ -93,23 +93,27 @@ class ItemController extends Controller
     // для случая: когда установлен фильтр (неважно по коду или по наименованию):
     // можно нажимать на заголовки "Код"/"Наименование" - количество записей на экране то же оставаться должно,
     // меняется только сортировка
-    function browser($base_id, bool $sort_by_code = true, bool $save_by_code = true, $search = "")
+    // Использовать знак вопроса "/{project_id?}" (web.php)
+    //              равенство null "$project_id = null" (ItemController.php),
+    // иначе ошибка в function seach_click() - open('{{route('item.browser', '')}}' ...
+    function browser($base_id, $project_id = null, bool $sort_by_code = true, bool $save_by_code = true, $search = "")
     {
         $base = Base::findOrFail($base_id);
+        $project = Project::findOrFail($project_id);
         $name = BaseController::field_name();
         $items = null;
         if ($sort_by_code == true) {
             if ($base->is_code_number == true) {
                 // Сортировка по коду числовому
                 $items = Item::selectRaw("*, code*1  AS code_value")
-                    ->where('base_id', $base_id)->where('project_id', GlobalController::glo_project_id())->orderBy('code_value');
+                    ->where('base_id', $base_id)->where('project_id', $project->id)->orderBy('code_value');
             } else {
                 // Сортировка по коду строковому
-                $items = Item::where('base_id', $base_id)->where('project_id', GlobalController::glo_project_id())->orderByRaw(strval('code'));
+                $items = Item::where('base_id', $base_id)->where('project_id', $project->id)->orderByRaw(strval('code'));
             }
         } else {
             // Сортировка по наименованию
-            $items = Item::where('base_id', $base_id)->where('project_id', GlobalController::glo_project_id())->orderByRaw(strval($name));
+            $items = Item::where('base_id', $base_id)->where('project_id', $project->id)->orderByRaw(strval($name));
         }
         if ($items != null) {
             if ($search != "") {
@@ -120,38 +124,35 @@ class ItemController extends Controller
                 }
             }
         }
-        return view('item/browser', ['base' => $base, 'sort_by_code' => $sort_by_code, 'save_by_code' => $save_by_code,
+        return view('item/browser', ['base' => $base, 'project' => $project, 'sort_by_code' => $sort_by_code, 'save_by_code' => $save_by_code,
             'items' => $items->paginate(30), 'search' => $search]);
     }
 
-    function index()
-    {
-        $items = null;
-        $index = array_search(App::getLocale(), config('app.locales'));
-        if ($index !== false) {   // '!==' использовать, '!=' не использовать
-            switch ($index) {
-                case 0:
-                    //$items = Item::all()->sortBy('name_lang_0');
-                    $items = Item::where('project_id', GlobalController::glo_project_id())->orderBy('base_id')->orderBy('name_lang_0');
-                    break;
-                case 1:
-                    //$items = Item::all()->sortBy(function($row){return $row->name_lang_1 . $row->name_lang_0;});
-                    $items = Item::where('project_id', GlobalController::glo_project_id())->orderBy('base_id')->orderBy('name_lang_1')->orderBy('name_lang_0');
-                    break;
-                case 2:
-                    $items = Item::where('project_id', GlobalController::glo_project_id())->orderBy('base_id')->orderBy('name_lang_2')->orderBy('name_lang_0');
-                    break;
-                case 3:
-                    $items = Item::where('project_id', GlobalController::glo_project_id())->orderBy('base_id')->orderBy('name_lang_3')->orderBy('name_lang_0');
-                    break;
-            }
-        }
-        session(['links' => ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/' . request()->path()]);
-        return view('item/index', ['items' => $items->paginate(60)]);
-
-//        return view('item/index', ['items' => Item::all()->sortBy(function ($item){
-//            return $item->base->name_lang_0 . $item->name_lang_0;})]);
-    }
+//    function index()
+//    {
+//        $items = null;
+//        $index = array_search(App::getLocale(), config('app.locales'));
+//        if ($index !== false) {   // '!==' использовать, '!=' не использовать
+//            switch ($index) {
+//                case 0:
+//                    //$items = Item::all()->sortBy('name_lang_0');
+//                    $items = Item::where('project_id', GlobalController::glo_project_id())->orderBy('base_id')->orderBy('name_lang_0');
+//                    break;
+//                case 1:
+//                    //$items = Item::all()->sortBy(function($row){return $row->name_lang_1 . $row->name_lang_0;});
+//                    $items = Item::where('project_id', GlobalController::glo_project_id())->orderBy('base_id')->orderBy('name_lang_1')->orderBy('name_lang_0');
+//                    break;
+//                case 2:
+//                    $items = Item::where('project_id', GlobalController::glo_project_id())->orderBy('base_id')->orderBy('name_lang_2')->orderBy('name_lang_0');
+//                    break;
+//                case 3:
+//                    $items = Item::where('project_id', GlobalController::glo_project_id())->orderBy('base_id')->orderBy('name_lang_3')->orderBy('name_lang_0');
+//                    break;
+//            }
+//        }
+//        session(['links' => ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/' . request()->path()]);
+//        return view('item/index', ['items' => $items->paginate(60)]);
+//    }
 
     function base_index(Base $base, Project $project, Role $role)
     {
@@ -796,7 +797,7 @@ class ItemController extends Controller
         }
 
         //return $heading ? redirect()->route('item.item_index', $item) : redirect(session('links'));
-        return $heading ? redirect()->route('item.item_index', $item) : redirect()->route('item.base_index', ['base'=>$base, 'project'=>$project, 'role'=>$role]);
+        return $heading ? redirect()->route('item.item_index', $item) : redirect()->route('item.base_index', ['base' => $base, 'project' => $project, 'role' => $role]);
         //return redirect()->route('item.base_index', ['base'=>$item->base, 'project'=>$item->project, 'role'=>$role]);
 
 
@@ -1804,9 +1805,9 @@ class ItemController extends Controller
         // удаление неиспользуемых данных
         $this->delete_items_old($array_calc);
 
-        return redirect()->route('item.base_index', ['base'=>$item->base, 'project'=>$item->project, 'role'=>$role]);
+        return redirect()->route('item.base_index', ['base' => $item->base, 'project' => $item->project, 'role' => $role]);
 
-     }
+    }
 
     private
     function delete_items_old($array_calc)
@@ -1868,7 +1869,7 @@ class ItemController extends Controller
 
     function ext_delete_question(Item $item, Role $role, $heading = false)
     {
-         return view('item/ext_show', ['type_form' => 'delete_question', 'item' => $item, 'role' => $role,
+        return view('item/ext_show', ['type_form' => 'delete_question', 'item' => $item, 'role' => $role,
             'array_calc' => $this->get_array_calc_edit($item)['array_calc'], 'heading' => $heading]);
     }
 

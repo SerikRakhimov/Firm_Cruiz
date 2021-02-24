@@ -58,13 +58,8 @@ use App\Models\Project;
                         <li class="nav-item">
                             {{--                            <a class="nav-link" style="color: green"--}}
                             {{--                            <a class="nav-link text-primary font-weight-bold"--}}
-                            <?php
-                            $glo_project_template_id = GlobalController::glo_project_template_id();
-                            ?>
-                            @if($glo_project_template_id != 0)
-                                <a class="nav-link text-primary"
-                                   href="{{route('base.template_index', $glo_project_template_id)}}}">{{trans('main.bases')}}</a>
-                            @endif
+{{--                                <a class="nav-link text-primary"--}}
+{{--                                   href="{{route('base.template_index', $glo_project_template_id)}}}">{{trans('main.bases')}}</a>--}}
                         </li>
                         {{--                        <li class="nav-item">--}}
                         {{--                            <a class="nav-link"--}}
@@ -157,23 +152,6 @@ use App\Models\Project;
         </div>
     </nav>
     <main class="py-4 w-75 mw-75 mx-auto">
-        <?php
-        $glo_project_role_is_null = GlobalController::glo_project_role_is_null();
-        ?>
-        @if($glo_project_role_is_null == false)
-            <p>
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-6 text-left">
-                        <span class="badge badge-success">{{GlobalController::glo_project_name()}}</span>
-                    </div>
-                    <div class="col-6 text-right">
-                        <span class="badge badge-success">{{GlobalController::glo_role_name()}}</span>
-                    </div>
-                </div>
-            </div>
-            </p>
-        @endif
 {{--                <div class="mx-auto" style="width: 1200px;">--}}
         @yield('content')
 {{--                </div>--}}

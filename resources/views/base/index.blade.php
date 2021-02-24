@@ -4,7 +4,6 @@
     <?php
     use App\Models\Item;
     use App\Http\Controllers\GlobalController;
-    $glo_project_role_is_null = GlobalController::glo_project_role_is_null();
     ?>
     @include('layouts.template.show_name',['template'=>$template])
     <div class="container-fluid">
@@ -15,7 +14,7 @@
             <div class="col-2">
             </div>
             <div class="col-5 text-right">
-                @if (Auth::user()->isAdmin() ||  $glo_project_role_is_null == true)
+                @if (Auth::user()->isAdmin())
                     <button type="button" class="btn btn-dreamer" title="{{trans('main.add')}}"
                             onclick="document.location='{{route('base.create', ['template'=>$template])}}'">
                         {{--                    <i class="fas fa-plus fa-fw d-none d-sm-block "></i>--}}
@@ -33,7 +32,7 @@
             <th class="text-center">#</th>
             <th class="text-left">{{trans('main.names')}}</th>
             <th class="text-center">{{trans('main.type')}}</th>
-            @if (Auth::user()->isAdmin() ||  $glo_project_role_is_null == true)
+            @if (Auth::user()->isAdmin())
                 <th class="text-center"></th>
                 <th class="text-center"></th>
                 <th class="text-center"></th>
@@ -63,7 +62,7 @@
                     <td class="text-center">
                         {{$base->type_name()}}
                     </td>
-                    @if (Auth::user()->isAdmin() ||  $glo_project_role_is_null == true)
+                    @if (Auth::user()->isAdmin())
                         <td class="text-center">
                             <a href="{{route('base.show',$base)}}" title="{{trans('main.view')}}">
                                 <img src="{{Storage::url('view_record.png')}}" width="15" height="15"

@@ -49,12 +49,12 @@
         <caption>{{trans('main.select_record_for_work')}}</caption>
         <thead>
         <th class="text-center {{$sort_by_code == true?'font-italic' : ''}}">
-            <a href="{{route('item.browser',['base_id'=>$base->id, 'sort_by_code'=>1, 'save_by_code'=>$save_by_code==true?"1":"0", 'search'=>$search])}}"
+            <a href="{{route('item.browser',['base_id'=>$base->id, 'project_id'=>$project->id, 'sort_by_code'=>1, 'save_by_code'=>$save_by_code==true?"1":"0", 'search'=>$search])}}"
                title="{{trans('main.sort_by_code')}}">
                 {{trans('main.code')}}
             </a></th>
         <th class="text-center {{$sort_by_code == false?'font-italic' : ''}}">
-            <a href="{{route('item.browser',['base_id'=>$base->id, 'sort_by_code'=>0, 'save_by_code'=>$save_by_code==true?"1":"0", 'search'=>$search])}}"
+            <a href="{{route('item.browser',['base_id'=>$base->id, 'project_id'=>$project->id, 'sort_by_code'=>0, 'save_by_code'=>$save_by_code==true?"1":"0", 'search'=>$search])}}"
                title="{{trans('main.sort_by_name')}}">{{trans('main.name')}}</a></th>
         </tr>
         </thead>
@@ -76,7 +76,7 @@
     function seach_click() {
         param = '/{{$sort_by_code == true?"1":"0"}}';
         // " + param + param" правильно
-        open('{{route('item.browser', '')}}' + '/' + {{$base->id}} + param + param
+        open('{{route('item.browser', '')}}' + '/' + {{$base->id}} + '/' + {{$project->id}} + param + param
             + '/' + document.getElementById('search').value, '_self', 'width=800, height=800');
     };
 

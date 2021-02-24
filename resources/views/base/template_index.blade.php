@@ -8,7 +8,19 @@
     //phpinfo(); - для поиска php.ini
     ?>
 {{--    @include('layouts.template.show_name',['template'=>$template])--}}
-    {{$project->name()}} - {{$role->name()}}
+    <p>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-6 text-left">
+                <span class="badge badge-success">{{$project->name()}}</span>
+            </div>
+            <div class="col-6 text-right">
+                <span class="badge badge-success">{{$role->name()}}</span>
+            </div>
+        </div>
+    </div>
+    </p>
+
     <div class="container-fluid">
         <div class="row">
             <div class="col-5 text-center">

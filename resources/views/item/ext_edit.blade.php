@@ -19,13 +19,16 @@
     }
     ?>
     <script>
-        function browse(base_id, link_id) {
+        function browse(base_id, project_id,  link_id) {
             // Нужно, используется в browser.blade.php
             //alert(base_id + " " + link_id);
             window.item_id = document.getElementById(link_id);
             window.item_code = document.getElementById('code' + link_id);
             window.item_name = document.getElementById('name' + link_id);
-            open('{{route('item.browser', '')}}' + '/' + base_id + '/1/1', 'browse', 'width=800, height=800');
+            {{--open('{{route('item.browser', '')}}' + '/' + base_id + '/' + project_id + '/1/1', 'browse', 'width=800, height=800');--}}
+            {{--open('{{route('item.browser', '')}}' + '/' + base_id + '/' + project_id + '/1/1', 'browse', 'width=800, height=800');--}}
+            open('{{route('item.browser', '')}}' + '/' + base_id + '/' + project_id + '/1/1', 'browse', 'width=800, height=800');
+
         };
     </script>
 
@@ -321,7 +324,7 @@
                         {{--                            </div>--}}
                         <div class="col-sm-1">
                             <input type="button" value="..." title="{{trans('main.select_from_refer')}}"
-                                   onclick="browse('{{$link->parent_base_id}}','{{$key}}')"
+                                   onclick="browse('{{$link->parent_base_id}}','{{$project->id}}','{{$key}}')"
                                    @if($base_link_right['is_edit_link_read'] == true)
                                    disabled
                                 @endif
