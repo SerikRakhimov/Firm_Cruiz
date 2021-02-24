@@ -8,7 +8,7 @@
         @include('layouts.template.show_name', ['template'=>$template])
     </p>
     <p>
-        @include('layouts.edit_title', ['update'=>$update, 'table_name'=>trans('main.set')])
+        @include('layouts.form_edit_title', ['update'=>$update, 'table_name'=>trans('main.set')])
     </p>
     <form action="{{$update ? route('set.update',$set):route('set.store')}}" method="POST"
           enctype=multipart/form-data>

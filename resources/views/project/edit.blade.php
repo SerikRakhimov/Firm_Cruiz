@@ -15,7 +15,7 @@
         @endif
     </p>
     <p>
-        @include('layouts.edit_title', ['update'=>$update, 'table_name'=>trans('main.project')])
+        @include('layouts.form_edit_title', ['update'=>$update, 'table_name'=>trans('main.project')])
     </p>
     <form action="{{$update ? route('project.update',$project):route('project.store')}}" method="POST"
           enctype=multipart/form-data>

@@ -7,20 +7,7 @@
     // https://ru.coredump.biz/questions/41704091/laravel-file-uploads-failing-when-file-size-is-larger-than-2mb
     //phpinfo(); - для поиска php.ini
     ?>
-{{--    @include('layouts.template.show_name',['template'=>$template])--}}
-    <p>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-6 text-left">
-                <span class="badge badge-success">{{$project->name()}}</span>
-            </div>
-            <div class="col-6 text-right">
-                <span class="badge badge-success">{{$role->name()}}</span>
-            </div>
-        </div>
-    </div>
-    </p>
-
+    @include('layouts.show_project_role',['project'=>$project, 'role'=>$role])
     <div class="container-fluid">
         <div class="row">
             <div class="col-5 text-center">

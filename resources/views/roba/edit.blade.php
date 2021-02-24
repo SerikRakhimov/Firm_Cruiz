@@ -15,7 +15,7 @@
         @endif
     </p>
     <p>
-        @include('layouts.edit_title', ['update'=>$update, 'table_name'=>trans('main.roba')])
+        @include('layouts.form_edit_title', ['update'=>$update, 'table_name'=>trans('main.roba')])
     </p>
     <form action="{{$update ? route('roba.update', $roba):route('roba.store')}}" method="POST"
           enctype=multipart/form-data name="form">

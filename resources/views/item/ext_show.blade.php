@@ -10,7 +10,7 @@
     use App\Http\Controllers\MainController;
     $project = $item->project;
     ?>
-    {{$project->name()}} - {{$role->name()}}
+    @include('layouts.show_project_role',['project'=>$project, 'role'=>$role])
     <h3 class="display-5">
         @if ($type_form == 'show')
             {{trans('main.viewing_record')}}

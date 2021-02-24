@@ -31,7 +31,7 @@
         @if($is_role)
             @include('layouts.role.show_name',['role'=>$role])
         @endif
-        @include('layouts.show_title', ['type_form'=>$type_form, 'table_name'=>trans('main.access')])
+        @include('layouts.form_show_title', ['type_form'=>$type_form, 'table_name'=>trans('main.access')])
     </p>
 
     <p>Id: <b>{{$access->id}}</b></p>

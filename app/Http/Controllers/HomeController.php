@@ -8,6 +8,7 @@ use App\Models\Template;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Project;
+use App\Models\Role;
 
 class HomeController extends Controller
 {
@@ -33,7 +34,9 @@ class HomeController extends Controller
 
     function glo_store(Request $request)
     {
-        return redirect()->route('base.template_index', ['project' => $request->project_id, 'role' => $request->role_id]);
+        $project = Project::findOrFail($request->project_id);
+        $role = Role::findOrFail($request->role_id);
+        return redirect()->route('base.template_index', ['project' => $project, 'role' => $role]);
     }
 
 }

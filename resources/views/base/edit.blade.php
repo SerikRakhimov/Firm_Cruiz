@@ -9,7 +9,7 @@
         @include('layouts.template.show_name', ['template'=>$template])
     </p>
     <p>
-        @include('layouts.edit_title', ['update'=>$update, 'table_name'=>trans('main.base')])
+        @include('layouts.form_edit_title', ['update'=>$update, 'table_name'=>trans('main.base')])
     </p>
 
     <form action="{{$update ? route('base.update',$base):route('base.store')}}" method="POST"

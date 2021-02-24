@@ -7,7 +7,7 @@
     use Illuminate\Support\Facades\Request;
     ?>
     <p>
-        @include('layouts.show_title', ['type_form'=>$type_form, 'table_name'=>trans('main.user')])
+        @include('layouts.form_show_title', ['type_form'=>$type_form, 'table_name'=>trans('main.user')])
     </p>
 
     <p>Id: <b>{{$user->id}}</b></p>

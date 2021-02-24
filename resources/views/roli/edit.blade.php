@@ -15,7 +15,7 @@
         @endif
     </p>
     <p>
-        @include('layouts.edit_title', ['update'=>$update, 'table_name'=>trans('main.roli')])
+        @include('layouts.form_edit_title', ['update'=>$update, 'table_name'=>trans('main.roli')])
     </p>
     <form action="{{$update ? route('roli.update', $roli):route('roli.store')}}" method="POST"
           enctype=multipart/form-data name="form">

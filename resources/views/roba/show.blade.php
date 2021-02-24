@@ -24,7 +24,7 @@
             @if($is_base)
                 @include('layouts.base.show_name',['base'=>$base])
             @endif
-        @include('layouts.show_title', ['type_form'=>$type_form, 'table_name'=>trans('main.roba')])
+        @include('layouts.form_show_title', ['type_form'=>$type_form, 'table_name'=>trans('main.roba')])
     </p>
 
     <p>Id: <b>{{$roba->id}}</b></p>

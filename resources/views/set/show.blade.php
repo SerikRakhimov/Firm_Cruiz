@@ -10,7 +10,7 @@
     ?>
     <p>
         @include('layouts.template.show_name', ['template'=>$template])
-        @include('layouts.show_title', ['type_form'=>$type_form, 'table_name'=>trans('main.set')])
+        @include('layouts.form_show_title', ['type_form'=>$type_form, 'table_name'=>trans('main.set')])
     </p>
 
     <p>Id: <b>{{$set->id}}</b></p>

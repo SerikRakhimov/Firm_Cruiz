@@ -8,7 +8,7 @@
     ?>
     <p>
         @include('layouts.task.show_name', ['task'=>$task])
-        @include('layouts.show_title', ['type_form'=>$type_form, 'table_name'=>trans('main.module')])
+        @include('layouts.form_show_title', ['type_form'=>$type_form, 'table_name'=>trans('main.module')])
     </p>
 
     <p>Id: <b>{{$module->id}}</b></p>

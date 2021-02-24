@@ -24,7 +24,7 @@
             @if($is_link)
                 @include('layouts.link.show_name',['link'=>$link])
             @endif
-        @include('layouts.show_title', ['type_form'=>$type_form, 'table_name'=>trans('main.roli')])
+        @include('layouts.form_show_title', ['type_form'=>$type_form, 'table_name'=>trans('main.roli')])
     </p>
 
     <p>Id: <b>{{$roli->id}}</b></p>

@@ -8,7 +8,7 @@
         @include('layouts.task.show_name', ['task'=>$task])
     </p>
     <p>
-        @include('layouts.edit_title', ['update'=>$update, 'table_name'=>trans('main.module')])
+        @include('layouts.form_edit_title', ['update'=>$update, 'table_name'=>trans('main.module')])
     </p>
     <form action="{{$update ? route('module.update',$module):route('module.store')}}" method="POST"
           enctype=multipart/form-data>

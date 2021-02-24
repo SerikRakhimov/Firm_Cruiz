@@ -23,7 +23,7 @@
         @if($is_user)
             @include('layouts.user.show_name',['user'=>$user])
         @endif
-        @include('layouts.show_title', ['type_form'=>$type_form, 'table_name'=>trans('main.project')])
+        @include('layouts.form_show_title', ['type_form'=>$type_form, 'table_name'=>trans('main.project')])
     </p>
 
     <p>Id: <b>{{$project->id}}</b></p>
