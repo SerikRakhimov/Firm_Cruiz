@@ -224,4 +224,5 @@ return [
     'enter_one_word_without_spaces'=>'Бос сөз жоқ бір сөзді енгізіңіз',
     'only_latin_characters_numbers_and_special_characters_are_allowed'=>'Латын әліпбиінің рәміздері, сандар мен арнайы рәміздер ғана жарамды',
     'all_letters_must_be_lowercase'=>'Барлық әріптер кіші болуы керек',
+    'space'=>'Кеңістік',
 ];

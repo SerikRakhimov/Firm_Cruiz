@@ -292,17 +292,18 @@
             <form action="{{route('item.store_link_change')}}" method="POST" enctype=multipart/form-data>
                 <div class="form-row">
                     @csrf
-                    <input type="hidden" name="item" value="{{$item->id}}">
+                    <input type="hidden" name="item_id" value="{{$item->id}}">
+                    <input type="hidden" name="role_id" value="{{$role->id}}">
 
                     <div class="d-flex justify-content-end align-items-center mt-5">
                         <div class="col-auto">
-                            <label for="link">{{trans('main.another_attitude')}} = </label>
+                            <label for="link_id">{{trans('main.another_attitude')}} = </label>
                         </div>
                         <div class="">
                             <select class="form-control"
-                                    name="link"
-                                    id="link"
-                                    class="form-control @error('link') is-invalid @enderror">
+                                    name="link_id"
+                                    id="link_id"
+                                    class="form-control @error('link_id') is-invalid @enderror">
                                 @foreach($next_links_plan as $key=>$value)
                                     <option value="{{$value->id}}"
                                         {{--                                                                                    @if(!isset($array["\x00*\x00items"][$value->id]))--}}
@@ -317,7 +318,7 @@
                                     </option>
                                 @endforeach
                             </select>
-                            @error('link')
+                            @error('link_id')
                             <div class="text-danger">
                                 {{$message}}
                             </div>

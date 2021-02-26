@@ -692,7 +692,7 @@
             </div>
             <div class="col-sm-5 text-left">
                 <button type="button" class="btn btn-dreamer" title="{{trans('main.cancel')}}"
-                        onclick="document.location='{{session('links')}}';"
+                        @include('layouts.item.base_index.previous_url')
                 >
                     <i class="fas fa-arrow-left d-inline"></i>
                     {{trans('main.cancel')}}

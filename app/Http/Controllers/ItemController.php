@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Rules\IsUniqueRoba;
 use Illuminate\Support\Facades\App;
 use App\Models\Base;
 use App\Models\Item;
@@ -11,63 +12,65 @@ use App\Models\Set;
 use App\Models\Project;
 use App\Models\Role;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use phpDocumentor\Reflection\Types\Boolean;
 use phpDocumentor\Reflection\Types\Integer;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use App\Rules\IsUniqueItem;
 
 class ItemController extends Controller
 {
-    protected function rules()
-    {
-//    https://qna.habr.com/q/342501
-//    use Illuminate\Validation\Rule;
-//
-//        public function rules()
+//    protected function rules(Request $request, $project_id, $base_id)
 //    {
-//        $rules = [
-//            'name_eng'=>'required|string',
-//            'field1' => [
-//                'required',
-//                Rule::unique('table_name')->where(function ($query) {
-//                    $query->where('field2', $this->get('field2'));
-//                })
-//            ],
+////    https://qna.habr.com/q/342501
+////    use Illuminate\Validation\Rule;
+////
+////        public function rules()
+////    {
+////        $rules = [
+////            'name_eng'=>'required|string',
+////            'field1' => [
+////                'required',
+////                Rule::unique('table_name')->where(function ($query) {
+////                    $query->where('field2', $this->get('field2'));
+////                })
+////            ],
+////        ];
+////
+////        return $rules;
+////    }
+////        return [
+////            'base_id' => 'exists:bases,id|unique_with: items, base_id, name_lang_0',
+////            'name_lang_0' => ['required', 'max:255', 'unique_with: items, base_id, name_lang_0']
+////        ];
+//        // exists:table,column
+//        // поле должно существовать в заданной таблице базе данных.
+//        // 1000 - размер картинки и файла
+//        //'name_lang_0' => ['max:1000'] не использовать, т.к. при загрузке изображений и документов мешает
+//        return [
+//                        'code' => ['required', new IsUniqueItem($request, $project_id, $base_id)],
 //        ];
-//
-//        return $rules;
 //    }
+
+//    protected function name_lang_boolean_rules()
+//    {
 //        return [
 //            'base_id' => 'exists:bases,id|unique_with: items, base_id, name_lang_0',
-//            'name_lang_0' => ['required', 'max:255', 'unique_with: items, base_id, name_lang_0']
+//            'name_lang_0' => ['unique_with: items, base_id, name_lang_0']
 //        ];
-        // exists:table,column
-        // поле должно существовать в заданной таблице базе данных.
-        // 1000 - размер картинки и файла
-        //'name_lang_0' => ['max:1000'] не использовать, т.к. при загрузке изображений и документов мешает
-        return [
-            'code' => ['required', 'unique_with: items, base_id, project_id, code']
-        ];
-    }
+//
+//    }
 
-    protected function name_lang_boolean_rules()
-    {
-        return [
-            'base_id' => 'exists:bases,id|unique_with: items, base_id, name_lang_0',
-            'name_lang_0' => ['unique_with: items, base_id, name_lang_0']
-        ];
-
-    }
-
-    protected function code_rules()
+    protected function code_rules(Request $request, $project_id, $base_id)
     {
 //        return [
 //            'name_lang_0' => ['required', 'max:255']
 //        ];
         return [
-            'code' => ['required', 'unique_with: items, base_id, code']
+            'code' => ['required', new IsUniqueItem($request, $project_id, $base_id)],
         ];
     }
 
@@ -157,8 +160,7 @@ class ItemController extends Controller
     function base_index(Base $base, Project $project, Role $role)
     {
         $base_right = GlobalController::base_right($base, $role);
-
-        session(['links' => ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/' . request()->path()]);
+        session(['base_index_previous_url' => ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/' . request()->path()]);
         return view('item/base_index', ['base_right' => $base_right, 'base' => $base, 'project' => $project, 'role' => $role,
             'items' => GlobalController::items_right($base, $project, $role)['items']->paginate(60)]);
 
@@ -194,9 +196,10 @@ class ItemController extends Controller
 
     function store_link_change(Request $request)
     {
-        $item = $request['item'];
-        $link = $request['link'];
-        return redirect()->route('item.item_index', ['item' => $item, 'par_link' => $link]);
+        $item = Item::find($request['item_id']);
+        $role = Role::find($request['role_id']);
+        $link = Link::find($request['link_id']);
+        return redirect()->route('item.item_index', ['item' => $item, 'role' => $role, 'par_link' => $link]);
     }
 
     private
@@ -350,8 +353,7 @@ class ItemController extends Controller
         //        if($base->type_is_boolean()){
 //            $request->validate($this->name_lang_boolean_rules());
 //        }else{
-        $request->validate($this->rules());
-
+        $request->validate($this->code_rules($request, $project->id, $base->id));
 //        }
         // Проверка на обязательность ввода наименования
         if ($base->is_required_lst_num_str_img_doc == true && $base->is_calcname_lst == false) {
@@ -1303,7 +1305,7 @@ class ItemController extends Controller
 
     function store(Request $request)
     {
-        $request->validate($this->rules());
+        //$request->validate($this->rules($request));
 
         // установка часового пояса нужно для сохранения времени
         date_default_timezone_set('Asia/Almaty');
@@ -1326,9 +1328,9 @@ class ItemController extends Controller
     function update(Request $request, Item $item)
     {
         // Если данные изменились - выполнить проверку
-        if (!(($item->base_id == $request->base_id) and ($item->name_lang_0 == $request->name_lang_0))) {
-            $request->validate($this->rules());
-        }
+//        if (!(($item->base_id == $request->base_id) and ($item->name_lang_0 == $request->name_lang_0))) {
+//            $request->validate($this->rules($request));
+//        }
 
         $data = $request->except('_token', '_method');
 
@@ -1350,10 +1352,10 @@ class ItemController extends Controller
     {
         // Если данные изменились - выполнить проверку. оператор '??' нужны
         if (!($item->name_lang_0 ?? '' == $request->name_lang_0 ?? '')) {
-            $request->validate($this->name_lang_rules());
+            $request->validate($this->name_lang_rules($request));
         }
         if (!($item->code == $request->code)) {
-            $request->validate($this->code_rules());
+            $request->validate($this->code_rules($request, $item->project_id, $item->base_id));
         }
 
         // Проверка на обязательность ввода
@@ -1910,7 +1912,18 @@ class ItemController extends Controller
 
             }
         }
-        return $heading == true ? redirect()->route('item.base_index', $item->base_id) : redirect(session('links'));
+        //return $heading == true ? redirect()->route('item.base_index', $item->base_id) : redirect(session('base_index_previous_url'));
+        if ($heading == true) {
+            return redirect()->route('item.base_index', $item->base_id);
+        } else {
+            if (Session::has('base_index_previous_url')) {
+                return redirect(session('base_index_previous_url'));
+            } else {
+                return redirect()->back();
+            }
+        }
+
+
     }
 
     static function is_delete(Item $item, Role $role)
@@ -2181,7 +2194,7 @@ class ItemController extends Controller
         if ($result != '') {
 //            $result = '<ul type="circle"><li>'
 //                . $item->base->name() . ' (' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b>)' . $result . '</li></ul>';
-            $result = '<ul type="circle"><li>Id = ' . $item->id . ' ' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b>' . $result . '</li></ul>';
+            $result = '<ul type="circle"><li>' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b>' . $result . '</li></ul>';
         }
         return $result;
     }
@@ -2211,7 +2224,7 @@ class ItemController extends Controller
 //            $result = $result . '<li>' . $main->link->id . ' ' . $main->link->parent_label() . ' (' . $main->link->parent_base->name() . ': ' . '<b>' . $main->parent_item->name() . '</b>)'
 //                . $str . '</li>';
             $str = self::form_tree_start($items, $main->parent_item_id, $level);
-            $result = $result . '<li>Id = ' . $main->parent_item->id . ' ' . $main->link->parent_base->name() . ': ' . '<b>' . $main->parent_item->name() . '</b>' . $str . '</li>';
+            $result = $result . '<li>' . $main->link->parent_base->name() . ': ' . '<b>' . $main->parent_item->name() . '</b>' . $str . '</li>';
         }
         $result = $result . "</ul>";
         return $result;

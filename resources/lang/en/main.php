@@ -224,4 +224,5 @@ return [
     'enter_one_word_without_spaces'=>'Enter one word without spaces',
     'only_latin_characters_numbers_and_special_characters_are_allowed'=>'Only Latin characters, numbers, and special characters are allowed',
     'all_letters_must_be_lowercase'=>'All letters must be lowercase',
+    'space'=>'Space',
 ];
