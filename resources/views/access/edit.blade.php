@@ -2,6 +2,7 @@
 
 @section('content')
     <?php
+    use App\Models\Role;
     $update = isset($access);
     $is_project = isset($project);
     $is_user = isset($user);
@@ -22,7 +23,7 @@
         @include('layouts.form_edit_title', ['update'=>$update, 'table_name'=>trans('main.access')])
     </p>
     <form action="{{$update ? route('access.update', $access):route('access.store')}}" method="POST"
-          enctype=multipart/form-data name = "form">
+          enctype=multipart/form-data name="form">
         @csrf
 
         @if ($update)
@@ -42,13 +43,19 @@
                             id="project_id"
                             class="@error('project_id') is-invalid @enderror">
                         @foreach ($projects as $project)
-                            <option value="{{$project->id}}"
-                                    @if ($update)
-                                    @if ((old('project_id') ?? ($access->project_id ?? (int) 0)) ==  $project->id)
-                                    selected
-                                @endif
-                                @endif
-                            >{{$project->name()}}</option>
+                            <?php
+                            //                            Только те проекты, у которых where('roles.is_default_for_external', true)
+                            $find = Role::where('template_id', $project->template_id)->where('is_default_for_external', true)->exists();
+                            ?>
+                            @if($find)
+                                <option value="{{$project->id}}"
+                                        @if ($update)
+                                        @if ((old('project_id') ?? ($access->project_id ?? (int) 0)) ==  $project->id)
+                                        selected
+                                    @endif
+                                    @endif
+                                >{{$project->name()}}</option>
+                            @endif
                         @endforeach
                     </select>
                     @error('project_id')
