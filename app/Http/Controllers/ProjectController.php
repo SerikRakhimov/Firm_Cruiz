@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Access;
+use App\Models\Item;
 use Illuminate\Support\Facades\App;
 use App\User;
 use App\Models\Project;
 use App\Models\Template;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -67,7 +70,10 @@ class ProjectController extends Controller
 
     function create_user(User $user)
     {
-        $templates = Template::get();
+        $templates = Template::whereHas('roles', function ($query) {
+            $query->where('is_author', true);
+        })->get();
+
         return view('project/edit', ['user' => $user, 'templates' => $templates]);
     }
 
@@ -82,6 +88,16 @@ class ProjectController extends Controller
         //$project->template_id = $request->template_id;
 
         $this->set($request, $project);
+
+        $role = Role::where('template_id', $project->template_id)->where('is_author', true)->first();
+        if ($role) {
+            $access = new Access();
+            $access->project_id = $project->id;
+            $access->user_id = $project->user_id;
+            $access->role_id = $role->id;
+            $access->save();
+        }
+
         //https://laravel.demiart.ru/laravel-sessions/
         if ($request->session()->has('projects_previous_url')) {
             return redirect(session('projects_previous_url'));

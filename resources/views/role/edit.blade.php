@@ -42,30 +42,6 @@
             @endforeach
         </div>
 
-        <div class="form-group row" id="is_default_for_external_form_group">
-            <div class="col-sm-3 text-right">
-                <label class="form-label"
-                       for="is_default_for_external">{{trans('main.is_default_for_external')}}</label>
-            </div>
-            <div class="col-sm-7">
-                <input class="@error('is_default_for_external') is-invalid @enderror"
-                       type="checkbox"
-                       name="is_default_for_external"
-                       placeholder=""
-                       @if ((old('is_default_for_external') ?? ($role->is_default_for_external ?? false)) ==  true)
-                       checked
-                    @endif
-                >
-                @error('is_default_for_external')
-                <div class="invalid-feedback">
-                    {{$message}}
-                </div>
-                @enderror
-            </div>
-            <div class="col-sm-2">
-            </div>
-        </div>
-
         <div class="form-group row" id="is_author_form_group">
             <div class="col-sm-3 text-right">
                 <label class="form-label"
@@ -81,6 +57,30 @@
                     @endif
                 >
                 @error('is_author')
+                <div class="invalid-feedback">
+                    {{$message}}
+                </div>
+                @enderror
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div>
+
+        <div class="form-group row" id="is_default_for_external_form_group">
+            <div class="col-sm-3 text-right">
+                <label class="form-label"
+                       for="is_default_for_external">{{trans('main.is_default_for_external')}}</label>
+            </div>
+            <div class="col-sm-7">
+                <input class="@error('is_default_for_external') is-invalid @enderror"
+                       type="checkbox"
+                       name="is_default_for_external"
+                       placeholder=""
+                       @if ((old('is_default_for_external') ?? ($role->is_default_for_external ?? false)) ==  true)
+                       checked
+                    @endif
+                >
+                @error('is_default_for_external')
                 <div class="invalid-feedback">
                     {{$message}}
                 </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\App;
 use App\Models\Template;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,13 +20,13 @@ class TemplateController extends Controller
 
     function index()
     {
-        $templates = null;
+        $templates = Template::withCount('projects')->withCount('roles')->withCount('bases')->withCount('sets');
         $index = array_search(App::getLocale(), config('app.locales'));
         $name = "";  // нужно, не удалять
         $index = array_search(App::getLocale(), config('app.locales'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
             $name = 'name_lang_' . $index;
-            $templates = Template::orderBy($name);
+            $templates = $templates->orderBy($name);
         }
         session(['templates_previous_url' => request()->url()]);
         return view('template/index', ['templates' => $templates->paginate(60)]);

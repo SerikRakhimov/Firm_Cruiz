@@ -53,22 +53,22 @@
                 </td>
                 <td class="text-center">
                     <a href="{{route('project.index_template', $template)}}" title="{{trans('main.projects')}}">
-                        <i class="fas fa-cube"></i>
+                        <i class="fas fa-cube"></i> ({{$template->projects_count}})
                     </a>
                 </td>
                 <td class="text-center">
                     <a href="{{route('role.index', $template)}}" title="{{trans('main.roles')}}">
-                        <i class="fas fa-user-circle"></i>
+                        <i class="fas fa-user-circle"></i> ({{$template->roles_count}})
                     </a>
                 </td>
                 <td class="text-center">
                     <a href="{{route('base.index', $template)}}" title="{{trans('main.bases')}}">
-                        <i class="fas fa-atom"></i>
+                        <i class="fas fa-atom"></i> ({{$template->bases_count}})
                     </a>
                 </td>
                 <td class="text-center">
                     <a href="{{route('set.index', $template)}}" title="{{trans('main.sets')}}">
-                        <i class="fas fa-equals"></i>
+                        <i class="fas fa-equals"></i> ({{$template->sets_count}})
                     </a>
                 </td>
             </tr>
