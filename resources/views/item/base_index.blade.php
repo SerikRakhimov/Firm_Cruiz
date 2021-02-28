@@ -59,8 +59,12 @@
                 @if($base->is_code_needed == true)
                     <th class="text-center">{{trans('main.code')}}</th>
                 @endif
-                <th @include('layouts.class_from_base',['base'=>$base])>
-                    {{trans('main.name')}}</th>
+                {{--            если тип-вычисляемое поле и показывать вычисляемое поле--}}
+                {{--            похожая проверка в ext_show.blade.php--}}
+                @if(GlobalController::is_base_calcname_enable($base, $base_right))
+                    <th @include('layouts.class_from_base',['base'=>$base])>
+                        {{trans('main.name')}}</th>
+                @endif
             @endif
             @foreach($links as $link)
                 <?php
@@ -105,17 +109,21 @@
                             </a>
                         </td>
                     @endif
-                    <td @include('layouts.class_from_base',['base'=>$base])>
-                        @if($base->type_is_image)
-                            @include('view.img',['item'=>$item, 'size'=>"small", 'filenametrue'=>false])
-                        @elseif($base->type_is_document)
-                            @include('view.doc',['item'=>$item])
-                        @else
-                            <a href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}">
-                                {{$item->name()}}
-                            </a>
-                        @endif
-                    </td>
+                    {{--            если тип-вычисляемое поле и показывать вычисляемое поле--}}
+                    {{--            похожая проверка в ext_show.blade.php--}}
+                    @if(GlobalController::is_base_calcname_enable($base, $base_right))
+                        <td @include('layouts.class_from_base',['base'=>$base])>
+                            @if($base->type_is_image)
+                                @include('view.img',['item'=>$item, 'size'=>"small", 'filenametrue'=>false])
+                            @elseif($base->type_is_document)
+                                @include('view.doc',['item'=>$item])
+                            @else
+                                <a href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}">
+                                    {{$item->name()}}
+                                </a>
+                            @endif
+                        </td>
+                    @endif
                 @endif
                 {{--                <td class="text-center">&#8594;</td>--}}
                 @foreach($links as $link)

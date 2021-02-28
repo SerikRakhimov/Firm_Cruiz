@@ -29,11 +29,11 @@ use App\Models\Project;
 <div id="app">
     <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
         <div class="container">
-{{--            @foreach (session('glo_menu_lang') as $value)--}}
-                @foreach (config('app.locales') as $value)
+            {{--            @foreach (session('glo_menu_lang') as $value)--}}
+            @foreach (config('app.locales') as $value)
                 <a class="navbar-brand" href="{{ url('/setlocale/' . $value) }}">
                     <span
-{{--                        @if(session('locale') == $value)--}}
+                        {{--                        @if(session('locale') == $value)--}}
                         @if(App::getLocale() == $value)
                         style="text-decoration: underline"
                         @endif
@@ -42,7 +42,7 @@ use App\Models\Project;
             @endforeach
 
             <a class="navbar-brand" href="{{ url('/') }}">
-                {{ config('app.name', 'Abakus') }}
+                {{config('app.name')}}
             </a>
             {{--                Этот <button> не удалять, нужен для связки с <div class="collapse navbar-collapse" id="navbarSupportedContent">--}}
             <button type="button" class="navbar-toggler" type="button" data-toggle="collapse"
@@ -58,9 +58,26 @@ use App\Models\Project;
                         <li class="nav-item">
                             {{--                            <a class="nav-link" style="color: green"--}}
                             {{--                            <a class="nav-link text-primary font-weight-bold"--}}
-{{--                                <a class="nav-link text-primary"--}}
-{{--                                   href="{{route('base.template_index', $glo_project_template_id)}}}">{{trans('main.bases')}}</a>--}}
+                            {{--                                <a class="nav-link text-primary"--}}
+                            {{--                                   href="{{route('base.template_index', $glo_project_template_id)}}}">{{trans('main.bases')}}</a>--}}
+                            <a class="nav-link text-primary" href="\home"
+                               title="{{trans('main.project_role_selection')}}">
+                                {{trans('main.project_role_selection')}}
+                            </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-primary" href="{{route('project.index_user', Auth::user())}}"
+                            title="{{trans('main.projects')}}">
+                                {{trans('main.projects')}}
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-primary" href="{{route('access.index_user', Auth::user())}}"
+                            title="{{trans('main.accesses')}}">
+                                {{trans('main.accesses')}}
+                            </a>
+                        </li>
+
                         {{--                        <li class="nav-item">--}}
                         {{--                            <a class="nav-link"--}}
                         {{--                               href="{{route('access.index_user', Auth::user())}}">{{trans('main.accesses')}}</a>--}}
@@ -86,7 +103,7 @@ use App\Models\Project;
                     <!-- Authentication Links -->
                     @guest
                         <li class="nav-item">
-{{--                            <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>--}}
+                            {{--                            <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>--}}
                             <a class="nav-link" href="{{ route('login') }}">{{trans('main.login')}}</a>
                         </li>
                         @if (Route::has('register'))
@@ -115,18 +132,9 @@ use App\Models\Project;
                                     @csrf
                                 </form>
                                 @auth
-                                    <a class="dropdown-item" href="\home">
-                                        {{trans('main.project_role_selection')}}
-                                    </a>
-                                    <a class="dropdown-item" href="{{route('project.index_user', Auth::user())}}">
-                                        {{trans('main.projects')}}
-                                    </a>
-                                    <a class="dropdown-item" href="{{route('access.index_user', Auth::user())}}">
-                                        {{trans('main.accesses')}}
-                                    </a>
-                                    <a class="dropdown-item" href="#">
-                                        {{trans('main.all_projects')}}
-                                    </a>
+                                    {{--                                    <a class="dropdown-item" href="#">--}}
+                                    {{--                                        {{trans('main.all_projects')}}--}}
+                                    {{--                                    </a>--}}
                                     @if(Auth::user()->isModerator())
                                         <a class="dropdown-item" href="{{route('moderation.index')}}">
                                             {{trans('main.moderation')}}(<span
@@ -152,9 +160,9 @@ use App\Models\Project;
         </div>
     </nav>
     <main class="py-4 w-75 mw-75 mx-auto">
-{{--                <div class="mx-auto" style="width: 1200px;">--}}
+        {{--                <div class="mx-auto" style="width: 1200px;">--}}
         @yield('content')
-{{--                </div>--}}
+        {{--                </div>--}}
     </main>
 </div>
 <!-- Ajax -->

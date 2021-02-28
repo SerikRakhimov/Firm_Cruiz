@@ -152,6 +152,7 @@ class RobaController extends Controller
     {
         $roba->role_id = $request->role_id;
         $roba->base_id = $request->base_id;
+        $roba->is_all_base_calcname_enable = isset($request->is_all_base_calcname_enable) ? true : false;
         $roba->is_list_base_create = isset($request->is_list_base_create) ? true : false;
         $roba->is_list_base_read = isset($request->is_list_base_read) ? true : false;
         $roba->is_list_base_update = isset($request->is_list_base_update) ? true : false;

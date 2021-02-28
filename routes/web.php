@@ -78,8 +78,8 @@ Route::get('/', function () {
     }
 
     if (Auth::check()) {
-        //return view('welcome');
-        return view('home');
+        return view('welcome');
+        //return view('home');
         //return redirect()->route('order.index_job_user');
     } else {
         return redirect()->route('login');

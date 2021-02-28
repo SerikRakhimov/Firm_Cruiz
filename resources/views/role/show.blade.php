@@ -22,6 +22,7 @@
     <p>{{trans('main.is_default_for_external')}}: <b>{{GlobalController::name_is_boolean($role->is_default_for_external)}}</b></p>
     <p>{{trans('main.is_list_base_sndb')}}: <b>{{GlobalController::name_is_boolean($role->is_list_base_sndb)}}</b></p>
     <p>{{trans('main.is_list_base_id')}}: <b>{{GlobalController::name_is_boolean($role->is_list_base_id)}}</b></p>
+    <p>{{trans('main.is_all_base_calcname_enable')}}: <b>{{GlobalController::name_is_boolean($role->is_all_base_calcname_enable)}}</b></p>
     <p>{{trans('main.is_list_base_create')}}: <b>{{GlobalController::name_is_boolean($role->is_list_base_create)}}</b></p>
     <p>{{trans('main.is_list_base_read')}}: <b>{{GlobalController::name_is_boolean($role->is_list_base_read)}}</b></p>
     <p>{{trans('main.is_list_base_update')}}: <b>{{GlobalController::name_is_boolean($role->is_list_base_update)}}</b></p>

@@ -162,6 +162,7 @@ return [
     'project_role_selection' => 'Project and role selection',
     'is_list_base_sndb' => 'Show Bases with types String, Number, Date, Boolean',
     'is_list_base_id' => 'Show Bases with types Image, Document',
+    'is_all_base_calcname_enable' => 'Show Base with calculated name',
     'is_list_base_create' => 'Creating Bases in the list',
     'is_list_base_read' => 'Reading Bases in the list',
     'is_list_base_update' => 'Updating the Bases in the List',

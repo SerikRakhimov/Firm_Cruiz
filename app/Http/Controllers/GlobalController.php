@@ -45,6 +45,7 @@ class GlobalController extends Controller
 
     static function base_right(Base $base, Role $role, bool $is_no_sndb_pd_rule = false)
     {
+        $is_all_base_calcname_enable = $role->is_all_base_calcname_enable;
         $is_list_base_create = $role->is_list_base_create;
         $is_list_base_read = $role->is_list_base_read;
         $is_list_base_update = $role->is_list_base_update;
@@ -87,6 +88,7 @@ class GlobalController extends Controller
         // Блок проверки по robas, используя переменные $role и $base
         $roba = Roba::where('role_id', $role->id)->where('base_id', $base->id)->first();
         if ($roba != null) {
+            $is_roba_all_base_calcname_enable = $roba->is_all_base_calcname_enable;
             $is_roba_list_base_create = $roba->is_list_base_create;
             $is_roba_list_base_read = $roba->is_list_base_read;
             $is_roba_list_base_update = $roba->is_list_base_update;
@@ -112,6 +114,7 @@ class GlobalController extends Controller
 //            $is_roba_edit_link_enable = $is_roba_edit_link_read || $is_roba_edit_link_update;
 
             $is_list_base_calc = $is_roba_list_base_calc;
+            $is_all_base_calcname_enable = $is_roba_all_base_calcname_enable;
             $is_list_base_create = $is_roba_list_base_create;
             $is_list_base_read = $is_roba_list_base_read;
             $is_list_base_update = $is_roba_list_base_update;
@@ -134,6 +137,7 @@ class GlobalController extends Controller
         $is_edit_link_enable = $is_edit_link_read || $is_edit_link_update;
 //
         return ['is_list_base_calc' => $is_list_base_calc,
+            'is_all_base_calcname_enable' => $is_all_base_calcname_enable,
             'is_list_base_create' => $is_list_base_create,
             'is_list_base_read' => $is_list_base_read,
             'is_list_base_update' => $is_list_base_update,
@@ -159,6 +163,7 @@ class GlobalController extends Controller
         $base_right = self::base_right($base, $role, true);
 
         $is_list_base_calc = $base_right['is_list_base_calc'];
+        $is_all_base_calcname_enable = $base_right['is_all_base_calcname_enable'];
         $is_list_base_create = $base_right['is_list_base_create'];
         $is_list_base_read = $base_right['is_list_base_read'];
         $is_list_base_update = $base_right['is_list_base_update'];
@@ -186,6 +191,7 @@ class GlobalController extends Controller
         $is_edit_link_enable = $is_edit_link_read || $is_edit_link_update;
 
         return ['is_list_base_calc' => $is_list_base_calc,
+            'is_all_base_calcname_enable' => $is_all_base_calcname_enable,
             'is_list_base_create' => $is_list_base_create,
             'is_list_base_read' => $is_list_base_read,
             'is_list_base_update' => $is_list_base_update,
@@ -227,8 +233,6 @@ class GlobalController extends Controller
 //        });
 
 
-
-
 //        $items = $items->whereHas('child_mains', function ($query) {
 //            $query->where('link_id', 11)->whereHas('parent_item', function ($query) {
 //                $query->where(strval('name_lang_0'), '<=',500);});
@@ -236,8 +240,6 @@ class GlobalController extends Controller
 //            $query->where('link_id', 3)->whereHas('parent_item', function ($query) {
 //                $query->whereDate('name_lang_0', '>','2020-02-09');});
 //        });
-
-
 
 
         $name = "";  // нужно, не удалять
@@ -259,6 +261,13 @@ class GlobalController extends Controller
     static function image_is_missing_html()
     {
         return trans('main.image_is_missing');
+    }
+
+//  Если тип-вычисляемое поле и показывать вычисляемое поле
+    static function is_base_calcname_enable($base, $base_right)
+    {
+        return ($base->is_calcname_lst == true && $base_right['is_all_base_calcname_enable'] == true)
+            || ($base->is_calcname_lst == false);
     }
 
 }

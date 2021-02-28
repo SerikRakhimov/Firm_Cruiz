@@ -138,6 +138,31 @@
             </div>
         </div>
 
+        <div class="form-group row" id="is_all_base_calcname_enable_form_group">
+            <div class="col-sm-3 text-right">
+                <label class="form-label"
+                       for="is_all_base_calcname_enable">{{trans('main.is_all_base_calcname_enable')}}</label>
+            </div>
+            <div class="col-sm-7">
+                <input class="@error('is_all_base_calcname_enable') is-invalid @enderror"
+                       type="checkbox"
+                       name="is_all_base_calcname_enable"
+                       placeholder=""
+                       {{--                       "$role->is_all_base_calcname_enable ?? true" - "true" значение по умолчанию--}}
+                       @if ((old('is_all_base_calcname_enable') ?? ($role->is_all_base_calcname_enable ?? false)) ==  true)
+                       checked
+                    @endif
+                >
+                @error('is_all_base_calcname_enable')
+                <div class="invalid-feedback">
+                    {{$message}}
+                </div>
+                @enderror
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div>
+
         <div class="form-group row" id="is_list_base_create_form_group">
             <div class="col-sm-3 text-right">
                 <label class="form-label"
