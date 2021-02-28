@@ -30,23 +30,26 @@
                 </button>
             </div>
         @endif
-        @if ($base->is_calcname_lst == true)
-            <div class="col-12 text-right">
-                <a href="{{route('item.calculate_name', ['base'=>$base, 'project'=>$project])}}"
-                   title="{{trans('main.calculate_name')}}">
-                    <img src="{{Storage::url('calculate_name.png')}}" width="15" height="15"
-                         alt="{{trans('main.calculate_name')}}">
-                </a>
-            </div>
-        @endif
-        @if ($base->is_recalc_code == true)
-            <div class="col-12 text-right">
-                <a href="{{route('item.recalculation_codes',['base'=>$base, 'project'=>$project])}}"
-                   title="{{trans('main.recalculation_codes')}}">
-                    <img src="{{Storage::url('recalculation_codes.png')}}" width="15" height="15"
-                         alt="{{trans('main.recalculation_codes')}}">
-                </a>
-            </div>
+{{--        Не удалять--}}
+        @if(1==2)
+            @if ($base->is_calcname_lst == true)
+                <div class="col-12 text-right">
+                    <a href="{{route('item.calculate_name', ['base'=>$base, 'project'=>$project])}}"
+                       title="{{trans('main.calculate_name')}}">
+                        <img src="{{Storage::url('calculate_name.png')}}" width="15" height="15"
+                             alt="{{trans('main.calculate_name')}}">
+                    </a>
+                </div>
+            @endif
+            @if ($base->is_recalc_code == true)
+                <div class="col-12 text-right">
+                    <a href="{{route('item.recalculation_codes',['base'=>$base, 'project'=>$project])}}"
+                       title="{{trans('main.recalculation_codes')}}">
+                        <img src="{{Storage::url('recalculation_codes.png')}}" width="15" height="15"
+                             alt="{{trans('main.recalculation_codes')}}">
+                    </a>
+                </div>
+            @endif
         @endif
     </div>
     </p>

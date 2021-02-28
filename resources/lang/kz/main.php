@@ -226,4 +226,10 @@ return [
     'only_latin_characters_numbers_and_special_characters_are_allowed'=>'Латын әліпбиінің рәміздері, сандар мен арнайы рәміздер ғана жарамды',
     'all_letters_must_be_lowercase'=>'Барлық әріптер кіші болуы керек',
     'space'=>'Кеңістік',
+    'info_projects' => 'Өз жобаларыңызды үлгілер негізінде жасаңыз',
+    'info_accesses' => 'Басқа пайдаланушылардың жобаларына қосылыңыз',
+    'info_project_role_selection'=>'Жобаларды орындауға жіберу',
+    'mainmenu'=>'Басты мәзір',
+    'app_info_first'=>'Бірінші бұлтты мульти-тілді әмбебап',
+    'app_info_second'=>'есеп платформасы',
 ];

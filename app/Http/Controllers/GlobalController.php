@@ -215,6 +215,7 @@ class GlobalController extends Controller
     {
         $base_right = self::base_right($base, $role);
         $items = Item::where('base_id', $base->id)->where('project_id', $project->id);
+        // Такая же проверка и в ItemController (function browser(), get_items_for_link())
         if ($base_right['is_list_base_byuser'] == true) {
             $items = $items->where('created_user_id', GlobalController::glo_user_id());
         }

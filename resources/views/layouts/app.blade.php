@@ -60,20 +60,20 @@ use App\Models\Project;
                             {{--                            <a class="nav-link text-primary font-weight-bold"--}}
                             {{--                                <a class="nav-link text-primary"--}}
                             {{--                                   href="{{route('base.template_index', $glo_project_template_id)}}}">{{trans('main.bases')}}</a>--}}
-                            <a class="nav-link text-primary" href="\home"
-                               title="{{trans('main.project_role_selection')}}">
+                            <a class="nav-link" href="\home"
+                               title="{{trans('main.info_project_role_selection')}}">
                                 {{trans('main.project_role_selection')}}
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-primary" href="{{route('project.index_user', Auth::user())}}"
-                            title="{{trans('main.projects')}}">
+                            <a class="nav-link" href="{{route('project.index_user', Auth::user())}}"
+                            title="{{trans('main.info_projects')}}">
                                 {{trans('main.projects')}}
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-primary" href="{{route('access.index_user', Auth::user())}}"
-                            title="{{trans('main.accesses')}}">
+                            <a class="nav-link" href="{{route('access.index_user', Auth::user())}}"
+                            title="{{trans('main.info_accesses')}}">
                                 {{trans('main.accesses')}}
                             </a>
                         </li>

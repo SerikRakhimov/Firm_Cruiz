@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+        <title>{{config('app.name', 'Laravel')}}</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
@@ -44,8 +44,14 @@
                 text-align: center;
             }
 
-            .title {
+            .title_big {
                 font-size: 84px;
+                color: #1c5145;
+            }
+
+            .title_small {
+                font-size: 45px;
+                color: #5f7a91;
             }
 
             .links > a {
@@ -68,7 +74,7 @@
             @if (Route::has('login'))
                 <div class="top-right links">
                     @auth
-                        <a href="{{ url('/home') }}">Home</a>
+                        <a href="{{ url('/home') }}">{{trans('main.mainmenu')}}</a>
                     @else
                         <a href="{{ route('login') }}">{{trans('main.login')}}</a>
 
@@ -80,8 +86,14 @@
             @endif
 
             <div class="content">
-                <div class="title m-b-md">
-                    Abakus - учетная платформа
+                <div class="title_big m-b-md">
+                    Abakus online
+                </div>
+                <div class="title_small m-b-md">
+                    {{trans('main.app_info_first')}}
+                </div>
+                <div class="title_small m-b-md">
+                    {{trans('main.app_info_second')}}
                 </div>
 {{--                <div class="title m-b-md">--}}
 {{--                    Abakus - учетная платформа--}}

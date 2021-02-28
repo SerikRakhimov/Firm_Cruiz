@@ -99,10 +99,12 @@ class ItemController extends Controller
     // Использовать знак вопроса "/{project_id?}" (web.php)
     //              равенство null "$project_id = null" (ItemController.php),
     // иначе ошибка в function seach_click() - open('{{route('item.browser', '')}}' ...
-    function browser($base_id, $project_id = null, bool $sort_by_code = true, bool $save_by_code = true, $search = "")
+    function browser($base_id, $project_id = null, $role_id = null, bool $sort_by_code = true, bool $save_by_code = true, $search = "")
     {
         $base = Base::findOrFail($base_id);
         $project = Project::findOrFail($project_id);
+        $role = Role::findOrFail($role_id);
+        $base_right = GlobalController::base_right($base, $role);
         $name = BaseController::field_name();
         $items = null;
         if ($sort_by_code == true) {
@@ -119,6 +121,11 @@ class ItemController extends Controller
             $items = Item::where('base_id', $base_id)->where('project_id', $project->id)->orderByRaw(strval($name));
         }
         if ($items != null) {
+            // Такая же проверка и в GlobalController (function items_right()),
+            // в ItemController (function browser(), get_items_for_link())
+            if ($base_right['is_list_base_byuser'] == true) {
+                $items = $items->where('created_user_id', GlobalController::glo_user_id());
+            }
             if ($search != "") {
                 if ($save_by_code == true) {
                     $items = $items->where('code', 'LIKE', '%' . $search . '%');
@@ -809,19 +816,12 @@ class ItemController extends Controller
     function save_reverse_sets(Item $item)
     {
         $itpv = Item::findOrFail($item->id);
-        echo "item->id = " . $item->id;
         $mains = $itpv->child_mains()->get();
-        echo "count() = " . count($mains);
         $inputs_reverse = array();
         $invals = array();
         foreach ($mains as $key => $main) {
-            echo " main->id = " . $main->id;
             $inputs_reverse[$main->link_id] = $main->parent_item_id;
         }
-        echo 'inputs_reverse = ';
-        foreach ($inputs_reverse as $key => $value) {
-            echo '[' . $key . '] = ' . $value . chr(13);
-        };
 
         foreach ($inputs_reverse as $key => $value) {
             $item_work = Item::findOrFail($value);
@@ -833,10 +833,6 @@ class ItemController extends Controller
             }
         }
 
-        echo 'invals_reverse = ';
-        foreach ($invals as $key => $value) {
-            echo '[' . $key . '] = ' . $value . chr(13);
-        };
         $keys_reverse = array_keys($inputs_reverse);
         $values_reverse = array_values($invals);
         $valits_reverse = array_values($inputs_reverse);
@@ -866,20 +862,6 @@ class ItemController extends Controller
     private
     function save_sets(Item $item, $keys, $values, $valits, bool $reverse)
     {
-        echo 'reverse = ' . $reverse;
-        echo 'keys = ';
-        foreach ($keys as $key => $value) {
-            echo '[' . $key . '] = ' . $value . chr(13);
-        };
-        echo "values = ";
-        foreach ($values as $key => $value) {
-            echo '[' . $key . '] = ' . $value . chr(13);
-        };
-        echo "valits = ";
-        foreach ($valits as $key => $value) {
-            echo '[' . $key . '] = ' . $value . chr(13);
-        };
-
 //        $table1 = Set::select(DB::Raw('sets.*'))
 //            ->join('links', 'sets.link_from_id', '=', 'links.id')
 //            ->join('bases', 'links.child_base_id', '=', $item->base_id)
@@ -896,28 +878,19 @@ class ItemController extends Controller
         $set_group_by_base_to = $set_main->groupBy('to_child_base_id')->sortBy('to_child_base_id');
 
         //$table2 = Set::select(DB::Raw('$table1.*'))->get();
-
-
-        //echo "".var_dump($set_group_by_base_to);
-        //echo "".count($set_group_by_base_to);
         foreach ($set_group_by_base_to as $to_key => $to_value) {
             $items = Item::where('base_id', $to_key)->where('project_id', $item->project_id);
 //            $items = $items->whereHas('child_mains', function ($query) {
 //                $query->where('link_id', 41)->where('parent_item_id', 388);
 //            });
-            //echo "items = " . var_dump($items->get()) . ", ";
             $set_base_to = $set_main->where('to_child_base_id', '=', $to_key)->sortBy('to_parent_base_id');
             $set_is_group = $set_base_to->where('is_group', true);
-            //echo "".$value['base_to_id'];
             //$base_to_id = $key;
-            //echo var_dump($key);
-            //echo "" . count($set_base_to);
             $error = true;
             $found = false;
             $item_seek = null;
             // Поиск $item_seek
             foreach ($set_is_group as $key => $value) {
-                echo " keyskeys = " . $value->link_from->id;
 //                проверка, если link - вычисляемое поле
                 //if ($link->parent_is_parent_related == true || $link->parent_is_numcalc == true)
                 if ($value->link_from->parent_is_parent_related == true) {
@@ -925,8 +898,6 @@ class ItemController extends Controller
 
                 } else {
                     //$item_seek = MainController::view_info($item, $value['link_from_id']);
-                    //echo "item_id = " . $item->id;
-                    //echo "value_link_from_id = " . $value['link_from_id'];
                     $nk = -1;
                     foreach ($keys as $k => $v) {
 
@@ -938,19 +909,13 @@ class ItemController extends Controller
 
                     if ($nk != -1) {
                         $set_to = $set_is_group->where('link_from_id', $value['link_from_id'])->first();
-                        //echo "set_base_to = " . var_dump($set_base_to) . ", ";
-                        //echo " set_to = " . var_dump($set_to) . ", ";
                         if ($set_to) {
                             $nt = $set_to->link_to_id;
-//                        echo " nk = " . $nk . ", ";
-//                        echo " nt = " . $nt . ", ";
-//                        echo " vl = " . $values[$nk] . ", ";
                             $nv = $values[$nk];
                             $items = $items->whereHas('child_mains', function ($query) use ($nt, $nv) {
                                 $query->where('link_id', $nt)->where('parent_item_id', $nv);
                             });
                             $item_seek = $items->first();
-                            //echo "count = " . count($item_seek);
                             $error = false;
                             if (!$item_seek) {
                                 $found = false;
@@ -958,12 +923,10 @@ class ItemController extends Controller
                             } else {
                                 $found = true;
                             }
-                            //echo var_dump($value['link_from_id']);
                         }
                     }
                 }
 
-                //echo "items = " . var_dump($items->get()).", ";
             }
 
             if (!$error) {
@@ -982,13 +945,10 @@ class ItemController extends Controller
                     // Нужно, чтобы id было
                     $item_seek->save();
                 }
-                //echo ' item_seek->id = ' . $item_seek->id;
                 //$items = $items->get();
-                //echo 'item_seek->id = ' . $item_seek->id;
                 $error = true;
                 $found = false;
                 $valnull = false;
-                echo "VALNULL START ";
                 // Фильтры
                 foreach ($set_base_to as $key => $value) {
                     $nk = 0;
@@ -1020,7 +980,6 @@ class ItemController extends Controller
                         $seek_value = 0;
 
 
-                        echo " is_numeric(values[nk]) = " . is_numeric($values[$nk]);
                         if ($value->link_to->parent_base->type_is_number() && is_numeric($values[$nk])) {
                             $ch = $values[$nk];
                         } else {
@@ -1035,17 +994,12 @@ class ItemController extends Controller
                                 $seek_value = $vl + $kf * $ch;
                                 if ($seek_value == 0) {
                                     $valnull = true;
-                                    echo "plusvalnull_item_seek->id = " . $item_seek->id;
                                 }
                             } elseif ($value->is_upd_minus == true) {
                                 $seek_item = true;
-                                echo " vl = " . $vl;
-                                echo " kf = " . $kf;
-                                echo " ch = " . $ch;
                                 $seek_value = $vl - $kf * $ch;
                                 if ($seek_value == 0) {
                                     $valnull = true;
-                                    echo "minusvalnull_item_seek->id = " . $item_seek->id;
                                 }
                             } elseif ($value->is_upd_replace == true) {
                                 $main->parent_item_id = $valits[$nk];
@@ -1091,17 +1045,13 @@ class ItemController extends Controller
 
                 // Если остаток нулевой
                 if ($valnull) {
-                    echo " valnull_item_seek->id = " . $item_seek->id;
                     $item_seek->delete();
                 }
 
-                echo "VALNULL FIN ";
             }
         }
 
     }
-//echo var_dump($keys);
-//echo var_dump($values);
 
 
     private
@@ -1111,9 +1061,6 @@ class ItemController extends Controller
         $main->child_item_id = $item->id;
         // поиск должен быть удачным, иначе "$main->link_id = $keys[$index]" может дать ошибку
         $link = Link::findOrFail($keys[$index]);
-        if ($index == 3) {
-            echo " index == 3: " . $link->parent_base->name();
-        }
 
         // тип корректировки поля - список
         if ($link->parent_base->type_is_list()) {
@@ -1160,8 +1107,8 @@ class ItemController extends Controller
                         Mail::send(['html' => 'mail/login_site'], ['remote_addr' => $_SERVER['REMOTE_ADDR'],
                             'http_user_agent' => $_SERVER['HTTP_USER_AGENT'], 'appname' => $appname],
                             function ($message) use ($appname) {
-                                $message->to('moderation@rsb0807.kz', '')->subject("Модерация '" . $appname . "'");
-                                $message->from('support@rsb0807.kz', $appname);
+                                $message->to(env('MAIL_TO_ADDRESS_MODERATION', 'moderation@rsb0807.kz'), '')->subject("Модерация '" . $appname . "'");
+                                $message->from(env('MAIL_FROM_ADDRESS', 'support@rsb0807.kz'), $appname);
                             });
                     }
                 } else {
@@ -1251,16 +1198,9 @@ class ItemController extends Controller
                 $item_find->updated_user_id = Auth::user()->id;
                 $item_find->save();
             }
-            if ($index == 3) {
-                echo " item_find->id = " . $item_find->id;
-            }
             $main->parent_item_id = $item_find->id;
             // заменяем значение в массиве ссылкой на $item вместо значения
             $valits[$index] = $item_find->id;
-            if ($index == 3) {
-                echo " 333 - index = " . $index;
-                echo " 333 - valits[index] = " . $valits[$index];
-            }
         }
         $main->updated_user_id = Auth::user()->id;
         $main->save();
@@ -1285,8 +1225,8 @@ class ItemController extends Controller
                             Mail::send(['html' => 'mail/login_site'], ['remote_addr' => $_SERVER['REMOTE_ADDR'],
                                 'http_user_agent' => $_SERVER['HTTP_USER_AGENT'], 'appname' => $appname],
                                 function ($message) use ($appname) {
-                                    $message->to('moderation@rsb0807.kz', '')->subject("Модерация '" . $appname . "'");
-                                    $message->from('support@rsb0807.kz', $appname);
+                                    $message->to(env('MAIL_TO_ADDRESS_MODERATION', 'moderation@rsb0807.kz'), '')->subject("Модерация '" . $appname . "'");
+                                    $message->from(env('MAIL_FROM_ADDRESS', 'support@rsb0807.kz'), $appname);
                                 });
                         }
 
@@ -1947,7 +1887,7 @@ class ItemController extends Controller
         return Main::where('parent_item_id', $item->id)->exists();
     }
 
-    static function get_items_for_link(Link $link, Project $project)
+    static function get_items_for_link(Link $link, Project $project, Role $role)
     {
         $result_parent_label = '';
         $result_child_base_name = '';
@@ -1979,10 +1919,16 @@ class ItemController extends Controller
                 }
 
                 // список items по выбранному parent_base_id
-                $result_parent_base_items = Item::select(['id', 'base_id', 'name_lang_0', 'name_lang_1', 'name_lang_2', 'name_lang_3'])->where('base_id', $link->parent_base_id)->where('project_id', $project->id)->orderBy($name)->get();
+                $base_right = GlobalController::base_right($link->parent_base, $role);
+                $result_parent_base_items = Item::select(['id', 'base_id', 'name_lang_0', 'name_lang_1', 'name_lang_2', 'name_lang_3', 'created_user_id'])->where('base_id', $link->parent_base_id)->where('project_id', $project->id)->orderBy($name);
+                // Такая же проверка и в GlobalController (function items_right()),
+                // в ItemController (function browser(), get_items_for_link())
+                if ($base_right['is_list_base_byuser'] == true) {
+                    $result_parent_base_items = $result_parent_base_items->where('created_user_id', GlobalController::glo_user_id());
+                }
+                $result_parent_base_items = $result_parent_base_items->get();
                 foreach ($result_parent_base_items as $item) {
                     $result_parent_base_items_options = $result_parent_base_items_options . "<option value='" . $item->id . "'>" . $item->name() . "</option>";
-
                 }
             }
         }

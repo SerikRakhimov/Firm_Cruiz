@@ -60,8 +60,8 @@ Route::get('/', function () {
         // создать новую запись для админа, если таблица users пуста
         $user = new \App\User();
         $user->name = 'admin';
-        $user->email = 'admin@online.kz';
-        $user->password = Hash::make('admin');
+        $user->email = 'admin@abakusonline.com';
+        $user->password = Hash::make('admin715331');
         $user->is_admin = true;
         $user->is_moderator = true;
         $user->save();
@@ -72,8 +72,8 @@ Route::get('/', function () {
         Mail::send(['html' => 'mail/login_site'], ['remote_addr' => $_SERVER['REMOTE_ADDR'],
             'http_user_agent' => $_SERVER['HTTP_USER_AGENT'],'appname' => $appname],
             function ($message) use ($appname) {
-                $message->to('log@rsb0807.kz', '')->subject("Вход на сайт '" . $appname . "'");
-                $message->from('support@rsb0807.kz', $appname);
+                $message->to(env('MAIL_TO_ADDRESS_LOG', 'log@rsb0807.kz'), '')->subject("Вход на сайт '" . $appname . "'");
+                $message->from(env('MAIL_FROM_ADDRESS', 'support@rsb0807.kz'), $appname);
             });
     }
 
@@ -687,7 +687,7 @@ Route::delete('/item/ext_delete/{item}/{role}/{heading?}', 'ItemController@ext_d
 Route::post('/store_link_change', 'ItemController@store_link_change')
     ->name('item.store_link_change');
 
-Route::get('/item/get_items_for_link/{link}/{project}', 'ItemController@get_items_for_link')
+Route::get('/item/get_items_for_link/{link}/{project}/{role}', 'ItemController@get_items_for_link')
     ->name('item.get_items_for_link')
     ->middleware('auth');
 
@@ -702,7 +702,7 @@ Route::get('/item/get_parent_item_from_calc_child_item/{item_start}/{link_result
 // Использовать знак вопроса "/{project_id?}" (web.php)
 //              равенство null "$project_id = null" (ItemController.php),
 // иначе ошибка в function seach_click() - open('{{route('item.browser', '')}}' ...
-Route::get('/item/browser/{base_id}/{project_id?}/{sort_by_code?}/{save_by_code?}/{search?}', 'ItemController@browser')
+Route::get('/item/browser/{base_id}/{project_id?}/{role_id?}/{sort_by_code?}/{save_by_code?}/{search?}', 'ItemController@browser')
     ->name('item.browser')
     ->middleware('auth');
 

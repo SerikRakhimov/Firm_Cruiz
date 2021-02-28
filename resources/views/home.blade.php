@@ -38,134 +38,148 @@
     $is_user = isset($user);
     $is_role = isset($role);
     ?>
-    <p>
-        @if(count($projects)==0)
-            <a class="dropdown-item" href="{{route('project.index_user', Auth::user())}}">
-                {{trans('main.projects')}}
+
+    @if(count($projects)==0)
+        <p>
+        <h5 class="display-5 text-center">
+            <a class="nav-link" href="\home"
+               title="{{trans('main.project_role_selection')}}">
+                "{{trans('main.project_role_selection')}}" - {{trans('main.info_project_role_selection')}}</a>
+        </h5>
+        <h5 class="display-5 text-center">
+            <a href="{{route('project.index_user', Auth::user())}}"
+               title="{{trans('main.projects')}}">
+                "{{trans('main.projects')}}" - {{trans('main.info_projects')}}
             </a>
-            <a class="dropdown-item" href="{{route('access.index_user', Auth::user())}}">
-                {{trans('main.accesses')}}
+        </h5>
+        <h5 class="display-5 text-center">
+            <a class="nav-link" href="{{route('access.index_user', Auth::user())}}"
+               title="{{trans('main.accesses')}}">
+                "{{trans('main.accesses')}}" - {{trans('main.info_accesses')}}
             </a>
+        </h5>
+        </p>
+    @else
+        <p>
+        <h3 class="display-5 text-center">
+            {{trans('main.project_role_selection')}}
+        </h3>
+        </p>
+        <form action="{{route('home.glo_store')}}" method="POST"
+              enctype=multipart/form-data name="form">
+            @csrf
+            @if($is_project)
+                <input type="hidden" name="project_id" value="{{$project->id}}">
+            @else
+                <div class="form-group row">
+                    <div class="col-sm-3 text-right">
+                        <label for="project_id" class="col-form-label">{{trans('main.project')}}<span
+                                class="text-danger">*</span></label>
+                    </div>
+                    <div class="col-sm-7">
+                        <select class="form-control"
+                                name="project_id"
+                                id="project_id"
+                                class="@error('project_id') is-invalid @enderror">
+                            @foreach ($projects as $project)
+                                <option value="{{$project->project_id}}"
+                                >
+                                    {{--                            {{$project->name()}}--}}
+                                    {{Project::findOrFail($project->project_id)->name()}}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('project_id')
+                        <div class="text-danger">
+                            {{$message}}
+                        </div>
+                        @enderror
+                    </div>
+                    <div class="col-sm-2">
+                    </div>
+                </div>
+            @endif
+
+            @if($is_user)
+                <input type="hidden" name="user_id" value="{{$user->id}}">
+            @else
+                <div class="form-group row">
+                    <div class="col-sm-3 text-right">
+                        <label for="user_id" class="col-form-label">{{trans('main.user')}}<span
+                                class="text-danger">*</span></label>
+                    </div>
+                    <div class="col-sm-7">
+                        <select class="form-control"
+                                name="user_id"
+                                id="user_id"
+                                class="@error('user_id') is-invalid @enderror">
+                            @foreach ($users as $user)
+                                <option value="{{$user->id}}"
+                                        @if ($update)
+                                        @if ((old('user_id') ?? ($access->user_id ?? (int) 0)) ==  $user->id)
+                                        selected
+                                    @endif
+                                    @endif
+                                >{{$user->name}}, {{$user->email}}</option>
+                            @endforeach
+                        </select>
+                        @error('user_id')
+                        <div class="text-danger">
+                            {{$message}}
+                        </div>
+                        @enderror
+                    </div>
+                    <div class="col-sm-2">
+                    </div>
+                </div>
+            @endif
+            @if($is_role)
+                <input type="hidden" name="role_id" value="{{$role->id}}">
+            @else
+                <div class="form-group row">
+                    <div class="col-sm-3 text-right">
+                        <label for="role_id" class="col-form-label">{{trans('main.role')}}<span
+                                class="text-danger">*</span></label>
+                    </div>
+                    <div class="col-sm-7">
+                        <select class="form-control"
+                                name="role_id"
+                                id="role_id"
+                                class="@error('role_id') is-invalid @enderror">
+                            @foreach ($roles as $role)
+                                <option value="{{$role->id}}"
+                                        @if ($update)
+                                        @if ((old('role_id') ?? ($access->role_id ?? (int) 0)) ==  $role->id)
+                                        selected
+                                    @endif
+                                    @endif
+                                >{{$role->name()}}</option>
+                            @endforeach
+                        </select>
+                        @error('role_id')
+                        <div class="text-danger">
+                            {{$message}}
+                        </div>
+                        @enderror
+                    </div>
+                    <div class="col-sm-2">
+                    </div>
+                </div>
+            @endif
+            <br>
+            <div class="container-fluid">
+                <div class="row text-center">
+                    <div class="col-12 text-center">
+                        <button type="submit" class="btn btn-dreamer"
+                                title="{{trans('main.login')}}">
+                            <i class="fas fa-running"></i>
+                            {{trans('main.login')}}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
     @endif
-    <h3 class="display-5 text-center">
-        {{trans('main.project_role_selection')}}
-    </h3>
-    </p>
-    <form action="{{route('home.glo_store')}}" method="POST"
-          enctype=multipart/form-data name="form">
-        @csrf
-        @if($is_project)
-            <input type="hidden" name="project_id" value="{{$project->id}}">
-        @else
-            <div class="form-group row">
-                <div class="col-sm-3 text-right">
-                    <label for="project_id" class="col-form-label">{{trans('main.project')}}<span
-                            class="text-danger">*</span></label>
-                </div>
-                <div class="col-sm-7">
-                    <select class="form-control"
-                            name="project_id"
-                            id="project_id"
-                            class="@error('project_id') is-invalid @enderror">
-                        @foreach ($projects as $project)
-                            <option value="{{$project->project_id}}"
-                            >
-                                {{--                            {{$project->name()}}--}}
-                                {{Project::findOrFail($project->project_id)->name()}}
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('project_id')
-                    <div class="text-danger">
-                        {{$message}}
-                    </div>
-                    @enderror
-                </div>
-                <div class="col-sm-2">
-                </div>
-            </div>
-        @endif
-
-        @if($is_user)
-            <input type="hidden" name="user_id" value="{{$user->id}}">
-        @else
-            <div class="form-group row">
-                <div class="col-sm-3 text-right">
-                    <label for="user_id" class="col-form-label">{{trans('main.user')}}<span
-                            class="text-danger">*</span></label>
-                </div>
-                <div class="col-sm-7">
-                    <select class="form-control"
-                            name="user_id"
-                            id="user_id"
-                            class="@error('user_id') is-invalid @enderror">
-                        @foreach ($users as $user)
-                            <option value="{{$user->id}}"
-                                    @if ($update)
-                                    @if ((old('user_id') ?? ($access->user_id ?? (int) 0)) ==  $user->id)
-                                    selected
-                                @endif
-                                @endif
-                            >{{$user->name}}, {{$user->email}}</option>
-                        @endforeach
-                    </select>
-                    @error('user_id')
-                    <div class="text-danger">
-                        {{$message}}
-                    </div>
-                    @enderror
-                </div>
-                <div class="col-sm-2">
-                </div>
-            </div>
-        @endif
-        @if($is_role)
-            <input type="hidden" name="role_id" value="{{$role->id}}">
-        @else
-            <div class="form-group row">
-                <div class="col-sm-3 text-right">
-                    <label for="role_id" class="col-form-label">{{trans('main.role')}}<span
-                            class="text-danger">*</span></label>
-                </div>
-                <div class="col-sm-7">
-                    <select class="form-control"
-                            name="role_id"
-                            id="role_id"
-                            class="@error('role_id') is-invalid @enderror">
-                        @foreach ($roles as $role)
-                            <option value="{{$role->id}}"
-                                    @if ($update)
-                                    @if ((old('role_id') ?? ($access->role_id ?? (int) 0)) ==  $role->id)
-                                    selected
-                                @endif
-                                @endif
-                            >{{$role->name()}}</option>
-                        @endforeach
-                    </select>
-                    @error('role_id')
-                    <div class="text-danger">
-                        {{$message}}
-                    </div>
-                    @enderror
-                </div>
-                <div class="col-sm-2">
-                </div>
-            </div>
-        @endif
-
-        <br>
-        <div class="container-fluid">
-            <div class="row text-center">
-                <div class="col-12 text-center">
-                    <button type="submit" class="btn btn-dreamer"
-                            title="{{trans('main.login')}}">
-                        <i class="fas fa-running"></i>
-                        {{trans('main.login')}}
-                    </button>
-                </div>
-            </div>
-        </div>
-    </form>
 
     @if ($is_user)
         <script>

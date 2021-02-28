@@ -19,15 +19,13 @@
     }
     ?>
     <script>
-        function browse(base_id, project_id,  link_id) {
+        function browse(base_id, project_id, role_id,  link_id) {
             // Нужно, используется в browser.blade.php
             //alert(base_id + " " + link_id);
             window.item_id = document.getElementById(link_id);
             window.item_code = document.getElementById('code' + link_id);
             window.item_name = document.getElementById('name' + link_id);
-            {{--open('{{route('item.browser', '')}}' + '/' + base_id + '/' + project_id + '/1/1', 'browse', 'width=800, height=800');--}}
-            {{--open('{{route('item.browser', '')}}' + '/' + base_id + '/' + project_id + '/1/1', 'browse', 'width=800, height=800');--}}
-            open('{{route('item.browser', '')}}' + '/' + base_id + '/' + project_id + '/1/1', 'browse', 'width=800, height=800');
+            open('{{route('item.browser', '')}}' + '/' + base_id + '/' + project_id + '/' + role_id + '/1/1', 'browse', 'width=800, height=800');
 
         };
     </script>
@@ -238,7 +236,7 @@
                 @continue
             @endif
             <?php
-            $result = ItemController::get_items_for_link($link, $project);
+            $result = ItemController::get_items_for_link($link, $project, $role);
             $items = $result['result_parent_base_items'];
             $code_find = null;
             if ($value != null) {
@@ -324,7 +322,7 @@
                         {{--                            </div>--}}
                         <div class="col-sm-1">
                             <input type="button" value="..." title="{{trans('main.select_from_refer')}}"
-                                   onclick="browse('{{$link->parent_base_id}}','{{$project->id}}','{{$key}}')"
+                                   onclick="browse('{{$link->parent_base_id}}','{{$project->id}}','{{$role->id}}','{{$key}}')"
                                    @if($base_link_right['is_edit_link_read'] == true)
                                    disabled
                                 @endif
@@ -544,87 +542,15 @@
                             @endforeach
                         </div>
                     </fieldset>
+
                     {{--                            если тип корректировки поля - изображение--}}
                 @elseif($link->parent_base->type_is_image())
                     @include('edit.img_link',['update'=>$update, 'base'=>$link->parent_base,'result'=>$result,'value'=>$value, 'name'=>$key,'id'=>"link".$key, 'size'=>"small"])
-                    {{--                    <div class="form-group row">--}}
-                    {{--                        <div class="col-sm-3 text-right">--}}
-                    {{--                            --}}{{--                            Выберите файл - изображение, размером не более 500 Кб--}}
-                    {{--                            <label for="{{$key}}">{{$result['result_parent_label']}}<span--}}
-                    {{--                                    class="text-danger">*</span>--}}
-                    {{--                                @if($update)--}}
-                    {{--                                    @if ($value != null)--}}
-                    {{--                                        <?php--}}
-                    {{--                                        $item_image = Item::find($value);--}}
-                    {{--                                        ?>--}}
-                    {{--                                        @if ($item_image != null)--}}
-                    {{--                                            (сейчас:<a href="{{Storage::url($item_image->filename())}}">--}}
-                    {{--                                                <img src="{{Storage::url($item_image->filename())}}" height="50"--}}
-                    {{--                                                     alt="" title="{{$item_image->title_img()}}">--}}
-                    {{--                                            </a>)--}}
-                    {{--                                        @endif--}}
-                    {{--                                    @endif--}}
-                    {{--                                @endif--}}
-                    {{--                            </label>--}}
-                    {{--                        </div>--}}
-                    {{--                        <div class="col-sm-4">--}}
-                    {{--                            <input type="file"--}}
-                    {{--                                   name="{{$key}}" id="link{{$key}}"--}}
-                    {{--                                   class="@error($key) is-invalid @enderror"--}}
-                    {{--                                   accept="image/*">--}}
-                    {{--                            @error($key)--}}
-                    {{--                            <div class="text-danger">--}}
-                    {{--                                {{$message}}--}}
-                    {{--                            </div>--}}
-                    {{--                            @enderror--}}
-                    {{--                        </div>--}}
-                    {{--                        <div class="col-sm-5-left">--}}
-                    {{--                            <label for="{{$key}}">Выберите другую картинку для изменения, или оставьте--}}
-                    {{--                                существующую</label>--}}
-                    {{--                        </div>--}}
-                    {{--                    </div>--}}
-                    {{--                            если тип корректировки поля - документ--}}
+
+                        {{--                            если тип корректировки поля - документ--}}
                 @elseif($link->parent_base->type_is_document())
                     @include('edit.doc_link',['update'=>$update, 'base'=>$link->parent_base,'result'=>$result,'value'=>$value, 'name'=>$key,'id'=>"link".$key])
-                    {{--                        <div class="form-group row">--}}
-                    {{--                        <div class="col-sm-3 text-right">--}}
-                    {{--                            --}}{{--Выберите файл - документ (.xls, .xlsx, .pdf, .doc, .docx, .rtf, .txt)--}}
-                    {{--                            <label for="{{$key}}">{{$result['result_parent_label']}}(.xls, .xlsx, .pdf, .doc, .docx,--}}
-                    {{--                                .rtf, .txt)<span--}}
-                    {{--                                    class="text-danger">*</span>--}}
-                    {{--                                @if($update)--}}
-                    {{--                                    @if ($value != null)--}}
-                    {{--                                        <?php--}}
-                    {{--                                        $item_image = Item::find($value);--}}
-                    {{--                                        ?>--}}
-                    {{--                                        @if ($item_image != null)--}}
-                    {{--                                            (сейчас:--}}
-                    {{--                                            <a href="{{Storage::url($item_image->filename())}}" target="_blank">--}}
-                    {{--                                                Открыть документ--}}
-                    {{--                                            </a>--}}
-                    {{--                                            )--}}
-                    {{--                                        @endif--}}
-                    {{--                                    @endif--}}
-                    {{--                                @endif--}}
-                    {{--                            </label>--}}
-                    {{--                        </div>--}}
-                    {{--                        <div class="col-sm-4">--}}
-                    {{--                            <input type="file"--}}
-                    {{--                                   name="{{$key}}" id="link{{$key}}"--}}
-                    {{--                                   class="@error($key) is-invalid @enderror"--}}
-                    {{--                                   accept=".xls, .xlsx, .pdf, .doc, .docx, .rtf, .txt">--}}
-                    {{--                            @error($key)--}}
-                    {{--                            <div class="text-danger">--}}
-                    {{--                                {{$message}}--}}
-                    {{--                            </div>--}}
-                    {{--                            @enderror--}}
-                    {{--                        </div>--}}
-                    {{--                        <div class="col-sm-5-left">--}}
-                    {{--                            <label for="{{$key}}">Выберите другую картинку для изменения, или оставьте--}}
-                    {{--                                существующую</label>--}}
-                    {{--                        </div>--}}
-                    {{--                    </div>--}}
-                    {{--                                если тип корректировки поля - список--}}
+
                 @elseif($link->parent_base->type_is_list())
                     <div class="form-group row">
                         <div class="col-sm-3 text-right">

@@ -226,4 +226,10 @@ return [
     'only_latin_characters_numbers_and_special_characters_are_allowed'=>'Only Latin characters, numbers, and special characters are allowed',
     'all_letters_must_be_lowercase'=>'All letters must be lowercase',
     'space'=>'Space',
+    'info_projects' => 'Create  projects based on templates',
+    'info_accesses' => 'Connect to projects of other users',
+    'info_project_role_selection'=>'Start to run projects',
+    'mainmenu'=>'Main menu',
+    'app_info_first'=>'The first cloud-based multilingual universal',
+    'app_info_second'=>'settlement accounting platform',
 ];

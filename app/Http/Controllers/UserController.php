@@ -22,7 +22,7 @@ class UserController extends Controller
 {
     protected function rules()
     {
-        // Похожие строки и в RegisterController.php
+        //c Похожие строки и в RegisterController.php
         // В частности: в этом файле использовать такие проверки
         //     'password' => ['required', 'string', 'min:8'],
         //    'confirm_password' => ['min:8','same:password'],
@@ -30,7 +30,7 @@ class UserController extends Controller
             'name' => ['required', 'string', 'max:255', 'unique:users', new IsOneWordUser(), new IsLatinUser(), new IsLowerUser()],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8'],
-            'confirm_password' => ['min:8','same:password'],
+            'confirm_password' => ['min:8', 'same:password'],
         ];
     }
 
@@ -52,7 +52,7 @@ class UserController extends Controller
     {
         return [
             'password' => ['required', 'string', 'min:8'],
-            'confirm_password' => ['min:8','same:password'],
+            'confirm_password' => ['min:8', 'same:password'],
         ];
     }
 
@@ -137,11 +137,15 @@ class UserController extends Controller
         $user->fill($data);
 
         $this->set($request, $user);
-
-        if ($request->session()->has('users_previous_url')) {
-            return redirect(session('users_previous_url'));
-        } else {
-            return redirect()->back();
+        if (Auth::user()->isAdmin()) {
+            if ($request->session()->has('users_previous_url')) {
+                return redirect(session('users_previous_url'));
+            } else {
+                return redirect()->back();
+            }
+        }
+        else{
+            return redirect()->route('user.show', ['user' => $user]);
         }
     }
 

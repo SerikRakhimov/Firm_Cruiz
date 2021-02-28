@@ -226,4 +226,10 @@ return [
     'only_latin_characters_numbers_and_special_characters_are_allowed'=>'Допустимы только символы латинского алфавита, цифры и спецсимволы',
     'all_letters_must_be_lowercase'=>'Все буквы должны быть строчными',
     'space'=>'Пространство',
+    'info_projects' => 'Создавайте свои проекты на основе шаблонов',
+    'info_accesses' => 'Подключайтесь к проектам других пользователей',
+    'info_project_role_selection'=>'Запуск на выполнение проектов',
+    'mainmenu'=>'Главное меню',
+    'app_info_first'=>'Первая облачная мультиязычная универсальная',
+    'app_info_second'=>'расчетная учетная платформа',
 ];
