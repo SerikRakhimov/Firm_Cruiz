@@ -95,6 +95,7 @@
                 <div class="title_small m-b-md">
                     {{trans('main.app_info_second')}}
                 </div>
+                <p><a href="support@abakusonline.com">support@abakusonline.com</a></p>
 {{--                <div class="title m-b-md">--}}
 {{--                    Abakus - учетная платформа--}}
 {{--                </div>--}}
