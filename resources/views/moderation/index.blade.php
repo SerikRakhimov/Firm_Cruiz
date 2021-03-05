@@ -48,9 +48,6 @@
                     </a>
                 </td>
                 <td class="text-center">
-                    <a href="{{Storage::url($item->filename(true))}}">
-                        <img src="{{Storage::url($item->filename(true))}}" height="50"
-                             alt="" title="{{$item->title_img()}}"></a>
                     @include('view.img',['item'=>$item, 'size'=>"small", 'filenametrue'=>true])
                 </td>
                 <td class="text-center">
