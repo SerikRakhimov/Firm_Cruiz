@@ -16,6 +16,10 @@ class ModerationController extends Controller
 
     function index()
     {
+        if (!
+        Auth::user()->isModerator()) {
+            return null;
+        }
         $items = Item::select(DB::Raw('items.*'))
             ->join('bases', 'items.base_id', '=', 'bases.id')
             ->where('bases.type_is_image', true)
@@ -29,6 +33,10 @@ class ModerationController extends Controller
 
     function show(Item $item)
     {
+        if (!
+        Auth::user()->isModerator()) {
+            return null;
+        }
         return view('moderation/show', ['type_form' => 'show', 'item' => $item]);
     }
 
