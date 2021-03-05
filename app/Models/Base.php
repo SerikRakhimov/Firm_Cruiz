@@ -184,25 +184,25 @@ class Base extends Model
     function name_is_required_lst_num_str_img_doc()
     {
         return $this->is_required_lst_num_str_img_doc == "1" ? html_entity_decode('	&#9745;')
-            : ($this->is_required_lst_num_str_img_doc == "0" ? html_entity_decode('&#65794;') : trans('main.empty'));
+            : ($this->is_required_lst_num_str_img_doc == "0" ? html_entity_decode('&#10065;') : trans('main.empty'));
     }
 
     function name_is_one_value_lst_str()
     {
         return $this->is_one_value_lst_str == "1" ? html_entity_decode('	&#9745;')
-            : ($this->is_one_value_lst_str == "0" ? html_entity_decode('&#65794;') : trans('main.empty'));
+            : ($this->is_one_value_lst_str == "0" ? html_entity_decode('&#10065;') : trans('main.empty'));
     }
 
     function name_is_calcname_lst()
     {
         return $this->is_calcname_lst == "1" ? html_entity_decode('	&#9745;')
-            : ($this->is_calcname_lst == "0" ? html_entity_decode('&#65794;') : trans('main.empty'));
+            : ($this->is_calcname_lst == "0" ? html_entity_decode('&#10065;') : trans('main.empty'));
     }
 
     function name_is_same_small_calcname()
     {
         return $this->is_same_small_calcname == "1" ? html_entity_decode('	&#9745;')
-            : ($this->is_same_small_calcname == "0" ? html_entity_decode('&#65794;') : trans('main.empty'));
+            : ($this->is_same_small_calcname == "0" ? html_entity_decode('&#10065;') : trans('main.empty'));
     }
 
     function number_format()

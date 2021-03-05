@@ -40,7 +40,7 @@ class GlobalController extends Controller
     static function name_is_boolean($value)
     {
         return $value == true ? html_entity_decode('	&#9745;')
-            : ($value == false ? html_entity_decode('&#65794;') : trans('main.empty'));
+            : ($value == false ? html_entity_decode('&#10065;') : trans('main.empty'));
     }
 
     static function base_right(Base $base, Role $role, bool $is_no_sndb_pd_rule = false)
@@ -265,7 +265,8 @@ class GlobalController extends Controller
         return trans('main.image_is_missing');
     }
 
-//  Если тип-вычисляемое поле и показывать вычисляемое поле
+//  Если тип-не вычисляемое поле и показывать вычисляемое поле
+//  или если тип-не вычисляемое натименование
     static function is_base_calcname_enable($base, $base_right)
     {
         return ($base->is_calcname_lst == true && $base_right['is_all_base_calcname_enable'] == true)

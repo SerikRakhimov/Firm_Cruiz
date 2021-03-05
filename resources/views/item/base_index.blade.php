@@ -112,7 +112,8 @@
                             </a>
                         </td>
                     @endif
-                    {{--            если тип-вычисляемое поле и показывать вычисляемое поле--}}
+{{--                       Если тип-не вычисляемое поле и показывать вычисляемое поле--}}
+{{--                       или если тип-не вычисляемое натименование--}}
                     {{--            похожая проверка в ext_show.blade.php--}}
                     @if(GlobalController::is_base_calcname_enable($base, $base_right))
                         <td @include('layouts.class_from_base',['base'=>$base])>

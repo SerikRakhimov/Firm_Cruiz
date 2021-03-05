@@ -90,8 +90,9 @@ class Item extends Model
                 }
             } elseif ($base_find->type_is_boolean()) {
                 //    Похожие строки в Base.php
-                $result = $this->name_lang_0 == "1" ? html_entity_decode('	&#9745;')
-                    : ($this->name_lang_0 == "0" ? html_entity_decode('&#65794;') : trans('main.empty'));
+                // #65794 - ранее был пустой квадратик
+                $result = $this->name_lang_0 == "1" ? html_entity_decode('  &#9745;')
+                    : ($this->name_lang_0 == "0" ? html_entity_decode('&#10065;') : trans('main.empty'));
                 //
             } else {
                 $index = array_search(App::getLocale(), config('app.locales'));
@@ -123,8 +124,8 @@ class Item extends Model
                     $name = date_create($name)->Format(trans('main.format_date'));
                 } elseif ($base_find->type_is_boolean()) {
                     //    Похожие строки в Base.php
-                    $name = $name == "1" ? html_entity_decode('	555&#9745;')
-                        : ($name == "0" ? html_entity_decode('&#65794;') : trans('main.empty'));
+                    $name = $name == "1" ? html_entity_decode('	&#9745;')
+                        : ($name == "0" ? html_entity_decode('&#10065;') : trans('main.empty'));
                     //
                 }
             }
