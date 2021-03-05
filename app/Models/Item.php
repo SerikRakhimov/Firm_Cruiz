@@ -198,7 +198,7 @@ class Item extends Model
         return $result;
     }
 
-//    // Возвращает true, если статус =  "не прошло модерацию"  и есть комментарий
+    // Возвращает true, если статус =  "не прошло модерацию"  и есть комментарий
 //    function is_no_moderation_info()
 //    {
 //        $result = false;
