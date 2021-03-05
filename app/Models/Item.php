@@ -195,29 +195,29 @@ class Item extends Model
         return $result;
     }
 
-    // Возвращает true, если статус =  "не прошло модерацию"  и есть комментарий
-    function is_no_moderation_info()
-    {
-        $result = false;
-        if ($this->base->type_is_image() == true) {
-            // Показывать для пользователя, создавшего фото
-            if ($this->created_user_id == Auth::user()->id) {
-                if ($this->base->is_to_moderate_image == true) {
-                    // Не прошло модерацию
-                    if ($this->name_lang_1 == "2") {
-                        $result = trans('main.did_not_pass_the_moderation');
-                        if ($this->name_lang_2 != "") {
-                            $result = true;
-                        }
-                    }
-                }
-            }
-        }
-        return $result;
-    }
+//    // Возвращает true, если статус =  "не прошло модерацию"  и есть комментарий
+//    function is_no_moderation_info()
+//    {
+//        $result = false;
+//        if ($this->base->type_is_image() == true) {
+//            // Показывать для пользователя, создавшего фото
+//            if ($this->created_user_id == Auth::user()->id) {
+//                if ($this->base->is_to_moderate_image == true) {
+//                    // Не прошло модерацию
+//                    if ($this->name_lang_1 == "2") {
+//                        $result = trans('main.did_not_pass_the_moderation');
+//                        if ($this->name_lang_2 != "") {
+//                            $result = true;
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        return $result;
+//    }
 
-    // Возвращает true, если статус =  "на модерации и не прошло модерацию"  и есть комментарий
-    function is_moderation()
+    // Возвращает true, если статус =  "на модерации и не прошло модерацию"
+    function is_moderation_info()
     {
         $result = false;
         if ($this->base->type_is_image() == true) {

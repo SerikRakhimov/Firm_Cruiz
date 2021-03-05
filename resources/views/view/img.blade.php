@@ -16,7 +16,7 @@ use \App\Http\Controllers\GlobalController;
                              @include('types.img.height',['size'=>$size])
                                  alt="" title="{{$item->title_img()}}">
                     </a>
-                    @if($item->is_moderation() == true)
+                    @if($item->is_moderation_info() == true)
                         <div class="text-danger">
                             {{$item->title_img()}}</div>
                     @endif
