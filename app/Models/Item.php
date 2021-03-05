@@ -162,10 +162,10 @@ class Item extends Model
                     if ($this->base->is_to_moderate_image == true) {
                         // На модерации
                         if ($this->name_lang_1 == "3") {
-                            $result = "Storage::on_moderation.png";
+                            $result = "on_moderation.png";
                         } // Не прошло модерацию
                         elseif ($this->name_lang_1 == "2") {
-                            $result = "Storage::did_not_pass_the_moderation.png";
+                            $result = "did_not_pass_the_moderation.png";
                         }
                     }
                 }
