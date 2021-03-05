@@ -186,8 +186,11 @@ class Item extends Model
                 } // Не прошло модерацию
                 elseif ($this->name_lang_1 == "2") {
                     $result = trans('main.did_not_pass_the_moderation');
-                    if ($this->name_lang_2 != "") {
-                        $result = $result . ": " . $this->name_lang_2;
+                    // Показывать для пользователя, создавшего фото
+                    if ($this->created_user_id == Auth::user()->id) {
+                        if ($this->name_lang_2 != "") {
+                            $result = $result . ": " . $this->name_lang_2;
+                        }
                     }
                 }
             }
