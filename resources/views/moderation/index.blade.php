@@ -48,7 +48,7 @@
                     </a>
                 </td>
                 <td class="text-center">
-                    <a href="{{Storage::url($item->filename())}}">
+                    <a href="{{Storage::url($item->filename(true))}}">
                         <img src="{{Storage::url($item->filename(true))}}" height="50"
                              alt="" title="{{$item->filename(true)}}"></a>
                 </td>
