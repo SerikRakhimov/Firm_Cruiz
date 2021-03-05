@@ -217,6 +217,7 @@ class Item extends Model
 //    }
 
     // Возвращает true, если статус =  "на модерации и не прошло модерацию"
+    // для пользователя, создавшего фото
     function is_moderation_info()
     {
         $result = false;
