@@ -6,11 +6,11 @@
         </div>
         <div class="col-sm-4">
             @if($item->img_doc_exist())
-                {{mb_strtolower(trans('main.now'))}}:<a href="{{Storage::url($item->filename(true))}}">
+                ({{mb_strtolower(trans('main.now'))}}:<a href="{{Storage::url($item->filename(true))}}">
                     <img src="{{Storage::url($item->filename(true))}}"
                          height=@include('types.img.height',['size'=>$size])
                              alt="" title="{{$item->title_img()}}">
-                </a>
+                </a>)
                 @endif
                 </label>
         </div>
