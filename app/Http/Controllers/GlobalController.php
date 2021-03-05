@@ -261,6 +261,7 @@ class GlobalController extends Controller
 
     static function image_is_missing_html()
     {
+        //        Изображение отсутствует
         return trans('main.image_is_missing');
     }
 

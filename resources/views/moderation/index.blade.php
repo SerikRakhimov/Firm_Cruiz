@@ -50,7 +50,7 @@
                 <td class="text-center">
                     <a href="{{Storage::url($item->filename(true))}}">
                         <img src="{{Storage::url($item->filename(true))}}" height="50"
-                             alt="" title="{{$item->filename(true)}}"></a>
+                             alt="" title="{{$item->title_img()}}"></a>
                 </td>
                 <td class="text-center">
                     <a href="{{route('moderation.show',$item)}}" title="{{trans('main.show')}}">
