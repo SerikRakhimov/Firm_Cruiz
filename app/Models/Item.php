@@ -123,7 +123,7 @@ class Item extends Model
                     $name = date_create($name)->Format(trans('main.format_date'));
                 } elseif ($base_find->type_is_boolean()) {
                     //    Похожие строки в Base.php
-                    $name = $name == "1" ? html_entity_decode('	&#9745;')
+                    $name = $name == "1" ? html_entity_decode('	555&#9745;')
                         : ($name == "0" ? html_entity_decode('&#65794;') : trans('main.empty'));
                     //
                 }
