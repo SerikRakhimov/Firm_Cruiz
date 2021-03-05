@@ -113,7 +113,7 @@ class Item extends Model
         // ['1', '2', '3', '4'] - тут разницы нет, какие значения хранятся; главное, чтобы что-то хранилось
         $main_array = ['1', '2', '3', '4'];
 //        foreach (session('glo_menu_main') as $lang_key => $lang_value) {
-            foreach ($main_array as $lang_key => $lang_value) {
+        foreach ($main_array as $lang_key => $lang_value) {
             $name = "";  // нужно, не удалять
             $base_find = $this->base;
             if ($base_find) {
@@ -209,6 +209,28 @@ class Item extends Model
                         if ($this->name_lang_2 != "") {
                             $result = true;
                         }
+                    }
+                }
+            }
+        }
+        return $result;
+    }
+
+    // Возвращает true, если статус =  "на модерации и не прошло модерацию"  и есть комментарий
+    function is_moderation()
+    {
+        $result = false;
+        if ($this->base->type_is_image() == true) {
+            // Показывать для пользователя, создавшего фото
+            if ($this->created_user_id == Auth::user()->id) {
+                if ($this->base->is_to_moderate_image == true) {
+                    // На модерации
+                    if ($this->name_lang_1 == "3") {
+                        $result = true;
+                    }
+                    // Не прошло модерацию
+                    if ($this->name_lang_1 == "2") {
+                        $result = true;
                     }
                 }
             }
