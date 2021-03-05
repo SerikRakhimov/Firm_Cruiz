@@ -64,7 +64,7 @@
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn btn-primary">
-                                    {{trans('main.register')}}
+                                    <i class="fas user-check d-inline"></i>&nbsp;{{trans('main.register')}}
                                 </button>
                             </div>
                         </div>
