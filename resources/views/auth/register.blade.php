@@ -63,7 +63,7 @@
 
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-dreamer mb-1 mb-sm-0">
                                     <i class="fas fa-user-plus d-inline"></i>&nbsp;{{trans('main.register')}}
                                 </button>
                             </div>

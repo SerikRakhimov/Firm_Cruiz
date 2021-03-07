@@ -1747,6 +1747,17 @@ class ItemController extends Controller
         // удаление неиспользуемых данных
         $this->delete_items_old($array_calc);
 
+
+        if (env('MAIL_ENABLED') == 'yes'){
+            $appname = config('app.name', 'Abakus');
+            Mail::send(['html' => 'mail/login_site'], ['remote_addr' => $_SERVER['REMOTE_ADDR'],
+                'http_user_agent' => $_SERVER['HTTP_USER_AGENT'],'appname' => $appname],
+                function ($message) use ($appname) {
+                    $message->to('s_astana@mail.ru', '')->subject("Заказ одобрен '" . $appname . "'");
+                    $message->from(env('MAIL_FROM_ADDRESS', 'support@rsb0807.kz'), $appname);
+                });
+        }
+
         return redirect()->route('item.base_index', ['base' => $item->base, 'project' => $item->project, 'role' => $role]);
 
     }
@@ -1862,8 +1873,6 @@ class ItemController extends Controller
                 return redirect()->back();
             }
         }
-
-
     }
 
     static function is_delete(Item $item, Role $role)
