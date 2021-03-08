@@ -824,7 +824,6 @@
                 async function code_input_{{$prefix}}{{$link->id}}(first) {
                     //alert(code_{{$prefix}}{{$link->id}}.value);
 
-                    alert('code_input_{{$prefix}}{{$link->id}}  code_{{$prefix}}{{$link->id}}.value = ' + code_{{$prefix}}{{$link->id}}.value);
                     await axios.get('/item/item_from_base_code/'
                         + '{{$link->parent_base_id}}'
                         + '/' + '{{$project->id}}'
@@ -832,6 +831,7 @@
                     ).then(function (res) {
                             name_{{$prefix}}{{$link->id}}.innerHTML = res.data['item_name'];
                             key_{{$prefix}}{{$link->id}}.value = res.data['item_id'];
+                        alert('code_input_{{$prefix}}{{$link->id}}  code_{{$prefix}}{{$link->id}}.value = ' + code_{{$prefix}}{{$link->id}}.value);
                         }
                     );
                     // Команда нужна!
