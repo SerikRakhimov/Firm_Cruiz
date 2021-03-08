@@ -1015,7 +1015,7 @@ class ItemController extends Controller
                                 $item_find = new Item();
                                 $item_find->base_id = $value->link_to->parent_base_id;
                                 // Похожие строки вверху
-                                $item_find->code = uniqid($item_find->id . '_', true);
+                                $item_find->code = uniqid($item_find->base_id . '_', true);
                                 // присваивание полям наименование строкового значение числа
                                 foreach (config('app.locales') as $key => $value) {
                                     $item_find['name_lang_' . $key] = $seek_value;
@@ -1079,7 +1079,7 @@ class ItemController extends Controller
             }
             $item_find->base_id = $link->parent_base_id;
             // Похожая строка вверху и внизу
-            $item_find->code = uniqid($item_find->id . '_', true);
+            $item_find->code = uniqid($item_find->base_id . '_', true);
             //присваивание полям наименование строкового значение числа
 //            $i = 0;
 //            foreach (config('app.locales') as $lang_key => $lang_value) {
@@ -1151,7 +1151,7 @@ class ItemController extends Controller
                 $item_find = new Item();
                 $item_find->base_id = $link->parent_base_id;
                 // Похожая строка вверху и внизу
-                $item_find->code = uniqid($item_find->id . '_', true);
+                $item_find->code = uniqid($item_find->base_id . '_', true);
                 // присваивание полям наименование строкового значение числа
                 $i = 0;
                 foreach (config('app.locales') as $lang_key => $lang_value) {
@@ -1187,7 +1187,7 @@ class ItemController extends Controller
                 $item_find = new Item();
                 $item_find->base_id = $link->parent_base_id;
                 // Похожие строки вверху
-                $item_find->code = uniqid($item_find->id . '_', true);
+                $item_find->code = uniqid($item_find->base_id . '_', true);
                 // присваивание полям наименование строкового значение числа
                 foreach (config('app.locales') as $key => $value) {
                     $item_find['name_lang_' . $key] = $values[$index];
@@ -1747,16 +1747,15 @@ class ItemController extends Controller
         // удаление неиспользуемых данных
         $this->delete_items_old($array_calc);
 
-
-        if (env('MAIL_ENABLED') == 'yes'){
-            $appname = config('app.name', 'Abakus');
-            Mail::send(['html' => 'mail/login_site'], ['remote_addr' => $_SERVER['REMOTE_ADDR'],
-                'http_user_agent' => $_SERVER['HTTP_USER_AGENT'],'appname' => $appname],
-                function ($message) use ($appname) {
-                    $message->to('s_astana@mail.ru', '')->subject("Заказ одобрен '" . $appname . "'");
-                    $message->from(env('MAIL_FROM_ADDRESS', 'support@rsb0807.kz'), $appname);
-                });
-        }
+//        if (env('MAIL_ENABLED') == 'yes'){
+//            $appname = config('app.name', 'Abakus');
+//            Mail::send(['html' => 'mail/login_site'], ['remote_addr' => $_SERVER['REMOTE_ADDR'],
+//                'http_user_agent' => $_SERVER['HTTP_USER_AGENT'],'appname' => $appname],
+//                function ($message) use ($appname) {
+//                    $message->to('s_astana@mail.ru', '')->subject("Заказ одобрен '" . $appname . "'");
+//                    $message->from(env('MAIL_FROM_ADDRESS', 'support@rsb0807.kz'), $appname);
+//                });
+//        }
 
         return redirect()->route('item.base_index', ['base' => $item->base, 'project' => $item->project, 'role' => $role]);
 

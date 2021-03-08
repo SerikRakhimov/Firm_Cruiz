@@ -1001,7 +1001,7 @@
     <script>
         window.onload = function () {
             // массив функций нужен, что при window.onload запустить обработчики всех полей
-            //alert('onload');
+            alert('onload');
             @foreach($functions as $value)
                 {{$value}}(true);
             @endforeach
