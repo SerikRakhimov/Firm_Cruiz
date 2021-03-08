@@ -823,6 +823,8 @@
                 // async - await нужно, https://tproger.ru/translations/understanding-async-await-in-javascript/
                 async function code_input_{{$prefix}}{{$link->id}}(first) {
                     //alert(code_{{$prefix}}{{$link->id}}.value);
+
+                    alert('code_input_{{$prefix}}{{$link->id}}  code_{{$prefix}}{{$link->id}}.value = ' + code_{{$prefix}}{{$link->id}}.value);
                     await axios.get('/item/item_from_base_code/'
                         + '{{$link->parent_base_id}}'
                         + '/' + '{{$project->id}}'
@@ -835,7 +837,6 @@
                     // Команда нужна!
                     document.getElementById('code{{$link->id}}').dispatchEvent(new Event('change'));
 
-                    alert('code_input_{{$prefix}}{{$link->id}}');
                     on_parent_refer();
                     {{-- http://javascript.ru/forum/events/76761-programmno-vyzvat-sobytie-change.html#post503465--}}
                     {{-- вызываем состояние "элемент изменился", в связи с этим запустятся функции - обработчики "change"--}}
