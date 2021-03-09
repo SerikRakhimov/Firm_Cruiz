@@ -2125,7 +2125,12 @@ class ItemController extends Controller
                         $result_item = $item;
                         $result_item_id = $item->id;
                         if ($item->base->type_is_image() || $item->base->type_is_document()) {
-                            $result_item_name = "<a href='" . Storage::url($item->filename()) . "'><img src='" . Storage::url($item->filename()) . "' height='50' alt='' title='" . $item->filename() . "'></a>";
+//                            $result_item_name = "<a href='" . Storage::url($item->filename()) . "'><img src='" . Storage::url($item->filename()) . "' height='50' alt='' title='" . $item->filename() . "'></a>";
+                            if ($item->base->type_is_image()) {
+                                $result_item_name = "<img src='" . Storage::url($item->filename()) . "' height='250' alt='' title='" . $item->title_img() . "'>";
+                            }else{
+                                $result_item_name = "<a href='" . Storage::url($item->filename()) . "'><img src='" . Storage::url($item->filename()) . "' height='50' alt='' title='" . $item->filename() . "'></a>";
+                            }
                         } else {
                             $result_item_name = $item->name();
                         }

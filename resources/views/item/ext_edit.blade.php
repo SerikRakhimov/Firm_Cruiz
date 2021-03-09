@@ -19,7 +19,7 @@
     }
     ?>
     <script>
-        function browse(base_id, project_id, role_id,  link_id) {
+        function browse(base_id, project_id, role_id, link_id) {
             // Нужно, используется в browser.blade.php
             //alert(base_id + " " + link_id);
             window.item_id = document.getElementById(link_id);
@@ -57,7 +57,7 @@
         @if ($update)
             @method('PUT')
         @endif
-{{--        <input type="hidden" name="base_id" value="{{$base->id}}">--}}
+        {{--        <input type="hidden" name="base_id" value="{{$base->id}}">--}}
         @if ($update)
             <div class="form-group row">
                 <div class="col-sm-3 text-right">
@@ -293,7 +293,10 @@
                                    placeholder=""
 
                                    {{--                                       value="{{old('code{{$key}}') ?? ($item->code ?? ($base->is_code_number == true?($update ?"0":$code_new):""))}}"--}}
+
                                    value="{{old('code'.$key) ?? $code_find??''}}"
+
+                                   {{--                                   value="{{(old('code'.$key)) ?? (($value != null) ? Item::find($value)->code: '0')}}"--}}
                                    {{--                                       {{$link->parent_base->is_code_number == true?" step = 0":""}}--}}
                                    {{--                                       @if($link->parent_base->is_code_number == true  && $link->parent_base->is_limit_sign_code == true)--}}
                                    {{--                                       min="0" max="{{$link->parent_base->number_format()}}"--}}
@@ -547,7 +550,7 @@
                 @elseif($link->parent_base->type_is_image())
                     @include('edit.img_link',['update'=>$update, 'base'=>$link->parent_base,'result'=>$result,'value'=>$value, 'name'=>$key,'id'=>"link".$key, 'size'=>"small"])
 
-                        {{--                            если тип корректировки поля - документ--}}
+                    {{--                            если тип корректировки поля - документ--}}
                 @elseif($link->parent_base->type_is_document())
                     @include('edit.doc_link',['update'=>$update, 'base'=>$link->parent_base,'result'=>$result,'value'=>$value, 'name'=>$key,'id'=>"link".$key])
 
@@ -618,7 +621,7 @@
             </div>
             <div class="col-sm-5 text-left">
                 <button type="button" class="btn btn-dreamer" title="{{trans('main.cancel')}}"
-                        @include('layouts.item.base_index.previous_url')
+                    @include('layouts.item.base_index.previous_url')
                 >
                     <i class="fas fa-arrow-left d-inline"></i>
                     {{trans('main.cancel')}}
@@ -746,14 +749,15 @@
                 var parent_base_id{{$prefix}}{{$link->id}} = document.getElementById('link{{$link->id}}');
 
                 <?php
-                //                $functs_parent_refer[count($functs_parent_refer)] = "link_id_change_" . $prefix . $link->id;
+                $functs_parent_refer[count($functs_parent_refer)] = "link_id_change_" . $prefix . $link->id;
                 //           $functions[count($functions)] = "link_id_change_" . $prefix . $link->id;
                 ?>
                 function link_id_change_{{$prefix}}{{$link->id}}(first = false) {
                     //alert('{{$link->id}} - {{$link_parent->id}} - {{$const_link_id_start}} - {{$const_link_start->parent_base->is_code_needed}} - {{$const_link_start->parent_is_enter_refer}}');
-                    //alert(child_base_id{{$prefix}}{{$link->id}}.value);
+                    //alert('child_base_id{{$prefix}}{{$link->id}}.value = ' + child_base_id{{$prefix}}{{$link->id}}.value);
                     if (child_base_id{{$prefix}}{{$link->id}}.value == 0) {
                         parent_base_id{{$prefix}}{{$link->id}}.innerHTML = "{{trans('main.no_information') . '!'}}";
+                        //alert('---->'+"{{trans('main.no_information') . '!'}}")
                     } else {
                         axios.get('/item/get_parent_item_from_calc_child_item/'
                             + child_base_id{{$prefix}}{{$link->id}}.value
@@ -767,10 +771,13 @@
                                 @endif
                             }
                         );
+                        // При просмотре фото может неправильно работать при просмотре фото по связанному полю - проэтому закомментарено
+                        // вызываем состояние "элемент изменился", в связи с этим запустятся функции - обработчики "change"
+                        // child_code_id{{$prefix}}{{$link->id}}.dispatchEvent(new Event('input'));
                     }
                 }
-
-                child_code_id{{$prefix}}{{$link->id}}.addEventListener("change", link_id_change_{{$prefix}}{{$link->id}});
+                // Эта команда не нужна
+                //child_code_id{{$prefix}}{{$link->id}}.addEventListener("change", link_id_change_{{$prefix}}{{$link->id}});
 
                     @elseif($const_link_start->parent_base->type_is_list())
                 var child_base_id{{$prefix}}{{$link->id}} = document.getElementById('link{{$const_link_id_start}}');
@@ -814,38 +821,10 @@
                 var code_{{$prefix}}{{$link->id}} = document.getElementById('code{{$link->id}}');
                 var name_{{$prefix}}{{$link->id}} = document.getElementById('name{{$link->id}}');
                 var key_{{$prefix}}{{$link->id}} = document.getElementById('{{$link->id}}');
+
                 {{--                @if($link->parent_base->is_code_needed == true  && $link->parent_base->is_code_number == true  && $link->parent_base->is_limit_sign_code == true--}}
                 {{--&& $link->parent_base->is_code_zeros == true  && $link->parent_base->significance_code > 0)--}}
                 @if($link->parent_base->is_code_needed == true  && $link->parent_base->is_code_number == true)
-                <?php
-                $functions[count($functions)] = "code_input_" . $prefix . $link->id;
-                ?>
-                // async - await нужно, https://tproger.ru/translations/understanding-async-await-in-javascript/
-                async function code_input_{{$prefix}}{{$link->id}}(first) {
-                    //alert(code_{{$prefix}}{{$link->id}}.value);
-
-                    await axios.get('/item/item_from_base_code/'
-                        + '{{$link->parent_base_id}}'
-                        + '/' + '{{$project->id}}'
-                        + '/' + code_{{$prefix}}{{$link->id}}.value
-                    ).then(function (res) {
-                            name_{{$prefix}}{{$link->id}}.innerHTML = res.data['item_name'];
-                            key_{{$prefix}}{{$link->id}}.value = res.data['item_id'];
-                        alert('code_input_{{$prefix}}{{$link->id}}  code_{{$prefix}}{{$link->id}}.value = ' + code_{{$prefix}}{{$link->id}}.value);
-                        }
-                    );
-                    // Команда нужна!
-                    document.getElementById('code{{$link->id}}').dispatchEvent(new Event('change'));
-
-                    on_parent_refer();
-                    {{-- http://javascript.ru/forum/events/76761-programmno-vyzvat-sobytie-change.html#post503465--}}
-                    {{-- вызываем состояние "элемент изменился", в связи с этим запустятся функции - обработчики "change"--}}
-                    {{--document.getElementById('code{{$link->id}}').dispatchEvent(new Event('change'));--}}
-                }
-
-                code_{{$prefix}}{{$link->id}}.addEventListener("input", code_input_{{$prefix}}{{$link->id}});
-                //code_{{$prefix}}{{$link->id}}.addEventListener("change", code_change_{{$prefix}}{{$link->id}});
-
                 @if($link->parent_base->is_limit_sign_code == true && $link->parent_base->is_code_zeros == true  && $link->parent_base->significance_code > 0)
                 <?php
                 $functions[count($functions)] = "code_change_" . $prefix . $link->id;
@@ -855,13 +834,53 @@
                     numDigits = {{$link->parent_base->significance_code}};
                     code_{{$prefix}}{{$link->id}}.value = numDigits >= numStr.length ? Array.apply(null, {length: numDigits - numStr.length + 1}).join("0") + numStr : numStr.substring(0, numDigits);
                     // http://javascript.ru/forum/events/76761-programmno-vyzvat-sobytie-change.html#post503465
+
                     // вызываем состояние "элемент изменился", в связи с этим запустятся функции - обработчики "change"
-                    code_{{$prefix}}{{$link->id}}.dispatchEvent(new Event('input'));
+                    //code_{{$prefix}}{{$link->id}}.dispatchEvent(new Event('input'));
+                    //alert('code_change_ code_{{$prefix}}{{$link->id}}.value = ' + code_{{$prefix}}{{$link->id}}.value);
+
                 }
 
                 code_{{$prefix}}{{$link->id}}.addEventListener("change", code_change_{{$prefix}}{{$link->id}});
 
                 @endif
+                <?php
+                $functions[count($functions)] = "code_input_" . $prefix . $link->id;
+                ?>
+                // async - await нужно, https://tproger.ru/translations/understanding-async-await-in-javascript/
+                async function code_input_{{$prefix}}{{$link->id}}(first) {
+                    //alert('code_input111_ code_{{$prefix}}{{$link->id}}.value = ' + code_{{$prefix}}{{$link->id}}.value);
+
+                    await axios.get('/item/item_from_base_code/'
+                        + '{{$link->parent_base_id}}'
+                        + '/' + '{{$project->id}}'
+                        + '/' + code_{{$prefix}}{{$link->id}}.value
+                    ).then(function (res) {
+                            name_{{$prefix}}{{$link->id}}.innerHTML = res.data['item_name'];
+                            key_{{$prefix}}{{$link->id}}.value = res.data['item_id'];
+                            on_parent_refer();
+                            //alert('key_{{$prefix}}{{$link->id}}.value = ' + key_{{$prefix}}{{$link->id}}.value);
+                            //alert('code_input_{{$prefix}}{{$link->id}}  code_{{$prefix}}{{$link->id}}.value = ' + code_{{$prefix}}{{$link->id}}.value);
+                        }
+                    );
+                    //on_parent_refer();
+                    //alert('code{{$link->id}}=' + code{{$link->id}}.value);
+                    // Команда нужна!
+                    //document.getElementById('code{{$link->id}}').dispatchEvent(new Event('change'));
+
+
+                    //alert('code_input222_ code_{{$prefix}}{{$link->id}}.value = ' + code_{{$prefix}}{{$link->id}}.value);
+                    {{-- http://javascript.ru/forum/events/76761-programmno-vyzvat-sobytie-change.html#post503465--}}
+                    {{-- вызываем состояние "элемент изменился", в связи с этим запустятся функции - обработчики "change"--}}
+                    {{--document.getElementById('code{{$link->id}}').dispatchEvent(new Event('change'));--}}
+                }
+
+                {{--code_{{$prefix}}{{$link->id}}.addEventListener("input", code_input_{{$prefix}}{{$link->id}});--}}
+                //code_{{$prefix}}{{$link->id}}.addEventListener("change", code_input_{{$prefix}}{{$link->id}});
+
+                code_{{$prefix}}{{$link->id}}.addEventListener("change", code_input_{{$prefix}}{{$link->id}});
+
+
                 @endif
 
             </script>
@@ -875,7 +894,6 @@
                 var nc_parameter_{{$prefix}}{{$link->id}} = document.getElementById('link{{$link->id}}');
             </script>
         @endif
-
 
 
     @endforeach
@@ -943,10 +961,6 @@
 
             @endif
 
-
-
-
-
         var child_base_id_work = 0;
         var parent_base_id_work = 0;
 
@@ -997,14 +1011,12 @@
 
         @endif
 
-
-
         @endforeach
     </script>
     <script>
         window.onload = function () {
             // массив функций нужен, что при window.onload запустить обработчики всех полей
-            alert('onload');
+
             @foreach($functions as $value)
                 {{$value}}(true);
             @endforeach
