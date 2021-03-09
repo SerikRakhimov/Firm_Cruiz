@@ -858,12 +858,14 @@
                     ).then(function (res) {
                             name_{{$prefix}}{{$link->id}}.innerHTML = res.data['item_name'];
                             key_{{$prefix}}{{$link->id}}.value = res.data['item_id'];
-                            on_parent_refer();
+                            //on_parent_refer();
                             //alert('key_{{$prefix}}{{$link->id}}.value = ' + key_{{$prefix}}{{$link->id}}.value);
                             //alert('code_input_{{$prefix}}{{$link->id}}  code_{{$prefix}}{{$link->id}}.value = ' + code_{{$prefix}}{{$link->id}}.value);
                         }
                     );
-                    //on_parent_refer();
+                    // Команда "on_parent_refer();" нужна, для вызова функция обновления данных с зависимых таблиц
+                    // Функция code_input_{{$prefix}}{{$link->id}}(first) выполняется не сразу
+                    on_parent_refer();
                     //alert('code{{$link->id}}=' + code{{$link->id}}.value);
                     // Команда нужна!
                     //document.getElementById('code{{$link->id}}').dispatchEvent(new Event('change'));
