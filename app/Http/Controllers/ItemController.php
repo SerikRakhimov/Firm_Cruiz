@@ -134,7 +134,7 @@ class ItemController extends Controller
                 }
             }
         }
-        return view('item/browser', ['base' => $base, 'project' => $project, 'sort_by_code' => $sort_by_code, 'save_by_code' => $save_by_code,
+        return view('item/browser', ['base' => $base, 'project' => $project, 'role' => $role, 'sort_by_code' => $sort_by_code, 'save_by_code' => $save_by_code,
             'items' => $items->paginate(30), 'search' => $search]);
     }
 
@@ -2125,7 +2125,7 @@ class ItemController extends Controller
                         $result_item = $item;
                         $result_item_id = $item->id;
                         if ($item->base->type_is_image() || $item->base->type_is_document()) {
-//                            $result_item_name = "<a href='" . Storage::url($item->filename()) . "'><img src='" . Storage::url($item->filename()) . "' height='50' alt='' title='" . $item->filename() . "'></a>";
+                            //$result_item_name = "<a href='" . Storage::url($item->filename()) . "'><img src='" . Storage::url($item->filename()) . "' height='50' alt='' title='" . $item->filename() . "'></a>";
                             if ($item->base->type_is_image()) {
                                 $result_item_name = "<img src='" . Storage::url($item->filename()) . "' height='250' alt='' title='" . $item->title_img() . "'>";
                             }else{

@@ -1022,8 +1022,7 @@
             @foreach($functions as $value)
                 {{$value}}(true);
             @endforeach
-
-            //on_parent_refer();
+            // on_parent_refer();
 
             // Не нужно вызывать функцию on_calc(),
             // это связано с разрешенной корректировкой вычисляемых полей ($link->parent_is_nc_viewonly)
