@@ -1689,7 +1689,7 @@ class ItemController extends Controller
                 foreach ($mains as $main) {
                     $delete_main = false;
                     $link = Link::where('id', $main->link_id)->first();
-                    echo "11111111";
+                    echo "111111115555";
                     if ($link) {
                         if ($link->child_base_id != $item->base_id) {
                             $delete_main = true;
