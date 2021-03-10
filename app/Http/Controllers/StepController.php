@@ -20,9 +20,11 @@ class StepController extends Controller
             if ($steps != null) {
                 foreach ($steps as $step) {
                     switch ($step->command) {
+                        // x = число-константа
                         case "N":
                             $result = $result . "\ny = x;\n x =" . $step->first . ";";
                             break;
+                            // x - значение параметра
                         case "Z":
 //                            $result = $result . "\n alert(Number(nc_parameter_4_315.innerHTML));x = Number(nc_parameter_4_" . $step->first
 //                            . "." . $step->second == "V" ? "innerHTML" : "value" . ");";
@@ -30,6 +32,7 @@ class StepController extends Controller
                             . "." . ($step->second == "V" ? "innerHTML" : "value") . ");";
                             break;
                         case "M":
+                            // Математические операции над x и y
                             switch ($step->first) {
                                 case "+":
                                     $result = $result . "\n x = x + y; y = 0;";
@@ -49,9 +52,11 @@ class StepController extends Controller
 
                             }
                             break;
+                            // Округление числа
                         case "R":
                             $result = $result . "\n x = round(x," . $step->first . ");";
                             break;
+                            // Сдвиг по стеку
                         case "U":
                             $result = $result . "\nz = y;\ny = x;\nx = z;\nz = 0;";
                             break;
@@ -70,7 +75,7 @@ class StepController extends Controller
         $error_message = "";
         $steps = Step::where('link_id', $link->id)->orderBy('row')->get();
         if ($steps != null) {
-            $value = 105.25;
+            $value = 0;
         } else {
             $error_message = "steps is null";
         }
