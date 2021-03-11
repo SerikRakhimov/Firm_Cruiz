@@ -555,7 +555,24 @@ class ItemController extends Controller
         // если при вводе формы пометка checkbox не установлена, в $request записи про элемент checkbox вообще нет
         // если при вводе формы пометка checkbox установлена, в $request есть запись со значеним "on"
         // см. https://webformyself.com/kak-v-php-poluchit-znachenie-checkbox/
-        foreach ($string_langs as $link) {
+//        foreach ($string_langs as $link) {
+//            // Проверка нужна
+//            $base_link_right = GlobalController::base_link_right($link, $role);
+//            if ($base_link_right['is_edit_link_enable'] == false) {
+//                continue;
+//            }
+//            // похожая формула выше (в этой же процедуре)
+//            if ($link->parent_base->type_is_boolean()) {
+//                // у этой команды два предназначения:
+//                // 1) заменить "on" на "1" при отмеченном checkbox
+//                // 2) создать новый ([$link->id]-й) элемент массива со значением "0" при выключенном checkbox
+//                // в базе данных информация хранится как "0" или "1"
+//                $inputs[$link->id] = isset($inputs[$link->id]) ? "1" : "0";
+//            }
+//        }
+
+        foreach ($inputs as $key=>$input) {
+            $link = Link::findOrFail($key);
             // Проверка нужна
             $base_link_right = GlobalController::base_link_right($link, $role);
             if ($base_link_right['is_edit_link_enable'] == false) {
@@ -567,7 +584,7 @@ class ItemController extends Controller
                 // 1) заменить "on" на "1" при отмеченном checkbox
                 // 2) создать новый ([$link->id]-й) элемент массива со значением "0" при выключенном checkbox
                 // в базе данных информация хранится как "0" или "1"
-                $inputs[$link->id] = isset($inputs[$link->id]) ? "1" : "0";
+                $inputs[$key] = isset($inputs[$key]) ? "1" : "0";
             }
         }
 
@@ -1515,7 +1532,24 @@ class ItemController extends Controller
             }
         }
 
-        foreach ($string_langs as $link) {
+//        foreach ($string_langs as $link) {
+//            // Проверка нужна
+//            $base_link_right = GlobalController::base_link_right($link, $role);
+//            if ($base_link_right['is_edit_link_enable'] == false) {
+//                continue;
+//            }
+//            // похожая формула выше (в этой же процедуре)
+//            if ($link->parent_base->type_is_boolean()) {
+//                // у этой команды два предназначения:
+//                // 1) заменить "on" на "1" при отмеченном checkbox
+//                // 2) создать новый ([$link->id]-й) элемент массива со значением "0" при выключенном checkbox
+//                // в базе данных информация хранится как "0" или "1"
+//                $inputs[$link->id] = isset($inputs[$link->id]) ? "1" : "0";
+//            }
+//        }
+
+        foreach ($inputs as $key=>$input) {
+            $link = Link::findOrFail($key);
             // Проверка нужна
             $base_link_right = GlobalController::base_link_right($link, $role);
             if ($base_link_right['is_edit_link_enable'] == false) {
@@ -1527,9 +1561,10 @@ class ItemController extends Controller
                 // 1) заменить "on" на "1" при отмеченном checkbox
                 // 2) создать новый ([$link->id]-й) элемент массива со значением "0" при выключенном checkbox
                 // в базе данных информация хранится как "0" или "1"
-                $inputs[$link->id] = isset($inputs[$link->id]) ? "1" : "0";
+                $inputs[$key] = isset($inputs[$key]) ? "1" : "0";
             }
         }
+
         $array_mess = array();
         foreach ($string_langs as $link) {
             if ($link->parent_is_parent_related == false) {
@@ -1562,6 +1597,7 @@ class ItemController extends Controller
                 }
             }
         }
+
         foreach ($inputs as $key => $value) {
             $inputs[$key] = ($value != null) ? $value : "";
         }
@@ -1689,7 +1725,6 @@ class ItemController extends Controller
                 foreach ($mains as $main) {
                     $delete_main = false;
                     $link = Link::where('id', $main->link_id)->first();
-                    echo "111111115555";
                     if ($link) {
                         if ($link->child_base_id != $item->base_id) {
                             $delete_main = true;
