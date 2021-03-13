@@ -42,6 +42,30 @@
             @endforeach
         </div>
 
+        <div class="form-group row">
+            @foreach (config('app.locales') as $key=>$value)
+                <div class="col-3 text-right">
+                    <label for="desc_lang_{{$key}}" class="col-form-label">{{trans('main.desc')}}
+                        ({{trans('main.' . $value)}})<span
+                            class="text-danger">*</span></label>
+                </div>
+                <div class="col-7">
+                    <textarea
+                        name="desc_lang_{{$key}}"
+                        id="desc_lang_{{$key}}"
+                        class="form-control @error('desc_lang_' . $key) is-invalid @enderror"
+                        placeholder="">
+                        {{ old('desc_lang_' . $key) ?? ($role['desc_lang_' . $key] ?? '') }}
+                        </textarea>
+                </div>
+                @error('desc_lang_' . $key)
+                <div class="text-danger">
+                    {{$message}}
+                </div>
+                @enderror
+            @endforeach
+        </div>
+
         <div class="form-group row" id="is_author_form_group">
             <div class="col-sm-3 text-right">
                 <label class="form-label"

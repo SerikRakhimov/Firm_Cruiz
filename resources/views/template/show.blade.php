@@ -16,6 +16,10 @@
         <p>{{trans('main.name')}} ({{trans('main.' . $value)}}): <b>{{$template['name_lang_' . $key]}}</b></p>
     @endforeach
 
+    @foreach (config('app.locales') as $key=>$value)
+        <p>{{trans('main.desc')}} ({{trans('main.' . $value)}}): <b>{{$template['desc_lang_' . $key]}}</b></p>
+    @endforeach
+
     @if ($type_form == 'show')
         @if(Auth::user()->isAdmin() == true)
             <p>

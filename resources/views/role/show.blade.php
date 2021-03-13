@@ -18,6 +18,11 @@
     @foreach (config('app.locales') as $key=>$value)
         <p>{{trans('main.name')}} ({{trans('main.' . $value)}}): <b>{{$role['name_lang_' . $key]}}</b></p>
     @endforeach
+
+    @foreach (config('app.locales') as $key=>$value)
+        <p>{{trans('main.desc')}} ({{trans('main.' . $value)}}): <b>{{$role['desc_lang_' . $key]}}</b></p>
+    @endforeach
+
     <p>{{trans('main.is_author')}}: <b>{{GlobalController::name_is_boolean($role->is_author)}}</b></p>
     <p>{{trans('main.is_default_for_external')}}: <b>{{GlobalController::name_is_boolean($role->is_default_for_external)}}</b></p>
     <p>{{trans('main.is_list_base_sndb')}}: <b>{{GlobalController::name_is_boolean($role->is_list_base_sndb)}}</b></p>

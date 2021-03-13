@@ -118,10 +118,16 @@ class RoleController extends Controller
     function set(Request $request, Role &$role)
     {
         $role->template_id = $request->template_id;
+
         $role->name_lang_0 = $request->name_lang_0;
         $role->name_lang_1 = isset($request->name_lang_1) ? $request->name_lang_1 : "";
         $role->name_lang_2 = isset($request->name_lang_2) ? $request->name_lang_2 : "";
         $role->name_lang_3 = isset($request->name_lang_3) ? $request->name_lang_3 : "";
+
+        $role->desc_lang_0 = $request->desc_lang_0;
+        $role->desc_lang_1 = isset($request->desc_lang_1) ? $request->desc_lang_1 : "";
+        $role->desc_lang_2 = isset($request->desc_lang_2) ? $request->desc_lang_2 : "";
+        $role->desc_lang_3 = isset($request->desc_lang_3) ? $request->desc_lang_3 : "";
 
         $role->is_default_for_external = isset($request->is_default_for_external) ? true : false;
         $role->is_author = isset($request->is_author) ? true : false;

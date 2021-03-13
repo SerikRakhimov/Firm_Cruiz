@@ -108,6 +108,7 @@ return [
     'images' => 'Images',
     'document' => 'Document',
     'status' => 'Status',
+    'desc' => 'Description',
     'is_code_needed' => 'Code needed',
     'is_code_number' => 'Numeric code (otherwise string)',
     'is_limit_sign_code' => 'Limit the significance of the code',

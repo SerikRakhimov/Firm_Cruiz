@@ -108,6 +108,7 @@ return [
     'images' => 'Суреттер',
     'document' => 'Құжат',
     'status' => 'Мәртебе',
+    'desc' => 'Сипаттама',
     'is_code_needed' => 'Код қажет',
     'is_code_number' => 'Сандық код (басқаша жол)',
     'is_limit_sign_code' => 'Кодтың маңыздылығын шектеңіз',

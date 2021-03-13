@@ -31,9 +31,15 @@
     @if(!$is_template)
         <p>{{trans('main.template')}}: <b>{{$project->template->name()}}</b></p>
     @endif
+
     @foreach (config('app.locales') as $key=>$value)
         <p>{{trans('main.name')}} ({{trans('main.' . $value)}}): <b>{{$project['name_lang_' . $key]}}</b></p>
     @endforeach
+
+    @foreach (config('app.locales') as $key=>$value)
+        <p>{{trans('main.desc')}} ({{trans('main.' . $value)}}): <b>{{$project['desc_lang_' . $key]}}</b></p>
+    @endforeach
+
     @if(!$is_user)
         <p>{{trans('main.author')}}: <b>{{$project->user->name()}}</b></p>
     @endif

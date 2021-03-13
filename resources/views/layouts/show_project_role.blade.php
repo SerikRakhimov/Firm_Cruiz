@@ -19,5 +19,15 @@
             </a>
         </div>
     </div>
+    <div class="row">
+        <div class="col-12 text-center">
+            {{$project->desc()}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 text-center">
+            {{$role->desc()}}
+        </div>
+    </div>
 </div>
 </p>

@@ -135,6 +135,11 @@ class ProjectController extends Controller
         $project->name_lang_2 = isset($request->name_lang_2) ? $request->name_lang_2 : "";
         $project->name_lang_3 = isset($request->name_lang_3) ? $request->name_lang_3 : "";
 
+        $project->desc_lang_0 = $request->desc_lang_0;
+        $project->desc_lang_1 = isset($request->desc_lang_1) ? $request->desc_lang_1 : "";
+        $project->desc_lang_2 = isset($request->desc_lang_2) ? $request->desc_lang_2 : "";
+        $project->desc_lang_3 = isset($request->desc_lang_3) ? $request->desc_lang_3 : "";
+
         $project->save();
     }
 

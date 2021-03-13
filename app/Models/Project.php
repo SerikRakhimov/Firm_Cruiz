@@ -35,6 +35,19 @@ class Project extends Model
         return $result;
     }
 
+    function desc()
+    {
+        $result = "";  // нужно, не удалять
+        $index = array_search(App::getLocale(), config('app.locales'));
+        if ($index !== false) {   // '!==' использовать, '!=' не использовать
+            $result = $this['desc_lang_' . $index];
+        }
+        if ($result == "") {
+            $result = $this->desc_lang_0;
+        }
+        return $result;
+    }
+
     function name_id()
     {
         return $this->name() . " (Id = " . strval($this->id) . ")";

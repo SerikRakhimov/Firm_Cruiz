@@ -19,10 +19,10 @@ class CreateItemsTable extends Migration
             $table->unsignedBigInteger('base_id')->default(0);
             // размер строкового поля 1000 также прописан в ItemController::calc_value_func()
             $table->string('code',255)->default("");
-            $table->string('name_lang_0',1000)->default("");
-            $table->string('name_lang_1',1000)->default("");
-            $table->string('name_lang_2',1000)->default("");
-            $table->string('name_lang_3',1000)->default("");
+            $table->string('name_lang_0',500)->default("");
+            $table->string('name_lang_1',500)->default("");
+            $table->string('name_lang_2',500)->default("");
+            $table->string('name_lang_3',500)->default("");
             $table->timestamps();
             $table->index('base_id');
             //$table->unique(['base_id', 'code']);
