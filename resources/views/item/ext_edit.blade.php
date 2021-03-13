@@ -364,7 +364,7 @@
                                    class="form-control @error($key) is-invalid @enderror"
                                    placeholder=""
                                    value="{{(old($key)) ?? (($value != null) ? Item::find($value)->name() :
-($link->parent_num_bool_default_value!="")? $link->parent_num_bool_default_value:'0'
+(($link->parent_num_bool_default_value!="")? $link->parent_num_bool_default_value:'0')
 )}}"
                                    step="{{$link->parent_base->digits_num_format()}}"
 
@@ -470,7 +470,7 @@
                                    id="link{{$key}}"
                                    placeholder=""
                                    @if ((boolean)((old($key)) ?? (($value != null) ? Item::find($value)->name_lang_0 :
-($link->parent_num_bool_default_value!="")? $link->parent_num_bool_default_value:'0')) == true)
+(($link->parent_num_bool_default_value!="")? $link->parent_num_bool_default_value:'0'))) == true)
                                    checked
                                    @endif
                                    @if($base_link_right['is_edit_link_read'] == true)
