@@ -2,6 +2,7 @@
 
 @section('content')
     <?php
+    use App\Models\Link;
     $update = isset($link);
     ?>
     <h3 class="display-5">
@@ -115,6 +116,22 @@
                    placeholder=""
                    value="{{ old('parent_base_number') ?? ($link['parent_base_number'] ?? '0') }}">
             @error('parent_base_number')
+            <div class="text-danger">
+                {{$message}}
+            </div>
+            @enderror
+        </div>
+
+        <div class="form-group">
+            <label for="parent_num_bool_default_value">{{trans('main.parent')}}_{{trans('main.parent_num_bool_default_value')}}<span
+                    class="text-danger">*</span></label>
+            <input type="text"
+                   name="parent_num_bool_default_value"
+                   id="parent_num_bool_default_value"
+                   class="form-control @error('parent_num_bool_default_value') is-invalid @enderror"
+                   placeholder=""
+                   value="{{ old('parent_num_bool_default_value') ?? ($link['parent_num_bool_default_value'] ?? '') }}">
+            @error('parent_num_bool_default_value')
             <div class="text-danger">
                 {{$message}}
             </div>
@@ -261,6 +278,19 @@
             </div>
         </div>
 
+        <div class="form-group" id="parent_is_hidden_field_form_group">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" name="parent_is_hidden_field"
+                       id="parent_is_hidden_field"
+                       {{--            "(int) 0" нужно--}}
+                       @if ((old('parent_is_hidden_field') ?? ($link->parent_is_hidden_field ?? false)) ==  true)
+                       checked
+                       @endif
+                       >
+                <label class="form-check-label" for="parent_is_hidden_field">{{trans('main.parent_is_hidden_field')}}</label>
+            </div>
+        </div>
+
         <div class="form-group" id="parent_is_parent_related_form_group">
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="checkbox" name="parent_is_parent_related"
@@ -360,7 +390,9 @@
                 {{trans('main.save')}}
             @endif
         </button>
-        <a class="btn btn-success" href="{{ route('link.index') }}">{{trans('main.cancel')}}</a>
+        <a class="btn btn-success" href="{{ route('link.base_index',
+ ['base' => $base, 'links' => Link::where('child_base_id', $base->id)->orderBy('parent_base_number')->get()]) }}">
+            {{trans('main.cancel')}}</a>
     </form>
 
     <script>

@@ -246,7 +246,12 @@
             ?>
             {{--                            проверка для вычисляемых полей--}}
             @if($link->parent_is_parent_related == true)
-                <div class="form-group row">
+                <div class="form-group row"
+                     {{--                     проверка скрывать поле или нет--}}
+                     @if($link->parent_is_hidden_field == true)
+                     hidden
+                    @endif
+                >
                     <div class="col-sm-3 text-right">
                         <label for="calc{{$key}}" class="form-label">
                             {{$result['result_parent_label']}}
@@ -358,7 +363,9 @@
                                    id="link{{$key}}"
                                    class="form-control @error($key) is-invalid @enderror"
                                    placeholder=""
-                                   value="{{(old($key)) ?? (($value != null) ? Item::find($value)->name() : '0')}}"
+                                   value="{{(old($key)) ?? (($value != null) ? Item::find($value)->name() :
+($link->parent_num_bool_default_value!="")? $link->parent_num_bool_default_value:'0'
+)}}"
                                    step="{{$link->parent_base->digits_num_format()}}"
 
                                    @if($base_link_right['is_edit_link_read'] == true)
@@ -776,6 +783,7 @@
                         // child_code_id{{$prefix}}{{$link->id}}.dispatchEvent(new Event('input'));
                     }
                 }
+
                 // Эта команда не нужна
                 //child_code_id{{$prefix}}{{$link->id}}.addEventListener("change", link_id_change_{{$prefix}}{{$link->id}});
 

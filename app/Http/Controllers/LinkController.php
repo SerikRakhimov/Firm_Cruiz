@@ -61,7 +61,7 @@ class LinkController extends Controller
 
     function create(Base $base)
     {
-        return view('link/edit', ['bases' => Base::where('template_id', $base->template_id)->get()]);
+        return view('link/edit', ['base' => $base, 'bases' => Base::where('template_id', $base->template_id)->get()]);
     }
 
     function store(Request $request)
@@ -84,6 +84,7 @@ class LinkController extends Controller
         $link->child_labels_lang_2 = isset($request->child_labels_lang_2) ? $request->child_labels_lang_2 : "";
         $link->child_labels_lang_3 = isset($request->child_labels_lang_3) ? $request->child_labels_lang_3 : "";
         $link->parent_base_number = $request->parent_base_number;
+        $link->parent_num_bool_default_value = isset($request->parent_num_bool_default_value) ? $request->parent_num_bool_default_value : "";
         $link->parent_label_lang_0 = isset($request->parent_label_lang_0) ? $request->parent_label_lang_0 : "";
         $link->parent_label_lang_1 = isset($request->parent_label_lang_1) ? $request->parent_label_lang_1 : "";
         $link->parent_label_lang_2 = isset($request->parent_label_lang_2) ? $request->parent_label_lang_2 : "";
@@ -99,6 +100,7 @@ class LinkController extends Controller
         $link->parent_is_nc_viewonly = isset($request->parent_is_nc_viewonly) ? true : false;
         $link->parent_is_nc_screencalc = isset($request->parent_is_nc_screencalc) ? true : false;
         $link->parent_is_nc_parameter = isset($request->parent_is_nc_parameter) ? true : false;
+        $link->parent_is_hidden_field = isset($request->parent_is_hidden_field) ? true : false;
 
         $link->parent_is_small_calcname = isset($request->parent_is_small_calcname) ? true : false;
         if ($link->parent_is_calcname == false) {
@@ -189,7 +191,6 @@ class LinkController extends Controller
         $data = $request->except('_token', '_method');
         $link->fill($data);
 
-
         $link->child_base_id = $request->child_base_id;
         $link->parent_base_id = $request->parent_base_id;
         $link->child_label_lang_0 = isset($request->child_label_lang_0) ? $request->child_label_lang_0 : "";
@@ -201,6 +202,7 @@ class LinkController extends Controller
         $link->child_labels_lang_2 = isset($request->child_labels_lang_2) ? $request->child_labels_lang_2 : "";
         $link->child_labels_lang_3 = isset($request->child_labels_lang_3) ? $request->child_labels_lang_3 : "";
         $link->parent_base_number = $request->parent_base_number;
+        $link->parent_num_bool_default_value = isset($request->parent_num_bool_default_value) ? $request->parent_num_bool_default_value : "";
         $link->parent_label_lang_0 = isset($request->parent_label_lang_0) ? $request->parent_label_lang_0 : "";
         $link->parent_label_lang_1 = isset($request->parent_label_lang_1) ? $request->parent_label_lang_1 : "";
         $link->parent_label_lang_2 = isset($request->parent_label_lang_2) ? $request->parent_label_lang_2 : "";
@@ -216,6 +218,7 @@ class LinkController extends Controller
         $link->parent_is_nc_viewonly = isset($request->parent_is_nc_viewonly) ? true : false;
         $link->parent_is_nc_screencalc = isset($request->parent_is_nc_screencalc) ? true : false;
         $link->parent_is_nc_parameter = isset($request->parent_is_nc_parameter) ? true : false;
+        $link->parent_is_hidden_field = isset($request->parent_is_hidden_field) ? true : false;
 
         $link->parent_is_small_calcname = isset($request->parent_is_small_calcname) ? true : false;
         if ($link->parent_is_calcname == false) {
@@ -293,7 +296,7 @@ class LinkController extends Controller
 
     function edit(Link $link, Base $base)
     {
-        return view('link/edit', ['link' => $link, 'bases' =>  Base::where('template_id', $base->template_id)->get()]);
+        return view('link/edit', ['base' => $base, 'link' => $link, 'bases' =>  Base::where('template_id', $base->template_id)->get()]);
     }
 
     function delete_question(Link $link)
@@ -304,7 +307,7 @@ class LinkController extends Controller
     function delete(Link $link)
     {
         $link->delete();
-        return redirect()->route('link.index');
+        return redirect()->route('link.base_index', ['base' => $link->child_base, 'links' => Link::where('child_base_id', $link->child_base_id)->orderBy('parent_base_number')->get()]);
     }
 
     static function get_parent_parent_related_start_link_id(Base $base, Link $link_current = null)

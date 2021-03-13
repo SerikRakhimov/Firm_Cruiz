@@ -52,7 +52,9 @@
             @csrf
             @method('DELETE')
             <button type="submit" class="btn btn-primary">{{trans('main.delete')}}</button>
-            <a class="btn btn-success" href="{{ route('link.index') }}">{{trans('main.cancel')}}</a>
+            <a class="btn btn-success" href="{{ route('link.base_index',
+ ['base' => $link->child_base, 'links' => Link::where('child_base_id', $link->child_base_id)->orderBy('parent_base_number')->get()]) }}">
+                {{trans('main.cancel')}}</a>
         </form>
     @endif
 

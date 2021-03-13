@@ -120,6 +120,8 @@ return [
     'is_required_lst_num_str_img_doc' => 'Required',
     'is_to_moderate_image' => 'To moderate',
     'is_one_value_lst_str' => 'One value in all languages',
+    'parent_is_hidden_field'=>'Hidden field (for related fields)',
+    'parent_num_bool_default_value'=>'Default value (for numeric and boolean fields)',
     'parent_is_parent_related' => 'Automatically populate from parent input field',
     'parent_parent_related_start_link_id' => 'What field will we take as a basis?',
     'parent_parent_related_result_link_id' => 'What to display?',

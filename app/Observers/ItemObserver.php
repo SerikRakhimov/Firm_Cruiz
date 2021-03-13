@@ -26,10 +26,26 @@ class ItemObserver
      * @param \App\Item $item
      * @return void
      */
-    public function updated($item)
-    {
-        //
-    }
+//    public function updated($item)
+//    {
+//        //
+//    }
+
+//    public function updated($item)
+//    {
+//        //
+//        if ($item->base->is_code_needed == false) {
+//            $item->code = uniqid($item->base_id . '_1111___', true);
+//        }
+//    }
+//
+//    public function updating($item)
+//    {
+//        //
+//        if ($item->base->is_code_needed == false) {
+//            $item->code = uniqid($item->base_id . '_2222___', true);
+//        }
+//    }
 
     /**
      * Handle the item "deleted" event.
@@ -47,12 +63,12 @@ class ItemObserver
         foreach ($mains as $main) {
             // Эта проверка нужна, если неправильно заполнены Присваивания (sets)
             //if (isset($main->parent_item->base_id)){
-                if ($main->parent_item->base->type_is_image() || $main->parent_item->base->type_is_document()) {
-                    //Storage::delete($main->parent_item->filename());
-                    //нужно удалять, "Storage::delete()" выполнится, т.к. это рекурсивный вызов этой же функции "public function deleting($item)"
-                    // item- картинки и документы создаются на каждую связь(Например спр-к товаров) - поэтому их нужно удалять
-                    $main->parent_item->delete();
-                }
+            if ($main->parent_item->base->type_is_image() || $main->parent_item->base->type_is_document()) {
+                //Storage::delete($main->parent_item->filename());
+                //нужно удалять, "Storage::delete()" выполнится, т.к. это рекурсивный вызов этой же функции "public function deleting($item)"
+                // item- картинки и документы создаются на каждую связь(Например спр-к товаров) - поэтому их нужно удалять
+                $main->parent_item->delete();
+            }
             //}
         }
     }

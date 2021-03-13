@@ -120,6 +120,8 @@ return [
     'is_required_lst_num_str_img_doc' => 'Қажет',
     'is_to_moderate_image' => 'Tүрлендіру',
     'is_one_value_lst_str' => 'Барлық тілдерде бір мән',
+    'parent_is_hidden_field'=>'Жасырын өріс (байланысқан өрістер үшін)',
+    'parent_num_bool_default_value'=>'Әдепкі мән (сандық және логикалық өрістер үшін)',
     'parent_is_parent_related' => 'Енгізу тектік өрісінен автоматты түрде толтыру',
     'parent_parent_related_start_link_id' => 'Қай даланы(поле) негізге аламыз?',
     'parent_parent_related_result_link_id' => 'Нені көрсету керек?',
