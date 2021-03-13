@@ -179,7 +179,14 @@ class GlobalController extends Controller
         $is_show_link_enable = $base_right['is_show_link_enable'];
         $is_edit_link_read = $base_right['is_edit_link_read'];
         $is_edit_link_update = $base_right['is_edit_link_update'];
-
+        //  Проверка скрывать поле или нет
+        if ($link->parent_is_hidden_field == true){
+            $is_list_link_enable = false;
+            $is_show_link_enable = false;
+            $is_edit_link_read = false;
+            // При корректировке в форме ставится пометка hidden
+            //$is_edit_link_update = false;
+        }
         // Блок проверки по rolis, используя переменные $role и $link
         $roli = Roli::where('role_id', $role->id)->where('link_id', $link->id)->first();
         if ($roli != null) {
