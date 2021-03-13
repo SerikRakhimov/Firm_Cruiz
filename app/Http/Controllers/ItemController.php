@@ -571,20 +571,19 @@ class ItemController extends Controller
 //            }
 //        }
 
-        foreach ($inputs as $key=>$input) {
-            $link = Link::findOrFail($key);
-            // Проверка нужна
-            $base_link_right = GlobalController::base_link_right($link, $role);
-            if ($base_link_right['is_edit_link_enable'] == false) {
-                continue;
-            }
-            // похожая формула выше (в этой же процедуре)
+        foreach ($string_langs as $link) {
             if ($link->parent_base->type_is_boolean()) {
+                // Проверка нужна
+                $base_link_right = GlobalController::base_link_right($link, $role);
+                if ($base_link_right['is_edit_link_update'] == false) {
+                    continue;
+                }
+                // похожая формула выше (в этой же процедуре)
                 // у этой команды два предназначения:
                 // 1) заменить "on" на "1" при отмеченном checkbox
                 // 2) создать новый ([$link->id]-й) элемент массива со значением "0" при выключенном checkbox
                 // в базе данных информация хранится как "0" или "1"
-                $inputs[$key] = isset($inputs[$key]) ? "1" : "0";
+                $inputs[$link->id] = isset($inputs[$link->id]) ? "1" : "0";
             }
         }
 
@@ -1548,20 +1547,19 @@ class ItemController extends Controller
 //            }
 //        }
 
-        foreach ($inputs as $key=>$input) {
-            $link = Link::findOrFail($key);
-            // Проверка нужна
-            $base_link_right = GlobalController::base_link_right($link, $role);
-            if ($base_link_right['is_edit_link_enable'] == false) {
-                continue;
-            }
-            // похожая формула выше (в этой же процедуре)
+        foreach ($string_langs as $link) {
             if ($link->parent_base->type_is_boolean()) {
+                // Проверка нужна
+                $base_link_right = GlobalController::base_link_right($link, $role);
+                if ($base_link_right['is_edit_link_update'] == false) {
+                    continue;
+                }
+                // похожая формула выше (в этой же процедуре)
                 // у этой команды два предназначения:
                 // 1) заменить "on" на "1" при отмеченном checkbox
                 // 2) создать новый ([$link->id]-й) элемент массива со значением "0" при выключенном checkbox
                 // в базе данных информация хранится как "0" или "1"
-                $inputs[$key] = isset($inputs[$key]) ? "1" : "0";
+                $inputs[$link->id] = isset($inputs[$link->id]) ? "1" : "0";
             }
         }
 
@@ -2164,7 +2162,7 @@ class ItemController extends Controller
                             //$result_item_name = "<a href='" . Storage::url($item->filename()) . "'><img src='" . Storage::url($item->filename()) . "' height='50' alt='' title='" . $item->filename() . "'></a>";
                             if ($item->base->type_is_image()) {
                                 $result_item_name = "<img src='" . Storage::url($item->filename()) . "' height='250' alt='' title='" . $item->title_img() . "'>";
-                            }else{
+                            } else {
                                 $result_item_name = "<a href='" . Storage::url($item->filename()) . "'><img src='" . Storage::url($item->filename()) . "' height='50' alt='' title='" . $item->filename() . "'></a>";
                             }
                         } else {

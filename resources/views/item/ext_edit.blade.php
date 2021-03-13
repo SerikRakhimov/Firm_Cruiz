@@ -459,6 +459,7 @@
                     {{--                                если тип корректировки поля - логический--}}
                 @elseif($link->parent_base->type_is_boolean())
                     {{--                        https://mdbootstrap.com/docs/jquery/forms/basic/--}}
+                    {{--(($link->parent_num_bool_default_value!="")? $link->parent_num_bool_default_value:'0'))--}}
                     <div class="form-group row">
                         <div class="col-sm-3 text-right">
                             <label class="form-label" for="{{$key}}">{{$result['result_parent_label']}}</label>
@@ -469,8 +470,9 @@
                                    name="{{$key}}"
                                    id="link{{$key}}"
                                    placeholder=""
-                                   @if ((boolean)((old($key)) ?? (($value != null) ? Item::find($value)->name_lang_0 :
-(($link->parent_num_bool_default_value!="")? $link->parent_num_bool_default_value:'0'))) == true)
+                                   @if ((boolean)(old($key) ?? (($value != null) ? Item::find($value)->name_lang_0 :
+(($link->parent_num_bool_default_value!="")? $link->parent_num_bool_default_value:'0'))
+)) == true)
                                    checked
                                    @endif
                                    @if($base_link_right['is_edit_link_read'] == true)
