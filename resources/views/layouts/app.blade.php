@@ -52,53 +52,69 @@ use App\Models\Project;
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            @auth
-                <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav mr-auto">
+            {{--            @auth--}}
+            {{--            @guest--}}
+            <!-- Left Side Of Navbar -->
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{route('project.all_index')}}"
+                           title="{{trans('main.all_projects')}}">
+                            {{trans('main.all_projects')}}
+                        </a>
+                    </li>
+                    {{--                        <li class="nav-item">--}}
+                    {{--                            --}}{{--                            <a class="nav-link" style="color: green"--}}
+                    {{--                            --}}{{--                            <a class="nav-link text-primary font-weight-bold"--}}
+                    {{--                            --}}{{--                                <a class="nav-link text-primary"--}}
+                    {{--                            --}}{{--                                   href="{{route('base.template_index', $glo_project_template_id)}}}">{{trans('main.bases')}}</a>--}}
+                    {{--                            <a class="nav-link" href="\home"--}}
+                    {{--                               title="{{trans('main.info_project_role_selection')}}">--}}
+                    {{--                                {{trans('main.project_role_selection')}}--}}
+                    {{--                            </a>--}}
+                    {{--                        </li>--}}
+                    {{--                        <li class="nav-item">--}}
+                    {{--                            <a class="nav-link" href="{{route('project.index_user', Auth::user())}}"--}}
+                    {{--                            title="{{trans('main.info_projects')}}">--}}
+                    {{--                                {{trans('main.projects')}}--}}
+                    {{--                            </a>--}}
+                    {{--                        </li>--}}
+                    {{--                        <li class="nav-item">--}}
+                    {{--                            <a class="nav-link" href="{{route('access.index_user', Auth::user())}}"--}}
+                    {{--                            title="{{trans('main.info_accesses')}}">--}}
+                    {{--                                {{trans('main.accesses')}}--}}
+                    {{--                            </a>--}}
+                    {{--                        </li>--}}
+
+                    {{--                        <li class="nav-item">--}}
+                    {{--                            <a class="nav-link"--}}
+                    {{--                               href="{{route('access.index_user', Auth::user())}}">{{trans('main.accesses')}}</a>--}}
+                    {{--                        </li>--}}
+                    {{--                        <li class="nav-item">--}}
+                    {{--                            <a class="nav-link" href="#">{{trans('main.all_projects')}}</a>--}}
+                    {{--                        </li>--}}
+                    {{--                @endguest--}}
+                    @auth
                         <li class="nav-item">
-                            {{--                            <a class="nav-link" style="color: green"--}}
-                            {{--                            <a class="nav-link text-primary font-weight-bold"--}}
-                            {{--                                <a class="nav-link text-primary"--}}
-                            {{--                                   href="{{route('base.template_index', $glo_project_template_id)}}}">{{trans('main.bases')}}</a>--}}
-                            <a class="nav-link" href="\home"
-                               title="{{trans('main.info_project_role_selection')}}">
-                                {{trans('main.project_role_selection')}}
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{route('project.index_user', Auth::user())}}"
-                            title="{{trans('main.info_projects')}}">
-                                {{trans('main.projects')}}
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{route('access.index_user', Auth::user())}}"
-                            title="{{trans('main.info_accesses')}}">
-                                {{trans('main.accesses')}}
+                            <a class="nav-link" href="{{route('project.my_index')}}"
+                               title="{{trans('main.my_projects')}}">
+                                {{trans('main.my_projects')}}
                             </a>
                         </li>
 
-                        {{--                        <li class="nav-item">--}}
-                        {{--                            <a class="nav-link"--}}
-                        {{--                               href="{{route('access.index_user', Auth::user())}}">{{trans('main.accesses')}}</a>--}}
-                        {{--                        </li>--}}
-                        {{--                        <li class="nav-item">--}}
-                        {{--                            <a class="nav-link" href="#">{{trans('main.all_projects')}}</a>--}}
-                        {{--                        </li>--}}
-                    </ul>
-                {{--                @if(Auth::user()->isAdmin())--}}
-                {{--                    <!-- Right Side Of Navbar -->--}}
-                {{--                        <ul class="navbar-nav ml-auto">--}}
-                {{--                            <li class="nav-item">--}}
-                {{--                                <a class="nav-link" href="{{route('template.index')}}">{{trans('main.templates')}}</a>--}}
-                {{--                            </li>--}}
-                {{--                            <li class="nav-item">--}}
-                {{--                                <a class="nav-link" href="{{route('user.index')}}">{{trans('main.users')}}</a>--}}
-                {{--                            </li>--}}
-                {{--                        </ul>--}}
-                {{--                @endif--}}
-            @endauth
-            <!-- Right Side Of Navbar -->
+                        {{--                @if(Auth::user()->isAdmin())--}}
+                        {{--                    <!-- Right Side Of Navbar -->--}}
+                        {{--                        <ul class="navbar-nav ml-auto">--}}
+                        {{--                            <li class="nav-item">--}}
+                        {{--                                <a class="nav-link" href="{{route('template.index')}}">{{trans('main.templates')}}</a>--}}
+                        {{--                            </li>--}}
+                        {{--                            <li class="nav-item">--}}
+                        {{--                                <a class="nav-link" href="{{route('user.index')}}">{{trans('main.users')}}</a>--}}
+                        {{--                            </li>--}}
+                        {{--                        </ul>--}}
+                        {{--                @endif--}}
+                    @endauth
+                </ul>
+                <!-- Right Side Of Navbar -->
                 <ul class="navbar-nav ml-auto">
                     <!-- Authentication Links -->
                     @guest
@@ -132,6 +148,10 @@ use App\Models\Project;
                                     @csrf
                                 </form>
                                 @auth
+                                    <a class="dropdown-item" href="{{route('project.index_user', Auth::user())}}"
+                                       title="{{trans('main.setup')}}">
+                                        {{trans('main.setup')}}
+                                    </a>
                                     {{--                                    <a class="dropdown-item" href="#">--}}
                                     {{--                                        {{trans('main.all_projects')}}--}}
                                     {{--                                    </a>--}}

@@ -21,6 +21,35 @@ class ProjectController extends Controller
         ];
     }
 
+
+    function all_index()
+    {
+        $projects = Project::orderBy('user_id')->orderBy('template_id')->orderBy('created_at');
+        $name = "";  // нужно, не удалять
+        $index = array_search(App::getLocale(), config('app.locales'));
+        if ($index !== false) {   // '!==' использовать, '!=' не использовать
+            $name = 'name_lang_' . $index;
+            $projects = $projects->orderBy($name);
+        }
+        //session(['projects_previous_url' => request()->url()]);
+        return view('project/main_index', ['projects' => $projects->paginate(60),
+            'all'=>true, 'my'=>false, 'title'=>trans('main.all_projects')]);
+    }
+
+    function my_index()
+    {
+        $projects = Project::where('user_id', GlobalController::glo_user_id())->orderBy('user_id')->orderBy('template_id')->orderBy('created_at');
+        $name = "";  // нужно, не удалять
+        $index = array_search(App::getLocale(), config('app.locales'));
+        if ($index !== false) {   // '!==' использовать, '!=' не использовать
+            $name = 'name_lang_' . $index;
+            $projects = $projects->orderBy($name);
+        }
+        //session(['projects_previous_url' => request()->url()]);
+        return view('project/main_index', ['projects' => $projects->paginate(60),
+            'all'=>false, 'my'=>true, 'title'=>trans('main.my_projects')]);
+    }
+
     function index_template(Template $template)
     {
         if (!Auth::user()->isAdmin()) {
@@ -64,8 +93,15 @@ class ProjectController extends Controller
 
     function create_template(Template $template)
     {
-        $users = User::orderBy('name')->get();
-        return view('project/edit', ['template' => $template, 'users' => $users]);
+        $exists = Template::whereHas('roles', function ($query) {
+            $query->where('is_author', true);
+        })->where('id', $template->id)->exists();
+        if ($exists) {
+            $users = User::orderBy('name')->get();
+            return view('project/edit', ['template' => $template, 'users' => $users]);
+        } else {
+            return trans('main.role_author_not_found');
+        }
     }
 
     function create_user(User $user)

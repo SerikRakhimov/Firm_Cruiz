@@ -368,6 +368,13 @@ Route::delete('/roli/delete/{roli}', 'RoliController@delete')
     ->middleware('auth');
 
 // Projects
+// "->middleware('auth')" не использовать
+Route::get('/project/all_index', 'ProjectController@all_index')
+    ->name('project.all_index');
+
+Route::get('/project/my_index', 'ProjectController@my_index')
+    ->name('project.my_index');
+
 Route::get('/project/index_template/{template}', 'ProjectController@index_template')
     ->name('project.index_template')
     ->middleware('auth');

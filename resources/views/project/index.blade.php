@@ -19,6 +19,7 @@
     @if($is_user)
         @include('layouts.user.show_name',['user'=>$user])
     @endif
+    </p>
     <div class="container-fluid">
         <div class="row">
             <div class="col-5 text-center">
