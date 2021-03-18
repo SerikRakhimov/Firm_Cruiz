@@ -47,13 +47,13 @@
     </div>
     <div class="row">
         <div class="col-4 text-right">
-            <a class="nav-link" href="{{route('project.index_user', Auth::user())}}"
+            <a class="nav-link" href="{{route('template.main_index')}}"
                title="{{trans('main.templates')}}">
                 <h5>{{trans('main.templates')}}</h5>
             </a>
         </div>
         <div class="col-8 text-left">
-            <a class="nav-link" href="{{route('project.index_user', Auth::user())}}"
+            <a class="nav-link" href="{{route('template.main_index')}}"
                title="{{trans('main.templates')}}">
                 {{trans('main.info_templates')}}
             </a>
