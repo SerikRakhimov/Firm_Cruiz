@@ -58,18 +58,19 @@
                 {{trans('main.delete')}}
             </button>
         </p>
-        <p>
-            <button type="button" class="btn btn-dreamer" title="{{trans('main.accesses')}}"
-                    onclick="document.location='{{route('access.index_project', $project)}}'">
-                            <i class="fas fa-universal-access"></i>
-                {{trans('main.accesses')}}
-            </button>
-            <button type="button" class="btn btn-dreamer"
-                    title="{{trans('main.cancel')}}" @include('layouts.project.previous_url')>
-                            <i class="fas fa-arrow-left"></i>
-                {{trans('main.cancel')}}
-            </button>
-        </p>
+        {{--            Не удалять--}}
+{{--        <p>--}}
+{{--            <button type="button" class="btn btn-dreamer" title="{{trans('main.accesses')}}"--}}
+{{--                    onclick="document.location='{{route('access.index_project', $project)}}'">--}}
+{{--                            <i class="fas fa-universal-access"></i>--}}
+{{--                {{trans('main.accesses')}}--}}
+{{--            </button>--}}
+{{--            <button type="button" class="btn btn-dreamer"--}}
+{{--                    title="{{trans('main.cancel')}}" @include('layouts.project.previous_url')>--}}
+{{--                            <i class="fas fa-arrow-left"></i>--}}
+{{--                {{trans('main.cancel')}}--}}
+{{--            </button>--}}
+{{--        </p>--}}
     @elseif($type_form == 'delete_question')
         <form action="{{route('project.delete', $project)}}" method="POST" id='delete-form'>
             @csrf
