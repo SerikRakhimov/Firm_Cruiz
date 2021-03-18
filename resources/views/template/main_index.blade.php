@@ -21,7 +21,7 @@
         $i++;
         ?>
         <div class="card shadow">
-            <img class="card-img-top" src="{{Storage::url('body.jpg')}}" alt="Card image">
+            <img class="card-img-top" src="{{Storage::url('background.png')}}" alt="Card image">
                 <h4 class="card-header">{{$template->name()}}</h4>
                 <div class="card-body">
                     <p class="card-text">{{$template->desc()}}</p>
