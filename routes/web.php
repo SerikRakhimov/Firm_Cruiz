@@ -640,9 +640,9 @@ Route::get('/link/base_index/{base}', 'LinkController@base_index')
 //    ->name('item.index')
 //    ->middleware('auth');
 
-// "->middleware('auth')" не использовать
 Route::get('/item/base_index/{base}/{project}/{role}', 'ItemController@base_index')
-    ->name('item.base_index');
+    ->name('item.base_index')
+    ->middleware('auth');
 
 Route::get('/item/item_index/{item}/{role}/{par_link?}', 'ItemController@item_index')
     ->name('item.item_index')
