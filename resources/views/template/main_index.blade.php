@@ -20,20 +20,21 @@
         <?php
         $i++;
         ?>
-        <div class="card">
-            <h4 class="card-header">{{$template->name()}}</h4>
+        <div class="card shadow">
+            <img class="card-img-top" src="{{Storage::url('body.jpg')}}" alt="Card image">
+                <h4 class="card-header">{{$template->name()}}</h4>
                 <div class="card-body">
-                <p class="card-text">{{$template->desc()}}</p>
-                {{--                ($my_projects ? 1 : 0)--}}
-                <button type="button" class="btn btn-dreamer" title="{{trans('main.create_project')}}"
-                        onclick="document.location='{{route('project.create_template_user', ['template'=>$template])}}'">
-                    <i class="fas fa-plus d-inline"></i>
-                    {{trans('main.create_project')}}
-                </button>
-            </div>
-            <div class="card-footer">
-                <small class="text-muted">{{trans('main.projects')}}: {{$template->projects_count}}</small>
-            </div>
+                    <p class="card-text">{{$template->desc()}}</p>
+                    {{--                ($my_projects ? 1 : 0)--}}
+                    <button type="button" class="btn btn-dreamer" title="{{trans('main.create_project')}}"
+                            onclick="document.location='{{route('project.create_template_user', ['template'=>$template])}}'">
+                        <i class="fas fa-plus d-inline"></i>
+                        {{trans('main.create_project')}}
+                    </button>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted">{{trans('main.projects')}}: {{$template->projects_count}}</small>
+                </div>
         </div>
         <br>
 

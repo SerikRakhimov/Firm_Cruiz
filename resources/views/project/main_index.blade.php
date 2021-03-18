@@ -32,7 +32,8 @@
             }
         }
         ?>
-        <div class="card">
+        <div class="card shadow">
+            <img class="card-img-top" src="{{Storage::url('body.jpg')}}" alt="Card image">
             <p class="card-header">{{$project->template->name()}}</p>
             <div class="card-body">
                 <h4 class="card-title">{{$project->name()}}</h4>
