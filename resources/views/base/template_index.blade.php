@@ -34,21 +34,23 @@
         ?>
         @foreach($bases as $base)
             <?php
-                $base_right = GlobalController::base_right($base, $role);
+            $base_right = GlobalController::base_right($base, $role);
             ?>
             @if($base_right['is_list_base_calc'] == true)
                 <?php
                 $i++;
                 ?>
                 <tr>
-{{--                                    <th scope="row">{{$i}}</th>--}}
+                    {{--                                    <th scope="row">{{$i}}</th>--}}
                     <td class="text-center">{{$i}}</td>
                     <td class="text-left">
                         <a
                             href="{{route('item.base_index',['base'=>$base, 'project' => $project, 'role' => $role])}}"
-                           title="{{$base->names()}}">
+                            title="{{$base->names()}}">
                             {{$base->names()}}
+                            @auth
                             ({{count(GlobalController::items_right($base, $project, $role)['itget'])}})
+                            @endauth
                         </a>
                     </td>
                 </tr>
