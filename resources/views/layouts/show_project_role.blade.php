@@ -10,18 +10,13 @@
     <div class="row">
         <div class="col-6 text-left">
             <a href="{{route('base.template_index', ['project' => $project, 'role' => $role])}}" title="{{trans('main.bases')}}">
-                <span class="badge badge-success">{{Auth::user()->name()}}</span>
+                <span class="badge badge-success">@guest{{trans('main.guest')}}@endguest @auth{{Auth::user()->name()}}@endauth</span>
             </a>
         </div>
         <div class="col-6 text-right">
             <a href="{{route('base.template_index', ['project' => $project, 'role' => $role])}}" title="{{trans('main.bases')}}">
                 <span class="badge badge-success">{{$role->name()}}</span>
             </a>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-12 text-center">
-            {{$project->desc()}}
         </div>
     </div>
     <div class="row">

@@ -166,6 +166,10 @@ class ItemController extends Controller
 
     function base_index(Base $base, Project $project, Role $role)
     {
+        if (GlobalController::check_project_user($project, $role) == false) {
+            return view('message', ['message' => trans('main.info_user_changed')]);
+        }
+
         $base_right = GlobalController::base_right($base, $role);
         session(['base_index_previous_url' => ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/' . request()->path()]);
         return view('item/base_index', ['base_right' => $base_right, 'base' => $base, 'project' => $project, 'role' => $role,
@@ -175,6 +179,10 @@ class ItemController extends Controller
 
     function item_index(Item $item, Role $role, Link $par_link = null)
     {
+        if (GlobalController::check_project_user($item->project, $role) == false) {
+            return view('message', ['message' => trans('main.info_user_changed')]);
+        }
+
 //        $items = null;
 //        $index = array_search(App::getLocale(), config('app.locales'));
 //        if ($index !== false) {   // '!==' использовать, '!=' не использовать
@@ -324,12 +332,20 @@ class ItemController extends Controller
 
     function ext_show(Item $item, Role $role)
     {
+        if (GlobalController::check_project_user($item->project, $role) == false) {
+            return view('message', ['message' => trans('main.info_user_changed')]);
+        }
+
         return view('item/ext_show', ['type_form' => 'show', 'item' => $item, 'role' => $role, 'array_calc' => $this->get_array_calc_edit($item)['array_calc']]);
     }
 
     function ext_create(Base $base, Project $project, Role $role, $heading = 0, Link $par_link = null, Item $parent_item = null)
         // '$heading = 0' использовать; аналог '$heading = false', в этом случае так /item/ext_create/{base}//
     {
+        if (GlobalController::check_project_user($project, $role) == false) {
+            return view('message', ['message' => trans('main.info_user_changed')]);
+        }
+
         $arrays = $this->get_array_calc_create($base, $par_link, $parent_item);
         $array_calc = $arrays['array_calc'];
         $array_disabled = $arrays['array_disabled'];
@@ -345,7 +361,6 @@ class ItemController extends Controller
             'array_calc' => $array_calc,
             'array_disabled' => $array_disabled,
             'par_link' => $par_link, 'parent_item' => $parent_item]);
-
     }
 
     function create()
@@ -355,6 +370,9 @@ class ItemController extends Controller
 
     function ext_store(Request $request, Base $base, Project $project, Role $role, $heading)
     {
+        if (GlobalController::check_project_user($project, $role) == false) {
+            return view('message', ['message' => trans('main.info_user_changed')]);
+        }
 
         //https://webformyself.com/kak-v-php-poluchit-znachenie-checkbox/
         //        if($base->type_is_boolean()){
@@ -824,7 +842,6 @@ class ItemController extends Controller
         //return $heading ? redirect()->route('item.item_index', $item) : redirect(session('links'));
         return $heading ? redirect()->route('item.item_index', $item) : redirect()->route('item.base_index', ['base' => $base, 'project' => $project, 'role' => $role]);
         //return redirect()->route('item.base_index', ['base'=>$item->base, 'project'=>$item->project, 'role'=>$role]);
-
 
     }
 
@@ -1306,6 +1323,10 @@ class ItemController extends Controller
 
     function ext_update(Request $request, Item $item, Role $role)
     {
+        if (GlobalController::check_project_user($item->project, $role) == false) {
+            return view('message', ['message' => trans('main.info_user_changed')]);
+        }
+
         // Если данные изменились - выполнить проверку. оператор '??' нужны
         if (!($item->name_lang_0 ?? '' == $request->name_lang_0 ?? '')) {
             $request->validate($this->name_lang_rules($request));
@@ -1838,6 +1859,10 @@ class ItemController extends Controller
 
     function ext_edit(Item $item, Role $role, Link $par_link = null, Item $parent_item = null)
     {
+        if (GlobalController::check_project_user($item->project, $role) == false) {
+            return view('message', ['message' => trans('main.info_user_changed')]);
+        }
+
         $arrays = $this->get_array_calc_edit($item, $par_link, $parent_item);
         $array_calc = $arrays['array_calc'];
         $array_disabled = $arrays['array_disabled'];
@@ -1855,12 +1880,20 @@ class ItemController extends Controller
 
     function ext_delete_question(Item $item, Role $role, $heading = false)
     {
+        if (GlobalController::check_project_user($item->project, $role) == false) {
+            return view('message', ['message' => trans('main.info_user_changed')]);
+        }
+
         return view('item/ext_show', ['type_form' => 'delete_question', 'item' => $item, 'role' => $role,
             'array_calc' => $this->get_array_calc_edit($item)['array_calc'], 'heading' => $heading]);
     }
 
     function ext_delete(Item $item, Role $role, $heading = false)
     {
+        if (GlobalController::check_project_user($item->project, $role) == false) {
+            return view('message', ['message' => trans('main.info_user_changed')]);
+        }
+
 //        if ($item->base->type_is_image() || $item->base->type_is_document()) {
 //            Storage::delete($item->filename());
 //        }
@@ -2400,7 +2433,6 @@ class ItemController extends Controller
 
         return $result;
     }
-
 
     function recalculation_codes(Base $base, Project $project)
     {

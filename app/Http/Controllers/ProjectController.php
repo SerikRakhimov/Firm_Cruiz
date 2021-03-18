@@ -33,7 +33,7 @@ class ProjectController extends Controller
         }
         //session(['projects_previous_url' => request()->url()]);
         return view('project/main_index', ['projects' => $projects->paginate(60),
-            'all'=>true, 'my'=>false, 'title'=>trans('main.all_projects')]);
+            'all_projects' => true, 'my_projects' => false, 'title' => trans('main.all_projects')]);
     }
 
     function my_index()
@@ -47,13 +47,13 @@ class ProjectController extends Controller
         }
         //session(['projects_previous_url' => request()->url()]);
         return view('project/main_index', ['projects' => $projects->paginate(60),
-            'all'=>false, 'my'=>true, 'title'=>trans('main.my_projects')]);
+            'all_projects' => false, 'my_projects' => true, 'title' => trans('main.my_projects')]);
     }
 
     function index_template(Template $template)
     {
         if (!Auth::user()->isAdmin()) {
-            return null;
+            return redirect()->route('project.all_index');
         }
         $projects = Project::where('template_id', $template->id);
         $name = "";  // нужно, не удалять
@@ -68,6 +68,9 @@ class ProjectController extends Controller
 
     function index_user(User $user)
     {
+        if (GlobalController::glo_user_id() != $user->id) {
+            return redirect()->route('project.all_index');
+        }
         $projects = Project::where('user_id', $user->id);
         $name = "";  // нужно, не удалять
         $index = array_search(App::getLocale(), config('app.locales'));
@@ -81,6 +84,11 @@ class ProjectController extends Controller
 
     function show_template(Project $project)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $template = Template::findOrFail($project->template_id);
         return view('project/show', ['type_form' => 'show', 'template' => $template, 'project' => $project]);
     }
@@ -88,11 +96,19 @@ class ProjectController extends Controller
     function show_user(Project $project)
     {
         $user = User::findOrFail($project->user_id);
+        if (GlobalController::glo_user_id() != $user->id) {
+            return redirect()->route('project.all_index');
+        }
         return view('project/show', ['type_form' => 'show', 'user' => $user, 'project' => $project]);
     }
 
     function create_template(Template $template)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $exists = Template::whereHas('roles', function ($query) {
             $query->where('is_author', true);
         })->where('id', $template->id)->exists();
@@ -100,21 +116,47 @@ class ProjectController extends Controller
             $users = User::orderBy('name')->get();
             return view('project/edit', ['template' => $template, 'users' => $users]);
         } else {
-            return trans('main.role_author_not_found');
+            return view('message', ['message' => trans('main.role_author_not_found')]);
         }
     }
 
     function create_user(User $user)
     {
+        if (GlobalController::glo_user_id() != $user->id) {
+            return redirect()->route('project.all_index');
+        }
+
         $templates = Template::whereHas('roles', function ($query) {
             $query->where('is_author', true);
         })->get();
+        if ($templates) {
+            return view('project/edit', ['user' => $user, 'templates' => $templates]);
+        } else {
+            return view('message', ['message' => trans('main.role_author_not_found')]);
+        }
 
-        return view('project/edit', ['user' => $user, 'templates' => $templates]);
+    }
+
+    function create_template_user(Template $template)
+    {
+        $user = GlobalController::glo_user();
+
+        $exists = Template::whereHas('roles', function ($query) {
+            $query->where('is_author', true);
+        })->where('id', $template->id)->exists();
+        if ($exists) {
+            return view('project/edit', ['template' => $template, 'user' => $user]);
+        } else {
+            return view('message', ['message' => trans('main.role_author_not_found')]);
+        }
     }
 
     function store(Request $request)
     {
+        $user = User::findOrFail($request->user_id);
+        if (GlobalController::glo_user_id() != $user->id) {
+            return redirect()->route('project.all_index');
+        }
         $request->validate($this->rules());
 
         // установка часового пояса нужно для сохранения времени
@@ -138,12 +180,18 @@ class ProjectController extends Controller
         if ($request->session()->has('projects_previous_url')) {
             return redirect(session('projects_previous_url'));
         } else {
-            return redirect()->back();
+            //return redirect()->back();
+            return redirect()->route('project.my_index');
         }
+
     }
 
     function update(Request $request, Project $project)
     {
+        $user = User::findOrFail($project->user_id);
+        if (GlobalController::glo_user_id() != $user->id) {
+            return redirect()->route('project.all_index');
+        }
         if (!($project->name_lang_0 == $request->name_lang_0)) {
             $request->validate($this->rules());
         }
@@ -171,7 +219,7 @@ class ProjectController extends Controller
         $project->name_lang_2 = isset($request->name_lang_2) ? $request->name_lang_2 : "";
         $project->name_lang_3 = isset($request->name_lang_3) ? $request->name_lang_3 : "";
 
-        $project->desc_lang_0 = $request->desc_lang_0;
+        $project->desc_lang_0 = isset($request->desc_lang_0) ? $request->desc_lang_0 : "";
         $project->desc_lang_1 = isset($request->desc_lang_1) ? $request->desc_lang_1 : "";
         $project->desc_lang_2 = isset($request->desc_lang_2) ? $request->desc_lang_2 : "";
         $project->desc_lang_3 = isset($request->desc_lang_3) ? $request->desc_lang_3 : "";
@@ -181,6 +229,11 @@ class ProjectController extends Controller
 
     function edit_template(Project $project)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $template = Template::findOrFail($project->template_id);
         $users = User::orderBy('name')->get();
         return view('project/edit', ['template' => $template, 'project' => $project, 'users' => $users]);
@@ -189,18 +242,30 @@ class ProjectController extends Controller
     function edit_user(Project $project)
     {
         $user = User::findOrFail($project->user_id);
+        if (GlobalController::glo_user_id() != $user->id) {
+            return redirect()->route('project.all_index');
+        }
         $templates = Template::get();
         return view('project/edit', ['user' => $user, 'project' => $project, 'templates' => $templates]);
     }
 
     function delete_question(Project $project)
     {
+        $user = User::findOrFail($project->user_id);
+        if (GlobalController::glo_user_id() != $user->id) {
+            return redirect()->route('project.all_index');
+        }
         $template = Template::findOrFail($project->template_id);
         return view('project/show', ['type_form' => 'delete_question', 'template' => $template, 'project' => $project]);
     }
 
     function delete(Request $request, Project $project)
     {
+        $user = User::findOrFail($project->user_id);
+        if (GlobalController::glo_user_id() != $user->id) {
+            return redirect()->route('project.all_index');
+        }
+
         $project->delete();
 
         if ($request->session()->has('projects_previous_url')) {

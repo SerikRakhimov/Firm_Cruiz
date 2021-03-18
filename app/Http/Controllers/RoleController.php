@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\App;
 use App\Models\Role;
 use App\Models\Template;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class RoleController extends Controller
 {
@@ -18,6 +19,11 @@ class RoleController extends Controller
 
     function index(Template $template)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $roles = Role::where('template_id', $template->id);
         $name = "";  // нужно, не удалять
         $index = array_search(App::getLocale(), config('app.locales'));
@@ -31,6 +37,11 @@ class RoleController extends Controller
 
     function show(Role $role)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $template = Template::findOrFail($role->template_id);
         return view('role/show', ['type_form' => 'show', 'template' => $template, 'role' => $role]);
     }
@@ -38,11 +49,21 @@ class RoleController extends Controller
 
     function create(Template $template)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         return view('role/edit', ['template' => $template]);
     }
 
     function store(Request $request)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $request->validate($this->rules());
 
         $array_mess = [];
@@ -70,6 +91,11 @@ class RoleController extends Controller
 
     function update(Request $request, Role $role)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         if (!($role->name_lang_0 == $request->name_lang_0)) {
             $request->validate($this->rules());
         }
@@ -124,7 +150,7 @@ class RoleController extends Controller
         $role->name_lang_2 = isset($request->name_lang_2) ? $request->name_lang_2 : "";
         $role->name_lang_3 = isset($request->name_lang_3) ? $request->name_lang_3 : "";
 
-        $role->desc_lang_0 = $request->desc_lang_0;
+        $role->desc_lang_0 = isset($request->desc_lang_0) ? $request->desc_lang_0 : "";
         $role->desc_lang_1 = isset($request->desc_lang_1) ? $request->desc_lang_1 : "";
         $role->desc_lang_2 = isset($request->desc_lang_2) ? $request->desc_lang_2 : "";
         $role->desc_lang_3 = isset($request->desc_lang_3) ? $request->desc_lang_3 : "";
@@ -154,18 +180,33 @@ class RoleController extends Controller
 
     function edit(Role $role)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $template = Template::findOrFail($role->template_id);
         return view('role/edit', ['template' => $template, 'role' => $role]);
     }
 
     function delete_question(Role $role)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $template = Template::findOrFail($role->template_id);
         return view('role/show', ['type_form' => 'delete_question', 'template' => $template, 'role' => $role]);
     }
 
     function delete(Request $request, Role $role)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $role->delete();
 
         if ($request->session()->has('roles_previous_url')) {

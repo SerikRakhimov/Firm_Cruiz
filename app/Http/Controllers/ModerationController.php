@@ -18,7 +18,7 @@ class ModerationController extends Controller
     {
         if (!
         Auth::user()->isModerator()) {
-            return null;
+            return redirect()->route('project.all_index');
         }
         $items = Item::select(DB::Raw('items.*'))
             ->join('bases', 'items.base_id', '=', 'bases.id')
@@ -35,7 +35,7 @@ class ModerationController extends Controller
     {
         if (!
         Auth::user()->isModerator()) {
-            return null;
+            return redirect()->route('project.all_index');
         }
         return view('moderation/show', ['type_form' => 'show', 'item' => $item]);
     }
@@ -44,7 +44,7 @@ class ModerationController extends Controller
     {
         if (!
         Auth::user()->isModerator()) {
-            return null;
+            return redirect()->route('project.all_index');
         }
 
         $data = $request->except('_token', '_method');
@@ -85,7 +85,7 @@ class ModerationController extends Controller
     {
         if (!
         Auth::user()->isModerator()) {
-            return null;
+            return redirect()->route('project.all_index');
         }
         return view('moderation/edit', ['item' => $item, 'statuses' => Item::get_img_statuses()]);
     }
@@ -94,7 +94,7 @@ class ModerationController extends Controller
     {
         if (!
         Auth::user()->isModerator()) {
-            return null;
+            return redirect()->route('project.all_index');
         }
         return view('moderation/show', ['type_form' => 'delete_question', 'item' => $item]);
     }
@@ -103,7 +103,7 @@ class ModerationController extends Controller
     {
         if (!
         Auth::user()->isModerator()) {
-            return null;
+            return redirect()->route('project.all_index');
         };
         $item->delete();
 

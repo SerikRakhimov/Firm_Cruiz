@@ -57,5 +57,10 @@
         </tbody>
     </table>
     {{$bases->links()}}
+    <div class="row">
+        <div class="col-12 text-center">
+            {{$project->desc()}}
+        </div>
+    </div>
 @endsection
 

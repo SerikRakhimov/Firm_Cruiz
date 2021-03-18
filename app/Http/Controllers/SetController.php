@@ -10,6 +10,7 @@ use App\Models\Set;
 use App\Models\Template;
 use App\Rules\IsUniqueSet;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class SetController extends Controller
@@ -24,6 +25,11 @@ class SetController extends Controller
 
     function index(Template $template)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $sets = Set::where('template_id', $template->id);
 //        $name = "";  // нужно, не удалять
 //        $index = array_search(App::getLocale(), config('app.locales'));
@@ -47,6 +53,11 @@ class SetController extends Controller
 
     function show(Set $set)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $template = Template::findOrFail($set->template_id);
         return view('set/show', ['type_form' => 'show', 'template' => $template, 'set' => $set]);
     }
@@ -54,6 +65,11 @@ class SetController extends Controller
 
     function create(Template $template)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $links = $this->select_links_template($template);
         return view('set/edit', ['template' => $template, 'links' => $links,
             'forwhats' => Set::get_forwhats(), 'updactions' => Set::get_updactions()]);
@@ -61,6 +77,11 @@ class SetController extends Controller
 
     function store(Request $request)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $request->validate($this->rules($request));
 
         $array_mess = [];
@@ -88,6 +109,11 @@ class SetController extends Controller
 
     function update(Request $request, Set $set)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         if (!(($set->link_from_id == $request->link_from_id) && ($set->link_to_id == $request->link_to_id))) {
             $request->validate($this->rules($request));
         }
@@ -227,6 +253,11 @@ class SetController extends Controller
 
     function edit(Set $set)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $template = Template::findOrFail($set->template_id);
         $links = $this->select_links_template($template);
         return view('set/edit', ['template' => $template, 'set' => $set, 'links' => $links,
@@ -235,12 +266,22 @@ class SetController extends Controller
 
     function delete_question(Set $set)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $template = Template::findOrFail($set->template_id);
         return view('set/show', ['type_form' => 'delete_question', 'template' => $template, 'set' => $set]);
     }
 
     function delete(Request $request, Set $set)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $set->delete();
 
         if ($request->session()->has('sets_previous_url')) {

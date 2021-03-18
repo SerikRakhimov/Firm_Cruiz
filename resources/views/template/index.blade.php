@@ -5,7 +5,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-5 text-center">
-                <h3>{{trans('main.templates')}}</h3>
+                <h3>{{trans('main.configuring_templates')}}</h3>
             </div>
             <div class="col-2">
             </div>

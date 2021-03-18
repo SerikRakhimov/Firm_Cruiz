@@ -39,6 +39,11 @@ class BaseController extends Controller
 
     function index(Template $template)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $bases = Base::where('template_id', $template->id);
         $index = array_search(App::getLocale(), config('app.locales'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
@@ -66,6 +71,10 @@ class BaseController extends Controller
 
     function template_index(Project $project, Role $role)
     {
+        if (GlobalController::check_project_user($project, $role) == false) {
+            return view('message', ['message' => trans('main.info_user_changed')]);
+        }
+
         $template = $project->template;
         $bases = Base::where('template_id', $template->id);
         $index = array_search(App::getLocale(), config('app.locales'));
@@ -89,25 +98,34 @@ class BaseController extends Controller
         }
         session(['bases_previous_url' => request()->url()]);
         return view('base/template_index', ['project' => $project, 'role' => $role, 'bases' => $bases->paginate(60)]);
+
     }
 
     function show(Base $base)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         return view('base/show', ['type_form' => 'show', 'base' => $base]);
     }
 
     function create(Template $template)
     {
-        if (!Auth::user()->isAdmin()) {
-            return null;
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
         }
+
         return view('base/edit', ['template' => $template, 'types' => Base::get_types()]);
     }
 
     function store(Request $request)
     {
-        if (!Auth::user()->isAdmin()) {
-            return null;
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
         }
 
         $request->validate($this->rules());
@@ -329,9 +347,11 @@ class BaseController extends Controller
 
     function update(Request $request, Base $base)
     {
-        if (!Auth::user()->isAdmin()) {
-            return null;
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
         }
+
         //if (!(($base->name_lang_0 == $request->name_lang_0) && ($base->name_lang_0 == $request->name_lang_0))) {
         $request->validate($this->rules());
         //}
@@ -551,26 +571,32 @@ class BaseController extends Controller
 
     function edit(Base $base)
     {
-        if (!Auth::user()->isAdmin()) {
-            return null;
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
         }
+
         $template = Template::findOrFail($base->template_id);
         return view('base/edit', ['template' => $template, 'base' => $base, 'types' => Base::get_types()]);
     }
 
     function delete_question(Base $base)
     {
-        if (!Auth::user()->isAdmin()) {
-            return null;
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
         }
+
         return view('base/show', ['type_form' => 'delete_question', 'base' => $base]);
     }
 
     function delete(Base $base)
     {
-        if (!Auth::user()->isAdmin()) {
-            return null;
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
         }
+
         // сначала эта команда
         $template = Template::findOrFail($base->template_id);
         // потом эта команда

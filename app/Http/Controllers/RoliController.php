@@ -9,6 +9,7 @@ use App\Models\Role;
 use App\Models\Template;
 use App\Rules\IsUniqueRoli;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class RoliController extends Controller
@@ -23,6 +24,11 @@ class RoliController extends Controller
 
     function index_role(Role $role)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $rolis = Roli::where('role_id', $role->id)->orderBy('link_id');
         session(['rolis_previous_url' => request()->url()]);
         return view('roli/index', ['role' => $role, 'rolis' => $rolis->paginate(60)]);
@@ -31,6 +37,11 @@ class RoliController extends Controller
 
     function index_link(Link $link)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $rolis = Roli::where('link_id', $link->id)->orderBy('role_id');
         session(['rolis_previous_url' => request()->url()]);
         return view('roli/index', ['link' => $link, 'rolis' => $rolis->paginate(60)]);
@@ -38,18 +49,33 @@ class RoliController extends Controller
 
     function show_role(Roli $roli)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $role = Role::findOrFail($roli->role_id);
         return view('roli/show', ['type_form' => 'show', 'role' => $role, 'roli' => $roli]);
     }
 
     function show_link(Roli $roli)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $link = Link::findOrFail($roli->link_id);
         return view('roli/show', ['type_form' => 'show', 'link' => $link, 'roli' => $roli]);
     }
 
     function create_role(Role $role)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $links = $this->select_links_role($role);
 
         return view('roli/edit', ['role' => $role, 'links' => $links]);
@@ -57,6 +83,11 @@ class RoliController extends Controller
 
     function create_link(Link $link)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $roles = Role::where('template_id', $link->child_base->template_id);
         $name = "";  // нужно, не удалять
         $index = array_search(App::getLocale(), config('app.locales'));
@@ -70,6 +101,11 @@ class RoliController extends Controller
 
     function store(Request $request)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $request->validate($this->rules($request));
 
         $array_mess = [];
@@ -97,6 +133,11 @@ class RoliController extends Controller
 
     function update(Request $request, Roli $roli)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         if (!(($roli->role_id == $request->role_id) && ($roli->link_id == $request->link_id))) {
             $request->validate($this->rules($request));
         }
@@ -173,6 +214,11 @@ class RoliController extends Controller
 
     function edit_role(Roli $roli)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $role = Role::findOrFail($roli->role_id);
 
         $links = $this->select_links_role($role);
@@ -182,6 +228,11 @@ class RoliController extends Controller
 
     function edit_link(Roli $roli)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $link = Link::findOrFail($roli->link_id);
         $roles = Role::where('template_id', $link->child_base->template_id);
         $name = "";  // нужно, не удалять
@@ -196,12 +247,22 @@ class RoliController extends Controller
 
     function delete_question(Roli $roli)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $template = Template::findOrFail($roli->role->template_id);
         return view('roli/show', ['type_form' => 'delete_question', 'template' => $template, 'roli' => $roli]);
     }
 
     function delete(Request $request, Roli $roli)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $roli->delete();
 
         if ($request->session()->has('rolis_previous_url')) {

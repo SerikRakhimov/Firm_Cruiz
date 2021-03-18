@@ -58,8 +58,9 @@ class UserController extends Controller
 
     function index()
     {
-        if (!Auth::user()->isAdmin()) {
-            return null;
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
         }
 
         $users = User::orderBy('name');
@@ -99,11 +100,21 @@ class UserController extends Controller
 
     function create()
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         return view('user/edit');
     }
 
     function store(Request $request)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $request->validate($this->rules());
 
         // установка часового пояса нужно для сохранения времени
@@ -122,6 +133,11 @@ class UserController extends Controller
 
     function update(Request $request, User $user)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         if ($user->name != $request->name) {
             $request->validate($this->name_rules());
         }
@@ -143,8 +159,7 @@ class UserController extends Controller
             } else {
                 return redirect()->back();
             }
-        }
-        else{
+        } else {
             return redirect()->route('user.show', ['user' => $user]);
         }
     }
@@ -160,16 +175,25 @@ class UserController extends Controller
 
     function edit(User $user)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         return view('user/edit', ['user' => $user, 'change_password' => false]);
     }
 
     function change_password(User $user)
     {
+        if (GlobalController::glo_user_id() != $user->id) {
+            return redirect()->route('project.all_index');
+        }
         return view('user/edit', ['user' => $user, 'change_password' => true]);
     }
 
     function delete_question(User $user)
     {
+        // Нельзя удалить пользователя Админа
         if ($user->isAdmin() == true) {
             abort(404);
         } else {
@@ -179,6 +203,11 @@ class UserController extends Controller
 
     function delete(Request $request, User $user)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $user->delete();
 
         if ($request->session()->has('users_previous_url')) {

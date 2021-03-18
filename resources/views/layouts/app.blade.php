@@ -113,6 +113,13 @@ use App\Models\Project;
                         {{--                        </ul>--}}
                         {{--                @endif--}}
                     @endauth
+                    <li class="nav-item">
+                        <a class="nav-link"
+                           href="{{route('template.main_index')}}"
+                           title="{{trans('main.templates')}}">
+                            {{trans('main.templates')}}
+                        </a>
+                    </li>
                 </ul>
                 <!-- Right Side Of Navbar -->
                 <ul class="navbar-nav ml-auto">
@@ -120,11 +127,13 @@ use App\Models\Project;
                     @guest
                         <li class="nav-item">
                             {{--                            <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>--}}
-                            <a class="nav-link" href="{{ route('login') }}">{{trans('main.login')}}</a>
+                            <a class="nav-link" href="{{ route('login') }}"
+                               title="{{trans('main.login')}}">{{trans('main.login')}}</a>
                         </li>
                         @if (Route::has('register'))
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('register') }}">{{trans('main.register')}}</a>
+                                <a class="nav-link" href="{{ route('register') }}" title="{{trans('main.register')}}">
+                                    {{trans('main.register')}}</a>
                             </li>
                         @endif
                     @else
@@ -139,7 +148,8 @@ use App\Models\Project;
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="{{ route('logout') }}"
                                    onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
+                                                     document.getElementById('logout-form').submit();"
+                                   title="{{trans('main.logout')}}">
                                     {{trans('main.logout')}}
                                 </a>
 
@@ -156,17 +166,20 @@ use App\Models\Project;
                                     {{--                                        {{trans('main.all_projects')}}--}}
                                     {{--                                    </a>--}}
                                     @if(Auth::user()->isModerator())
-                                        <a class="dropdown-item" href="{{route('moderation.index')}}">
+                                        <a class="dropdown-item" href="{{route('moderation.index')}}"
+                                           title="{{trans('main.moderation')}}">
                                             {{trans('main.moderation')}}(<span
                                                 class="badge badge-primary">{{trans('main.moderator')}}</span>)
                                         </a>
                                     @endif
                                     @if(Auth::user()->isAdmin())
-                                        <a class="dropdown-item" href="{{route('template.index')}}">
-                                            {{trans('main.templates')}}(<span
+                                        <a class="dropdown-item" href="{{route('template.index')}}"
+                                           title="{{trans('main.configuring_templates')}}">
+                                            {{trans('main.configuring_templates')}}(<span
                                                 class="badge badge-primary">{{trans('main.admin')}}</span>)
                                         </a>
-                                        <a class="dropdown-item" href="{{route('user.index')}}">
+                                        <a class="dropdown-item" href="{{route('user.index')}}"
+                                           title="{{trans('main.users')}}">
                                             {{trans('main.users')}}(<span
                                                 class="badge badge-primary">{{trans('main.admin')}}</span>)
                                         </a>

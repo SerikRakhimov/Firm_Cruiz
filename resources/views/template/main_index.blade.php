@@ -7,49 +7,32 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-12 text-center">
-                <h3>{{$title}}</h3>
+                <h3>{{trans('main.templates')}}</h3>
             </div>
         </div>
     </div>
     </p>
     <?php
-    $i = $projects->firstItem() - 1;
+    $i = $templates->firstItem() - 1;
     ?>
     {{--    <div class="card-deck">--}}
-    @foreach($projects as $project)
+    @foreach($templates as $template)
         <?php
         $i++;
-        $message = "";
-        if ($all_projects == true) {
-            $role = Role::where('template_id', $project->template_id)->where('is_default_for_external', true)->first();
-            if (!$role) {
-                $message = trans('main.role_default_for_external_not_found');
-            }
-        } else {
-            $role = Role::where('template_id', $project->template_id)->where('is_author', true)->first();
-            if (!$role) {
-                $message = trans('main.role_author_not_found');
-            }
-        }
         ?>
         <div class="card">
-            <p class="card-header">{{$project->template->name()}}</p>
-            <div class="card-body">
-                <h4 class="card-title">{{$project->name()}}</h4>
-                <p class="card-text">{{$project->desc()}}</p>
-                @if($role)
-                    {{--                ($my_projects ? 1 : 0)--}}
-                    <button type="button" class="btn btn-dreamer" title="{{trans('main.start')}}"
-                            onclick="document.location='{{route('base.template_index', ['project'=>$project, 'role'=>$role])}}'">
-                        <i class="fas fa-play d-inline"></i>
-                        {{trans('main.start')}}
-                    </button>
-                    @else
-                    <p class="card-text text-danger">{{$message}}</p>
-                @endif
+            <h4 class="card-header">{{$template->name()}}</h4>
+                <div class="card-body">
+                <p class="card-text">{{$template->desc()}}</p>
+                {{--                ($my_projects ? 1 : 0)--}}
+                <button type="button" class="btn btn-dreamer" title="{{trans('main.create_project')}}"
+                        onclick="document.location='{{route('project.create_template_user', ['template'=>$template])}}'">
+                    <i class="fas fa-plus d-inline"></i>
+                    {{trans('main.create_project')}}
+                </button>
             </div>
             <div class="card-footer">
-                <small class="text-muted">{{$project->created_at}}</small>
+                <small class="text-muted">{{trans('main.projects')}}: {{$template->projects_count}}</small>
             </div>
         </div>
         <br>
@@ -78,6 +61,7 @@
     {{--            </div>--}}
     {{--        </div>--}}
 
-    {{$projects->links()}}
+    {{$templates->links()}}
+
 @endsection
 

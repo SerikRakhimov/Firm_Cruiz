@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\App;
 use App\Models\Base;
 use App\Models\Link;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LinkController extends Controller
 {
@@ -25,6 +26,11 @@ class LinkController extends Controller
 
     function index()
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $links = null;
         $index = array_search(App::getLocale(), config('app.locales'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
@@ -48,6 +54,11 @@ class LinkController extends Controller
 
     function base_index(Base $base)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $items = null;
         session(['links' => ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/' . request()->path()]);
         return view('link/base_index', ['base' => $base, 'links' => Link::where('child_base_id', $base->id)->orderBy('parent_base_number')->get()]);
@@ -56,16 +67,31 @@ class LinkController extends Controller
 
     function show(Link $link)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         return view('link/show', ['type_form' => 'show', 'link' => $link]);
     }
 
     function create(Base $base)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         return view('link/edit', ['base' => $base, 'bases' => Base::where('template_id', $base->template_id)->get()]);
     }
 
     function store(Request $request)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $request->validate($this->rules());
 
         // установка часового пояса нужно для сохранения времени
@@ -178,6 +204,11 @@ class LinkController extends Controller
 
     function update(Request $request, Link $link)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         // Если данные изменились - выполнить проверку
 //        if (!(($link->child_base_id == $request->child_base_id)
 //            and ($link->child_label_lang_0 == $request->child_label_lang_0)
@@ -296,16 +327,31 @@ class LinkController extends Controller
 
     function edit(Link $link, Base $base)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         return view('link/edit', ['base' => $base, 'link' => $link, 'bases' =>  Base::where('template_id', $base->template_id)->get()]);
     }
 
     function delete_question(Link $link)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         return view('link/show', ['type_form' => 'delete_question', 'link' => $link]);
     }
 
     function delete(Link $link)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $link->delete();
         return redirect()->route('link.base_index', ['base' => $link->child_base, 'links' => Link::where('child_base_id', $link->child_base_id)->orderBy('parent_base_number')->get()]);
     }

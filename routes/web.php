@@ -82,7 +82,8 @@ Route::get('/', function () {
         //return view('home');
         //return redirect()->route('order.index_job_user');
     } else {
-        return redirect()->route('login');
+//        return redirect()->route('login');
+        return redirect()->route('project.all_index');
     }
 
 })
@@ -112,6 +113,10 @@ Route::post('/home/glo_store', 'HomeController@glo_store')
 Route::get('/template/index', 'TemplateController@index')
     ->name('template.index')
     ->middleware('auth');
+
+// "->middleware('auth')" не использовать
+Route::get('/template/main_index', 'TemplateController@main_index')
+    ->name('template.main_index');
 
 Route::get('/template/show/{template}', 'TemplateController@show')
     ->name('template.show')
@@ -399,6 +404,10 @@ Route::get('/project/create_user/{user}', 'ProjectController@create_user')
     ->name('project.create_user')
     ->middleware('auth');
 
+Route::get('/project/create_template_user/{template}', 'ProjectController@create_template_user')
+    ->name('project.create_template_user')
+    ->middleware('auth');
+
 Route::get('/project/edit_template/{project}', 'ProjectController@edit_template')
     ->name('project.edit_template')
     ->middleware('auth');
@@ -534,9 +543,9 @@ Route::get('/base/index/{template}', 'BaseController@index')
     ->name('base.index')
     ->middleware('auth');
 
+// "->middleware('auth')" не использовать
 Route::get('/base/template_index/{project}/{role}', 'BaseController@template_index')
-    ->name('base.template_index')
-    ->middleware('auth');
+    ->name('base.template_index');
 
 Route::get('/base/show/{base}', 'BaseController@show')
     ->name('base.show')
@@ -631,9 +640,9 @@ Route::get('/link/base_index/{base}', 'LinkController@base_index')
 //    ->name('item.index')
 //    ->middleware('auth');
 
+// "->middleware('auth')" не использовать
 Route::get('/item/base_index/{base}/{project}/{role}', 'ItemController@base_index')
-    ->name('item.base_index')
-    ->middleware('auth');
+    ->name('item.base_index');
 
 Route::get('/item/item_index/{item}/{role}/{par_link?}', 'ItemController@item_index')
     ->name('item.item_index')

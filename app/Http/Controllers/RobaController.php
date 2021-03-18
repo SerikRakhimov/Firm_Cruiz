@@ -10,6 +10,7 @@ use App\Models\Template;
 use App\Rules\IsUniqueRoba;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class RobaController extends Controller
 {
@@ -23,6 +24,11 @@ class RobaController extends Controller
 
     function index_role(Role $role)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $robas = Roba::where('role_id', $role->id)->orderBy('base_id');
         session(['robas_previous_url' => request()->url()]);
         return view('roba/index', ['role' => $role, 'robas' => $robas->paginate(60)]);
@@ -31,6 +37,11 @@ class RobaController extends Controller
 
     function index_base(Base $base)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $robas = Roba::where('base_id', $base->id)->orderBy('role_id');
         session(['robas_previous_url' => request()->url()]);
         return view('roba/index', ['base' => $base, 'robas' => $robas->paginate(60)]);
@@ -38,18 +49,33 @@ class RobaController extends Controller
 
     function show_role(Roba $roba)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $role = Role::findOrFail($roba->role_id);
         return view('roba/show', ['type_form' => 'show', 'role' => $role, 'roba' => $roba]);
     }
 
     function show_base(Roba $roba)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $base = Base::findOrFail($roba->base_id);
         return view('roba/show', ['type_form' => 'show', 'base' => $base, 'roba' => $roba]);
     }
 
     function create_role(Role $role)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $bases = Base::where('template_id', $role->template_id);
         $name = "";  // нужно, не удалять
         $index = array_search(App::getLocale(), config('app.locales'));
@@ -63,6 +89,11 @@ class RobaController extends Controller
 
     function create_base(Base $base)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $roles = Role::where('template_id', $base->template_id);
         $name = "";  // нужно, не удалять
         $index = array_search(App::getLocale(), config('app.locales'));
@@ -76,6 +107,11 @@ class RobaController extends Controller
 
     function store(Request $request)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $request->validate($this->rules($request));
 
         $array_mess = [];
@@ -103,6 +139,11 @@ class RobaController extends Controller
 
     function update(Request $request, Roba $roba)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         if (!(($roba->role_id == $request->role_id) && ($roba->base_id == $request->base_id))) {
             $request->validate($this->rules($request));
         }
@@ -172,6 +213,11 @@ class RobaController extends Controller
 
     function edit_role(Roba $roba)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $role = Role::findOrFail($roba->role_id);
         $bases = Base::where('template_id', $role->template_id);
         $name = "";  // нужно, не удалять
@@ -186,6 +232,11 @@ class RobaController extends Controller
 
     function edit_base(Roba $roba)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $base = Base::findOrFail($roba->base_id);
         $roles = Role::where('template_id', $base->template_id);
         $name = "";  // нужно, не удалять
@@ -200,12 +251,22 @@ class RobaController extends Controller
 
     function delete_question(Roba $roba)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $template = Template::findOrFail($roba->role->template_id);
         return view('roba/show', ['type_form' => 'delete_question', 'template' => $template, 'roba' => $roba]);
     }
 
     function delete(Request $request, Roba $roba)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $roba->delete();
 
         if ($request->session()->has('robas_previous_url')) {

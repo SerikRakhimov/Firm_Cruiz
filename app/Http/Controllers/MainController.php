@@ -7,6 +7,7 @@ use App\Models\Item;
 use App\Models\Link;
 use App\Models\Main;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class MainController extends Controller
 {
@@ -22,6 +23,11 @@ class MainController extends Controller
 
     function index()
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $mains = Main::orderBy('link_id')->orderBy('child_item_id')->orderBy('parent_item_id');
         return view('main/index', ['mains' => $mains->paginate(60)]);
 
@@ -29,6 +35,11 @@ class MainController extends Controller
 
     function index_item(Item $item)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
 //        $child_mains = Main::all()->where('child_item_id', $item->id)->sortBy(function ($main) {
 //            return $main->link->parent_base->name() . $main->parent_item->name();
 //        });
@@ -50,6 +61,11 @@ class MainController extends Controller
 
     function index_full(Item $item, Link $link)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
 //        $item = $main->parent_item;
 //        $link_head = $main->link;
         $link_head = $link;
@@ -66,6 +82,11 @@ class MainController extends Controller
 
     function store_full(Request $request)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $item = $request['item'];
         $link = $request['link'];
 
@@ -74,17 +95,32 @@ class MainController extends Controller
 
     function show(Main $main)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         return view('main/show', ['type_form' => 'show', 'main' => $main]);
     }
 
     function create()
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         // исключая вычисляемые поля
         return view('main/edit', ['links' => Link::all()->where('parent_is_parent_related', false)]);
     }
 
     function store(Request $request)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $request->validate($this->rules());
 
         // установка часового пояса нужно для сохранения времени
@@ -120,6 +156,11 @@ class MainController extends Controller
 
     function update(Request $request, Main $main)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         // Если данные изменились - выполнить проверку
         if (!(($main->link_id == $request->link_id)
             and ($main->child_item_id == $request->child_item_id)
@@ -159,17 +200,32 @@ class MainController extends Controller
 
     function edit(Main $main)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         // исключая вычисляемые поля
         return view('main/edit', ['main' => $main, 'links' => Link::all()->where('parent_is_parent_related', false)]);
     }
 
     function delete_question(Main $main)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         return view('main/show', ['type_form' => 'delete_question', 'main' => $main]);
     }
 
     function delete(Main $main)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
+
         $main->delete();
         return redirect()->route('main.index');
     }
@@ -186,6 +242,7 @@ class MainController extends Controller
         }
         return $item;
     }
+
     // вывод объекта по имени главного $item и $link
     static function view_info($child_item_id, $link_id)
     {

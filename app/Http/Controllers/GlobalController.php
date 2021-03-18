@@ -280,4 +280,19 @@ class GlobalController extends Controller
             || ($base->is_calcname_lst == false);
     }
 
+    static function check_project_user(Project $project, Role $role)
+    {
+        $result = false;
+        if ($role->is_author == true) {
+            if (Auth::check()) {
+                $result = $project->user_id == GlobalController::glo_user_id();
+            } else {
+                $result = false;
+            }
+        } else {
+            $result = true;
+        }
+        return $result;
+    }
+
 }

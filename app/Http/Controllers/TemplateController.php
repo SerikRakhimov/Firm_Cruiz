@@ -20,6 +20,10 @@ class TemplateController extends Controller
 
     function index()
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
         $templates = Template::withCount('projects')->withCount('roles')->withCount('bases')->withCount('sets');
         $index = array_search(App::getLocale(), config('app.locales'));
         $name = "";  // нужно, не удалять
@@ -32,8 +36,26 @@ class TemplateController extends Controller
         return view('template/index', ['templates' => $templates->paginate(60)]);
     }
 
+    function main_index()
+    {
+        $templates = Template::withCount('projects');
+        $index = array_search(App::getLocale(), config('app.locales'));
+        $name = "";  // нужно, не удалять
+        $index = array_search(App::getLocale(), config('app.locales'));
+        if ($index !== false) {   // '!==' использовать, '!=' не использовать
+            $name = 'name_lang_' . $index;
+            $templates = $templates->orderBy($name);
+        }
+        session(['templates_previous_url' => request()->url()]);
+        return view('template/main_index', ['templates' => $templates->paginate(60)]);
+    }
+
     function show(Template $template)
     {
+        if (!
+        Auth::user()->isAdmin()) {
+            return redirect()->route('project.all_index');
+        }
         return view('template/show', ['type_form' => 'show', 'template' => $template]);
     }
 
@@ -42,7 +64,7 @@ class TemplateController extends Controller
     {
         if (!
         Auth::user()->isAdmin()) {
-            return null;
+            return redirect()->route('project.all_index');
         }
         return view('template/edit');
     }
@@ -51,7 +73,7 @@ class TemplateController extends Controller
     {
         if (!
         Auth::user()->isAdmin()) {
-            return null;
+            return redirect()->route('project.all_index');
         }
         $request->validate($this->rules());
 
@@ -73,7 +95,7 @@ class TemplateController extends Controller
     {
         if (!
         Auth::user()->isAdmin()) {
-            return null;
+            return redirect()->route('project.all_index');
         }
         if (!($template->name_lang_0 == $request->name_lang_0)) {
             $request->validate($this->rules());
@@ -98,10 +120,12 @@ class TemplateController extends Controller
         $template->name_lang_1 = isset($request->name_lang_1) ? $request->name_lang_1 : "";
         $template->name_lang_2 = isset($request->name_lang_2) ? $request->name_lang_2 : "";
         $template->name_lang_3 = isset($request->name_lang_3) ? $request->name_lang_3 : "";
-        $template->desc_lang_0 = $request->desc_lang_0;
+
+        $template->desc_lang_0 = isset($request->desc_lang_0) ? $request->desc_lang_0 : "";
         $template->desc_lang_1 = isset($request->desc_lang_1) ? $request->desc_lang_1 : "";
         $template->desc_lang_2 = isset($request->desc_lang_2) ? $request->desc_lang_2 : "";
         $template->desc_lang_3 = isset($request->desc_lang_3) ? $request->desc_lang_3 : "";
+
         $template->save();
     }
 
@@ -109,7 +133,7 @@ class TemplateController extends Controller
     {
         if (!
         Auth::user()->isAdmin()) {
-            return null;
+            return redirect()->route('project.all_index');
         }
         return view('template/edit', ['template' => $template]);
     }
@@ -118,7 +142,7 @@ class TemplateController extends Controller
     {
         if (!
         Auth::user()->isAdmin()) {
-            return null;
+            return redirect()->route('project.all_index');
         }
         return view('template/show', ['type_form' => 'delete_question', 'template' => $template]);
     }
@@ -127,8 +151,8 @@ class TemplateController extends Controller
     {
         if (!
         Auth::user()->isAdmin()) {
-            return null;
-        };
+            return redirect()->route('project.all_index');
+        }
 
         $template->delete();
 

@@ -162,8 +162,12 @@
                 </div>
                 <div class="col-5 text-left">
                     <button type="button" class="btn btn-dreamer" title="{{trans('main.cancel')}}"
-                        @include('layouts.project.previous_url')
-                    >
+                            @if($is_template && $is_user)
+                            onclick="document.location='{{route('template.main_index')}}'"
+                        @else
+                            @include('layouts.project.previous_url')
+                        @endif
+                        >
                         {{--                    <i class="fas fa-arrow-left"></i>--}}
                         {{trans('main.cancel')}}
                     </button>
