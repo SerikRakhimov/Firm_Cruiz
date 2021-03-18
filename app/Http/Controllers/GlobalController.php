@@ -180,7 +180,7 @@ class GlobalController extends Controller
         $is_edit_link_read = $base_right['is_edit_link_read'];
         $is_edit_link_update = $base_right['is_edit_link_update'];
         //  Проверка скрывать поле или нет
-        if ($link->parent_is_hidden_field == true){
+        if ($link->parent_is_hidden_field == true) {
             $is_list_link_enable = false;
             $is_show_link_enable = false;
             $is_edit_link_read = false;
@@ -283,14 +283,16 @@ class GlobalController extends Controller
     static function check_project_user(Project $project, Role $role)
     {
         $result = false;
-        if ($role->is_author == true) {
-            if (Auth::check()) {
-                $result = $project->user_id == GlobalController::glo_user_id();
-            } else {
-                $result = false;
-            }
-        } else {
+        if ($role->is_default_for_external == true) {
             $result = true;
+        } else {
+            if ($role->is_author == true) {
+                if (Auth::check()) {
+                    $result = $project->user_id == GlobalController::glo_user_id();
+                } else {
+                    $result = false;
+                }
+            }
         }
         return $result;
     }
