@@ -76,7 +76,7 @@ class BaseController extends Controller
         }
 
         $template = $project->template;
-        return view('message', ['message' => $project->template_id]);
+        return view('message', ['message' => $project->id]);
         $bases = Base::where('template_id', $template->id);
         $index = array_search(App::getLocale(), config('app.locales'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
