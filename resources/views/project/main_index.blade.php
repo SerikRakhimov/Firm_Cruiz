@@ -32,7 +32,6 @@
             }
         }
         ?>
-        {{$project->id}} {{$project->template->id}}
         <div class="card shadow">
             <img class="card-img-top" src="{{Storage::url('background.png')}}" alt="Card image">
             <p class="card-header">{{$project->template->name()}}</p>
