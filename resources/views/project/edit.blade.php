@@ -41,7 +41,8 @@
                             <option value="{{$template->id}}"
                             @if ($update)
                                 "(int) 0" нужно
-                                @if ((old('template_id') ?? ($key ?? (int) 0)) ==  $project->template_id)
+{{--                                @if ((old('template_id') ?? ($key ?? (int) 0)) ==  $project->template_id)--}}
+                                    @if ((old('template_id') ?? ($project->template_id ?? (int) 0)) ==  $template->id)
                                     selected
                                 @endif
                             @endif
