@@ -37,7 +37,8 @@
     @endforeach
 
     @foreach (config('app.locales') as $key=>$value)
-        <p>{{trans('main.desc')}} ({{trans('main.' . $value)}}): <b>{{$project['desc_lang_' . $key]}}</b></p>
+{{--        <p>{{trans('main.desc')}} ({{trans('main.' . $value)}}): <b>{{$project['desc_lang_' . $key]}}</b></p>--}}
+        <p>{{trans('main.desc')}} ({{trans('main.' . $value)}}): <b><?php echo nl2br($project['desc_lang_' . $key]); ?></b></p>
     @endforeach
 
     @if(!$is_user)

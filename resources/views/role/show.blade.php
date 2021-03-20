@@ -20,7 +20,8 @@
     @endforeach
 
     @foreach (config('app.locales') as $key=>$value)
-        <p>{{trans('main.desc')}} ({{trans('main.' . $value)}}): <b>{{$role['desc_lang_' . $key]}}</b></p>
+{{--        <p>{{trans('main.desc')}} ({{trans('main.' . $value)}}): <b>{{$role['desc_lang_' . $key]}}</b></p>--}}
+        <p>{{trans('main.desc')}} ({{trans('main.' . $value)}}): <b><?php echo nl2br($role['desc_lang_' . $key]); ?></b></p>
     @endforeach
 
     <p>{{trans('main.is_author')}}: <b>{{GlobalController::name_is_boolean($role->is_author)}}</b></p>
@@ -58,12 +59,13 @@
             </button>
         </p>
         <p>
-            <button type="button" class="btn btn-dreamer" title="{{trans('main.accesses')}}"
-                    onclick="document.location='{{route('access.index_role', $role)}}'"
-            >
-                <i class="fas fa-universal-access"></i>
-                {{trans('main.accesses')}}
-            </button>
+            {{--            Не удалять--}}
+{{--            <button type="button" class="btn btn-dreamer" title="{{trans('main.accesses')}}"--}}
+{{--                    onclick="document.location='{{route('access.index_role', $role)}}'"--}}
+{{--            >--}}
+{{--                <i class="fas fa-universal-access"></i>--}}
+{{--                {{trans('main.accesses')}}--}}
+{{--            </button>--}}
             <button type="button" class="btn btn-dreamer" title="{{trans('main.robas')}}"
                     onclick="document.location='{{route('roba.index_role', $role)}}'"
             >

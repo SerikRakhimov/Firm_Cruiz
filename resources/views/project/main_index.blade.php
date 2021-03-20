@@ -37,7 +37,8 @@
             <p class="card-header">{{$project->template->name()}}</p>
             <div class="card-body">
                 <h4 class="card-title">{{$project->name()}}</h4>
-                <p class="card-text">{{$project->desc()}}</p>
+{{--                <p class="card-text">{{$project->desc()}}</p>--}}
+                <p class="card-text"><?php echo nl2br($project->desc()); ?></p>
                 @if($role)
                     {{--                ($my_projects ? 1 : 0)--}}
                     <button type="button" class="btn btn-dreamer" title="{{trans('main.start')}}"

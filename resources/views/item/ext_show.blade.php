@@ -9,7 +9,8 @@
     use App\Http\Controllers\ItemController;
     use App\Http\Controllers\MainController;
     $project = $item->project;
-    $base_right = GlobalController::base_right($item->base, $role);
+    $base = $item->base;
+    $base_right = GlobalController::base_right($base, $role);
     ?>
     @include('layouts.show_project_role',['project'=>$project, 'role'=>$role])
     <h3 class="display-5">
@@ -21,10 +22,6 @@
         <span class="text-info">-</span> <span class="text-success">{{$item->base->info()}}</span>
     </h3>
     <br>
-    <?php
-    $base = $item->base;
-    $base_right = GlobalController::base_right($base, $role);
-    ?>
     <p>Id: <b>{{$item->id}}</b></p>
     @if($base_right['is_show_base_enable'] == true)
 {{--        <p>--}}

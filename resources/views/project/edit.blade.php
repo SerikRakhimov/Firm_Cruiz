@@ -94,6 +94,7 @@
                     <textarea
                         name="desc_lang_{{$key}}"
                         id="desc_lang_{{$key}}"
+                        rows = "5"
                         class="form-control @error('desc_lang_' . $key) is-invalid @enderror"
                         placeholder="">
                         {{ old('desc_lang_' . $key) ?? ($project['desc_lang_' . $key] ?? '') }}
