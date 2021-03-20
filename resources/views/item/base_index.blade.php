@@ -217,5 +217,10 @@
         </tbody>
     </table>
     {{$items->links()}}
+    <div class="row">
+        <div class="col-12 text-center">
+            {{$project->desc()}}
+        </div>
+    </div>
 @endsection
 
