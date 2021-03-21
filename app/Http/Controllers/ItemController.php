@@ -1323,6 +1323,9 @@ class ItemController extends Controller
 
     function ext_update(Request $request, Item $item, Role $role)
     {
+        // установка часового пояса нужно для сохранения времени
+        date_default_timezone_set('Asia/Almaty');
+
         if (GlobalController::check_project_user($item->project, $role) == false) {
             return view('message', ['message' => trans('main.info_user_changed')]);
         }

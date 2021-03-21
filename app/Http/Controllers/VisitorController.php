@@ -14,10 +14,11 @@ class VisitorController extends Controller
     static function visitors_count()
     {
         // https://blog.myrusakov.ru/whoonline.html
-        $result = 0;
-        // 1800 - 30 минут в секундах
-        // 60 секунд * 30 минут
-        $online_time = 1800;
+        // установка часового пояса нужно для сохранения времени
+        date_default_timezone_set('Asia/Almaty');
+        // 300 - 5 минут в секундах
+        // 60 секунд * 5 минут
+        $online_time = 300;
         $ip = $_SERVER["REMOTE_ADDR"];
         $ip = ip2long($ip);
         $date = time();
