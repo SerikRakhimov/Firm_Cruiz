@@ -109,6 +109,8 @@ return [
     'document' => 'Құжат',
     'status' => 'Мәртебе',
     'desc' => 'Сипаттама',
+    'dc_ext' => 'Сыртқы сипаттама',
+    'dc_int' => 'Ішкі сипаттама',
     'setup' => 'Теңшеу',
     'configuring_templates'=>'Үлгілерді теңшеу',
     'is_code_needed' => 'Код қажет',
@@ -244,4 +246,6 @@ return [
     'app_info_first'=>'Бірінші бұлтты мульти-тілді әмбебап',
     'app_info_second'=>'есеп платформасы',
     'create_project' => 'Жобаны жасау',
+    'true'=>'Рас',
+    'false' => 'Өтірік',
 ];

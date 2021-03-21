@@ -65,6 +65,7 @@ class Item extends Model
         return $this->hasMany(Main::class, 'parent_item_id');
     }
 
+    //name() используется для отображения значений полей
     function name()
     {
         $result = "";  // нужно, не удалять
@@ -88,11 +89,16 @@ class Item extends Model
                 } else {
                     $result = date_create($this->name_lang_0)->Format(trans('main.format_date'));
                 }
+                // Не использовать
+//                    $result = date_create($this->name_lang_0)->Format('Y.m.d');
             } elseif ($base_find->type_is_boolean()) {
                 //    Похожие строки в Base.php
                 // #65794 - ранее был пустой квадратик
                 $result = $this->name_lang_0 == "1" ? html_entity_decode('  &#9745;')
                     : ($this->name_lang_0 == "0" ? html_entity_decode('&#10065;') : trans('main.empty'));
+                // Не использовать
+//                $result = $this->name_lang_0 == "1" ? "1-".trans('main.true')
+//                    : ($this->name_lang_0 == "0" ? "0-".trans('main.false') : trans('main.empty'));
                 //
             } else {
                 $index = array_search(App::getLocale(), config('app.locales'));
@@ -107,30 +113,44 @@ class Item extends Model
         return $result;
     }
 
+    //names() используется для расчета вычисляемого наименования
     function names()
     {
         $res_array = array();
         // массив "glo_menu_main" показывает, что четыре поля наименований хранятся в bases и items
         // ['1', '2', '3', '4'] - тут разницы нет, какие значения хранятся; главное, чтобы что-то хранилось
         $main_array = ['1', '2', '3', '4'];
+        // Сохранить текущий язык
+        $locale = App::getLocale();
 //        foreach (session('glo_menu_main') as $lang_key => $lang_value) {
         foreach ($main_array as $lang_key => $lang_value) {
             $name = "";  // нужно, не удалять
-            $base_find = $this->base;
-            if ($base_find) {
-                // Эта строка нужна, не удалять
-                $name = $this['name_lang_' . $lang_key];
-                if ($base_find->type_is_date()) {
-                    $name = date_create($name)->Format(trans('main.format_date'));
-                } elseif ($base_find->type_is_boolean()) {
-                    //    Похожие строки в Base.php
-                    $name = $name == "1" ? html_entity_decode('	&#9745;')
-                        : ($name == "0" ? html_entity_decode('&#10065;') : trans('main.empty'));
-                    //
+            if ($lang_key < count(config('app.locales'))) {
+                $lc = config('app.locales')[$lang_key];
+                App::setLocale($lc);
+                $base_find = $this->base;
+                if ($base_find) {
+                    // Эта строка нужна, не удалять
+                    $name = $this['name_lang_' . $lang_key];
+                    if ($base_find->type_is_date()) {
+                        //$name = date_create($name)->Format(trans('main.format_date'));
+                        // Нужно для правильной сортировки по полю $item->name_lang_x
+                        $name = date_create($name)->Format('Y.m.d');
+                    } elseif ($base_find->type_is_boolean()) {
+                        //    Похожие строки в Base.php
+//                    $name = $name == "1" ? html_entity_decode('	&#9745;')
+//                        : ($name == "0" ? html_entity_decode('&#10065;') : trans('main.empty'));
+                        // Нужно для правильной сортировки по полю $item->name_lang_x
+                        $name = $name == "1" ? "1-" . trans('main.true')
+                            : ($name == "0" ? "0-" . trans('main.false') : trans('main.empty'));
+                        //
+                    }
                 }
             }
             $res_array[$lang_key] = $name;
         }
+        // Восстановить текущий язык
+        App::setLocale($locale);
         return $res_array;
     }
 

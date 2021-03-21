@@ -31,7 +31,7 @@
             </div>
         @endif
 {{--        Не удалять--}}
-        @if(1==2)
+        @if(1==1)
             @if ($base->is_calcname_lst == true)
                 <div class="col-12 text-right">
                     <a href="{{route('item.calculate_name', ['base'=>$base, 'project'=>$project])}}"
@@ -219,7 +219,8 @@
     {{$items->links()}}
     <div class="row">
         <div class="col-12 text-center">
-            {{$project->desc()}}
+            <p><?php echo nl2br($project->dc_ext()); ?></p>
+            <p><?php echo nl2br($project->dc_int()); ?></p>
         </div>
     </div>
 @endsection

@@ -86,21 +86,46 @@
         <div class="form-group row">
             @foreach (config('app.locales') as $key=>$value)
                 <div class="col-3 text-right">
-                    <label for="desc_lang_{{$key}}" class="col-form-label">{{trans('main.desc')}}
+                    <label for="dc_ext_lang_{{$key}}" class="col-form-label">{{trans('main.dc_ext')}}
                         ({{trans('main.' . $value)}})<span
                             class="text-danger">*</span></label>
                 </div>
                 <div class="col-7">
                     <textarea
-                        name="desc_lang_{{$key}}"
-                        id="desc_lang_{{$key}}"
+                        name="dc_ext_lang_{{$key}}"
+                        id="dc_ext_lang_{{$key}}"
                         rows = "5"
-                        class="form-control @error('desc_lang_' . $key) is-invalid @enderror"
+                        class="form-control @error('dc_ext_lang_' . $key) is-invalid @enderror"
                         placeholder="">
-                        {{ old('desc_lang_' . $key) ?? ($project['desc_lang_' . $key] ?? '') }}
+                        {{ old('dc_ext_lang_' . $key) ?? ($project['dc_ext_lang_' . $key] ?? '') }}
                         </textarea>
                 </div>
-                @error('desc_lang_' . $key)
+                @error('dc_ext_lang_' . $key)
+                <div class="text-danger">
+                    {{$message}}
+                </div>
+                @enderror
+            @endforeach
+        </div>
+
+        <div class="form-group row">
+            @foreach (config('app.locales') as $key=>$value)
+                <div class="col-3 text-right">
+                    <label for="dc_int_lang_{{$key}}" class="col-form-label">{{trans('main.dc_int')}}
+                        ({{trans('main.' . $value)}})<span
+                            class="text-danger">*</span></label>
+                </div>
+                <div class="col-7">
+                    <textarea
+                        name="dc_int_lang_{{$key}}"
+                        id="dc_int_lang_{{$key}}"
+                        rows = "5"
+                        class="form-control @error('dc_int_lang_' . $key) is-invalid @enderror"
+                        placeholder="">
+                        {{ old('dc_int_lang_' . $key) ?? ($project['dc_int_lang_' . $key] ?? '') }}
+                        </textarea>
+                </div>
+                @error('dc_int_lang_' . $key)
                 <div class="text-danger">
                     {{$message}}
                 </div>

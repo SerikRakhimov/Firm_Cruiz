@@ -109,6 +109,8 @@ return [
     'document' => 'Document',
     'status' => 'Status',
     'desc' => 'Description',
+    'dc_ext' => 'External description',
+    'dc_int' => 'Internal description',
     'setup' => 'Setup',
     'configuring_templates'=>'Configuring templates',
     'is_code_needed' => 'Code needed',
@@ -244,4 +246,6 @@ return [
     'app_info_first'=>'The first cloud-based multilingual universal',
     'app_info_second'=>'settlement accounting platform',
     'create_project' => 'Create project',
+    'true'=>'True',
+    'false' => 'False',
 ];

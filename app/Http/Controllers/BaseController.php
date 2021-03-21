@@ -68,7 +68,6 @@ class BaseController extends Controller
         return view('base/index', ['template' => $template, 'bases' => $bases->paginate(60)]);
     }
 
-
     function template_index(Project $project, Role $role)
     {
         if (GlobalController::check_project_user($project, $role) == false) {

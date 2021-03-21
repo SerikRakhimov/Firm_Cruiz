@@ -37,8 +37,12 @@
     @endforeach
 
     @foreach (config('app.locales') as $key=>$value)
-{{--        <p>{{trans('main.desc')}} ({{trans('main.' . $value)}}): <b>{{$project['desc_lang_' . $key]}}</b></p>--}}
-        <p>{{trans('main.desc')}} ({{trans('main.' . $value)}}): <b><?php echo nl2br($project['desc_lang_' . $key]); ?></b></p>
+        {{--        <p>{{trans('main.dc')}} ({{trans('main.' . $value)}}): <b>{{$project['dc_lang_' . $key]}}</b></p>--}}
+        <p>{{trans('main.dc_ext')}} ({{trans('main.' . $value)}}): <b><?php echo nl2br($project['dc_ext_lang_' . $key]); ?></b></p>
+    @endforeach
+
+    @foreach (config('app.locales') as $key=>$value)
+        <p>{{trans('main.dc_int')}} ({{trans('main.' . $value)}}): <b><?php echo nl2br($project['dc_int_lang_' . $key]); ?></b></p>
     @endforeach
 
     @if(!$is_user)

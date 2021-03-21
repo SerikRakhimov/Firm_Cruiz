@@ -35,15 +35,28 @@ class Project extends Model
         return $result;
     }
 
-    function desc()
+    function dc_ext()
     {
         $result = "";  // нужно, не удалять
         $index = array_search(App::getLocale(), config('app.locales'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
-            $result = $this['desc_lang_' . $index];
+            $result = $this['dc_ext_lang_' . $index];
         }
         if ($result == "") {
-            $result = $this->desc_lang_0;
+            $result = $this->dc_ext_lang_0;
+        }
+        return $result;
+    }
+
+    function dc_int()
+    {
+        $result = "";  // нужно, не удалять
+        $index = array_search(App::getLocale(), config('app.locales'));
+        if ($index !== false) {   // '!==' использовать, '!=' не использовать
+            $result = $this['dc_int_lang_' . $index];
+        }
+        if ($result == "") {
+            $result = $this->dc_int_lang_0;
         }
         return $result;
     }

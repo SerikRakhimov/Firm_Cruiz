@@ -14,10 +14,14 @@ class UpdateProjectsTableAddDescription extends Migration
     public function up()
     {
         Schema::table('projects', function (Blueprint $table) {
-            $table->text('desc_lang_0')->default("");
-            $table->text('desc_lang_1')->default("");
-            $table->text('desc_lang_2')->default("");
-            $table->text('desc_lang_3')->default("");
+            $table->text('dc_ext_lang_0')->default("");
+            $table->text('dc_ext_lang_1')->default("");
+            $table->text('dc_ext_lang_2')->default("");
+            $table->text('dc_ext_lang_3')->default("");
+            $table->text('dc_int_lang_0')->default("");
+            $table->text('dc_int_lang_1')->default("");
+            $table->text('dc_int_lang_2')->default("");
+            $table->text('dc_int_lang_3')->default("");
         });
     }
 

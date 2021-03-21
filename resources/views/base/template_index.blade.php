@@ -61,7 +61,8 @@
     {{$bases->links()}}
     <div class="row">
         <div class="col-12 text-center">
-            {{$project->desc()}}
+            <p><?php echo nl2br($project->dc_ext()); ?></p>
+            <p><?php echo nl2br($project->dc_int()); ?></p>
         </div>
     </div>
 @endsection

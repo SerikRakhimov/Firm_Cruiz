@@ -283,16 +283,20 @@ class GlobalController extends Controller
     static function check_project_user(Project $project, Role $role)
     {
         $result = false;
-        if ($role->is_default_for_external == true) {
-            $result = true;
-        } else {
-            if ($role->is_author == true) {
-                if (Auth::check()) {
-                    $result = $project->user_id == GlobalController::glo_user_id();
-                } else {
-                    $result = false;
+        if ($project->template_id == $role->template_id) {
+            if ($role->is_default_for_external == true) {
+                $result = true;
+            } else {
+                if ($role->is_author == true) {
+                    if (Auth::check()) {
+                        $result = $project->user_id == GlobalController::glo_user_id();
+                    } else {
+                        $result = false;
+                    }
                 }
             }
+        } else {
+            $result = false;
         }
         return $result;
     }
