@@ -41,7 +41,6 @@ use App\Models\Project;
                     >{{mb_strtoupper($value)}}</span>
                 </a>
             @endforeach
-
             <a class="navbar-brand" href="{{ url('/') }}" title="{{config('app.name')}}">
                 {{config('app.name')}}
             </a>
