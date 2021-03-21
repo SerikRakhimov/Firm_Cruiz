@@ -32,7 +32,7 @@ class VisitorController extends Controller
             $visit_new->date = $date;
             $visit_new->save();
         }
-        Visitor::where('date', '<', $delete_date)->delete();
+        //Visitor::where('date', '<', $delete_date)->delete();
         $result = Visitor::count();
         return $result;
     }
