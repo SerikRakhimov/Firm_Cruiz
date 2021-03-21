@@ -97,9 +97,9 @@ class ProjectController extends Controller
 
     function show_user(Project $project)
     {
+        $user = User::findOrFail($project->user_id);
         if (!
         Auth::user()->isAdmin()) {
-            $user = User::findOrFail($project->user_id);
             if (GlobalController::glo_user_id() != $user->id) {
                 return redirect()->route('project.all_index');
             }
