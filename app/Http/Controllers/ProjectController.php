@@ -68,8 +68,10 @@ class ProjectController extends Controller
 
     function index_user(User $user)
     {
-        if (GlobalController::glo_user_id() != $user->id) {
-            return redirect()->route('project.all_index');
+        if (!Auth::user()->isAdmin()) {
+            if (GlobalController::glo_user_id() != $user->id) {
+                return redirect()->route('project.all_index');
+            }
         }
         $projects = Project::where('user_id', $user->id);
         $name = "";  // нужно, не удалять
@@ -188,9 +190,11 @@ class ProjectController extends Controller
 
     function update(Request $request, Project $project)
     {
-        $user = User::findOrFail($project->user_id);
-        if (GlobalController::glo_user_id() != $user->id) {
-            return redirect()->route('project.all_index');
+        if (!Auth::user()->isAdmin()) {
+            $user = User::findOrFail($project->user_id);
+            if (GlobalController::glo_user_id() != $user->id) {
+                return redirect()->route('project.all_index');
+            }
         }
         if (!($project->name_lang_0 == $request->name_lang_0)) {
             $request->validate($this->rules());
