@@ -241,8 +241,7 @@ class ProjectController extends Controller
 
     function edit_template(Project $project)
     {
-        if (!
-        Auth::user()->isAdmin()) {
+        if (!Auth::user()->isAdmin()) {
             return redirect()->route('project.all_index');
         }
 
@@ -254,8 +253,10 @@ class ProjectController extends Controller
     function edit_user(Project $project)
     {
         $user = User::findOrFail($project->user_id);
-        if (GlobalController::glo_user_id() != $user->id) {
-            return redirect()->route('project.all_index');
+        if (!Auth::user()->isAdmin()) {
+            if (GlobalController::glo_user_id() != $user->id) {
+                return redirect()->route('project.all_index');
+            }
         }
         $templates = Template::get();
         return view('project/edit', ['user' => $user, 'project' => $project, 'templates' => $templates]);
