@@ -244,8 +244,10 @@ return [
     'info_user_changed'=>'User changed. Reselect the project.',
     'mainmenu'=>'Main menu',
     'app_info_first'=>'The first cloud-based multilingual universal',
-    'app_info_second'=>'settlement accounting platform',
+    'app_info_second'=>'Settlement accounting platform',
     'create_project' => 'Create project',
     'true'=>'True',
-    'false' => 'False',
+    'false'=>'False',
+    'online_now'=>'Online now',
+    'visitors_info'=>'Visitors',
 ];

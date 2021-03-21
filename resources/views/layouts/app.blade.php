@@ -2,6 +2,7 @@
 <?php
 use Illuminate\Support\Facades\App;
 use App\Http\Controllers\GlobalController;
+use App\Http\Controllers\VisitorController;
 use Illuminate\Support\Facades\Session;
 use App\Models\Project;
 ?>
@@ -41,8 +42,14 @@ use App\Models\Project;
                 </a>
             @endforeach
 
-            <a class="navbar-brand" href="{{ url('/') }}">
+            <a class="navbar-brand" href="{{ url('/') }}" title="{{config('app.name')}}">
                 {{config('app.name')}}
+            </a>
+            <?php
+                $visitors_count = VisitorController::visitors_count();
+            ?>
+            <a class="navbar-brand" href="#" title = "{{trans('main.online_now') . ": " . $visitors_count . ' ' . mb_strtolower(trans('main.visitors_info'))}}">
+                ({{$visitors_count}})
             </a>
             {{--                Этот <button> не удалять, нужен для связки с <div class="collapse navbar-collapse" id="navbarSupportedContent">--}}
             <button type="button" class="navbar-toggler" type="button" data-toggle="collapse"
