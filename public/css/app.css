@@ -176,6 +176,10 @@ h1, h2, h3, h4, h5, h6 {
     color: #f79a1c;
 }
 
+p {
+    color: #f79a1c;
+}
+
 table {
     font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
     font-size: 14px;
