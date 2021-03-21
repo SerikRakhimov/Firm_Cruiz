@@ -23,7 +23,7 @@ class VisitorController extends Controller
         $date = time();
         $delete_date = $date - $online_time;
         $visitor = Visitor::where('ip', $ip)->first();
-        if ($visitor != null) {
+        if ($visitor) {
             $visitor->date = $date;
             $visitor->save();
         } else {
