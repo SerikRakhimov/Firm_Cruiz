@@ -24,15 +24,15 @@ class VisitorController extends Controller
         $delete_date = $date - $online_time;
         $visitor = Visitor::where('ip', $ip)->first();
         if ($visitor != null) {
-            $visitor->save();
             $visitor->date = $date;
+            $visitor->save();
         } else {
             $visit_new = new Visitor();
             $visit_new->ip = $ip;
             $visit_new->date = $date;
             $visit_new->save();
         }
-        //Visitor::where('date', '<', $delete_date)->delete();
+        Visitor::where('date', '<', $delete_date)->delete();
         $result = Visitor::count();
         return $result;
     }
