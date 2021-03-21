@@ -10,10 +10,12 @@ use Illuminate\Http\Request;
 
 class VisitorController extends Controller
 {
+    // Подсчет количества посетителей на сайте онлайн
     static function visitors_count()
     {
         // https://blog.myrusakov.ru/whoonline.html
         $result = 0;
+        // 1800 - 30 минут в секундах
         // 60 секунд * 30 минут
         $online_time = 1800;
         $ip = $_SERVER["REMOTE_ADDR"];

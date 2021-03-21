@@ -45,9 +45,11 @@ use App\Models\Project;
                 {{config('app.name')}}
             </a>
             <?php
-                $visitors_count = VisitorController::visitors_count();
+            // Подсчет количества посетителей на сайте онлайн
+            $visitors_count = VisitorController::visitors_count();
             ?>
-            <a class="navbar-brand" href="#" title = "{{trans('main.online_now') . ": " . $visitors_count . ' ' . mb_strtolower(trans('main.visitors_info'))}}">
+            <a class="navbar-brand" href="#"
+               title="{{trans('main.online_now') . ": " . $visitors_count . ' ' . mb_strtolower(trans('main.visitors_info'))}}">
                 ({{$visitors_count}})
             </a>
             {{--                Этот <button> не удалять, нужен для связки с <div class="collapse navbar-collapse" id="navbarSupportedContent">--}}
