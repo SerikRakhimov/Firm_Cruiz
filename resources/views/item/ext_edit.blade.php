@@ -177,7 +177,7 @@
                     </div>
                 </div>
             @elseif($base->type_is_image())
-                @include('edit.img_base',['update'=>$update, 'base'=>$base,'item'=>$item ?? null, 'name'=>"name_lang_0",'id'=>"name_lang_0", 'size'=>"small"])
+                @include('edit.img_base',['update'=>$update, 'base'=>$base,'item'=>$item ?? null, 'name'=>"name_lang_0",'id'=>"name_lang_0", 'size'=>"medium"])
                 {{--                            если тип корректировки поля - документ--}}
             @elseif($base->type_is_document())
                 @include('edit.doc_base',['update'=>$update, 'base'=>$base,'item'=>$item ?? null, 'name'=>"name_lang_0",'id'=>"name_lang_0"])
@@ -558,7 +558,7 @@
 
                     {{--                            если тип корректировки поля - изображение--}}
                 @elseif($link->parent_base->type_is_image())
-                    @include('edit.img_link',['update'=>$update, 'base'=>$link->parent_base,'result'=>$result,'value'=>$value, 'name'=>$key,'id'=>"link".$key, 'size'=>"small"])
+                    @include('edit.img_link',['update'=>$update, 'base'=>$link->parent_base,'result'=>$result,'value'=>$value, 'name'=>$key,'id'=>"link".$key, 'size'=>"medium"])
 
                     {{--                            если тип корректировки поля - документ--}}
                 @elseif($link->parent_base->type_is_document())
