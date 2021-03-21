@@ -118,7 +118,7 @@
                     @if(GlobalController::is_base_calcname_enable($base, $base_right))
                         <td @include('layouts.class_from_base',['base'=>$base])>
                             @if($base->type_is_image)
-                                @include('view.img',['item'=>$item, 'size'=>"medium", 'filenametrue'=>false])
+                                @include('view.img',['item'=>$item, 'size'=>"small", 'filenametrue'=>false])
                             @elseif($base->type_is_document)
                                 @include('view.doc',['item'=>$item])
                             @else
@@ -143,7 +143,7 @@
                             ?>
                             @if($item_find)
                                 @if($link->parent_base->type_is_image())
-                                    @include('view.img',['item'=>$item_find, 'size'=>"medium", 'filenametrue'=>false])
+                                    @include('view.img',['item'=>$item_find, 'size'=>"small", 'filenametrue'=>false])
                                 @elseif($link->parent_base->type_is_document())
                                     @include('view.doc',['item'=>$item_find])
                                 @else
