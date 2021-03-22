@@ -74,9 +74,10 @@
                 $base_link_right = GlobalController::base_link_right($link, $role);
                 ?>
                 @if($base_link_right['is_list_link_enable'] == true)
-                    <th
-                        @include('layouts.class_from_base',['base'=>$link->parent_base])
-                    >
+{{--                    <th--}}
+{{--                        @include('layouts.class_from_base',['base'=>$link->parent_base])--}}
+{{--                    >--}}
+                        <th class="text-center">
                         <a href="{{route('item.base_index',['base'=>$link->parent_base_id, 'project'=>$project, 'role'=>$role])}}"
                            title="{{$link->parent_base->names()}}">
                             {{$link->parent_label()}}
