@@ -398,21 +398,27 @@
                             {{--                                {{session('errors')!=null ? session('errors')->first($key): ''}}--}}
                             {{--                            </div>--}}
                         </div>
-                        @if($link->parent_is_numcalc == true)
-                            <div class="col-sm-1">
-                                <input type="button" value="..." title="{{trans('main.calculate')}}"
-                                       name="button_nc{{$key}}"
-                                       id="button_nc{{$key}}"
-                                >
-                            </div>
-                            <div class="col-sm-6">
+                        {{-- Похожая проверка внизу--}}
+                        {{-- @if($base_link_right['is_edit_link_read'] == false)--}}
+                        {{-- @if($link->parent_is_numcalc == true)--}}
+                        @if($base_link_right['is_edit_link_read'] == false)
+{{--                            @if($link->parent_is_numcalc == true)--}}
+                            @if($link->parent_is_numcalc==true)
+                                <div class="col-sm-1">
+                                    <input type="button" value="..." title="{{trans('main.calculate')}}"
+                                           name="button_nc{{$key}}"
+                                           id="button_nc{{$key}}"
+                                    >
+                                </div>
+                                <div class="col-sm-6">
                                 <span class="form-label text-danger"
                                       name="name{{$key}}"
                                       id="name{{$key}}"></span>
-                            </div>
-                        @else
-                            <div class="col-sm-7">
-                            </div>
+                                </div>
+                            @else
+                                <div class="col-sm-7">
+                                </div>
+                            @endif
                         @endif
                     </div>
 
@@ -470,20 +476,20 @@
                                    name="{{$key}}"
                                    id="link{{$key}}"
                                    placeholder=""
-                                   @if ((boolean)(old($key) ?? (($value != null) ? Item::find($value)->name_lang_0 :
+                            @if ((boolean)(old($key) ?? (($value != null) ? Item::find($value)->name_lang_0 :
 (($link->parent_num_bool_default_value!="")? $link->parent_num_bool_default_value:'0'))
 )) == true)
-                                   checked
-                                   @endif
-                                   @if($base_link_right['is_edit_link_read'] == true)
-                                   disabled
-                                   @else
-                                   @if($par_link)
-                                   @if ($key == $par_link->id)
-                                   disabled
+                            checked
+                            @endif
+                            @if($base_link_right['is_edit_link_read'] == true)
+                                disabled
+                            @else
+                                @if($par_link)
+                                    @if ($key == $par_link->id)
+                                        disabled
+                                    @endif
                                 @endif
-                                @endif
-                                @endif
+                            @endif
                             >
                             @error($key)
                             <div class="invalid-feedback">
@@ -916,11 +922,15 @@
             @foreach($array_calc as $key=>$value)
             <?php
             $link = Link::find($key);
+            $base_link_right = GlobalController::base_link_right($link, $role);
             $prefix = '5_';
             ?>
 
-
-
+            {{-- Похожая проверка вверху--}}
+            {{-- @if($base_link_right['is_edit_link_read'] == false)--}}
+            {{-- @if($link->parent_is_numcalc == true)--}}
+            @if($base_link_right['is_edit_link_read'] == false)
+            @if($link->parent_is_numcalc == true)
             @if($link->parent_is_numcalc==true && $link->parent_is_nc_screencalc==true)
         var button_nc_{{$prefix}}{{$link->id}} = document.getElementById('button_nc{{$link->id}}');
         var numcalc_{{$prefix}}{{$link->id}} = document.getElementById('link{{$link->id}}');
@@ -947,6 +957,8 @@
 
         button_nc_{{$prefix}}{{$link->id}}.addEventListener("click", button_nc_click_{{$prefix}}{{$link->id}});
             {{--    button_nc_{{$prefix}}{{$link->id}}.addEventListener("click", on_numcalc);--}}
+            @endif
+            @endif
             @endif
 
 
@@ -1010,7 +1022,6 @@
             $link = Link::find($key);
             $prefix = '6_';
             ?>
-
 
             @if($link->parent_is_nc_parameter == true && $link->parent_is_numcalc == false
                     && $link->parent_is_nc_viewonly == false && $link->parent_is_parent_related == false)
