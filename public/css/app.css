@@ -207,6 +207,10 @@ label {
     color: #833029;
 }
 
+.form-control:focus {
+    color: #833029;
+}
+
 .text-title {
     color: #5f7a91;
 }
