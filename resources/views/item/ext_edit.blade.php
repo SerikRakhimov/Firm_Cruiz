@@ -37,7 +37,7 @@
         @else
             {{trans('main.edit_record')}}
         @endif
-        <span class="text-info">-</span> <span class="text-success">{{$base->info()}}</span>
+        <span class="text-label">-</span> <span class="text-title">{{$base->info()}}</span>
     </h3>
     <br>
     {{--    https://qastack.ru/programming/1191113/how-to-ensure-a-select-form-field-is-submitted-when-it-is-disabled--}}

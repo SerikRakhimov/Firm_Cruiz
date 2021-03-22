@@ -19,14 +19,14 @@
         @elseif($type_form == 'delete_question')
             {{trans('main.delete_record_question')}}?
         @endif
-        <span class="text-info">-</span> <span class="text-success">{{$item->base->info()}}</span>
+        <span class="text-label">-</span> <span class="text-title">{{$item->base->info()}}</span>
     </h3>
     <br>
-    <p>Id: <b>{{$item->id}}</b></p>
+    <p class="text-label">Id: <b>{{$item->id}}</b></p>
     @if($base_right['is_show_base_enable'] == true)
 {{--        <p>--}}
             @if($base->is_code_needed == true)
-                {{trans('main.code')}}: <b>{{$item->code}}</b><br>
+                <p class="text-label">{{trans('main.code')}}: <b>{{$item->code}}</b></p>
             @endif
             {{--        @foreach (config('app.locales') as $key=>$value)--}}
             {{--            {{trans('main.name')}} ({{trans('main.' . $value)}}): <b>{{$item['name_lang_' . $key]}}</b><br>--}}
@@ -67,7 +67,7 @@
     {{--        @endif--}}
     {{--    @endforeach--}}
 
-    <p>
+    <p class="text-label">
         @foreach($array_calc as $key=>$value)
             <?php
 
@@ -101,7 +101,7 @@
         @endforeach
     </p>
 
-    <p>{{trans('main.created_user_date_time')}}:
+    <p class="text-label">{{trans('main.created_user_date_time')}}:
         <b>{{$item->created_user_date_time()}}</b><br>
         {{trans('main.updated_user_date_time')}}:
         <b>{{$item->updated_user_date_time()}}</b></p>
