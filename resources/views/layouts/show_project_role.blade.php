@@ -2,27 +2,29 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-12 text-center">
-            <a href="{{route('base.template_index', ['project' => $project, 'role' => $role])}}" title="{{trans('main.bases')}}">
+            <a href="{{route('base.template_index', ['project' => $project, 'role' => $role])}}"
+               title="{{trans('main.bases')}}">
                 <span class="badge badge-success">{{$project->name()}}</span>
             </a>
         </div>
     </div>
     <div class="row">
         <div class="col-6 text-left">
-            <a href="{{route('base.template_index', ['project' => $project, 'role' => $role])}}" title="{{trans('main.bases')}}">
-                <span class="badge badge-success">@guest{{trans('main.guest')}}@endguest @auth{{Auth::user()->name()}}@endauth</span>
+            <a href="{{route('base.template_index', ['project' => $project, 'role' => $role])}}"
+               title="{{trans('main.bases')}}">
+                <span
+                    class="badge badge-success">@guest{{trans('main.guest')}}@endguest @auth{{Auth::user()->name()}}@endauth</span>
             </a>
         </div>
         <div class="col-6 text-right">
-            <a href="{{route('base.template_index', ['project' => $project, 'role' => $role])}}" title="{{trans('main.bases')}}">
+            <a href="{{route('base.template_index', ['project' => $project, 'role' => $role])}}"
+               title="{{trans('main.bases')}}">
                 <span class="badge badge-success">{{$role->name()}}</span>
             </a>
         </div>
     </div>
-    <div class="row">
-        <div class="col-12 text-center">
-            {{$role->desc()}}
-        </div>
-    </div>
+    <dd>
+        {{$role->desc()}}
+    </dd>
 </div>
 </p>

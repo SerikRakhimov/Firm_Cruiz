@@ -13,7 +13,6 @@
     $base_right = GlobalController::base_right($base, $role);
 
     $list = $items;
-
     ?>
     @include('layouts.show_project_role',['project'=>$project, 'role'=>$role])
     <div class="container-fluid">
@@ -218,11 +217,7 @@
         </tbody>
     </table>
     {{$items->links()}}
-    <div class="row">
-        <div class="col-12 text-center">
-            <p><?php echo nl2br($project->dc_ext()); ?></p>
-            <p><?php echo nl2br($project->dc_int()); ?></p>
-        </div>
-    </div>
+    <dd><?php echo nl2br($project->dc_ext()); ?></dd>
+    <dd><?php echo nl2br($project->dc_int()); ?></dd>
 @endsection
 
