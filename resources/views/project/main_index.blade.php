@@ -124,7 +124,7 @@
             </div>
         </div>
         <div class="card-footer">
-            <small class="text-muted">Footer</small>
+            Footer
         </div>
     </div>
 @endsection
