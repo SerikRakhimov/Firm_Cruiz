@@ -37,7 +37,7 @@
             <p class="card-header">{{$project->template->name()}}</p>
             <div class="card-body">
                 <h4 class="card-title">{{$project->name()}}</h4>
-{{--                <p class="card-text">{{$project->desc()}}</p>--}}
+                {{--                <p class="card-text">{{$project->desc()}}</p>--}}
                 <p class="card-text"><?php echo nl2br($project->dc_ext()); ?></p>
                 @if($role)
                     {{--                ($my_projects ? 1 : 0)--}}
@@ -46,7 +46,7 @@
                         <i class="fas fa-play d-inline"></i>
                         {{trans('main.start')}}
                     </button>
-                    @else
+                @else
                     <p class="card-text text-danger">{{$message}}</p>
                 @endif
             </div>
@@ -81,5 +81,51 @@
     {{--        </div>--}}
 
     {{$projects->links()}}
+    <div class="card mt-4">
+        <p class="card-header">header</p>
+        <div class="row">
+            <div class="col-md-3">
+                <img class="img-fluid" src="{{Storage::url('MyPhoto.jpeg')}}" alt="Card image">
+            </div>
+            <div class="col-md-8">
+                <h4 class="card-title">ttttt</h4>
+                <h2 class="card-title mt-2">Yummi Foods</h2>
+                <p>ghghghghhh hhhhhhhhhh ghghghghghhh eeeeeeeeer bbbbbxbxbxbxbxbxbx eeererrerrr hhhhhhffgfggf</p>
+            </div>
+        </div>
+        <div class="card-footer">
+            <small class="text-muted">Footer</small>
+        </div>
+    </div>
+    <div class="card mt-4">
+        <p class="card-header">header</p>
+        <div class="row">
+            <div class="col-md-3">
+                <img class="img-fluid" src="{{Storage::url('on_moderation.png')}}" alt="Card image">
+            </div>
+            <div class="col-md-8">
+                <h2 class="card-title mt-2">Yummi Foods</h2>
+                <p>ghghghghhh hhhhhhhhhh ghghghghghhh eeeeeeeeer bbbbbxbxbxbxbxbxbx eeererrerrr hhhhhhffgfggf</p>
+            </div>
+        </div>
+        <div class="card-footer">
+            <small class="text-muted">Footer</small>
+        </div>
+    </div>
+    <div class="card mt-4">
+        <p class="card-header">header</p>
+        <div class="row">
+            <div class="col-md-3">
+                <img class="img-fluid" src="{{Storage::url('calculate_name.png')}}" alt="Card image">
+            </div>
+            <div class="col-md-8">
+                <h2 class="card-title mt-2">Yummi Foods</h2>
+                <p>ghghghghhh hhhhhhhhhh ghghghghghhh eeeeeeeeer bbbbbxbxbxbxbxbxbx eeererrerrr hhhhhhffgfggf</p>
+            </div>
+        </div>
+        <div class="card-footer">
+            <small class="text-muted">Footer</small>
+        </div>
+    </div>
 @endsection
 
