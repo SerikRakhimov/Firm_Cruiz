@@ -187,6 +187,15 @@ class RobaController extends Controller
         if ($request->is_edit_link_read  == true && $request->is_edit_link_update == true) {
             $array_mess['is_edit_link_read'] = trans('main.is_edit_link_read_rule') . '!';
         }
+        if ($request->is_edit_email_base_create  == false && $request->is_edit_email_question_base_create == true) {
+            $array_mess['is_edit_email_question_base_create'] = trans('main.is_edit_email_question_base_create_rule') . '!';
+        }
+        if ($request->is_edit_email_base_update  == false && $request->is_edit_email_question_base_update == true) {
+            $array_mess['is_edit_email_question_base_update'] = trans('main.is_edit_email_question_base_update_rule') . '!';
+        }
+        if ($request->is_show_email_base_delete  == false && $request->is_show_email_question_base_delete == true) {
+            $array_mess['is_show_email_question_base_delete'] = trans('main.is_show_email_question_base_delete_rule') . '!';
+        }
     }
 
     function set(Request $request, Roba &$roba)
@@ -208,6 +217,13 @@ class RobaController extends Controller
         $roba->is_show_link_enable = isset($request->is_show_link_enable) ? true : false;
         $roba->is_edit_link_read = isset($request->is_edit_link_read) ? true : false;
         $roba->is_edit_link_update = isset($request->is_edit_link_update) ? true : false;
+        $roba->is_edit_email_base_create = isset($request->is_edit_email_base_create) ? true : false;
+        $roba->is_edit_email_question_base_create = isset($request->is_edit_email_question_base_create) ? true : false;
+        $roba->is_edit_email_base_update = isset($request->is_edit_email_base_update) ? true : false;
+        $roba->is_edit_email_question_base_update = isset($request->is_edit_email_question_base_update) ? true : false;
+        $roba->is_show_email_base_delete = isset($request->is_show_email_base_delete) ? true : false;
+        $roba->is_show_email_question_base_delete = isset($request->is_show_email_question_base_delete) ? true : false;
+
         $roba->save();
     }
 

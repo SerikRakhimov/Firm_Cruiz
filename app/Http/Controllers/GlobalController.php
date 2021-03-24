@@ -60,6 +60,12 @@ class GlobalController extends Controller
         $is_show_link_enable = $role->is_show_link_enable;
         $is_edit_link_read = $role->is_edit_link_read;
         $is_edit_link_update = $role->is_edit_link_update;
+        $is_edit_email_base_create = $role->is_edit_email_base_create;
+        $is_edit_email_question_base_create = $role->is_edit_email_question_base_create;
+        $is_edit_email_base_update = $role->is_edit_email_base_update;
+        $is_edit_email_question_base_update = $role->is_edit_email_question_base_update;
+        $is_show_email_base_delete = $role->is_show_email_base_delete;
+        $is_show_email_question_base_delete = $role->is_show_email_question_base_delete;
         // Блок проверки по Role
         // "$is_list_base_calc = true" нужно
         $is_list_base_calc = true;
@@ -103,6 +109,13 @@ class GlobalController extends Controller
             $is_roba_show_link_enable = $roba->is_show_link_enable;
             $is_roba_edit_link_read = $roba->is_edit_link_read;
             $is_roba_edit_link_update = $roba->is_edit_link_update;
+            $is_roba_edit_email_base_create = $roba->is_edit_email_base_create;
+            $is_roba_edit_email_question_base_create = $roba->is_edit_email_question_base_create;
+            $is_roba_edit_email_base_update = $roba->is_edit_email_base_update;
+            $is_roba_edit_email_question_base_update = $roba->is_edit_email_question_base_update;
+            $is_roba_show_email_base_delete = $roba->is_show_email_base_delete;
+            $is_roba_show_email_question_base_delete = $roba->is_show_email_question_base_delete;
+
 //            if ($is_roba_list_base_read == true) {
 //                $is_roba_list_base_create = false;
 //                $is_roba_list_base_update = false;
@@ -131,6 +144,12 @@ class GlobalController extends Controller
             $is_show_link_enable = $is_roba_show_link_enable;
             $is_edit_link_read = $is_roba_edit_link_read;
             $is_edit_link_update = $is_roba_edit_link_update;
+            $is_edit_email_base_create = $is_roba_edit_email_base_create;
+            $is_edit_email_question_base_create = $is_roba_edit_email_question_base_create;
+            $is_edit_email_base_update = $is_roba_edit_email_base_update;
+            $is_edit_email_question_base_update = $is_roba_edit_email_question_base_update;
+            $is_show_email_base_delete = $is_roba_show_email_base_delete;
+            $is_show_email_question_base_delete = $is_roba_show_email_question_base_delete;
         }
 
         $is_edit_base_enable = $is_edit_base_read || $is_edit_base_update;
@@ -153,7 +172,13 @@ class GlobalController extends Controller
             'is_show_link_enable' => $is_show_link_enable,
             'is_edit_link_enable' => $is_edit_link_enable,
             'is_edit_link_read' => $is_edit_link_read,
-            'is_edit_link_update' => $is_edit_link_update
+            'is_edit_link_update' => $is_edit_link_update,
+            'is_edit_email_base_create' => $is_edit_email_base_create,
+            'is_edit_email_question_base_create' => $is_edit_email_question_base_create,
+            'is_edit_email_base_update' => $is_edit_email_base_update,
+            'is_edit_email_question_base_update' => $is_edit_email_question_base_update,
+            'is_show_email_base_delete' => $is_show_email_base_delete,
+            'is_show_email_question_base_delete' => $is_show_email_question_base_delete
         ];
     }
 
@@ -179,6 +204,12 @@ class GlobalController extends Controller
         $is_show_link_enable = $base_right['is_show_link_enable'];
         $is_edit_link_read = $base_right['is_edit_link_read'];
         $is_edit_link_update = $base_right['is_edit_link_update'];
+        $is_edit_email_base_create = $base_right['is_edit_email_base_create'];
+        $is_edit_email_question_base_create = $base_right['is_edit_email_question_base_create'];
+        $is_edit_email_base_update = $base_right['is_edit_email_base_update'];
+        $is_edit_email_question_base_update = $base_right['is_edit_email_question_base_update'];
+        $is_show_email_base_delete = $base_right['is_show_email_base_delete'];
+        $is_show_email_question_base_delete = $base_right['is_show_email_question_base_delete'];
         //  Проверка скрывать поле или нет
         if ($link->parent_is_hidden_field == true) {
             $is_list_link_enable = false;
@@ -215,6 +246,12 @@ class GlobalController extends Controller
             'is_edit_link_enable' => $is_edit_link_enable,
             'is_edit_link_read' => $is_edit_link_read,
             'is_edit_link_update' => $is_edit_link_update,
+            'is_edit_email_base_create' => $is_edit_email_base_create,
+            'is_edit_email_question_base_create' => $is_edit_email_question_base_create,
+            'is_edit_email_base_update' => $is_edit_email_base_update,
+            'is_edit_email_question_base_update' => $is_edit_email_question_base_update,
+            'is_show_email_base_delete' => $is_show_email_base_delete,
+            'is_show_email_question_base_delete' => $is_show_email_question_base_delete
         ];
     }
 

@@ -465,6 +465,156 @@
             </div>
         </div>
 
+        <div class="form-group row" id="is_edit_email_base_create_form_group">
+            <div class="col-sm-3 text-right">
+                <label class="form-label"
+                       for="is_edit_email_base_create">{{trans('main.is_edit_email_base_create')}}</label>
+            </div>
+            <div class="col-sm-7">
+                <input class="@error('is_edit_email_base_create') is-invalid @enderror"
+                       type="checkbox"
+                       name="is_edit_email_base_create"
+                       placeholder=""
+                       {{--                       "$roba->is_edit_email_base_create ?? false" - "false" значение по умолчанию--}}
+                       @if ((old('is_edit_email_base_create') ?? ($roba->is_edit_email_base_create ?? false)) ==  true)
+                       checked
+                    @endif
+                >
+                @error('is_edit_email_base_create')
+                <div class="invalid-feedback">
+                    {{$message}}
+                </div>
+                @enderror
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div>
+
+        <div class="form-group row" id="is_edit_email_question_base_create_form_group">
+            <div class="col-sm-3 text-right">
+                <label class="form-label"
+                       for="is_edit_email_question_base_create">{{trans('main.is_edit_email_question_base_create')}}</label>
+            </div>
+            <div class="col-sm-7">
+                <input class="@error('is_edit_email_question_base_create') is-invalid @enderror"
+                       type="checkbox"
+                       name="is_edit_email_question_base_create"
+                       placeholder=""
+                       {{--                       "$roba->is_edit_email_question_base_create ?? false" - "false" значение по умолчанию--}}
+                       @if ((old('is_edit_email_question_base_create') ?? ($roba->is_edit_email_question_base_create ?? false)) ==  true)
+                       checked
+                    @endif
+                >
+                @error('is_edit_email_question_base_create')
+                <div class="invalid-feedback">
+                    {{$message}}
+                </div>
+                @enderror
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div>
+
+        <div class="form-group row" id="is_edit_email_base_update_form_group">
+            <div class="col-sm-3 text-right">
+                <label class="form-label"
+                       for="is_edit_email_base_update">{{trans('main.is_edit_email_base_update')}}</label>
+            </div>
+            <div class="col-sm-7">
+                <input class="@error('is_edit_email_base_update') is-invalid @enderror"
+                       type="checkbox"
+                       name="is_edit_email_base_update"
+                       placeholder=""
+                       {{--                       "$roba->is_edit_email_base_update ?? false" - "false" значение по умолчанию--}}
+                       @if ((old('is_edit_email_base_update') ?? ($roba->is_edit_email_base_update ?? false)) ==  true)
+                       checked
+                    @endif
+                >
+                @error('is_edit_email_base_update')
+                <div class="invalid-feedback">
+                    {{$message}}
+                </div>
+                @enderror
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div>
+
+        <div class="form-group row" id="is_edit_email_question_base_update_form_group">
+            <div class="col-sm-3 text-right">
+                <label class="form-label"
+                       for="is_edit_email_question_base_update">{{trans('main.is_edit_email_question_base_update')}}</label>
+            </div>
+            <div class="col-sm-7">
+                <input class="@error('is_edit_email_question_base_update') is-invalid @enderror"
+                       type="checkbox"
+                       name="is_edit_email_question_base_update"
+                       placeholder=""
+                       {{--                       "$roba->is_edit_email_question_base_update ?? false" - "false" значение по умолчанию--}}
+                       @if ((old('is_edit_email_question_base_update') ?? ($roba->is_edit_email_question_base_update ?? false)) ==  true)
+                       checked
+                    @endif
+                >
+                @error('is_edit_email_question_base_update')
+                <div class="invalid-feedback">
+                    {{$message}}
+                </div>
+                @enderror
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div>
+
+        <div class="form-group row" id="is_show_email_base_delete_form_group">
+            <div class="col-sm-3 text-right">
+                <label class="form-label"
+                       for="is_show_email_base_delete">{{trans('main.is_show_email_base_delete')}}</label>
+            </div>
+            <div class="col-sm-7">
+                <input class="@error('is_show_email_base_delete') is-invalid @enderror"
+                       type="checkbox"
+                       name="is_show_email_base_delete"
+                       placeholder=""
+                       {{--                       "$roba->is_show_email_base_delete ?? false" - "false" значение по умолчанию--}}
+                       @if ((old('is_show_email_base_delete') ?? ($roba->is_show_email_base_delete ?? false)) ==  true)
+                       checked
+                    @endif
+                >
+                @error('is_show_email_base_delete')
+                <div class="invalid-feedback">
+                    {{$message}}
+                </div>
+                @enderror
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div>
+
+        <div class="form-group row" id="is_show_email_question_base_delete_form_group">
+            <div class="col-sm-3 text-right">
+                <label class="form-label"
+                       for="is_show_email_question_base_delete">{{trans('main.is_show_email_question_base_delete')}}</label>
+            </div>
+            <div class="col-sm-7">
+                <input class="@error('is_show_email_question_base_delete') is-invalid @enderror"
+                       type="checkbox"
+                       name="is_show_email_question_base_delete"
+                       placeholder=""
+                       {{--                       "$roba->is_show_email_question_base_delete ?? false" - "false" значение по умолчанию--}}
+                       @if ((old('is_show_email_question_base_delete') ?? ($roba->is_show_email_question_base_delete ?? false)) ==  true)
+                       checked
+                    @endif
+                >
+                @error('is_show_email_question_base_delete')
+                <div class="invalid-feedback">
+                    {{$message}}
+                </div>
+                @enderror
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div>
+
         <br>
         <div class="container-fluid">
             <div class="row text-center">

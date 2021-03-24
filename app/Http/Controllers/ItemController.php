@@ -839,6 +839,28 @@ class ItemController extends Controller
             return trans('transaction_not_completed') . ": " . $exc->getMessage();
         }
 
+        if (env('MAIL_ENABLED') == 'yes') {
+            $base_right = base_right($item, $role);
+            if ($base_right['is_edit_email_base_create'] == true) {
+                $created_user = User::find($item->created_user_id)->first();
+                if ($created_user) {
+                    $email_to = $created_user->email;
+                    $appname = config('app.name', 'Abakus');
+                    $appeal = "Уважаемый " . $created_user->name . "!";
+                    $action = "Запись была добавлена.";
+                    $iteminfo = $item->name();
+                    $sincerely = "С уважением, " . $appname . "!";
+                    Mail::send(['html' => 'mail/item_info'], ['appeal' => $appeal,
+                        'action' => $action, 'iteminfo' => $iteminfo, 'sincerely' => $sincerely],
+                        function ($message) use ($email_to, $appname, $action) {
+                            $message->to($email_to, '')->subject($action);
+                            $message->from(env('MAIL_FROM_ADDRESS', ''), $appname);
+                        });
+                }
+            }
+        }
+
+
         //return $heading ? redirect()->route('item.item_index', $item) : redirect(session('links'));
         return $heading ? redirect()->route('item.item_index', $item) : redirect()->route('item.base_index', ['base' => $base, 'project' => $project, 'role' => $role]);
         //return redirect()->route('item.base_index', ['base'=>$item->base, 'project'=>$item->project, 'role'=>$role]);
