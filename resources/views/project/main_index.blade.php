@@ -81,51 +81,21 @@
     {{--        </div>--}}
 
     {{$projects->links()}}
-    <div class="card mt-4">
-        <p class="card-header">header</p>
-        <div class="row">
-            <div class="col-md-3">
-                <img class="img-fluid" src="{{Storage::url('MyPhoto.jpeg')}}" alt="Card image">
-            </div>
-            <div class="col-md-8">
-                <h4 class="card-title">ttttt</h4>
-                <h2 class="card-title mt-2">Yummi Foods</h2>
-                <p>ghghghghhh hhhhhhhhhh ghghghghghhh eeeeeeeeer bbbbbxbxbxbxbxbxbx eeererrerrr hhhhhhffgfggf</p>
-            </div>
-        </div>
-        <div class="card-footer">
-            <small class="text-muted">Footer</small>
-        </div>
-    </div>
-    <div class="card mt-4">
-        <p class="card-header">header</p>
-        <div class="row">
-            <div class="col-md-3">
-                <img class="img-fluid" src="{{Storage::url('on_moderation.png')}}" alt="Card image">
-            </div>
-            <div class="col-md-8">
-                <h2 class="card-title mt-2">Yummi Foods</h2>
-                <p>ghghghghhh hhhhhhhhhh ghghghghghhh eeeeeeeeer bbbbbxbxbxbxbxbxbx eeererrerrr hhhhhhffgfggf</p>
-            </div>
-        </div>
-        <div class="card-footer">
-            <small class="text-muted">Footer</small>
-        </div>
-    </div>
-    <div class="card mt-4">
-        <p class="card-header">header</p>
-        <div class="row">
-            <div class="col-md-3">
-                <img class="img-fluid" src="{{Storage::url('calculate_name.png')}}" alt="Card image">
-            </div>
-            <div class="col-md-8">
-                <h2 class="card-title mt-2">Yummi Foods</h2>
-                <p>ghghghghhh hhhhhhhhhh ghghghghghhh eeeeeeeeer bbbbbxbxbxbxbxbxbx eeererrerrr hhhhhhffgfggf</p>
-            </div>
-        </div>
-        <div class="card-footer">
-            <small class="text-muted">Footer</small>
-        </div>
-    </div>
+{{--    <div class="card mt-4 text-label">--}}
+{{--        <p class="card-header text-label">header</p>--}}
+{{--        <div class="row align-items-center">--}}
+{{--            <div class="col-md-3">--}}
+{{--                <img class="img-fluid" src="{{Storage::url('MyPhoto.jpeg')}}" alt="Card image">--}}
+{{--            </div>--}}
+{{--            <div class="col-md-8">--}}
+{{--                <h4 class="card-title">ttttt</h4>--}}
+{{--                <h2 class="card-title mt-2">Yummi Foods</h2>--}}
+{{--                <p>ghghghghhh hhhhhhhhhh ghghghghghhh eeeeeeeeer bbbbbxbxbxbxbxbxbx eeererrerrr hhhhhhffgfggf</p>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--        <div class="card-footer text-label">--}}
+{{--            <small class="text-muted">Footer</small>--}}
+{{--        </div>--}}
+{{--    </div>--}}
 @endsection
 

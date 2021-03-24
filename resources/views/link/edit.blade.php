@@ -291,6 +291,19 @@
             </div>
         </div>
 
+        <div class="form-group" id="parent_is_primary_image_form_group">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" name="parent_is_primary_image"
+                       id="parent_is_primary_image"
+                       {{--            "(int) 0" нужно--}}
+                       @if ((old('parent_is_primary_image') ?? ($link->parent_is_primary_image ?? false)) ==  true)
+                       checked
+                    @endif
+                >
+                <label class="form-check-label" for="parent_is_primary_image">{{trans('main.parent_is_primary_image')}}</label>
+            </div>
+        </div>
+
         <div class="form-group" id="parent_is_parent_related_form_group">
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="checkbox" name="parent_is_parent_related"

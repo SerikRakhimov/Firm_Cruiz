@@ -203,8 +203,12 @@ label {
     color: #833029;
 }
 
+.text-from-refer {
+    color: blue;
+}
+
 .form-control {
-    color: #833029;
+    color: #45160f;
 }
 
 .form-control:focus {

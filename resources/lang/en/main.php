@@ -126,6 +126,7 @@ return [
     'is_to_moderate_image' => 'To moderate',
     'is_one_value_lst_str' => 'One value in all languages',
     'parent_is_hidden_field'=>'Hidden field (for related fields)',
+    'parent_is_primary_image'=>'Primary image (for images)',
     'parent_num_bool_default_value'=>'Default value (for numeric and boolean fields)',
     'parent_is_parent_related' => 'Automatically populate from parent input field',
     'parent_parent_related_start_link_id' => 'What field will we take as a basis?',
@@ -250,4 +251,5 @@ return [
     'false'=>'False',
     'online_now'=>'Online now',
     'visitors_info'=>'Visitors',
+    'sort_by'=>'Sort by',
 ];

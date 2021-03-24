@@ -126,6 +126,7 @@ return [
     'is_to_moderate_image'=>'Модерировать',
     'is_one_value_lst_str'=>'Одно значение на всех языках',
     'parent_is_hidden_field'=>'Скрытое поле (для связанных полей)',
+    'parent_is_primary_image'=>'Основное изображение (для изображений)',
     'parent_num_bool_default_value'=>'Значение по умолчанию (для числовых и логический полей)',
     'parent_is_parent_related'=>'Автоматически заполнять из родительского поля ввода',
     'parent_parent_related_start_link_id'=>'Какое поле возьмем за основу?',
@@ -250,4 +251,5 @@ return [
     'false'=>'Ложь',
     'online_now'=>'Сейчас на сайте',
     'visitors_info'=>'Посетителей',
+    'sort_by'=>'Сортировка по',
 ];

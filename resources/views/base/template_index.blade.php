@@ -51,7 +51,7 @@
                             @auth
                             ({{count(GlobalController::items_right($base, $project, $role)['itget'])}})
                             @endauth
-                        </a>
+                          </a>
                     </td>
                 </tr>
             @endif

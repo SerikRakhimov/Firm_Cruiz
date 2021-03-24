@@ -29,7 +29,7 @@
                 </button>
             </div>
         @endif
-{{--        Не удалять--}}
+        {{--        Не удалять--}}
         @if(1==2)
             @if ($base->is_calcname_lst == true)
                 <div class="col-12 text-right">
@@ -61,9 +61,10 @@
                 @if($base->is_code_needed == true)
                     <th class="text-center">{{trans('main.code')}}</th>
                 @endif
-                {{--            если тип-вычисляемое поле и показывать вычисляемое поле--}}
+                {{--                Если тип-вычисляемое поле и Показывать Основу с вычисляемым наименованием--}}
+                {{--                или если тип-не вычисляемое наименование--}}
                 {{--            похожая проверка в ext_show.blade.php--}}
-                @if(GlobalController::is_base_calcname_enable($base, $base_right))
+                @if(GlobalController::is_base_calcname_check($base, $base_right))
                     <th @include('layouts.class_from_base',['base'=>$base])>
                         {{trans('main.name')}}</th>
                 @endif
@@ -73,10 +74,10 @@
                 $base_link_right = GlobalController::base_link_right($link, $role);
                 ?>
                 @if($base_link_right['is_list_link_enable'] == true)
-{{--                    <th--}}
-{{--                        @include('layouts.class_from_base',['base'=>$link->parent_base])--}}
-{{--                    >--}}
-                        <th class="text-center">
+                    {{--                    <th--}}
+                    {{--                        @include('layouts.class_from_base',['base'=>$link->parent_base])--}}
+                    {{--                    >--}}
+                    <th class="text-center">
                         <a href="{{route('item.base_index',['base'=>$link->parent_base_id, 'project'=>$project, 'role'=>$role])}}"
                            title="{{$link->parent_base->names()}}">
                             {{$link->parent_label()}}
@@ -112,13 +113,13 @@
                             </a>
                         </td>
                     @endif
-{{--                       Если тип-не вычисляемое поле и показывать вычисляемое поле--}}
-{{--                       или если тип-не вычисляемое наименование--}}
+                    {{--                Если тип-вычисляемое поле и Показывать Основу с вычисляемым наименованием--}}
+                    {{--                или если тип-не вычисляемое наименование--}}
                     {{--            похожая проверка в ext_show.blade.php--}}
-                    @if(GlobalController::is_base_calcname_enable($base, $base_right))
+                    @if(GlobalController::is_base_calcname_check($base, $base_right))
                         <td @include('layouts.class_from_base',['base'=>$base])>
                             @if($base->type_is_image)
-                                @include('view.img',['item'=>$item, 'size'=>"small", 'filenametrue'=>false])
+                                @include('view.img',['item'=>$item, 'size'=>"small", 'filenametrue'=>false, 'link'=>true, 'img_fluid'=>false, 'title'=>""])
                             @elseif($base->type_is_document)
                                 @include('view.doc',['item'=>$item])
                             @else
@@ -143,7 +144,7 @@
                             ?>
                             @if($item_find)
                                 @if($link->parent_base->type_is_image())
-                                    @include('view.img',['item'=>$item_find, 'size'=>"small", 'filenametrue'=>false])
+                                    @include('view.img',['item'=>$item_find, 'size'=>"small", 'filenametrue'=>false, 'link'=>true, 'img_fluid'=>false, 'title'=>""])
                                 @elseif($link->parent_base->type_is_document())
                                     @include('view.doc',['item'=>$item_find])
                                 @else

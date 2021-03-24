@@ -217,4 +217,12 @@ class Base extends Model
         return str_repeat('9', $sg);
     }
 
+    // Возвращает истину, если есть основное изображение
+    function is_primary_image_link()
+    {
+        $links = $this->child_links();
+        $link = $links->where('parent_is_primary_image', true)->first();
+        return $link;
+    }
+
 }

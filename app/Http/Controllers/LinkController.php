@@ -127,6 +127,7 @@ class LinkController extends Controller
         $link->parent_is_nc_screencalc = isset($request->parent_is_nc_screencalc) ? true : false;
         $link->parent_is_nc_parameter = isset($request->parent_is_nc_parameter) ? true : false;
         $link->parent_is_hidden_field = isset($request->parent_is_hidden_field) ? true : false;
+        $link->parent_is_primary_image = isset($request->parent_is_primary_image) ? true : false;
 
         $link->parent_is_small_calcname = isset($request->parent_is_small_calcname) ? true : false;
         if ($link->parent_is_calcname == false) {
@@ -250,6 +251,7 @@ class LinkController extends Controller
         $link->parent_is_nc_screencalc = isset($request->parent_is_nc_screencalc) ? true : false;
         $link->parent_is_nc_parameter = isset($request->parent_is_nc_parameter) ? true : false;
         $link->parent_is_hidden_field = isset($request->parent_is_hidden_field) ? true : false;
+        $link->parent_is_primary_image = isset($request->parent_is_primary_image) ? true : false;
 
         $link->parent_is_small_calcname = isset($request->parent_is_small_calcname) ? true : false;
         if ($link->parent_is_calcname == false) {

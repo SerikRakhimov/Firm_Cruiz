@@ -32,7 +32,7 @@
             {{--            {{trans('main.name')}} ({{trans('main.' . $value)}}): <b>{{$item['name_lang_' . $key]}}</b><br>--}}
             {{--        @endforeach--}}
             @if($base->type_is_image)
-                @include('view.img',['item'=>$item, 'size'=>"medium", 'filenametrue'=>false])
+                @include('view.img',['item'=>$item, 'size'=>"medium", 'filenametrue'=>false, 'link'=>true, 'img_fluid'=>false, 'title'=>""])
                 {{--                <a href="{{Storage::url($item->filename())}}">--}}
                 {{--                    <img src="{{Storage::url($item->filename())}}" height="250"--}}
                 {{--                         alt="" title="{{$item->title_img()}}">--}}
@@ -43,9 +43,10 @@
                 {{--                    Открыть документ--}}
                 {{--                </a>--}}
             @else
-                {{--            если тип-вычисляемое поле и показывать вычисляемое поле--}}
+                {{--                Если тип-вычисляемое поле и Показывать Основу с вычисляемым наименованием--}}
+                {{--                или если тип-не вычисляемое наименование--}}
                 {{--            похожая проверка в base_index.blade.php--}}
-                @if(GlobalController::is_base_calcname_enable($base, $base_right))
+                @if(GlobalController::is_base_calcname_check($base, $base_right))
                     {{trans('main.name')}}: <b>{{$item->name()}}</b>
                 @endif
             @endif
@@ -82,7 +83,7 @@
                     {{$link->parent_label()}}:
                     @if($link->parent_base->type_is_image)
                         {{--                            <br>--}}
-                        @include('view.img',['item'=>$item_find, 'size'=>"medium", 'filenametrue'=>false])
+                        @include('view.img',['item'=>$item_find, 'size'=>"medium", 'filenametrue'=>false, 'link'=>true, 'img_fluid'=>false, 'title'=>""])
                         {{--                            <a href="{{Storage::url($item_find->filename())}}">--}}
                         {{--                                <img src="{{Storage::url($item_find->filename())}}" height="250"--}}
                         {{--                                     alt="" title="{{$item_find->title_img()}}">--}}

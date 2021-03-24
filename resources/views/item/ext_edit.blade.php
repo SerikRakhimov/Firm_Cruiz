@@ -329,19 +329,29 @@
                         {{--                                {{session('errors')!=null ? session('errors')->first($key): ''}}--}}
                         {{--                            </div>--}}
                         <div class="col-sm-1">
-                            <input type="button" value="..." title="{{trans('main.select_from_refer')}}"
-                                   onclick="browse('{{$link->parent_base_id}}','{{$project->id}}','{{$role->id}}','{{$key}}')"
-                                   @if($base_link_right['is_edit_link_read'] == true)
-                                   disabled
+                            {{--                                    Не удалять--}}
+                            {{--                            <input type="button" value="..." title="{{trans('main.select_from_refer')}}"--}}
+                            {{--                                   onclick="browse('{{$link->parent_base_id}}','{{$project->id}}','{{$role->id}}','{{$key}}')"--}}
+                            {{--                                   @if($base_link_right['is_edit_link_read'] == true)--}}
+                            {{--                                   disabled--}}
+                            {{--                                @endif--}}
+                            {{--                            >--}}
+                            <button type="button" title="{{trans('main.select_from_refer')}}"
+                                    onclick="browse('{{$link->parent_base_id}}','{{$project->id}}','{{$role->id}}','{{$key}}')"
+                                    class="text-label"
+                                    @if($base_link_right['is_edit_link_read'] == true)
+                                    disabled
                                 @endif
                             >
+{{--                                <i class="fas fa-mouse-pointer d-inline"></i>--}}
+                                ...
+                            </button>
                         </div>
                         <div class="col-sm-6">
                                 <span class="form-label text-success"
                                       name="name{{$key}}"
                                       id="name{{$key}}"></span>
                         </div>
-
                         {{--                                <span class="form-label text-success"--}}
                         {{--                                      name="calc{{$key}}"--}}
                         {{--                                      id="calc{{$key}}" >1111111111111111111111111111</span>--}}
@@ -402,13 +412,20 @@
                         {{-- @if($base_link_right['is_edit_link_read'] == false)--}}
                         {{-- @if($link->parent_is_numcalc == true)--}}
                         @if($base_link_right['is_edit_link_read'] == false)
-{{--                            @if($link->parent_is_numcalc == true)--}}
+                            {{--                            @if($link->parent_is_numcalc == true)--}}
                             @if($link->parent_is_numcalc==true)
                                 <div class="col-sm-1">
-                                    <input type="button" value="..." title="{{trans('main.calculate')}}"
-                                           name="button_nc{{$key}}"
-                                           id="button_nc{{$key}}"
-                                    >
+                                    {{--                                    Не удалять--}}
+                                    {{--                                    <input type="button" value="..." title="{{trans('main.calculate')}}"--}}
+                                    {{--                                           name="button_nc{{$key}}"--}}
+                                    {{--                                           id="button_nc{{$key}}"--}}
+                                    {{--                                    >--}}
+                                    <button type="button" title="{{trans('main.calculate')}}"
+                                            name="button_nc{{$key}}"
+                                            id="button_nc{{$key}}"
+                                            class="text-label">
+                                        <i class="fas fa-calculator d-inline"></i>
+                                    </button>
                                 </div>
                                 <div class="col-sm-6">
                                 <span class="form-label text-danger"

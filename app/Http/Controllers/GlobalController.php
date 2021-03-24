@@ -272,9 +272,9 @@ class GlobalController extends Controller
         return trans('main.image_is_missing');
     }
 
-//  Если тип-не вычисляемое поле и показывать вычисляемое поле
-//  или если тип-не вычисляемое натименование
-    static function is_base_calcname_enable($base, $base_right)
+//  Если тип-вычисляемое поле и Показывать Основу с вычисляемым наименованием
+//  или если тип-не вычисляемое наименование
+    static function is_base_calcname_check($base, $base_right)
     {
         return ($base->is_calcname_lst == true && $base_right['is_all_base_calcname_enable'] == true)
             || ($base->is_calcname_lst == false);
