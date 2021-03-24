@@ -844,9 +844,9 @@ class ItemController extends Controller
         if (env('MAIL_ENABLED') == 'yes') {
             $base_right = GlobalController::base_right($item->base, $role);
             if ($base_right['is_edit_email_base_create'] == true) {
+                dd($item->created_user_id);
                 $created_user = User::find($item->created_user_id)->first();
                 if ($created_user) {
-                    dd($created_user);
                     $email_to = $created_user->email;
                     $appname = config('app.name', 'Abakus');
                     $appeal = "Уважаемый " . $created_user->name . "!";
