@@ -844,7 +844,7 @@ class ItemController extends Controller
         if (env('MAIL_ENABLED') == 'yes') {
             $base_right = GlobalController::base_right($item->base, $role);
             if ($base_right['is_edit_email_base_create'] == true) {
-                $created_user = User::find($item->created_user_id)->first();
+                $created_user = User::find($item->created_user_id);
                 dd($created_user);
                 if ($created_user) {
                     $email_to = $created_user->email;
