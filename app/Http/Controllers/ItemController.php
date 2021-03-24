@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\GlobalController;
 use App\Rules\IsUniqueRoba;
 use Illuminate\Support\Facades\App;
 use App\Models\Base;
@@ -840,7 +841,7 @@ class ItemController extends Controller
         }
 
         if (env('MAIL_ENABLED') == 'yes') {
-            $base_right = base_right($item, $role);
+            $base_right = GlobalController::base_right($item->base, $role);
             if ($base_right['is_edit_email_base_create'] == true) {
                 $created_user = User::find($item->created_user_id)->first();
                 if ($created_user) {
@@ -859,7 +860,6 @@ class ItemController extends Controller
                 }
             }
         }
-
 
         //return $heading ? redirect()->route('item.item_index', $item) : redirect(session('links'));
         return $heading ? redirect()->route('item.item_index', $item) : redirect()->route('item.base_index', ['base' => $base, 'project' => $project, 'role' => $role]);
