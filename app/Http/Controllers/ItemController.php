@@ -849,7 +849,7 @@ class ItemController extends Controller
                     //$email_to = $created_user->email;
                     $email_to = $item->project->user->email;
                     $appname = config('app.name', 'Abakus');
-                    Mail::send(['html' => 'mail/item_info'], ['item' => $item],
+                    Mail::send(['html' => 'mail/item_create'], ['item' => $item],
                         function ($message) use ($email_to, $appname, $item) {
                             $message->to($email_to, '')->subject(trans('main.new_record') . ' - ' . $item->base->name());
                             $message->from(env('MAIL_FROM_ADDRESS', ''), $appname);
