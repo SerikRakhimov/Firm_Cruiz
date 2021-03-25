@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\GlobalController;
+use App\Http\Controllers\GlobalController;
 use App\Rules\IsUniqueRoba;
 use Illuminate\Support\Facades\App;
 use App\User;
@@ -844,17 +845,13 @@ class ItemController extends Controller
         if (env('MAIL_ENABLED') == 'yes') {
             $base_right = GlobalController::base_right($item->base, $role);
             if ($base_right['is_edit_email_base_create'] == true) {
-                $created_user = User::find($item->created_user_id);
-                if ($created_user) {
-                    //$email_to = $created_user->email;
-                    $email_to = $item->project->user->email;
-                    $appname = config('app.name', 'Abakus');
-                    Mail::send(['html' => 'mail/item_create'], ['item' => $item],
-                        function ($message) use ($email_to, $appname, $item) {
-                            $message->to($email_to, '')->subject(trans('main.new_record') . ' - ' . $item->base->name());
-                            $message->from(env('MAIL_FROM_ADDRESS', ''), $appname);
-                        });
-                }
+                $email_to = $item->project->user->email;
+                $appname = config('app.name', 'Abakus');
+                Mail::send(['html' => 'mail/item_create'], ['item' => $item],
+                    function ($message) use ($email_to, $appname, $item) {
+                        $message->to($email_to, '')->subject(trans('main.new_record') . ' - ' . $item->base->name());
+                        $message->from(env('MAIL_FROM_ADDRESS', ''), $appname);
+                    });
             }
         }
 
@@ -1823,6 +1820,19 @@ class ItemController extends Controller
 
         // удаление неиспользуемых данных
         $this->delete_items_old($array_calc);
+
+        if (env('MAIL_ENABLED') == 'yes') {
+            $base_right = GlobalController::base_right($item->base, $role);
+            if ($base_right['is_edit_email_base_update'] == true) {
+                $email_to = $item->created_user->email;
+                $appname = config('app.name', 'Abakus');
+                Mail::send(['html' => 'mail/item_update'], ['item' => $item],
+                    function ($message) use ($email_to, $appname, $item) {
+                        $message->to($email_to, '')->subject(trans('main.edit_record') . ' - ' . $item->base->name());
+                        $message->from(env('MAIL_FROM_ADDRESS', ''), $appname);
+                    });
+            }
+        }
 
 //        if (env('MAIL_ENABLED') == 'yes'){
 //            $appname = config('app.name', 'Abakus');
