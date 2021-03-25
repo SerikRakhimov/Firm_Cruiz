@@ -846,7 +846,8 @@ class ItemController extends Controller
             if ($base_right['is_edit_email_base_create'] == true) {
                 $created_user = User::find($item->created_user_id);
                 if ($created_user) {
-                    $email_to = $created_user->email;
+                    //$email_to = $created_user->email;
+                    $email_to = $item->project->user->email;
                     $appname = config('app.name', 'Abakus');
                     $appeal = "Уважаемый " . $created_user->name . "!";
                     $action = "Запись была добавлена.";
