@@ -849,14 +849,9 @@ class ItemController extends Controller
                     //$email_to = $created_user->email;
                     $email_to = $item->project->user->email;
                     $appname = config('app.name', 'Abakus');
-                    $appeal = "Уважаемый " . $created_user->name . "!";
-                    $action = "Запись была добавлена.";
-                    $iteminfo = $item->name();
-                    $sincerely = "С уважением, " . $appname . "!";
-                    Mail::send(['html' => 'mail/item_info'], ['appeal' => $appeal,
-                        'action' => $action, 'iteminfo' => $iteminfo, 'sincerely' => $sincerely],
-                        function ($message) use ($email_to, $appname, $action) {
-                            $message->to($email_to, '')->subject($action);
+                    Mail::send(['html' => 'mail/item_info'], ['item' => $item],
+                        function ($message) use ($email_to, $appname, $item) {
+                            $message->to($email_to, '')->subject(trans('main.new_record') . ' - ' . $item->base->name());
                             $message->from(env('MAIL_FROM_ADDRESS', ''), $appname);
                         });
                 }
