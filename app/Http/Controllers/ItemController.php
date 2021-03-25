@@ -1938,6 +1938,8 @@ class ItemController extends Controller
 //        }
         if (self::is_delete($item, $role) == true) {
 
+            $item_copy = $item;
+
             if ($this->is_save_sets($item)) {
 
                 try {
@@ -1959,6 +1961,22 @@ class ItemController extends Controller
                 $item->delete();
 
             }
+
+            $item = $item_copy;
+            if (env('MAIL_ENABLED') == 'yes') {
+                $base_right = GlobalController::base_right($item->base, $role);
+                if ($base_right['is_edit_email_base_update'] == true) {
+                    $email_to = $item->created_user->email;
+                    $deleted_user_date_time = GlobalController::deleted_user_date_time();
+                    $appname = config('app.name', 'Abakus');
+                    Mail::send(['html' => 'mail/item_delete'], ['item' => $item, 'deleted_user_date_time' => $deleted_user_date_time],
+                        function ($message) use ($email_to, $appname, $item) {
+                            $message->to($email_to, '')->subject(trans('main.delete_record') . ' - ' . $item->base->name());
+                            $message->from(env('MAIL_FROM_ADDRESS', ''), $appname);
+                        });
+                }
+            }
+
         }
         //return $heading == true ? redirect()->route('item.base_index', $item->base_id) : redirect(session('base_index_previous_url'));
         if ($heading == true) {
