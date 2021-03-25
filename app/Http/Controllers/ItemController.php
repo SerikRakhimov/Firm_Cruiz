@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\GlobalController;
-use App\Http\Controllers\GlobalController;
 use App\Rules\IsUniqueRoba;
 use Illuminate\Support\Facades\App;
 use App\User;

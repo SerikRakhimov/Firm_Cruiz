@@ -11,4 +11,4 @@
     <b>{{$item->created_user_date_time()}}</b><br>
 </p>
 <hr>
-<h5>{{config('app.name', 'Abakus')}}</h5>
+<h5>www.abakusonline.com</h5>
