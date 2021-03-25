@@ -37,22 +37,22 @@ class Item extends Model
 
     function created_user_date()
     {
-        return $this->created_user->name() . ", " . $this->created_at->Format(trans('main.format_date') . ", " . $this->created_user->email);
+        return $this->created_user->name() . ", " . $this->created_at->Format(trans('main.format_date')) . ", " . $this->created_user->email;
     }
 
     function updated_user_date()
     {
-        return $this->updated_user->name() . ", " . $this->updated_at->Format(trans('main.format_date'). ", " . $this->updated_user->email);
+        return $this->updated_user->name() . ", " . $this->updated_at->Format(trans('main.format_date')). ", " . $this->updated_user->email;
     }
 
     function created_user_date_time()
     {
-        return $this->created_user->name() . ", " . $this->created_at->Format(trans('main.format_date_time'). ", " . $this->created_user->email);
+        return $this->created_user->name() . ", " . $this->created_at->Format(trans('main.format_date_time')). ", " . $this->created_user->email;
     }
 
     function updated_user_date_time()
     {
-        return $this->updated_user->name() . ", " . $this->updated_at->Format(trans('main.format_date_time'). ", " . $this->updated_user->email);
+        return $this->updated_user->name() . ", " . $this->updated_at->Format(trans('main.format_date_time')). ", " . $this->updated_user->email;
     }
 
     function child_mains()
