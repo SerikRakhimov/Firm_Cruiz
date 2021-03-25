@@ -1,6 +1,6 @@
 <p>{{trans('main.project')}}: <b>{{$item->project->name()}}</b></p>
 <hr>
-<h5>{{$item->user->name()}}!</h5>
+<h5>{{$item->created_user->name()}}!</h5>
 <h3 class="display-5 text-center">{{trans('main.edit_record')}} - {{$item->base->name()}}</h3>
 <p>Id: <b>{{$item->id}}</b></p>
 @if($item->base->is_code_needed == true)
