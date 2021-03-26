@@ -48,9 +48,9 @@
                             href="{{route('item.base_index',['base'=>$base, 'project' => $project, 'role' => $role])}}"
                             title="{{$base->names()}}">
                             {{$base->names()}}
-                            @auth
-                            ({{count(GlobalController::items_right($base, $project, $role)['itget'])}})
-                            @endauth
+{{--                            @auth--}}
+                            {{GlobalController::items_right($base, $project, $role)['view_count']}}
+{{--                            @endauth--}}
                           </a>
                     </td>
                 </tr>

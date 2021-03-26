@@ -173,9 +173,15 @@ class ItemController extends Controller
         }
 
         $base_right = GlobalController::base_right($base, $role);
-        session(['base_index_previous_url' => ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/' . request()->path()]);
-        return view('item/base_index', ['base_right' => $base_right, 'base' => $base, 'project' => $project, 'role' => $role,
-            'items' => GlobalController::items_right($base, $project, $role)['items']->paginate(60)]);
+        $items = GlobalController::items_right($base, $project, $role)['items'];
+
+        if ($items) {
+            session(['base_index_previous_url' => ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/' . request()->path()]);
+            return view('item/base_index', ['base_right' => $base_right, 'base' => $base, 'project' => $project, 'role' => $role,
+                'items' => $items->paginate(60)]);
+        } else {
+            return view('message', ['message' => trans('main.no_access_for_unregistered_users')]);
+        }
 
     }
 

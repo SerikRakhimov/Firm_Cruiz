@@ -49,6 +49,8 @@ return [
     'no_information_on' => 'Нет информации по',
     'no_data' => 'Нет данных',
     'no_data_on' => 'Нет данных по',
+    'no_access' => 'Нет доступа',
+    'no_access_for_unregistered_users' => 'Нет доступа для незарегистрированных пользователей. Выполните "Вход" или "Регистрация".',
     'transaction_not_completed' => 'Транзакция не завершена',
     'another_attitude' => 'Другое отношение',
     'serial_number' => 'Номер',

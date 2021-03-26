@@ -24,7 +24,10 @@ class ProjectController extends Controller
 
     function all_index()
     {
-        $projects = Project::orderBy('user_id')->orderBy('template_id')->orderBy('created_at');
+        $projects = Project::whereHas('template.roles', function ($query) {
+            $query->where('is_default_for_external', true);
+        })->orderBy('user_id')->orderBy('template_id')->orderBy('created_at');
+
         $name = "";  // нужно, не удалять
         $index = array_search(App::getLocale(), config('app.locales'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
@@ -38,7 +41,9 @@ class ProjectController extends Controller
 
     function my_index()
     {
-        $projects = Project::where('user_id', GlobalController::glo_user_id())->orderBy('user_id')->orderBy('template_id')->orderBy('created_at');
+        $projects = Project::where('user_id', GlobalController::glo_user_id())->whereHas('template.roles', function ($query) {
+            $query->where('is_author', true);
+        })->orderBy('user_id')->orderBy('template_id')->orderBy('created_at');
         $name = "";  // нужно, не удалять
         $index = array_search(App::getLocale(), config('app.locales'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать

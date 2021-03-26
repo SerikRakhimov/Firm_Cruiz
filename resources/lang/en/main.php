@@ -49,6 +49,8 @@ return [
     'no_information_on' => 'No information on',
     'no_data' => 'No data',
     'no_data_on' => 'No data on',
+    'no_access' => 'No access',
+    'no_access_for_unregistered_users' => 'No access for unregistered users. Execute "Login" or "Register".',
     'transaction_not_completed' => 'Transaction not completed',
     'another_attitude' => 'Another Attitude',
     'serial_number' => 'Number',

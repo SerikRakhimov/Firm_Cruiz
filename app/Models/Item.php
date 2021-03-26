@@ -43,17 +43,17 @@ class Item extends Model
 
     function updated_user_date()
     {
-        return $this->updated_user->name() . ", " . $this->updated_at->Format(trans('main.format_date')). ", " . $this->updated_user->email;
+        return $this->updated_user->name() . ", " . $this->updated_at->Format(trans('main.format_date')) . ", " . $this->updated_user->email;
     }
 
     function created_user_date_time()
     {
-        return $this->created_user->name() . ", " . $this->created_at->Format(trans('main.format_date_time')). ", " . $this->created_user->email;
+        return $this->created_user->name() . ", " . $this->created_at->Format(trans('main.format_date_time')) . ", " . $this->created_user->email;
     }
 
     function updated_user_date_time()
     {
-        return $this->updated_user->name() . ", " . $this->updated_at->Format(trans('main.format_date_time')). ", " . $this->updated_user->email;
+        return $this->updated_user->name() . ", " . $this->updated_at->Format(trans('main.format_date_time')) . ", " . $this->updated_user->email;
     }
 
     function child_mains()
@@ -179,7 +179,15 @@ class Item extends Model
     {
         $result = $this->name_lang_0;
         if ($this->base->type_is_image() == true) {
-            if ($this->created_user_id != Auth::user()->id) {
+            // Показывать для пользователя, создавшего фото
+            // Для другого пользователя - проверка на модерацию
+            $check = false;
+            if (Auth::check()) {
+                $check = $this->created_user_id != Auth::user()->id;
+            } else {
+                $check = true;
+            }
+            if ($check) {
                 if ($moderation == false) {
                     if ($this->base->is_to_moderate_image == true) {
                         // На модерации
@@ -196,7 +204,7 @@ class Item extends Model
         return $result;
     }
 
-    // Для типов полей Изображение
+// Для типов полей Изображение
     function title_img()
     {
         $result = trans('main.сlick_to_view');
@@ -220,7 +228,7 @@ class Item extends Model
         return $result;
     }
 
-    // Возвращает true, если статус =  "не прошло модерацию"  и есть комментарий
+// Возвращает true, если статус =  "не прошло модерацию"  и есть комментарий
 //    function is_no_moderation_info()
 //    {
 //        $result = false;
@@ -241,14 +249,20 @@ class Item extends Model
 //        return $result;
 //    }
 
-    // Возвращает true, если статус =  "на модерации и не прошло модерацию"
-    // для пользователя, создавшего фото
+// Возвращает true, если статус =  "на модерации и не прошло модерацию"
+// для пользователя, создавшего фото
     function is_moderation_info()
     {
         $result = false;
         if ($this->base->type_is_image() == true) {
             // Показывать для пользователя, создавшего фото
-            if ($this->created_user_id == Auth::user()->id) {
+            $check = false;
+            if (Auth::check()) {
+                $check = $this->created_user_id == Auth::user()->id;
+            } else {
+                $check = false;
+            }
+            if ($check) {
                 if ($this->base->is_to_moderate_image == true) {
                     // На модерации
                     if ($this->name_lang_1 == "3") {
@@ -264,7 +278,7 @@ class Item extends Model
         return $result;
     }
 
-    // Для типов полей Изображение
+// Для типов полей Изображение
     function status_img()
     {
         $result = "";
@@ -301,13 +315,13 @@ class Item extends Model
         );
     }
 
-    // Для типов полей Изображение, Документ
+// Для типов полей Изображение, Документ
     function img_doc_exist()
     {
         return $this->name_lang_0 != "";
     }
 
-    // Для типов полей Изображение, Документ
+// Для типов полей Изображение, Документ
     function numval()
     {
         $value = 0;

@@ -40,12 +40,12 @@ class GlobalController extends Controller
 //    Похожие строки в Item.php
     static function deleted_user_date()
     {
-        return self::glo_user()->name() . ", " . date(trans('main.format_date')). ", " . self::glo_user()->email;
+        return self::glo_user()->name() . ", " . date(trans('main.format_date')) . ", " . self::glo_user()->email;
     }
 
     static function deleted_user_date_time()
     {
-        return self::glo_user()->name() . ", " . date(trans('main.format_date_time')). ", " . self::glo_user()->email;
+        return self::glo_user()->name() . ", " . date(trans('main.format_date_time')) . ", " . self::glo_user()->email;
     }
 
     static function name_is_boolean($value)
@@ -272,8 +272,14 @@ class GlobalController extends Controller
         $items = Item::where('base_id', $base->id)->where('project_id', $project->id);
         // Такая же проверка и в ItemController (function browser(), get_items_for_link())
         if ($base_right['is_list_base_byuser'] == true) {
-            $items = $items->where('created_user_id', GlobalController::glo_user_id());
+            if (Auth::check()) {
+                $items = $items->where('created_user_id', GlobalController::glo_user_id());
+            } else {
+                $items = null;
+            }
         }
+
+        // Не удалять
 //
 //        $items = $items->whereHas('child_mains', function ($query) {
 //            $query->where('parent_item_id', 358);
@@ -297,16 +303,23 @@ class GlobalController extends Controller
 //                $query->whereDate('name_lang_0', '>','2020-02-09');});
 //        });
 
+        $itget = null;
+        if ($items != null) {
+            $name = "";  // нужно, не удалять
+            $index = array_search(App::getLocale(), config('app.locales'));
+            if ($index !== false) {   // '!==' использовать, '!=' не использовать
+                $name = 'name_lang_' . $index;
+                $items = $items->orderBy($name);
+            }
 
-        $name = "";  // нужно, не удалять
-        $index = array_search(App::getLocale(), config('app.locales'));
-        if ($index !== false) {   // '!==' использовать, '!=' не использовать
-            $name = 'name_lang_' . $index;
-            $items = $items->orderBy($name);
+            $itget = $items->get();
+            $view_count = count($itget);
+        } else {
+            $itget = null;
+            $view_count = mb_strtolower(trans('main.no_access'));
         }
 
-        $itget = $items->get();
-        return ['items' => $items, 'itget' => $itget];
+        return ['items' => $items, 'itget' => $itget, 'view_count' => '(' . $view_count . ')'];
     }
 
     static function empty_html()

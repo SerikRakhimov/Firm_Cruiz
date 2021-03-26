@@ -640,9 +640,10 @@ Route::get('/link/base_index/{base}', 'LinkController@base_index')
 //    ->name('item.index')
 //    ->middleware('auth');
 
+// "->middleware('auth')" не использовать
 Route::get('/item/base_index/{base}/{project}/{role}', 'ItemController@base_index')
-    ->name('item.base_index')
-    ->middleware('auth');
+    ->name('item.base_index');
+    //->middleware('auth');
 
 Route::get('/item/item_index/{item}/{role}/{par_link?}', 'ItemController@item_index')
     ->name('item.item_index')
@@ -656,9 +657,10 @@ Route::get('/item/create', 'ItemController@create')
     ->name('item.create')
     ->middleware('auth');
 
+// "->middleware('auth')" не использовать
 Route::get('/item/ext_show/{item}/{role}', 'ItemController@ext_show')
-    ->name('item.ext_show')
-    ->middleware('auth');
+    ->name('item.ext_show');
+    //->middleware('auth');
 
 Route::get('/item/ext_create/{base}/{project}/{role}/{heading?}/{par_link?}/{parent_item?}', 'ItemController@ext_create')
     ->name('item.ext_create')
