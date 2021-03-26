@@ -2413,14 +2413,24 @@ class ItemController extends Controller
                         $dop_sepa1 = $calc_lang_1 == "" ? "" : $sc . " ";
                         $dop_sepa2 = $calc_lang_2 == "" ? "" : $sc . " ";
                         $dop_sepa3 = $calc_lang_3 == "" ? "" : $sc . " ";
-                        $left_str0 = $link->parent_is_left_calcname == true ? $link->parent_calcname_prefix_lang_0 . "" : "";
-                        $left_str1 = $link->parent_is_left_calcname == true ? $link->parent_calcname_prefix_lang_1 . "" : "";
-                        $left_str2 = $link->parent_is_left_calcname == true ? $link->parent_calcname_prefix_lang_2 . "" : "";
-                        $left_str3 = $link->parent_is_left_calcname == true ? $link->parent_calcname_prefix_lang_3 . "" : "";
-                        $right_str0 = $link->parent_is_left_calcname == false ? "" . $link->parent_calcname_prefix_lang_0 : "";
-                        $right_str1 = $link->parent_is_left_calcname == false ? "" . $link->parent_calcname_prefix_lang_1 : "";
-                        $right_str2 = $link->parent_is_left_calcname == false ? "" . $link->parent_calcname_prefix_lang_2 : "";
-                        $right_str3 = $link->parent_is_left_calcname == false ? "" . $link->parent_calcname_prefix_lang_3 : "";
+
+//                        $left_str0 = $link->parent_is_left_calcname == true ? $link->parent_calcname_prefix_lang_0 . "" : "";
+//                        $left_str1 = $link->parent_is_left_calcname == true ? $link->parent_calcname_prefix_lang_1 . "" : "";
+//                        $left_str2 = $link->parent_is_left_calcname == true ? $link->parent_calcname_prefix_lang_2 . "" : "";
+//                        $left_str3 = $link->parent_is_left_calcname == true ? $link->parent_calcname_prefix_lang_3 . "" : "";
+//                        $right_str0 = $link->parent_is_left_calcname == false ? "" . $link->parent_calcname_prefix_lang_0 : "";
+//                        $right_str1 = $link->parent_is_left_calcname == false ? "" . $link->parent_calcname_prefix_lang_1 : "";
+//                        $right_str2 = $link->parent_is_left_calcname == false ? "" . $link->parent_calcname_prefix_lang_2 : "";
+//                        $right_str3 = $link->parent_is_left_calcname == false ? "" . $link->parent_calcname_prefix_lang_3 : "";
+
+                        $left_str0 = $link->parent_is_left_calcname == true ? $link->parent_calcname_prefix_lang_0 . " " : "";
+                        $left_str1 = $link->parent_is_left_calcname == true ? $link->parent_calcname_prefix_lang_1 . " " : "";
+                        $left_str2 = $link->parent_is_left_calcname == true ? $link->parent_calcname_prefix_lang_2 . " " : "";
+                        $left_str3 = $link->parent_is_left_calcname == true ? $link->parent_calcname_prefix_lang_3 . " " : "";
+                        $right_str0 = $link->parent_is_left_calcname == false ? " " . $link->parent_calcname_prefix_lang_0 : "";
+                        $right_str1 = $link->parent_is_left_calcname == false ? " " . $link->parent_calcname_prefix_lang_1 : "";
+                        $right_str2 = $link->parent_is_left_calcname == false ? " " . $link->parent_calcname_prefix_lang_2 : "";
+                        $right_str3 = $link->parent_is_left_calcname == false ? " " . $link->parent_calcname_prefix_lang_3 : "";
 
                         $calc_lang_0 = $calc_lang_0 . ($dop_name_0 == "" ? "" : $dop_sepa0 . $left_str0) . $dop_name_0 . ($dop_name_0 == "" ? "" : $right_str0);
                         $calc_lang_1 = $calc_lang_1 . ($dop_name_1 == "" ? "" : $dop_sepa1 . $left_str1) . $dop_name_1 . ($dop_name_1 == "" ? "" : $right_str1);
