@@ -52,173 +52,224 @@
         @endif
     </div>
     </p>
-    <table class="table table-sm table-bordered table-hover">
-        <caption>{{trans('main.select_record_for_work')}}</caption>
-        <thead>
-        <tr>
-            <th class="text-center">#</th>
-            @if($base_right['is_list_base_enable'] == true)
-                @if($base->is_code_needed == true)
-                    <th class="text-center">{{trans('main.code')}}</th>
-                @endif
-                {{--                Если тип-вычисляемое поле и Показывать Основу с вычисляемым наименованием--}}
-                {{--                или если тип-не вычисляемое наименование--}}
-                {{--            похожая проверка в ext_show.blade.php--}}
-                @if(GlobalController::is_base_calcname_check($base, $base_right))
-                    <th @include('layouts.class_from_base',['base'=>$base])>
-                        {{trans('main.name')}}</th>
-                @endif
-            @endif
-            @foreach($links as $link)
+    <?php
+    $tile_view = $base->tile_view();
+    $link_image = $tile_view['link'];
+    $i = 0;
+    ?>
+
+    @if($tile_view['result'] == true)
+        <div class="card-columns">
+            @foreach($items as $item)
                 <?php
-                $base_link_right = GlobalController::base_link_right($link, $role);
+                $i = $i + 1;
+                $item_find = MainController::view_info($item->id, $link_image->id);
                 ?>
-                @if($base_link_right['is_list_link_enable'] == true)
-                    {{--                    <th--}}
-                    {{--                        @include('layouts.class_from_base',['base'=>$link->parent_base])--}}
-                    {{--                    >--}}
-                    <th class="text-center">
-                        <a href="{{route('item.base_index',['base'=>$link->parent_base_id, 'project'=>$project, 'role'=>$role])}}"
-                           title="{{$link->parent_base->names()}}">
-                            {{$link->parent_label()}}
+{{--                <div class="card text-center">--}}
+{{--                    <div class="card card-inverse text-center" style="background-color: rgba(222,255,162,0.23); border-color: #3548ee;">--}}
+                        <div class="card text-center">
+                    @if($base->is_code_needed == true)
+                        <a href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}" title="{{$item->name()}}">
+                            <p class="card-header text-label">{{trans('main.code')}}: {{$item->code}}</p>
                         </a>
-                    </th>
-                @endif
+                    @endif
+{{--                        <div class="card-body">--}}
+                    <div class="card-block">
+                        {{--                                https://askdev.ru/q/kak-vyzvat-funkciyu-javascript-iz-tega-href-v-html-276225/--}}
+                        <a href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}" title="{{$item->name()}}">
+                            @if($item_find)
+                                @include('view.img',['item'=>$item_find, 'size'=>"medium", 'filenametrue'=>false, 'link'=>false, 'img_fluid'=>true, 'title'=>$item->name()])
+                                {{--                            @else--}}
+                                {{--                                <div class="text-danger">--}}
+                                {{--                                    {{GlobalController::empty_html()}}</div>--}}
+                            @endif
+                        </a>
+                    </div>
+                    {{--                    <div class="card-footer">--}}
+                    <h5 class="card-title mt-2"><a href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}"
+                                                   title="{{$item->name()}}">
+                            {{$item->name()}}
+                        </a></h5>
+                    {{--                    </div>--}}
+                </div>
             @endforeach
-            {{--            <th class="text-center">{{trans('main.user')}}</th>--}}
-            {{--            <th class="text-center">{{trans('main.user')}}</th>--}}
-        </tr>
-        </thead>
-        <tbody>
-        <?php
-        $i = $items->firstItem() - 1;
-        ?>
-        @foreach($items as $item)
-            <?php
-            $i++;
-            ?>
+        </div>
+        <div class="row">
+            <div class="col text-center text-label">
+                {{trans('main.select_record_for_work')}}
+            </div>
+        </div>
+    @else
+        <table class="table table-sm table-bordered table-hover">
+            <caption>{{trans('main.select_record_for_work')}}</caption>
+            <thead>
             <tr>
-                <td class="text-center">
-                    {{--                    Не удалять--}}
-                    {{--                    <a href="{{route('item.item_index', ['item'=>$item, 'role'=>$role])}}">--}}
-                    <a href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}">
-                        {{$i}}
-                    </a>
-                </td>
+                <th class="text-center">#</th>
                 @if($base_right['is_list_base_enable'] == true)
                     @if($base->is_code_needed == true)
-                        <td class="text-center">
-                            <a href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}">
-                                {{$item->code}}
-                            </a>
-                        </td>
+                        <th class="text-center">{{trans('main.code')}}</th>
                     @endif
                     {{--                Если тип-вычисляемое поле и Показывать Основу с вычисляемым наименованием--}}
                     {{--                или если тип-не вычисляемое наименование--}}
                     {{--            похожая проверка в ext_show.blade.php--}}
                     @if(GlobalController::is_base_calcname_check($base, $base_right))
-                        <td @include('layouts.class_from_base',['base'=>$base])>
-                            @if($base->type_is_image)
-                                @include('view.img',['item'=>$item, 'size'=>"small", 'filenametrue'=>false, 'link'=>true, 'img_fluid'=>false, 'title'=>""])
-                            @elseif($base->type_is_document)
-                                @include('view.doc',['item'=>$item])
-                            @else
-                                <a href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}">
-                                    {{$item->name()}}
-                                </a>
-                            @endif
-                        </td>
+                        <th @include('layouts.class_from_base',['base'=>$base])>
+                            {{trans('main.name')}}</th>
                     @endif
                 @endif
-                {{--                <td class="text-center">&#8594;</td>--}}
                 @foreach($links as $link)
                     <?php
                     $base_link_right = GlobalController::base_link_right($link, $role);
                     ?>
                     @if($base_link_right['is_list_link_enable'] == true)
-                        <td
-                            @include('layouts.class_from_base',['base'=>$link->parent_base])
-                        >
-                            <?php
-                            $item_find = MainController::view_info($item->id, $link->id);
-                            ?>
-                            @if($item_find)
-                                @if($link->parent_base->type_is_image())
-                                    @include('view.img',['item'=>$item_find, 'size'=>"small", 'filenametrue'=>false, 'link'=>true, 'img_fluid'=>false, 'title'=>""])
-                                @elseif($link->parent_base->type_is_document())
-                                    @include('view.doc',['item'=>$item_find])
-                                @else
-                                    {{--                                Не удалять: просмотр Пространство--}}
-                                    {{--                                                                            проверка, если link - вычисляемое поле--}}
-                                    {{--                                    @if ($link->parent_is_parent_related == true || $link->parent_is_numcalc == true)--}}
-                                    {{--                                        <a href="{{route('item.item_index', ['item'=>$item_find, 'role'=>$role])}}">--}}
-                                    {{--                                            @else--}}
-                                    {{--                                                <a href="{{route('item.item_index', ['item'=>$item_find, 'role'=>$role,'par_link'=>$link])}}">--}}
-                                    {{--                                                    @endif--}}
-                                    <a href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}">
-                                        {{$item_find->name()}}
-                                    </a>
-                                @endif
-                            @else
-                                <div class="text-danger">
-                                    {{GlobalController::empty_html()}}</div>
-                            @endif
-                        </td>
+                        {{--                    <th--}}
+                        {{--                        @include('layouts.class_from_base',['base'=>$link->parent_base])--}}
+                        {{--                    >--}}
+                        <th class="text-center">
+                            <a href="{{route('item.base_index',['base'=>$link->parent_base_id, 'project'=>$project, 'role'=>$role])}}"
+                               title="{{$link->parent_base->names()}}">
+                                {{$link->parent_label()}}
+                            </a>
+                        </th>
                     @endif
                 @endforeach
-                {{--                <td>{{$item->created_user_date()}}--}}
-                {{--                </td>--}}
-                {{--                <td>{{$item->updated_user_date()}}--}}
-                {{--                </td>--}}
-                {{--                <td class="text-left">--}}
-                {{--                    <?php--}}
-                {{--                    $link = Link::where('child_base_id', $item->base_id)->exists();--}}
-                {{--                    $main = Main::where('child_item_id', $item->id)->exists();--}}
-                {{--                    ?>--}}
-                {{--                    @if ($link != null)--}}
-                {{--                        @if ($main != null)--}}
-                {{--                            {{trans('main.full')}}--}}
-                {{--                        @endif--}}
-                {{--                    @else--}}
-                {{--                        <span class="text-danger font-weight-bold">{{trans('main.empty')}}</span>--}}
-                {{--                    @endif--}}
-                {{--                </td>--}}
-                {{--                <td class="text-left">--}}
-                {{--                    <?php--}}
-                {{--                    //                  $link = Link::where('parent_base_id', $item->base_id)->first();--}}
-                {{--                    //                  $main = Main::where('parent_item_id', $item->id)->first();--}}
-                {{--                    //                  $link = Link::all()->contains('parent_base_id', $item->base_id);--}}
-                {{--                    //                  $main = Main::all()->contains('parent_item_id', $item->id);--}}
-                {{--                    $link = Link::where('parent_base_id', $item->base_id)->exists();--}}
-                {{--                    $main = Main::where('parent_item_id', $item->id)->exists();--}}
-                {{--                    ?>--}}
-                {{--                    @if ($link != null)--}}
-                {{--                        @if ($main != null)--}}
-                {{--                            {{trans('main.used')}}--}}
-                {{--                        @else--}}
-                {{--                            {{trans('main.not_used')}}--}}
-                {{--                        @endif--}}
-                {{--                    @endif--}}
-                {{--                    /--}}
-                {{--                    @if  (count($item->parent_mains) == 0)--}}
-                {{--                        <b>{{trans('main.not_used')}}</b>--}}
-                {{--                    @else--}}
-                {{--                        {{trans('main.used')}}--}}
-                {{--                    @endif--}}
-                {{--                </td>--}}
-                {{--                Не удалять: другой способ просмотра--}}
-                {{--                <td class="text-center">--}}
-                {{--                    <a href="{{route('main.index_item',$item)}}" title="{{trans('main.information')}}">--}}
-                {{--                        <img src="{{Storage::url('info_record.png')}}" width="15" height="15"--}}
-                {{--                             alt="{{trans('main.info')}}">--}}
-                {{--                    </a>--}}
-                {{--                </td>--}}
+                {{--            <th class="text-center">{{trans('main.user')}}</th>--}}
+                {{--            <th class="text-center">{{trans('main.user')}}</th>--}}
             </tr>
-        @endforeach
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            <?php
+            $i = $items->firstItem() - 1;
+            ?>
+            @foreach($items as $item)
+                <?php
+                $i++;
+                ?>
+                <tr>
+                    <td class="text-center">
+                        {{--                    Не удалять--}}
+                        {{--                    <a href="{{route('item.item_index', ['item'=>$item, 'role'=>$role])}}">--}}
+                        <a href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}">
+                            {{$i}}
+                        </a>
+                    </td>
+                    @if($base_right['is_list_base_enable'] == true)
+                        @if($base->is_code_needed == true)
+                            <td class="text-center">
+                                <a href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}">
+                                    {{$item->code}}
+                                </a>
+                            </td>
+                        @endif
+                        {{--                Если тип-вычисляемое поле и Показывать Основу с вычисляемым наименованием--}}
+                        {{--                или если тип-не вычисляемое наименование--}}
+                        {{--            похожая проверка в ext_show.blade.php--}}
+                        @if(GlobalController::is_base_calcname_check($base, $base_right))
+                            <td @include('layouts.class_from_base',['base'=>$base])>
+                                @if($base->type_is_image)
+                                    @include('view.img',['item'=>$item, 'size'=>"small", 'filenametrue'=>false, 'link'=>true, 'img_fluid'=>false, 'title'=>""])
+                                @elseif($base->type_is_document)
+                                    @include('view.doc',['item'=>$item])
+                                @else
+                                    <a href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}">
+                                        {{$item->name()}}
+                                    </a>
+                                @endif
+                            </td>
+                        @endif
+                    @endif
+                    {{--                <td class="text-center">&#8594;</td>--}}
+                    @foreach($links as $link)
+                        <?php
+                        $base_link_right = GlobalController::base_link_right($link, $role);
+                        ?>
+                        @if($base_link_right['is_list_link_enable'] == true)
+                            <td
+                                @include('layouts.class_from_base',['base'=>$link->parent_base])
+                            >
+                                <?php
+                                $item_find = MainController::view_info($item->id, $link->id);
+                                ?>
+                                @if($item_find)
+                                    @if($link->parent_base->type_is_image())
+                                        @include('view.img',['item'=>$item_find, 'size'=>"small", 'filenametrue'=>false, 'link'=>true, 'img_fluid'=>false, 'title'=>""])
+                                    @elseif($link->parent_base->type_is_document())
+                                        @include('view.doc',['item'=>$item_find])
+                                    @else
+                                        {{--                                Не удалять: просмотр Пространство--}}
+                                        {{--                                                                            проверка, если link - вычисляемое поле--}}
+                                        {{--                                    @if ($link->parent_is_parent_related == true || $link->parent_is_numcalc == true)--}}
+                                        {{--                                        <a href="{{route('item.item_index', ['item'=>$item_find, 'role'=>$role])}}">--}}
+                                        {{--                                            @else--}}
+                                        {{--                                                <a href="{{route('item.item_index', ['item'=>$item_find, 'role'=>$role,'par_link'=>$link])}}">--}}
+                                        {{--                                                    @endif--}}
+                                        <a href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}">
+                                            {{$item_find->name()}}
+                                        </a>
+                                    @endif
+                                @else
+                                    <div class="text-danger">
+                                        {{GlobalController::empty_html()}}</div>
+                                @endif
+                            </td>
+                        @endif
+                    @endforeach
+                    {{--                    Не удалять--}}
+                    {{--                <td>{{$item->created_user_date()}}--}}
+                    {{--                </td>--}}
+                    {{--                <td>{{$item->updated_user_date()}}--}}
+                    {{--                </td>--}}
+                    {{--                <td class="text-left">--}}
+                    {{--                    <?php--}}
+                    {{--                    $link = Link::where('child_base_id', $item->base_id)->exists();--}}
+                    {{--                    $main = Main::where('child_item_id', $item->id)->exists();--}}
+                    {{--                    ?>--}}
+                    {{--                    @if ($link != null)--}}
+                    {{--                        @if ($main != null)--}}
+                    {{--                            {{trans('main.full')}}--}}
+                    {{--                        @endif--}}
+                    {{--                    @else--}}
+                    {{--                        <span class="text-danger font-weight-bold">{{trans('main.empty')}}</span>--}}
+                    {{--                    @endif--}}
+                    {{--                </td>--}}
+                    {{--                <td class="text-left">--}}
+                    {{--                    <?php--}}
+                    {{--                    //                  $link = Link::where('parent_base_id', $item->base_id)->first();--}}
+                    {{--                    //                  $main = Main::where('parent_item_id', $item->id)->first();--}}
+                    {{--                    //                  $link = Link::all()->contains('parent_base_id', $item->base_id);--}}
+                    {{--                    //                  $main = Main::all()->contains('parent_item_id', $item->id);--}}
+                    {{--                    $link = Link::where('parent_base_id', $item->base_id)->exists();--}}
+                    {{--                    $main = Main::where('parent_item_id', $item->id)->exists();--}}
+                    {{--                    ?>--}}
+                    {{--                    @if ($link != null)--}}
+                    {{--                        @if ($main != null)--}}
+                    {{--                            {{trans('main.used')}}--}}
+                    {{--                        @else--}}
+                    {{--                            {{trans('main.not_used')}}--}}
+                    {{--                        @endif--}}
+                    {{--                    @endif--}}
+                    {{--                    /--}}
+                    {{--                    @if  (count($item->parent_mains) == 0)--}}
+                    {{--                        <b>{{trans('main.not_used')}}</b>--}}
+                    {{--                    @else--}}
+                    {{--                        {{trans('main.used')}}--}}
+                    {{--                    @endif--}}
+                    {{--                </td>--}}
+                    {{--                Не удалять: другой способ просмотра--}}
+                    {{--                <td class="text-center">--}}
+                    {{--                    <a href="{{route('main.index_item',$item)}}" title="{{trans('main.information')}}">--}}
+                    {{--                        <img src="{{Storage::url('info_record.png')}}" width="15" height="15"--}}
+                    {{--                             alt="{{trans('main.info')}}">--}}
+                    {{--                    </a>--}}
+                    {{--                </td>--}}
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+    @endif
     {{$items->links()}}
-    <dd><?php echo nl2br($project->dc_ext()); ?></dd>
-    <dd><?php echo nl2br($project->dc_int()); ?></dd>
+    <blockquote class="text-title pt-1 pl-5 pr-5"><?php echo nl2br($project->dc_ext()); ?></blockquote>
+    <blockquote class="text-title pt-1 pl-5 pr-5"><?php echo nl2br($project->dc_int()); ?></blockquote>
 @endsection
+
 

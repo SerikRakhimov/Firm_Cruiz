@@ -19,10 +19,6 @@
             </a>
         </div>
     </div>
-    <div class="row">
-        <div class="col-12 text-center">
-            {{$role->desc()}}
-        </div>
-    </div>
+    <blockquote class="text-title pt-1 pl-5 pr-5"><?php echo nl2br($role->desc()); ?></blockquote>
 </div>
 </p>

@@ -24,6 +24,7 @@ class Base extends Model
         return $this->hasMany(Link::class, 'parent_base_id');
     }
 
+    // Используется "name"
     function name()
     {
         $result = "";  // нужно, не удалять
@@ -38,6 +39,7 @@ class Base extends Model
         return $result;
     }
 
+    // Используется "names"
     function names()
     {
         $result = "";  // нужно, не удалять
@@ -217,12 +219,27 @@ class Base extends Model
         return str_repeat('9', $sg);
     }
 
-    // Возвращает истину, если есть основное изображение
-    function is_primary_image_link()
+//    // Возвращает истину, если есть основное изображение
+//    function is_primary_image_link()
+//    {
+//        $links = $this->child_links();
+//        $link = $links->where('parent_is_primary_image', true)->first();
+//        return $link;
+//    }
+
+    //Возвращает истину, если вид отображения информации - плитка, и если есть основное изображение в links
+    function tile_view()
     {
         $links = $this->child_links();
         $link = $links->where('parent_is_primary_image', true)->first();
-        return $link;
+        $result = false;
+        if ($link) {
+            if ($link->parent_base->type_is_image()) {
+                $result = true;
+            }
+        }
+        return ['result'=>$result, 'link'=>$link];
     }
+
 
 }

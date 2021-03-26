@@ -59,11 +59,7 @@
         </tbody>
     </table>
     {{$bases->links()}}
-    <div class="row">
-        <div class="col-12 text-center">
-            <p><?php echo nl2br($project->dc_ext()); ?></p>
-            <p><?php echo nl2br($project->dc_int()); ?></p>
-        </div>
-    </div>
+    <blockquote class="text-title pt-1 pl-5 pr-5"><?php echo nl2br($project->dc_ext()); ?></blockquote>
+    <blockquote class="text-title pt-1 pl-5 pr-5"><?php echo nl2br($project->dc_int()); ?></blockquote>
 @endsection
 
