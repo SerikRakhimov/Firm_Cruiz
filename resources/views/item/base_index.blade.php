@@ -204,7 +204,7 @@
                                         {{--                                                <a href="{{route('item.item_index', ['item'=>$item_find, 'role'=>$role,'par_link'=>$link])}}">--}}
                                         {{--                                                    @endif--}}
                                         <a href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}">
-<?php echo GlobalController::to_html($item_find);?>
+<?php //echo GlobalController::to_html($item_find);?>
                                             {{$item_find->name()}}
                                         </a>
                                     @endif
