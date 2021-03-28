@@ -172,7 +172,7 @@
                                     @include('view.doc',['item'=>$item])
                                 @else
                                     <a href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}">
-                                        {{GlobalController::to_html($item)}}
+                                        <?php echo GlobalController::to_html($item);?>
                                     </a>
                                 @endif
                             </td>
@@ -204,7 +204,7 @@
                                         {{--                                                <a href="{{route('item.item_index', ['item'=>$item_find, 'role'=>$role,'par_link'=>$link])}}">--}}
                                         {{--                                                    @endif--}}
                                         <a href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}">
-                                            {{GlobalController::to_html($item_find)}}
+                                            <?php echo GlobalController::to_html($item_find);?>
                                         </a>
                                     @endif
                                 @else
