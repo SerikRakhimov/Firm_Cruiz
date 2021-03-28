@@ -1,3 +1,6 @@
+<?php
+use App\Http\Controllers\GlobalController;
+?>
 <p>{{trans('main.project')}}: <b>{{$item->project->name()}}</b></p>
 <hr>
 <h5>{{$item->project->user->name()}}!</h5>
@@ -6,9 +9,10 @@
 @if($item->base->is_code_needed == true)
     <p>{{trans('main.code')}}: <b>{{$item->code}}</b></p>
 @endif
-<p>{{trans('main.name')}}: <b>{{$item->name()}}</b></p><br>
+<p>{{trans('main.name')}}:,<br><b><?php echo GlobalController::to_html($item);?></b></p><br>
 <p class="text-label">{{trans('main.created_user_date_time')}}:
     <b>{{$item->created_user_date_time()}}</b><br>
 </p>
+<br>
 <hr>
 <h5>www.abakusonline.com</h5>

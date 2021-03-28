@@ -362,4 +362,9 @@ class GlobalController extends Controller
         return $result;
     }
 
+    static function to_html($item)
+    {
+        return str_replace(trim($item->base->sepa_calcname), '<br>', $item->name());
+    }
+
 }
