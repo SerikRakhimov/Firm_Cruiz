@@ -1,3 +1,6 @@
+<?php
+use App\Http\Controllers\GlobalController;
+?>
 <p>{{trans('main.project')}}: <b>{{$item->project->name()}}</b></p>
 <hr>
 <h5>{{$item->created_user->name()}}!</h5>
