@@ -104,6 +104,7 @@ use \App\Http\Controllers\MainController;
                         <h5 class="card-title mt-2"><a href="#"
                                                   onclick="SelectFile('{{$item->id}}', '{{$item->code}}', '{{$item->name()}}')" title="{{$item->name()}}">
                                 {{--                            Где $item->name() выходит в cards выводить "<?php echo GlobalController::to_html();?>"--}}
+                                <?php echo GlobalController::to_html($item->name());?>
                             </a></h5>
 {{--                    </div>--}}
                 </div>
