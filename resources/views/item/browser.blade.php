@@ -103,7 +103,7 @@ use \App\Http\Controllers\MainController;
 {{--                    <div class="card-footer">--}}
                         <h5 class="card-title mt-2"><a href="#"
                                                   onclick="SelectFile('{{$item->id}}', '{{$item->code}}', '{{$item->name()}}')" title="{{$item->name()}}">
-                                {{$item->name()}}
+                                {{--                            Где $item->name() выходит в cards выводить "<?php echo GlobalController::to_html();?>"--}}
                             </a></h5>
 {{--                    </div>--}}
                 </div>

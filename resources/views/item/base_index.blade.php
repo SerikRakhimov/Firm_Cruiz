@@ -88,7 +88,8 @@
                     {{--                    <div class="card-footer">--}}
                     <h5 class="card-title mt-2"><a href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}"
                                                    title="{{$item->name()}}">
-                            {{$item->name()}}
+{{--                            Где $item->name() выходит в cards выводить "<?php echo GlobalController::to_html();?>"--}}
+                            <?php echo GlobalController::to_html($item);?>
                         </a></h5>
                     {{--                    </div>--}}
                 </div>
@@ -172,7 +173,8 @@
                                     @include('view.doc',['item'=>$item])
                                 @else
                                     <a href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}">
-                                        <?php echo GlobalController::to_html($item);?>
+                                        {{--                            Где $item->name() выходит в cards выводить "<?php echo GlobalController::to_html();?>"--}}
+                                        {{$item->name()}}
                                     </a>
                                 @endif
                             </td>
@@ -204,7 +206,7 @@
                                         {{--                                                <a href="{{route('item.item_index', ['item'=>$item_find, 'role'=>$role,'par_link'=>$link])}}">--}}
                                         {{--                                                    @endif--}}
                                         <a href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}">
-<?php //echo GlobalController::to_html($item_find);?>
+                                            {{--                            Где $item->name() выходит в cards выводить "<?php echo GlobalController::to_html();?>"--}}
                                             {{$item_find->name()}}
                                         </a>
                                     @endif
