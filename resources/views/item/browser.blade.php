@@ -85,7 +85,7 @@ use \App\Http\Controllers\MainController;
                 {{--                    <div class="col-4">--}}
                 <div class="card text-center">
                     <a href="#"
-                       onclick="SelectFile('{{$item->id}}', '{{$item->code}}', '{{$item->name()}}')" title="{{$item->name()}}">
+                       onclick="javascript:SelectFile('{{$item->id}}', '{{$item->code}}', '{{$item->name()}}')" title="{{$item->name()}}">
                         <p class="card-header text-label">{{trans('main.code')}}: {{$item->code}}</p>
                     </a>
                     <div class="card-block">
@@ -158,7 +158,8 @@ use \App\Http\Controllers\MainController;
                     <td class="text-center" style="cursor:pointer"
                         onclick="SelectFile('{{$item->id}}', '{{$item->code}}', '{{$item->name()}}')">{{$item->code}}</td>
                     <td class="text-left" style="cursor:pointer"
-                        onclick="SelectFile('{{$item->id}}', '{{$item->code}}', '{{$item->name()}}')">{{$item->name()}}</td>
+                        onclick="SelectFile('{{$item->id}}', '{{$item->code}}', '{{$item->name()}}')">{{$item->name()}}
+                    </td>
                 </tr>
             @endforeach
             </tbody>
@@ -168,7 +169,7 @@ use \App\Http\Controllers\MainController;
 @endif
 
 <script>
-    function seach_click() {
+     function seach_click() {
         param = '/{{$sort_by_code == true?"1":"0"}}';
         // " + param + param" правильно
         open('{{route('item.browser', '')}}' + '/' + {{$base->id}} +'/' + {{$project->id}} +'/' + {{$role->id}} +param + param
@@ -176,7 +177,6 @@ use \App\Http\Controllers\MainController;
     };
 
     function SelectFile(id, code, name) {
-
         opener.item_id.value = id;
         opener.item_code.value = code;
         opener.item_name.innerHTML = name;

@@ -2417,8 +2417,9 @@ class ItemController extends Controller
                     $dop_name_3 = trim($dop_name_3);
                     if (!($dop_name_0 == "" && $dop_name_1 == "" && $dop_name_2 == "" && $dop_name_3 == "")) {
                         // $item->base->sepa_calcname - символ разделения для вычисляемых полей
-                        // "\n" - символ перевода каретки
-                        $sc = trim($item->base->sepa_calcname) . "\n";
+                        // "\~" - символ перевода каретки (используется также в Item.php: функции name() nmbr())
+                        // "\~" - символ перевода каретки (используется также в ItemController.php: функция calc_value_func())
+                        $sc = trim($item->base->sepa_calcname) . "\~";
                         $dop_sepa0 = $calc_lang_0 == "" ? "" : $sc . " ";
                         $dop_sepa1 = $calc_lang_1 == "" ? "" : $sc . " ";
                         $dop_sepa2 = $calc_lang_2 == "" ? "" : $sc . " ";

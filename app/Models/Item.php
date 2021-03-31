@@ -120,14 +120,20 @@ class Item extends Model
         return $result;
     }
 
+    // "\~" - символ перевода каретки (используется также в Item.php: функции name() nmbr())
+    // "\~" - символ перевода каретки (используется также в ItemController.php: функция calc_value_func())
     function name($numcat = false){
-        // trim() убирает символы "\n"
-        return trim(self::name_start($numcat));
+        $result = self::name_start($numcat);
+        $result = str_replace('\~', '', $result);
+        return $result;
     }
 
+    // "\~" - символ перевода каретки (используется также в Item.php: функции name() nmbr())
+    // "\~" - символ перевода каретки (используется также в ItemController.php: функция calc_value_func())
     function nmbr($numcat = false){
-        // nl2br() заменяет символы "\n" на "<br>"
-        return nl2br(self::name_start($numcat));
+        $result = self::name_start($numcat);
+        $result = str_replace('\~', '<br>', $result);
+        return $result;
     }
 
     //names() используется для расчета вычисляемого наименования
