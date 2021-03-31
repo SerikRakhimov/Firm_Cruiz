@@ -206,7 +206,7 @@
                                         {{--                                                    @endif--}}
                                         <a href="{{route('item.ext_show', ['item'=>$item_find, 'role'=>$role])}}">
                                             {{--                            Где $item->name() выходит в cards выводить "<?php echo GlobalController::to_html();?>"--}}
-                                            {{$item_find->id}} {{$item_find->project_id}} {{$item_find->name()}}
+                                            {{$item_find->name()}}
                                         </a>
                                     @endif
                                 @else

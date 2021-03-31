@@ -375,10 +375,6 @@ class GlobalController extends Controller
     static function check_project_user(Project $project, Role $role)
     {
         $result = false;
-        echo "project->id = " . $project->id;
-        echo ", role->id = " . $role->id;
-        echo ", project->template_id = " . $project->template_id;
-        echo ", role->template_id = " . $role->template_id;
         if ($project->template_id == $role->template_id) {
             if ($role->is_default_for_external == true) {
                 $result = true;
