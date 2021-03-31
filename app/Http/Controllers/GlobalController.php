@@ -303,9 +303,12 @@ class GlobalController extends Controller
             $name = 'name_lang_' . $index;
         }
 
+        // Обязатель фильтр на два запроса:
+        // where('base_id', $base->id)->where('project_id', $project->id)
+        // where('ct.base_id', '=', $base->id)->where('ct.project_id', '=', $project->id)
+
         // Сортировка по наименованию
         if (GlobalController::is_base_calcname_check($base, $base_right)) {
-
             $items = Item::where('base_id', $base->id)->where('project_id', $project->id)->orderBy($name);
 
             // Сортировка по mains
@@ -317,6 +320,7 @@ class GlobalController extends Controller
                 ->join('items as ct', 'mains.child_item_id', '=', 'ct.id')
                 ->join('bases as bs', 'ct.base_id', '=', 'bs.id')
                 ->where('ct.base_id', '=', $base->id)
+                ->where('ct.project_id', '=', $project->id)
                 ->where('bs.type_is_image', false)
                 ->where('bs.type_is_document', false)
                 ->orderBy('ln.parent_base_number')
