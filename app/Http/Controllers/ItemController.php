@@ -504,9 +504,11 @@ class ItemController extends Controller
         $item->name_lang_3 = isset($request->name_lang_3) ? $request->name_lang_3 : "";
         $item->project_id = $project->id;
         // далее этот блок
-        // похожая формула ниже (в этой же процедуре)
+        // похожие формулы ниже (в этой же процедуре)
         if ($base->type_is_boolean()) {
             $item->name_lang_0 = isset($request->name_lang_0) ? "1" : "0";
+        } elseif ($base->type_is_number()) {
+            $item->name_lang_0 = GlobalController::save_number_to_item($base, $request->name_lang_0);
         }
 
         // затем этот блок (используется "$base")
@@ -652,6 +654,8 @@ class ItemController extends Controller
                     $path = $request[$key]->store('public/' . $item->project_id . '/' . $link->parent_base_id);
                 }
                 $inputs[$key] = $path;
+            } elseif ($link->parent_base->type_is_number()) {
+                $inputs[$key] = GlobalController::save_number_to_item($link->parent_base, $value);
             }
         }
 
@@ -1487,9 +1491,11 @@ class ItemController extends Controller
         }
 
         // далее этот блок
-        // похожая формула ниже (в этой же процедуре)
+        // похожие формула выше (в этой же процедуре)
         if ($item->base->type_is_boolean()) {
             $item->name_lang_0 = isset($request->name_lang_0) ? "1" : "0";
+        } elseif ($item->base->type_is_number()) {
+            $item->name_lang_0 = GlobalController::save_number_to_item($item->base, $request->name_lang_0);
         }
 
         // затем этот блок (используется "$item->base")
@@ -1573,6 +1579,8 @@ class ItemController extends Controller
                     $path = $request[$key]->store('public/' . $item->project_id . '/' . $link->parent_base_id);
                 }
                 $inputs[$key] = $path;
+            } elseif ($link->parent_base->type_is_number()) {
+                $inputs[$key] = GlobalController::save_number_to_item($link->parent_base, $value);
             }
         }
 
@@ -2254,6 +2262,7 @@ class ItemController extends Controller
                                 $result_item_name = "<a href='" . Storage::url($item->filename()) . "'><img src='" . Storage::url($item->filename()) . "' height='50' alt='' title='" . $item->filename() . "'></a>";
                             }
                         } else {
+                            // $numcat = false - не выводить числовых поля с разрядом тысячи/миллионы/миллиарды
                             $result_item_name = $item->name();
                         }
                         $result_item_name_options = "<option value='" . $item->id . "'>" . $item->name() . "</option>";
@@ -2337,7 +2346,7 @@ class ItemController extends Controller
             // Эта строка "$item_result = null;" нужна
             $item_result = null;
             if ($link) {
-                // если поле входит в состав вычисляемого составного поля
+                // если поле входит в состав вычисляемого составного поля / Для вычисляемого наименования
                 if ($link->parent_is_calcname == true) {
                     // $first_run = false запускается только для однородных значений (например: ФизЛицо имеет поле Мать(ФизЛицо), Отец(ФизЛицо))
                     if (($first_run == true) ||
@@ -2345,7 +2354,7 @@ class ItemController extends Controller
                             && (($item->base->is_same_small_calcname == false)
                                 || ($item->base->is_same_small_calcname == true) && ($link->parent_is_small_calcname == true)))) {
                         if ($value == null) {
-                            // Проверка на вычисляемые поля
+                            // Проверка на вычисляемые поля / Автоматически заполнять из родительского поля ввода
                             if ($link->parent_is_parent_related == true) {
                                 $const_link_id_start = LinkController::get_link_ids_from_calc_link($link)['const_link_id_start'];
                                 $link_parent = Link::find($link->parent_parent_related_start_link_id);
@@ -2407,8 +2416,9 @@ class ItemController extends Controller
                     $dop_name_2 = trim($dop_name_2);
                     $dop_name_3 = trim($dop_name_3);
                     if (!($dop_name_0 == "" && $dop_name_1 == "" && $dop_name_2 == "" && $dop_name_3 == "")) {
-                        // символ разделения для вычисляемых полей
-                        $sc = trim($item->base->sepa_calcname);
+                        // $item->base->sepa_calcname - символ разделения для вычисляемых полей
+                        // "\n" - символ перевода каретки
+                        $sc = trim($item->base->sepa_calcname) . "\n";
                         $dop_sepa0 = $calc_lang_0 == "" ? "" : $sc . " ";
                         $dop_sepa1 = $calc_lang_1 == "" ? "" : $sc . " ";
                         $dop_sepa2 = $calc_lang_2 == "" ? "" : $sc . " ";

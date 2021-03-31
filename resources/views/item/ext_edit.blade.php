@@ -116,7 +116,9 @@
                                id="name_lang_0" ;
                                class="form-control @error('name_lang_0') is-invalid @enderror"
                                placeholder=""
-                               value="{{old('name_lang_0') ?? ($item['name_lang_0'] ?? '') }}"
+                               {{--                               value="{{old('name_lang_0') ?? (GlobalController::restore_number_from_item($base,$item['name_lang_0']) ?? '') }}"--}}
+                               {{--                               value="{{old('name_lang_0') ?? ($item['name_lang_0'] ?? '') }}"--}}
+                               value="{{old('name_lang_0') ?? ($update?GlobalController::restore_number_from_item($base,$item['name_lang_0']):'0')}}"
                                step="{{$base->digits_num_format()}}">
                         @error('name_lang_0')
                         <div class="invalid-feedback">
@@ -343,7 +345,7 @@
                                     disabled
                                 @endif
                             >
-{{--                                <i class="fas fa-mouse-pointer d-inline"></i>--}}
+                                {{--                                <i class="fas fa-mouse-pointer d-inline"></i>--}}
                                 ...
                             </button>
                         </div>
@@ -373,7 +375,7 @@
                                    id="link{{$key}}"
                                    class="form-control @error($key) is-invalid @enderror"
                                    placeholder=""
-                                   value="{{(old($key)) ?? (($value != null) ? Item::find($value)->name() :
+                                   value="{{(old($key)) ?? (($value != null) ? GlobalController::restore_number_from_item($link->parent_base, Item::find($value)->name()) :
 (($link->parent_num_bool_default_value!="")? $link->parent_num_bool_default_value:'0')
 )}}"
                                    step="{{$link->parent_base->digits_num_format()}}"
@@ -952,7 +954,6 @@
         var button_nc_{{$prefix}}{{$link->id}} = document.getElementById('button_nc{{$link->id}}');
         var numcalc_{{$prefix}}{{$link->id}} = document.getElementById('link{{$link->id}}');
         var name_{{$prefix}}{{$link->id}} = document.getElementById('name{{$link->id}}');
-
 
         <?php
         $functs_numcalc[count($functs_numcalc)] = "button_nc_click_" . $prefix . $link->id;

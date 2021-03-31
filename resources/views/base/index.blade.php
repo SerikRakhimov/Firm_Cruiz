@@ -31,6 +31,7 @@
             <th class="text-center">#</th>
             <th class="text-left">{{trans('main.names')}}</th>
             <th class="text-center">{{trans('main.type')}}</th>
+            <th class="text-center">Id</th>
             @if (Auth::user()->isAdmin())
                 <th class="text-center"></th>
                 <th class="text-center"></th>
@@ -60,6 +61,9 @@
                     </td>
                     <td class="text-center">
                         {{$base->type_name()}}
+                    </td>
+                    <td class="text-center">
+                        {{$base->id}}
                     </td>
                     @if (Auth::user()->isAdmin())
                         <td class="text-center">

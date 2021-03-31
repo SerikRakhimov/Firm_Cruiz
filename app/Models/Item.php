@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Controllers\GlobalController;
 use Illuminate\Support\Facades\App;
 use Illuminate\Database\Eloquent\Model;
 use App\User;
@@ -66,8 +67,9 @@ class Item extends Model
         return $this->hasMany(Main::class, 'parent_item_id');
     }
 
-    //name() используется для отображения значений полей
-    function name()
+    // name() используется для отображения значений полей
+    // $numcat = true/false - вывод числовых полей с разрядом тысячи/миллионы/миллиарды
+    function name_start($numcat = false)
     {
         $result = "";  // нужно, не удалять
 
@@ -80,9 +82,9 @@ class Item extends Model
 //                $result = $this['name_lang_' . $index];
 //            }
 //        }
-        $base_find = $this->base;
-        if ($base_find) {
-            if ($base_find->type_is_date()) {
+        $base = $this->base;
+        if ($base) {
+            if ($base->type_is_date()) {
                 // "$this->name_lang_0 ??..." нужно, в случае если в $this->name_lang_0 хранится не дата
 //               $result = $this->name_lang_0 ? date_create($this->name_lang_0)->Format(trans('main.format_date')):'';
                 if (($timestamp = date_create($this->name_lang_0)) === false) {
@@ -92,7 +94,11 @@ class Item extends Model
                 }
                 // Не использовать
 //                    $result = date_create($this->name_lang_0)->Format('Y.m.d');
-            } elseif ($base_find->type_is_boolean()) {
+
+            } elseif ($base->type_is_number()) {
+                $result = GlobalController::restore_number_from_item($base, $this->name_lang_0, $numcat);
+
+            } elseif ($base->type_is_boolean()) {
                 //    Похожие строки в Base.php
                 // #65794 - ранее был пустой квадратик
                 $result = $this->name_lang_0 == "1" ? html_entity_decode('  &#9745;')
@@ -114,6 +120,16 @@ class Item extends Model
         return $result;
     }
 
+    function name($numcat = false){
+        // trim() убирает символы "\n"
+        return trim(self::name_start($numcat));
+    }
+
+    function nmbr($numcat = false){
+        // nl2br() заменяет символы "\n" на "<br>"
+        return nl2br(self::name_start($numcat));
+    }
+
     //names() используется для расчета вычисляемого наименования
     function names()
     {
@@ -129,15 +145,19 @@ class Item extends Model
             if ($lang_key < count(config('app.locales'))) {
                 $lc = config('app.locales')[$lang_key];
                 App::setLocale($lc);
-                $base_find = $this->base;
-                if ($base_find) {
+                $base = $this->base;
+                if ($base) {
                     // Эта строка нужна, не удалять
                     $name = $this['name_lang_' . $lang_key];
-                    if ($base_find->type_is_date()) {
-                        //$name = date_create($name)->Format(trans('main.format_date'));
+                    if ($base->type_is_date()) {
+                        $name = date_create($name)->Format(trans('main.format_date'));
                         // Нужно для правильной сортировки по полю $item->name_lang_x
-                        $name = date_create($name)->Format('Y.m.d');
-                    } elseif ($base_find->type_is_boolean()) {
+                        //$name = date_create($name)->Format('Y.m.d');
+
+                    } elseif ($base->type_is_number()) {
+                        $name = GlobalController::restore_number_from_item($base, $name);
+
+                    } elseif ($base->type_is_boolean()) {
                         //    Похожие строки в Base.php
 //                    $name = $name == "1" ? html_entity_decode('	&#9745;')
 //                        : ($name == "0" ? html_entity_decode('&#10065;') : trans('main.empty'));

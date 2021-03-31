@@ -24,34 +24,35 @@
     <br>
     <p class="text-label">Id: <b>{{$item->id}}</b></p>
     @if($base_right['is_show_base_enable'] == true)
-{{--        <p>--}}
-            @if($base->is_code_needed == true)
-                <p class="text-label">{{trans('main.code')}}: <b>{{$item->code}}</b></p>
+        {{--        <p>--}}
+        @if($base->is_code_needed == true)
+            <p class="text-label">{{trans('main.code')}}: <b>{{$item->code}}</b></p>
+        @endif
+        {{--        @foreach (config('app.locales') as $key=>$value)--}}
+        {{--            {{trans('main.name')}} ({{trans('main.' . $value)}}): <b>{{$item['name_lang_' . $key]}}</b><br>--}}
+        {{--        @endforeach--}}
+        @if($base->type_is_image)
+            @include('view.img',['item'=>$item, 'size'=>"medium", 'filenametrue'=>false, 'link'=>true, 'img_fluid'=>false, 'title'=>""])
+            {{--                <a href="{{Storage::url($item->filename())}}">--}}
+            {{--                    <img src="{{Storage::url($item->filename())}}" height="250"--}}
+            {{--                         alt="" title="{{$item->title_img()}}">--}}
+            {{--                </a>--}}
+        @elseif($base->type_is_document)
+            @include('view.doc',['item'=>$item])
+            {{--                <a href="{{Storage::url($item->filename())}}" target="_blank">--}}
+            {{--                    Открыть документ--}}
+            {{--                </a>--}}
+        @else
+            {{--                Если тип-вычисляемое поле и Показывать Основу с вычисляемым наименованием--}}
+            {{--                или если тип-не вычисляемое наименование--}}
+            {{--            похожая проверка в base_index.blade.php--}}
+            @if(GlobalController::is_base_calcname_check($base, $base_right))
+                {{--                                            $numcat = true - вывод числовых полей с разрядом тысячи/миллионы/миллиарды--}}
+                {{trans('main.name')}}: <b>{{$item->name(true)}}</b>
             @endif
-            {{--        @foreach (config('app.locales') as $key=>$value)--}}
-            {{--            {{trans('main.name')}} ({{trans('main.' . $value)}}): <b>{{$item['name_lang_' . $key]}}</b><br>--}}
-            {{--        @endforeach--}}
-            @if($base->type_is_image)
-                @include('view.img',['item'=>$item, 'size'=>"medium", 'filenametrue'=>false, 'link'=>true, 'img_fluid'=>false, 'title'=>""])
-                {{--                <a href="{{Storage::url($item->filename())}}">--}}
-                {{--                    <img src="{{Storage::url($item->filename())}}" height="250"--}}
-                {{--                         alt="" title="{{$item->title_img()}}">--}}
-                {{--                </a>--}}
-            @elseif($base->type_is_document)
-                @include('view.doc',['item'=>$item])
-                {{--                <a href="{{Storage::url($item->filename())}}" target="_blank">--}}
-                {{--                    Открыть документ--}}
-                {{--                </a>--}}
-            @else
-                {{--                Если тип-вычисляемое поле и Показывать Основу с вычисляемым наименованием--}}
-                {{--                или если тип-не вычисляемое наименование--}}
-                {{--            похожая проверка в base_index.blade.php--}}
-                @if(GlobalController::is_base_calcname_check($base, $base_right))
-                    {{trans('main.name')}}: <b>{{$item->name()}}</b>
-                @endif
-            @endif
-{{--            <br>--}}
-{{--        </p>--}}
+        @endif
+        {{--            <br>--}}
+        {{--        </p>--}}
     @endif
 
     {{--    @foreach($array_plan as $key=>$value)--}}
@@ -94,7 +95,8 @@
                         {{--                                Открыть документ--}}
                         {{--                            </a>--}}
                     @else
-                        <b>{{$item_find->name()}}</b>
+                        {{--                                            $numcat = true - вывод числовых полей с разрядом тысячи/миллионы/миллиарды--}}
+                        <b>{{$item_find->name(true)}}</b>
                     @endif
                     <br>
                 @endif
@@ -107,11 +109,11 @@
         {{trans('main.updated_user_date_time')}}:
         <b>{{$item->updated_user_date_time()}}</b></p>
 
-<!--    --><?php
-//    //        Не удалять
-////    $result = ItemController::form_tree($item->id);
-////    echo $result;
-//    ?>
+    <!--    --><?php
+    //    //        Не удалять
+    ////    $result = ItemController::form_tree($item->id);
+    ////    echo $result;
+    //    ?>
     @if ($type_form == 'show')
         <p>
             @if($base_right['is_list_base_update'] == true)
@@ -138,13 +140,13 @@
             {{--                                            @else--}}
             {{--                                                <a href="{{route('item.item_index', ['item'=>$item_find, 'role'=>$role,'par_link'=>$link])}}">--}}
             {{--                                                    @endif--}}
-{{--Не удалять--}}
-{{--            <button type="button" class="btn btn-dreamer mb-1 mb-sm-0"--}}
-{{--                    onclick='document.location="{{route('item.item_index', ['item'=>$item, 'role'=>$role])}}"'--}}
-{{--                    title="{{trans('main.space')}}">--}}
-{{--                <i class="fas fa-atlas"></i>--}}
-{{--                {{trans('main.space')}}--}}
-{{--            </button>--}}
+            {{--Не удалять--}}
+            {{--            <button type="button" class="btn btn-dreamer mb-1 mb-sm-0"--}}
+            {{--                    onclick='document.location="{{route('item.item_index', ['item'=>$item, 'role'=>$role])}}"'--}}
+            {{--                    title="{{trans('main.space')}}">--}}
+            {{--                <i class="fas fa-atlas"></i>--}}
+            {{--                {{trans('main.space')}}--}}
+            {{--            </button>--}}
             <button type="button" class="btn btn-dreamer mb-1 mb-sm-0"
                     title="{{trans('main.cancel')}}" @include('layouts.item.base_index.previous_url')>
                 <i class="fas fa-arrow-left"></i>

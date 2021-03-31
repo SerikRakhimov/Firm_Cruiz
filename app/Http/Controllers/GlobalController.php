@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Set;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use App\Models\Base;
 use App\Models\Link;
 use App\Models\Item;
+use App\Models\Main;
 use App\Models\Project;
 use App\Models\Role;
 use App\Models\Roba;
@@ -266,20 +269,7 @@ class GlobalController extends Controller
         ];
     }
 
-    static function items_right(Base $base, Project $project, Role $role)
-    {
-        $base_right = self::base_right($base, $role);
-        $items = Item::where('base_id', $base->id)->where('project_id', $project->id);
-        // Такая же проверка и в ItemController (function browser(), get_items_for_link())
-        if ($base_right['is_list_base_byuser'] == true) {
-            if (Auth::check()) {
-                $items = $items->where('created_user_id', GlobalController::glo_user_id());
-            } else {
-                $items = null;
-            }
-        }
-
-        // Не удалять
+    // Не удалять
 //
 //        $items = $items->whereHas('child_mains', function ($query) {
 //            $query->where('parent_item_id', 358);
@@ -303,15 +293,52 @@ class GlobalController extends Controller
 //                $query->whereDate('name_lang_0', '>','2020-02-09');});
 //        });
 
+    static function items_right(Base $base, Project $project, Role $role)
+    {
+        $base_right = self::base_right($base, $role);
+
+        $name = "";  // нужно, не удалять
+        $index = array_search(App::getLocale(), config('app.locales'));
+        if ($index !== false) {   // '!==' использовать, '!=' не использовать
+            $name = 'name_lang_' . $index;
+        }
+
+        // Сортировка по наименованию
+        if (GlobalController::is_base_calcname_check($base, $base_right)) {
+
+            $items = Item::where('base_id', $base->id)->where('project_id', $project->id)->orderBy($name);
+
+            // Сортировка по mains
+        } else {
+            // Не попадают в список $mains изображения/документы,
+            // а также связанные поля (они в Mains не хранятся)
+            $mains = Main::select(DB::Raw('mains.child_item_id as item_id'))
+                ->join('links as ln', 'mains.link_id', '=', 'ln.id')
+                ->join('items as ct', 'mains.child_item_id', '=', 'ct.id')
+                ->join('bases as bs', 'ct.base_id', '=', 'bs.id')
+                ->where('ct.base_id', '=', $base->id)
+                ->where('bs.type_is_image', false)
+                ->where('bs.type_is_document', false)
+                ->orderBy('ln.parent_base_number')
+                ->orderBy('ct.' . $name)
+                ->distinct();
+
+            $items = Item::joinSub($mains, 'mains', function ($join) {
+                $join->on('items.id', '=', 'mains.item_id');
+            });
+        }
+
+        // Такая же проверка и в ItemController (function browser(), get_items_for_link())
+        if ($base_right['is_list_base_byuser'] == true) {
+            if (Auth::check()) {
+                $items = $items->where('created_user_id', GlobalController::glo_user_id());
+            } else {
+                $items = null;
+            }
+        }
+
         $itget = null;
         if ($items != null) {
-            $name = "";  // нужно, не удалять
-            $index = array_search(App::getLocale(), config('app.locales'));
-            if ($index !== false) {   // '!==' использовать, '!=' не использовать
-                $name = 'name_lang_' . $index;
-                $items = $items->orderBy($name);
-            }
-
             $itget = $items->get();
             $view_count = count($itget);
         } else {
@@ -362,10 +389,96 @@ class GlobalController extends Controller
         return $result;
     }
 
-    static function to_html($item)
+//    static function to_html($item)
+//    {
+//        $str = trim($item->base->sepa_calcname);
+//        return str_replace($str, $str . '<br>', $item->name());
+//    }
+
+// На вход число в виде строки
+// На выходе это же число с нулями спереди
+// Нужно для правильной сортировки чисел
+    static function save_number_to_item(Base $base, $str)
     {
-        $str = trim($item->base->sepa_calcname);
-        return str_replace($str, $str . '<br>', $item->name());
+        // Максимальное количество разрядов для числа
+        $max_len = 17;
+        $work_len = 0;
+        $result = "";
+        $str = trim($str);
+        $first_char = "";
+        $sminus = "-";
+        // Первый символ равен "-"
+        if (substr($str, 0, 1) == $sminus) {
+            // Первый символ убирается
+            $str = substr($str, 1);
+            $work_len = $max_len - 1;
+            $first_char = $sminus;
+        } else {
+            $work_len = $max_len;
+            $first_char = "";
+        }
+        if ($base->type_is_number()) {
+            $digits_num = $base->digits_num;
+
+            // Число целое
+            if ($digits_num == 0) {
+                $int_value = intval($str);
+                $result = $first_char . str_pad($int_value, $work_len, "0", STR_PAD_LEFT);
+
+                // Число вещественное
+            } else {
+                $float_value = floatval($str);
+                $float_value = sprintf("%1." . $digits_num . "f", floatval($float_value));
+                $result = $first_char . str_pad($float_value, $work_len, "0", STR_PAD_LEFT);
+            }
+        }
+        return $result;
+    }
+
+// На вход число с нулями спереди
+// На выходе это же число в виде строки
+// Нужно для правильного отображения чисел
+// $numcat = true/false - вывод числовых полей с разрядом тысячи/миллионы/миллиарды
+    static function restore_number_from_item(Base $base, $str, $numcat = false)
+    {
+        // Максимальное количество разрядов для числа
+        $result = "";
+        $str = trim($str);
+        $first_char = "";
+        $sminus = "-";
+        // Первый символ равен "-"
+        if (substr($str, 0, 1) == $sminus) {
+            // Первый символ убирается
+            $str = substr($str, 1);
+            $first_char = $sminus;
+        } else {
+            $first_char = "";
+        }
+        if ($base->type_is_number()) {
+            $digits_num = $base->digits_num;
+
+            // Число целое
+            if ($digits_num == 0) {
+                $int_value = intval($str);
+                // $numcat = true/false - вывод числовых полей с разрядом тысячи/миллионы/миллиарды
+                if ($numcat) {
+                    $result = $first_char . number_format($int_value, $digits_num, '.', ' ');
+                } else {
+                    $result = $first_char . strval($int_value);
+                }
+
+                // Число вещественное
+            } else {
+                $float_value = floatval($str);
+                // $numcat = true/false - вывод числовых полей с разрядом тысячи/миллионы/миллиарды
+                if ($numcat) {
+                    $result = $first_char . number_format($float_value, $digits_num, '.', ' ');
+                } else {
+                    $result = $first_char . sprintf("%1." . $digits_num . "f", floatval($float_value));
+                }
+            }
+        }
+        return $result;
     }
 
 }

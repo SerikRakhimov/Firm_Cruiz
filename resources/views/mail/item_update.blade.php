@@ -9,7 +9,7 @@ use App\Http\Controllers\GlobalController;
 @if($item->base->is_code_needed == true)
     <p>{{trans('main.code')}}: <b>{{$item->code}}</b></p>
 @endif
-<p>{{trans('main.name')}}:<br><b><?php echo GlobalController::to_html($item);?></b></p><br>
+<p>{{trans('main.name')}}:<br><b><?php echo $item->nmbr();?></b></p><br>
 <p class="text-label">{{trans('main.updated_user_date_time')}}:
     <b>{{$item->updated_user_date_time()}}</b><br>
 </p>

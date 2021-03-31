@@ -12,7 +12,6 @@
     $links = $base->child_links->sortBy('parent_base_number');
     $base_right = GlobalController::base_right($base, $role);
 
-    $list = $items;
     ?>
     @include('layouts.show_project_role',['project'=>$project, 'role'=>$role])
     <div class="container-fluid">
@@ -30,7 +29,7 @@
             </div>
         @endif
         {{--        Не удалять--}}
-        @if(1==2)
+        @if(1==1)
             @if ($base->is_calcname_lst == true)
                 <div class="col-12 text-right">
                     <a href="{{route('item.calculate_name', ['base'=>$base, 'project'=>$project])}}"
@@ -89,7 +88,7 @@
                     <h5 class="card-title mt-2"><a href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}"
                                                    title="{{$item->name()}}">
 {{--                            Где $item->name() выходит в cards выводить "<?php echo GlobalController::to_html();?>"--}}
-                            <?php echo GlobalController::to_html($item);?>
+                            <?php echo $item->nmbr();?>
                         </a></h5>
                     {{--                    </div>--}}
                 </div>
@@ -151,7 +150,7 @@
                         {{--                    Не удалять--}}
                         {{--                    <a href="{{route('item.item_index', ['item'=>$item, 'role'=>$role])}}">--}}
                         <a href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}">
-                            {{$i}}
+                            {{$i}} Id = {{$item->id}}
                         </a>
                     </td>
                     @if($base_right['is_list_base_enable'] == true)
@@ -273,6 +272,7 @@
     {{$items->links()}}
     <blockquote class="text-title pt-1 pl-5 pr-5"><?php echo nl2br($project->dc_ext()); ?></blockquote>
     <blockquote class="text-title pt-1 pl-5 pr-5"><?php echo nl2br($project->dc_int()); ?></blockquote>
+
 @endsection
 
 
