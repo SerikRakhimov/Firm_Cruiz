@@ -204,7 +204,8 @@
                                         {{--                                            @else--}}
                                         {{--                                                <a href="{{route('item.item_index', ['item'=>$item_find, 'role'=>$role,'par_link'=>$link])}}">--}}
                                         {{--                                                    @endif--}}
-                                        <a href="{{route('item.ext_show', ['item'=>$item_find, 'role'=>$role])}}">
+{{--                                             Так использовать: 'item'=>$item--}}
+                                        <a href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}">
                                             {{--                            Где $item->name() выходит в cards выводить "<?php echo GlobalController::to_html();?>"--}}
                                             {{$item_find->name()}}
                                         </a>
