@@ -168,8 +168,8 @@ class Item extends Model
 //                    $name = $name == "1" ? html_entity_decode('	&#9745;')
 //                        : ($name == "0" ? html_entity_decode('&#10065;') : trans('main.empty'));
                         // Нужно для правильной сортировки по полю $item->name_lang_x
-                        $name = $name == "1" ? "1-" . trans('main.true')
-                            : ($name == "0" ? "0-" . trans('main.false') : trans('main.empty'));
+                        $name = $name == "1" ? trans('main.yes')
+                            : ($name == "0" ? trans('main.no') : trans('main.empty'));
                         //
                     }
                 }

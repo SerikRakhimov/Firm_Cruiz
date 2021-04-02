@@ -262,6 +262,8 @@ return [
     'create_project' => 'Create project',
     'true' => 'True',
     'false' => 'False',
+    'yes' => 'Yes',
+    'no' => 'No',
     'online_now' => 'Online now',
     'visitors_info' => 'Visitors',
     'sort_by' => 'Sort by',

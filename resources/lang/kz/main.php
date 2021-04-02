@@ -262,6 +262,8 @@ return [
     'create_project' => 'Жобаны жасау',
     'true'=>'Рас',
     'false'=>'Өтірік',
+    'yes' => 'Иә',
+    'no' => 'Жоқ',
     'online_now'=>'Қазір сайтта',
     'visitors_info'=>'Келуші',
     'sort_by'=>'Бойынша сұрыптау',
