@@ -402,7 +402,7 @@ class GlobalController extends Controller
 //            $itget = $items->get();
 //            $view_count = count($itget);
             $itget = null;
-            $view_count = 0;
+            $view_count = '';
         } else {
             $itget = null;
             $view_count = mb_strtolower(trans('main.no_access'));
