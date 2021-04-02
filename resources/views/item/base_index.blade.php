@@ -155,7 +155,7 @@
                         {{--                    Не удалять--}}
                         {{--                    <a href="{{route('item.item_index', ['item'=>$item, 'role'=>$role])}}">--}}
                         <a href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}">
-                            {{$i}} Id = {{$item->id}}
+                            {{$i}}
                         </a>
                     </td>
                     @if($base_right['is_list_base_enable'] == true)
