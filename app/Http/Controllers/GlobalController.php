@@ -297,7 +297,6 @@ class GlobalController extends Controller
     static function items_right(Base $base, Project $project, Role $role)
     {
 
-
         $base_right = self::base_right($base, $role);
 
         $name = "";  // нужно, не удалять
@@ -400,8 +399,10 @@ class GlobalController extends Controller
         $itget = null;
 
         if ($items != null) {
-            $itget = $items->get();
-            $view_count = count($itget);
+//            $itget = $items->get();
+//            $view_count = count($itget);
+            $itget = null;
+            $view_count = 0;
         } else {
             $itget = null;
             $view_count = mb_strtolower(trans('main.no_access'));
