@@ -173,7 +173,8 @@ class ItemController extends Controller
         }
 
         $base_right = GlobalController::base_right($base, $role);
-        $items = GlobalController::items_right($base, $project, $role)['items'];
+        $items_right = GlobalController::items_right($base, $project, $role);
+        $items = $items_right['items'];
 
         if ($items) {
             session(['base_index_previous_url' => ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/' . request()->path()]);

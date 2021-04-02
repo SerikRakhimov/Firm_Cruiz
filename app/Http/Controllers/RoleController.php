@@ -164,8 +164,8 @@ class RoleController extends Controller
         $role->desc_lang_2 = isset($request->desc_lang_2) ? $request->desc_lang_2 : "";
         $role->desc_lang_3 = isset($request->desc_lang_3) ? $request->desc_lang_3 : "";
 
-        $role->is_default_for_external = isset($request->is_default_for_external) ? true : false;
         $role->is_author = isset($request->is_author) ? true : false;
+        $role->is_default_for_external = isset($request->is_default_for_external) ? true : false;
         $role->is_list_base_sndb = isset($request->is_list_base_sndb) ? true : false;
         $role->is_list_base_id = isset($request->is_list_base_id) ? true : false;
         $role->is_all_base_calcname_enable = isset($request->is_all_base_calcname_enable) ? true : false;

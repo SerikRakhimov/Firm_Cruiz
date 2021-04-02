@@ -35,4 +35,14 @@ class Role extends Model
         return $result;
     }
 
+    function is_author()
+    {
+        return $this->is_author == true;
+    }
+
+    function is_default_for_external()
+    {
+        return $this->is_default_for_external == true;
+    }
+
 }

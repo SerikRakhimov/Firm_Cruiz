@@ -30,24 +30,28 @@
         @endif
         {{--        Не удалять--}}
         @if(1==1)
-            @if ($base->is_calcname_lst == true)
-                <div class="col-12 text-right">
-                    <a href="{{route('item.calculate_name', ['base'=>$base, 'project'=>$project])}}"
-                       title="{{trans('main.calculate_name')}}">
-                        <img src="{{Storage::url('calculate_name.png')}}" width="15" height="15"
-                             alt="{{trans('main.calculate_name')}}">
-                    </a>
-                </div>
-            @endif
-            @if ($base->is_recalc_code == true)
-                <div class="col-12 text-right">
-                    <a href="{{route('item.recalculation_codes',['base'=>$base, 'project'=>$project])}}"
-                       title="{{trans('main.recalculation_codes')}}">
-                        <img src="{{Storage::url('recalculation_codes.png')}}" width="15" height="15"
-                             alt="{{trans('main.recalculation_codes')}}">
-                    </a>
-                </div>
-            @endif
+            @auth
+                @if ($role->is_author())
+                    @if ($base->is_calcname_lst == true)
+                        <div class="col-12 text-right">
+                            <a href="{{route('item.calculate_name', ['base'=>$base, 'project'=>$project])}}"
+                               title="{{trans('main.calculate_name')}}">
+                                <img src="{{Storage::url('calculate_name.png')}}" width="15" height="15"
+                                     alt="{{trans('main.calculate_name')}}">
+                            </a>
+                        </div>
+                    @endif
+                    @if ($base->is_recalc_code == true)
+                        <div class="col-12 text-right">
+                            <a href="{{route('item.recalculation_codes',['base'=>$base, 'project'=>$project])}}"
+                               title="{{trans('main.recalculation_codes')}}">
+                                <img src="{{Storage::url('recalculation_codes.png')}}" width="15" height="15"
+                                     alt="{{trans('main.recalculation_codes')}}">
+                            </a>
+                        </div>
+                    @endif
+                @endif
+            @endauth
         @endif
     </div>
     </p>
@@ -64,15 +68,15 @@
                 $i = $i + 1;
                 $item_find = MainController::view_info($item->id, $link_image->id);
                 ?>
-{{--                <div class="card text-center">--}}
-{{--                    <div class="card card-inverse text-center" style="background-color: rgba(222,255,162,0.23); border-color: #3548ee;">--}}
-                        <div class="card text-center">
+                {{--                <div class="card text-center">--}}
+                {{--                    <div class="card card-inverse text-center" style="background-color: rgba(222,255,162,0.23); border-color: #3548ee;">--}}
+                <div class="card text-center">
                     @if($base->is_code_needed == true)
                         <a href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}" title="{{$item->name()}}">
                             <p class="card-header text-label">{{trans('main.code')}}: {{$item->code}}</p>
                         </a>
                     @endif
-{{--                        <div class="card-body">--}}
+                    {{--                        <div class="card-body">--}}
                     <div class="card-block">
                         {{--                                https://askdev.ru/q/kak-vyzvat-funkciyu-javascript-iz-tega-href-v-html-276225/--}}
                         <a href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}" title="{{$item->name()}}">
@@ -87,7 +91,7 @@
                     {{--                    <div class="card-footer">--}}
                     <h5 class="card-title mt-2"><a href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}"
                                                    title="{{$item->name()}}">
-{{--                            Где $item->name() выходит в cards выводить "<?php echo GlobalController::to_html();?>"--}}
+                            {{--                            Где $item->name() выходит в cards выводить "<?php echo GlobalController::to_html();?>"--}}
                             <?php echo $item->nmbr();?>
                         </a></h5>
                     {{--                    </div>--}}
@@ -139,7 +143,8 @@
             </thead>
             <tbody>
             <?php
-            $i = $items->firstItem() - 1;
+            //            $i = $items->firstItem() - 1;
+            $i = 0;
             ?>
             @foreach($items as $item)
                 <?php
@@ -150,7 +155,7 @@
                         {{--                    Не удалять--}}
                         {{--                    <a href="{{route('item.item_index', ['item'=>$item, 'role'=>$role])}}">--}}
                         <a href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}">
-                            {{$i}}
+                            {{$i}} Id = {{$item->id}}
                         </a>
                     </td>
                     @if($base_right['is_list_base_enable'] == true)
@@ -204,7 +209,7 @@
                                         {{--                                            @else--}}
                                         {{--                                                <a href="{{route('item.item_index', ['item'=>$item_find, 'role'=>$role,'par_link'=>$link])}}">--}}
                                         {{--                                                    @endif--}}
-{{--                                             Так использовать: 'item'=>$item--}}
+                                        {{--                                             Так использовать: 'item'=>$item--}}
                                         <a href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}">
                                             {{--                            Где $item->name() выходит в cards выводить "<?php echo GlobalController::to_html();?>"--}}
                                             {{$item_find->name()}}
