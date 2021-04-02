@@ -312,11 +312,13 @@ class GlobalController extends Controller
         $collection = collect();
 
         $items = Item::where('base_id', $base->id)->where('project_id', $project->id)->orderBy($name);
+        $its_start = $items;
 
         // Такая же проверка и в ItemController (function browser(), get_items_for_link())
         if ($base_right['is_list_base_byuser'] == true) {
             if (Auth::check()) {
                 $items = $items->where('created_user_id', GlobalController::glo_user_id());
+                $its_start = $items;
             } else {
                 $items = null;
                 $collection = null;
@@ -390,19 +392,20 @@ class GlobalController extends Controller
 //            $items = Item::joinSub($mains, 'mains', function ($join) {
 //                $join->on('items.id', '=', 'mains.item_id');
 //            });
-
-                $ids = $collection->keys()->toArray();
-                $items = Item::whereIn('id', $ids)
-                ->orderBy(\DB::raw("FIELD(id, " . implode(',', $ids ) . ")"));
+                if ($collection->count() == 0) {
+                    $items = $its_start;
+                } else {
+                    $ids = $collection->keys()->toArray();
+                    $items = Item::whereIn('id', $ids)
+                        ->orderBy(\DB::raw("FIELD(id, " . implode(',', $ids) . ")"));
+                }
             }
         }
         $itget = null;
 
         if ($items != null) {
-//            $itget = $items->get();
-//            $view_count = count($itget);
-            $itget = null;
-            $view_count = '';
+            $itget = $items->get();
+            $view_count = count($itget);
         } else {
             $itget = null;
             $view_count = mb_strtolower(trans('main.no_access'));
