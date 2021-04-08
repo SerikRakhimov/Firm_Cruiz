@@ -10,6 +10,7 @@ use App\Models\Base;
 use App\Models\Link;
 use App\Models\Item;
 use App\Models\Main;
+use App\Models\Text;
 use App\Models\Project;
 use App\Models\Role;
 use App\Models\Roba;
@@ -61,6 +62,7 @@ class GlobalController extends Controller
     static function base_right(Base $base, Role $role, bool $is_no_sndb_pd_rule = false)
     {
         $is_all_base_calcname_enable = $role->is_all_base_calcname_enable;
+        $is_list_base_sort_creation_date_desc = $role->is_list_base_sort_creation_date_desc;
         $is_list_base_create = $role->is_list_base_create;
         $is_list_base_read = $role->is_list_base_read;
         $is_list_base_update = $role->is_list_base_update;
@@ -110,6 +112,7 @@ class GlobalController extends Controller
         $roba = Roba::where('role_id', $role->id)->where('base_id', $base->id)->first();
         if ($roba != null) {
             $is_roba_all_base_calcname_enable = $roba->is_all_base_calcname_enable;
+            $is_roba_list_base_sort_creation_date_desc = $roba->is_list_base_sort_creation_date_desc;
             $is_roba_list_base_create = $roba->is_list_base_create;
             $is_roba_list_base_read = $roba->is_list_base_read;
             $is_roba_list_base_update = $roba->is_list_base_update;
@@ -143,6 +146,7 @@ class GlobalController extends Controller
 
             $is_list_base_calc = $is_roba_list_base_calc;
             $is_all_base_calcname_enable = $is_roba_all_base_calcname_enable;
+            $is_list_base_sort_creation_date_desc = $is_roba_list_base_sort_creation_date_desc;
             $is_list_base_create = $is_roba_list_base_create;
             $is_list_base_read = $is_roba_list_base_read;
             $is_list_base_update = $is_roba_list_base_update;
@@ -172,6 +176,7 @@ class GlobalController extends Controller
 //
         return ['is_list_base_calc' => $is_list_base_calc,
             'is_all_base_calcname_enable' => $is_all_base_calcname_enable,
+            'is_list_base_sort_creation_date_desc' => $is_list_base_sort_creation_date_desc,
             'is_list_base_create' => $is_list_base_create,
             'is_list_base_read' => $is_list_base_read,
             'is_list_base_update' => $is_list_base_update,
@@ -204,6 +209,7 @@ class GlobalController extends Controller
 
         $is_list_base_calc = $base_right['is_list_base_calc'];
         $is_all_base_calcname_enable = $base_right['is_all_base_calcname_enable'];
+        $is_list_base_sort_creation_date_desc = $base_right['is_list_base_sort_creation_date_desc'];
         $is_list_base_create = $base_right['is_list_base_create'];
         $is_list_base_read = $base_right['is_list_base_read'];
         $is_list_base_update = $base_right['is_list_base_update'];
@@ -245,6 +251,7 @@ class GlobalController extends Controller
 
         return ['is_list_base_calc' => $is_list_base_calc,
             'is_all_base_calcname_enable' => $is_all_base_calcname_enable,
+            'is_list_base_sort_creation_date_desc' => $is_list_base_sort_creation_date_desc,
             'is_list_base_create' => $is_list_base_create,
             'is_list_base_read' => $is_list_base_read,
             'is_list_base_update' => $is_list_base_update,
@@ -299,37 +306,44 @@ class GlobalController extends Controller
 
         $base_right = self::base_right($base, $role);
 
-        $name = "";  // нужно, не удалять
-        $index = array_search(App::getLocale(), config('app.locales'));
-        if ($index !== false) {   // '!==' использовать, '!=' не использовать
-            $name = 'name_lang_' . $index;
-        }
-
-        // Обязатель фильтр на два запроса:
+        // Обязательно фильтр на два запроса:
         // where('base_id', $base->id)->where('project_id', $project->id)
+        $items = Item::where('base_id', $base->id)->where('project_id', $project->id);
 
-        // В $collection сохраняется в key - $item->id
-        $collection = collect();
-        $items = Item::where('base_id', $base->id)->where('project_id', $project->id)->orderBy($name);
-
-        if (count($items->get()) > 0) {
-            // Такая же проверка и в ItemController (function browser(), get_items_for_link())
-            if ($base_right['is_list_base_byuser'] == true) {
-                if (Auth::check()) {
-                    $items = $items->where('created_user_id', GlobalController::glo_user_id());
-                } else {
-                    $items = null;
-                    $collection = null;
-                }
+        // Сортировать по дате создания записи в порядке убывания
+        if ($base_right['is_list_base_sort_creation_date_desc'] == true) {
+            //$items = $items->orderByDesc('created_user_id');
+            $items = $items->latest();
+        } else {
+            $name = "";  // нужно, не удалять
+            $index = array_search(App::getLocale(), config('app.locales'));
+            if ($index !== false) {   // '!==' использовать, '!=' не использовать
+                $name = 'name_lang_' . $index;
             }
-            if ($items != null) {
-                if (count($items->get()) > 0) {
-                    // Сортировка по mains
-                    // иначе Сортировка по наименованию
-                    if (!GlobalController::is_base_calcname_check($base, $base_right)) {
 
-                        // Не попадают в список $mains изображения/документы,
-                        // а также связанные поля (они в Mains не хранятся)
+
+            // В $collection сохраняется в key - $item->id
+            $collection = collect();
+            $items = $items->orderBy($name);
+
+            if (count($items->get()) > 0) {
+                // Такая же проверка и в ItemController (function browser(), get_items_for_link())
+                if ($base_right['is_list_base_byuser'] == true) {
+                    if (Auth::check()) {
+                        $items = $items->where('created_user_id', GlobalController::glo_user_id());
+                    } else {
+                        $items = null;
+                        $collection = null;
+                    }
+                }
+                if ($items != null) {
+                    if (count($items->get()) > 0) {
+                        // Сортировка по mains
+                        // иначе Сортировка по наименованию
+                        if (!GlobalController::is_base_calcname_check($base, $base_right)) {
+
+                            // Не попадают в список $mains изображения/документы,
+                            // а также связанные поля (они в Mains не хранятся)
 //            $mains = Main::select(DB::Raw('mains.child_item_id as item_id'))
 //                ->join('links as ln', 'mains.link_id', '=', 'ln.id')
 //                ->join('items as ct', 'mains.child_item_id', '=', 'ct.id')
@@ -342,37 +356,37 @@ class GlobalController extends Controller
 //                ->orderBy('ct.' . $name)
 //                ->distinct();
 
-                        // Не попадают в список $links изображения/документы,
-                        $links = Link::select(DB::Raw('links.*'))
-                            ->join('bases as pb', 'links.parent_base_id', '=', 'pb.id')
-                            ->where('links.child_base_id', '=', $base->id)
-                            ->where('pb.type_is_image', false)
-                            ->where('pb.type_is_document', false)
-                            ->orderBy('links.parent_base_number')->get();
+                            // Не попадают в список $links изображения/документы,
+                            $links = Link::select(DB::Raw('links.*'))
+                                ->join('bases as pb', 'links.parent_base_id', '=', 'pb.id')
+                                ->where('links.child_base_id', '=', $base->id)
+                                ->where('pb.type_is_image', false)
+                                ->where('pb.type_is_document', false)
+                                ->orderBy('links.parent_base_number')->get();
 
-                        $items = $items->get();
-                        $str = "";
-                        foreach ($items as $item) {
+                            $items = $items->get();
                             $str = "";
-                            foreach ($links as $link) {
-                                $item_find = MainController::view_info($item->id, $link->id);
-                                if ($item_find) {
-                                    // Формирование вычисляемой строки для сортировки
-                                    // Для строковых данных для сортировки берутся первые 50 символов
-                                    if ($item_find->base->type_is_list() || $item_find->base->type_is_string()) {
-                                        $str = $str . str_pad(trim($item_find[$name]), 50);
-                                    } else {
-                                        $str = $str . trim($item_find[$name]);
-                                    }
+                            foreach ($items as $item) {
+                                $str = "";
+                                foreach ($links as $link) {
+                                    $item_find = MainController::view_info($item->id, $link->id);
+                                    if ($item_find) {
+                                        // Формирование вычисляемой строки для сортировки
+                                        // Для строковых данных для сортировки берутся первые 50 символов
+                                        if ($item_find->base->type_is_list() || $item_find->base->type_is_string()) {
+                                            $str = $str . str_pad(trim($item_find[$name]), 50);
+                                        } else {
+                                            $str = $str . trim($item_find[$name]);
+                                        }
 
+                                    }
                                 }
+                                // В $collection сохраняется в key - $item->id
+                                $collection[$item->id] = $str;
                             }
-                            // В $collection сохраняется в key - $item->id
-                            $collection[$item->id] = $str;
-                        }
 
 //            Сортировка коллекции по значению
-                        $collection = $collection->sort();
+                            $collection = $collection->sort();
 
 //              Не удалять
 //            $mains = Main::select(DB::Raw('mains.child_item_id as item_id'))
@@ -391,9 +405,10 @@ class GlobalController extends Controller
 //            $items = Item::joinSub($mains, 'mains', function ($join) {
 //                $join->on('items.id', '=', 'mains.item_id');
 //            });
-                        $ids = $collection->keys()->toArray();
-                        $items = Item::whereIn('id', $ids)
-                            ->orderBy(\DB::raw("FIELD(id, " . implode(',', $ids) . ")"));
+                            $ids = $collection->keys()->toArray();
+                            $items = Item::whereIn('id', $ids)
+                                ->orderBy(\DB::raw("FIELD(id, " . implode(',', $ids) . ")"));
+                        }
                     }
                 }
             }
@@ -544,6 +559,38 @@ class GlobalController extends Controller
                 }
             }
         }
+        return $result;
+    }
+
+    // возвращает первые 255 символов переданной строки
+    static function itnm_left($str)
+    {
+        //ограниченные 255 - размером полей хранятся в $item->name_lang_0 - $item->name_lang_3
+        $maxlen = 255;
+        $result = "";
+        if (strlen($str) > $maxlen) {
+            $result = mb_substr($str, 0, $maxlen - 3) . "...";
+        } else {
+            $result = mb_substr($str, 0, $maxlen);
+        }
+        return $result;
+    }
+
+    static function it_text_name(Item $item)
+    {
+        $result = "";
+        //$text = $item->text();
+        $text = Text::where('item_id', $item->id)->first();
+        if ($text) {
+            $result = $text->name();
+        }
+        return $result;
+    }
+
+
+    static function it_txnm_n2b(Item $item)
+    {
+        $result = nl2br(self::it_text_name($item));
         return $result;
     }
 

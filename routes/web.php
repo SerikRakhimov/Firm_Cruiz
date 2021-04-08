@@ -396,6 +396,10 @@ Route::get('/project/show_user/{project}', 'ProjectController@show_user')
     ->name('project.show_user')
     ->middleware('auth');
 
+// "->middleware('auth')" не использовать
+Route::get('/project/{project}/{role?}', 'ProjectController@project')
+    ->name('project.project');
+
 Route::get('/project/create_template/{template}', 'ProjectController@create_template')
     ->name('project.create_template')
     ->middleware('auth');
@@ -542,10 +546,6 @@ Route::delete('/module/delete/{module}', 'ModuleController@delete')
 Route::get('/base/index/{template}', 'BaseController@index')
     ->name('base.index')
     ->middleware('auth');
-
-// "->middleware('auth')" не использовать
-Route::get('/base/template_index/{project}/{role}', 'BaseController@template_index')
-    ->name('base.template_index');
 
 Route::get('/base/show/{base}', 'BaseController@show')
     ->name('base.show')
@@ -730,6 +730,10 @@ Route::get('/item/calculate_name/{base}/{project}', 'ItemController@calculate_na
 
 Route::get('/item/recalculation_codes/{base}/{project}', 'ItemController@recalculation_codes')
     ->name('item.recalculation_codes')
+    ->middleware('auth');
+
+Route::get('/item/verify_table_texts', 'ItemController@verify_table_texts')
+    ->name('item.verify_table_texts')
     ->middleware('auth');
 
 Route::get('/item/item_from_base_code/{base}/{project}/{code}', 'ItemController@item_from_base_code')

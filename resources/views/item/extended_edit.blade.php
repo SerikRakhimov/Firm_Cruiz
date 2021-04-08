@@ -36,7 +36,7 @@ $update = isset($item);
                     id="{{$key}}"
                     class="form-control @error('{{$key}}') is-invalid @enderror">
                 @if (count($items) == 0)
-                    <option value = '0'>Нет информации по "{{$result['result_parent_base_name']}}"!</option>
+                    <option value = '0'>{{trans('main.no_information_on')}} "{{$result['result_parent_base_name']}}"!</option>
                 @else
                 @foreach ($items as $item)
                     <option value="{{$item->id}}"

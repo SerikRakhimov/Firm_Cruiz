@@ -65,7 +65,7 @@
                     @endif
                 >
                     @if (count($items) == 0)
-                        <option value='0'>Нет информации по "{{$result['result_parent_base_name']}}"!</option>
+                        <option value='0'>{{trans('main.no_information_on')}} "{{$result['result_parent_base_name']}}"!</option>
                     @else
                         @foreach ($items as $item1)
                             <option value="{{$item1->id}}"

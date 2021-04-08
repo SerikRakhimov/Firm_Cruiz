@@ -13,6 +13,7 @@ use App\Models\Main;
 use App\Models\Set;
 use App\Models\Project;
 use App\Models\Role;
+use App\Models\Text;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
@@ -315,7 +316,8 @@ class ItemController extends Controller
         return $this->get_array_calc($item->base, $item, false, $par_link, $parent_item);
     }
 
-    // рекурсивная функция
+    // Рекурсивная функция
+    // Вычисление зависимых значений по фильтрируемым полям
     private
     function par_link_calc_in_array_disabled($plan_child_links, $parent_item, &$array_disabled, Link $p_link)
     {
@@ -390,9 +392,9 @@ class ItemController extends Controller
         $request->validate($this->code_rules($request, $project->id, $base->id));
 //        }
         // Проверка на обязательность ввода наименования
-        if ($base->is_required_lst_num_str_img_doc == true && $base->is_calcname_lst == false) {
-            // Тип - список или строка
-            if ($base->type_is_list() || $base->type_is_string()) {
+        if ($base->is_required_lst_num_str_txt_img_doc == true && $base->is_calcname_lst == false) {
+            // Тип - список, строка или текст
+            if ($base->type_is_list() || $base->type_is_string() || $base->type_is_text()) {
                 $name_lang_array = array();
                 // значения null в ""
                 $name_lang_array[0] = isset($request->name_lang_0) ? $request->name_lang_0 : "";
@@ -402,9 +404,10 @@ class ItemController extends Controller
                 $errors = false;
                 $i = 0;
                 foreach (config('app.locales') as $lang_key => $lang_value) {
-                    if (($base->is_one_value_lst_str == true && $lang_key == 0) || ($base->is_one_value_lst_str == false)) {
+                    if (($base->is_one_value_lst_str_txt == true && $lang_key == 0) || ($base->is_one_value_lst_str_txt == false)) {
+                        // Точное сравнение "$name_lang_array[$i] === ''" используется
                         if ($name_lang_array[$i] === '') {
-                            $array_mess['name_lang_' . $i] = trans('main.is_required_lst_num_str_img_doc') . '!';
+                            $array_mess['name_lang_' . $i] = trans('main.is_required_lst_num_str_txt_img_doc') . '!';
                             $errors = true;
                         }
                         $i = $i + 1;
@@ -423,7 +426,7 @@ class ItemController extends Controller
                 $errors = false;
                 // "$value === '0'" использовать для точного сравнения (например, при $link->parent_base->type_is_string())
                 if ($name_lang_0_val === '0') {
-                    $array_mess['name_lang_0'] = trans('main.is_required_lst_num_str_img_doc') . '!';
+                    $array_mess['name_lang_0'] = trans('main.is_required_lst_num_str_txt_img_doc') . '!';
                     $errors = true;
                 }
                 if ($errors) {
@@ -437,7 +440,7 @@ class ItemController extends Controller
                 $errors = false;
 
                 if (!$request->hasFile('name_lang_0')) {
-                    $array_mess['name_lang_0'] = trans('main.is_required_lst_num_str_img_doc') . '!';
+                    $array_mess['name_lang_0'] = trans('main.is_required_lst_num_str_txt_img_doc') . '!';
                     $errors = true;
                 }
                 if ($errors) {
@@ -450,7 +453,7 @@ class ItemController extends Controller
             } elseif ($base->type_is_document()) {
                 $errors = false;
                 if (!$request->hasFile('name_lang_0')) {
-                    $array_mess['name_lang_0'] = trans('main.is_required_lst_num_str_img_doc') . '!';
+                    $array_mess['name_lang_0'] = trans('main.is_required_lst_num_str_txt_img_doc') . '!';
                     $errors = true;
                 }
                 if ($errors) {
@@ -504,12 +507,24 @@ class ItemController extends Controller
         $item->name_lang_2 = isset($request->name_lang_2) ? $request->name_lang_2 : "";
         $item->name_lang_3 = isset($request->name_lang_3) ? $request->name_lang_3 : "";
         $item->project_id = $project->id;
+
         // далее этот блок
         // похожие формулы ниже (в этой же процедуре)
+
+        // тип - логический
         if ($base->type_is_boolean()) {
             $item->name_lang_0 = isset($request->name_lang_0) ? "1" : "0";
+
+            // тип - число
         } elseif ($base->type_is_number()) {
             $item->name_lang_0 = GlobalController::save_number_to_item($base, $request->name_lang_0);
+
+        } // тип - текст
+        elseif ($base->type_is_text()) {
+            $item->name_lang_0 = GlobalController::itnm_left($request->name_lang_0);
+            $item->name_lang_1 = GlobalController::itnm_left($request->name_lang_1);
+            $item->name_lang_2 = GlobalController::itnm_left($request->name_lang_2);
+            $item->name_lang_3 = GlobalController::itnm_left($request->name_lang_3);
         }
 
         // затем этот блок (используется "$base")
@@ -536,7 +551,7 @@ class ItemController extends Controller
         $i = 0;
 
         foreach ($string_langs as $key => $link) {
-            if ($link->parent_base->type_is_string()) {
+            if ($link->parent_base->type_is_string() || $link->parent_base->type_is_text()) {
                 $i = 0;
                 foreach (config('app.locales') as $lang_key => $lang_value) {
                     // начиная со второго(индекс==1) элемента массива языков сохранять
@@ -554,8 +569,21 @@ class ItemController extends Controller
                 $code_names[] = 'code' . $link->id;
             }
         }
+
         // загрузить в $inputs все поля ввода, кроме $excepts, $string_names, $string_codes, array_merge() - функция суммирования двух и более массивов
         $inputs = $request->except(array_merge($excepts, $string_names, $code_names));
+
+        $it_texts = null;
+        if ($item->base->type_is_text()) {
+            $only = array('name_lang_0', 'name_lang_1', 'name_lang_2', 'name_lang_3');
+            $it_texts = $request->only($only);
+
+            foreach ($it_texts as $it_key => $it_text) {
+                $it_texts[$it_key] = isset($it_texts[$it_key]) ? $it_texts[$it_key] : "";
+            }
+
+        }
+
 
         foreach ($inputs as $key => $value) {
             $link = Link::findOrFail($key);
@@ -622,10 +650,10 @@ class ItemController extends Controller
                 // Тип - изображение
                 if ($link->parent_base->type_is_image() || $link->parent_base->type_is_document()) {
                     // Проверка на обязательность ввода
-                    if ($link->parent_base->is_required_lst_num_str_img_doc == true) {
+                    if ($link->parent_base->is_required_lst_num_str_txt_img_doc == true) {
                         $errors = false;
                         if (!$request->hasFile($link->id)) {
-                            $array_mess[$link->id] = trans('main.is_required_lst_num_str_img_doc') . '!';
+                            $array_mess[$link->id] = trans('main.is_required_lst_num_str_txt_img_doc') . '!';
                             $errors = true;
                         }
                         if ($errors) {
@@ -643,6 +671,7 @@ class ItemController extends Controller
             $inputs[$key] = ($value != null) ? $value : "";
         }
         $strings_inputs = $request->only($string_names);
+
         foreach ($strings_inputs as $key => $value) {
             $strings_inputs[$key] = ($value != null) ? $value : "";
         }
@@ -664,7 +693,6 @@ class ItemController extends Controller
         $values = array_values($inputs);
 
         $errors = false;
-
         foreach ($inputs as $key => $value) {
             $link = Link::findOrFail($key);
 
@@ -675,7 +703,7 @@ class ItemController extends Controller
             if ($work_base->type_is_list()) {
                 // так не использовать
                 // Проверка на обязательность ввода
-                if ($work_base->is_required_lst_num_str_img_doc == true) {
+                if ($work_base->is_required_lst_num_str_txt_img_doc == true) {
                     $control_required = true;
                 }
                 // это правильно
@@ -685,13 +713,13 @@ class ItemController extends Controller
             } // Тип - число
             elseif ($work_base->type_is_number()) {
                 // Проверка на обязательность ввода
-                if ($work_base->is_required_lst_num_str_img_doc == true) {
+                if ($work_base->is_required_lst_num_str_txt_img_doc == true) {
                     $control_required = true;
                 }
-            } // Тип - строка
-            elseif ($work_base->type_is_string()) {
+            } // Тип - строка или текст
+            elseif ($work_base->type_is_string() || $work_base->type_is_text()) {
                 // Проверка на обязательность ввода
-                if ($work_base->is_required_lst_num_str_img_doc == true) {
+                if ($work_base->is_required_lst_num_str_txt_img_doc == true) {
                     $control_required = true;
                 }
             } // Тип - дата
@@ -701,14 +729,14 @@ class ItemController extends Controller
 
             // при типе корректировки поля "строка", "логический" проверять на обязательность заполнения не нужно
             if ($control_required == true) {
-                // Тип - строка
-                if ($work_base->type_is_string()) {
+                // Тип - строка или текст
+                if ($work_base->type_is_string() || $work_base->type_is_text()) {
                     // поиск в таблице items значение с таким же названием и base_id
                     $name_lang_value = null;
                     $name_lang_key = null;
                     $i = 0;
                     foreach (config('app.locales') as $lang_key => $lang_value) {
-                        if (($work_base->is_one_value_lst_str == true && $lang_key == 0) || ($work_base->is_one_value_lst_str == false)) {
+                        if (($work_base->is_one_value_lst_str_txt == true && $lang_key == 0) || ($work_base->is_one_value_lst_str_txt == false)) {
                             if ($i == 0) {
                                 $name_lang_key = $key;
                                 $name_lang_value = $value;
@@ -751,10 +779,11 @@ class ItemController extends Controller
         }
 
         // Одно значение у всех языков
-        if ($base->is_one_value_lst_str == true) {
+        if ($base->is_one_value_lst_str_txt == true) {
             $item->name_lang_1 = $item->name_lang_0;
             $item->name_lang_2 = $item->name_lang_0;
             $item->name_lang_3 = $item->name_lang_0;
+
         }
 
         // при создании записи "$item->created_user_id" заполняется
@@ -763,11 +792,38 @@ class ItemController extends Controller
 
         try {
             // начало транзакции
-            DB::transaction(function ($r) use ($item, $keys, $values, $strings_inputs) {
+            DB::transaction(function ($r) use ($item, $it_texts, $keys, $values, $strings_inputs) {
 
                 // Эта команда "$item->save();" нужна, чтобы при сохранении записи стало известно значение $item->id.
                 // оно нужно в функции save_main() (для команды "$main->child_item_id = $item->id;");
                 $item->save();
+                // тип - текст
+                if ($it_texts) {
+                    if ($item->base->type_is_text()) {
+                        //$text = $item->text();
+                        $text = Text::where('item_id', $item->id)->first();
+                        if (!$text) {
+                            $text = new Text();
+                            $text->item_id = $item->id;
+                        }
+                        $text->name_lang_0 = $it_texts['name_lang_0'];
+                        // Одно значение у всех языков для тип - текст
+                        if ($item->base->is_one_value_lst_str_txt == true) {
+                            $text->name_lang_1 = $text->name_lang_0;
+                            $text->name_lang_2 = $text->name_lang_0;
+                            $text->name_lang_3 = $text->name_lang_0;
+                        } else {
+                            $text->name_lang_1 = "";
+                            $text->name_lang_2 = "";
+                            $text->name_lang_3 = "";
+                            foreach ($it_texts as $it_key => $it_text) {
+                                $text[$it_key] = $it_texts[$it_key];
+                            }
+                        }
+                        $text->save();
+                    }
+                }
+
 
 //              после ввода данных в форме массив состоит:
 //              индекс массива = link_id (для занесения в links->id)
@@ -811,9 +867,10 @@ class ItemController extends Controller
                 }
 
                 $valits = $values;
-                // Присвоение данных
+                // Присвоение данных для $this->save_sets()
                 // "$i = 0" использовать, т.к. индексы в массивах начинаются с 0
                 $i = 0;
+
                 foreach ($keys as $key) {
                     $main = Main::where('child_item_id', $item->id)->where('link_id', $key)->first();
                     if ($main == null) {
@@ -865,9 +922,9 @@ class ItemController extends Controller
             }
         }
 
-        //return $heading ? redirect()->route('item.item_index', $item) : redirect(session('links'));
+//return $heading ? redirect()->route('item.item_index', $item) : redirect(session('links'));
         return $heading ? redirect()->route('item.item_index', $item) : redirect()->route('item.base_index', ['base' => $base, 'project' => $project, 'role' => $role]);
-        //return redirect()->route('item.base_index', ['base'=>$item->base, 'project'=>$item->project, 'role'=>$role]);
+//return redirect()->route('item.base_index', ['base'=>$item->base, 'project'=>$item->project, 'role'=>$role]);
 
     }
 
@@ -1112,7 +1169,6 @@ class ItemController extends Controller
 
     }
 
-
     private
     function save_main(Main $main, $item, $keys, $values, &$valits, $index, $strings_inputs)
     {
@@ -1124,10 +1180,14 @@ class ItemController extends Controller
         // тип корректировки поля - список
         if ($link->parent_base->type_is_list()) {
             if ($values[$index] == 0) {
+                // Нужно
+                // Если запись main существует - то удалить ее
+                if(isset($main->id)){
+                    $main->delete();
+                }
                 return;
             }
             $main->parent_item_id = $values[$index];
-
 
         } // тип корректировки поля - изображение или документ
         elseif ($link->parent_base->type_is_image() || $link->parent_base->type_is_document()) {
@@ -1145,7 +1205,7 @@ class ItemController extends Controller
 //                if ($i == 0) {
 //                    $item_find['name_lang_' . $lang_key] = $values[$index];
 //                } else {
-//                    if ($link->parent_base->is_one_value_lst_str == true) {
+//                    if ($link->parent_base->is_one_value_lst_str_txt == true) {
 //                        // Одно значение для наименований у всех языков
 //                        $item_find['name_lang_' . $lang_key] = $values[$index];
 //                    } else {
@@ -1191,7 +1251,7 @@ class ItemController extends Controller
         elseif ($link->parent_base->type_is_string()) {
             // поиск в таблице items значение с таким же названием и base_id
             $item_find = Item::where('base_id', $link->parent_base_id)->where('project_id', $item->project_id)->where('name_lang_0', $values[$index]);
-            if ($link->parent_base->is_one_value_lst_str == false) {
+            if ($link->parent_base->is_one_value_lst_str_txt == false) {
                 $i = 0;
                 foreach (config('app.locales') as $lang_key => $lang_value) {
                     // начиная со второго(индекс==1) элемента массива языков учитывать
@@ -1217,7 +1277,7 @@ class ItemController extends Controller
                     if ($i == 0) {
                         $item_find['name_lang_' . $lang_key] = $values[$index];
                     } else {
-                        if ($link->parent_base->is_one_value_lst_str == true) {
+                        if ($link->parent_base->is_one_value_lst_str_txt == true) {
                             // Одно значение для наименований у всех языков
                             $item_find['name_lang_' . $lang_key] = $values[$index];
                         } else {
@@ -1232,6 +1292,61 @@ class ItemController extends Controller
                 $item_find->updated_user_id = Auth::user()->id;
                 $item_find->save();
             }
+            $main->parent_item_id = $item_find->id;
+            // заменяем значение в массиве ссылкой на $item вместо значения
+            $valits[$index] = $item_find->id;
+
+
+        } // тип корректировки поля - текст
+        // Полные значения полей text хранятся в таблице texts,
+        // краткие (ограниченные 255 - размером полей хранятся в $item->name_lang_0 - $item->name_lang_3)
+        // связь между таблицами items и text - "один-к-одному", по полю $item->id = $text->item->id
+        elseif ($link->parent_base->type_is_text()) {
+            $item_find = Text::find($main->parent_item_id);
+            if (!$item_find) {
+                // создание новой записи в items
+                $item_find = new Item();
+                // при создании записи "$item->created_user_id" заполняется
+                $item_find->created_user_id = Auth::user()->id;
+            }
+            $item_find->base_id = $link->parent_base_id;
+            // Похожая строка вверху и внизу
+            $item_find->code = uniqid($item_find->base_id . '_', true);
+            $item_find->project_id = $item->project_id;
+            $item_find->updated_user_id = Auth::user()->id;
+
+            // Нужно чтобы знать $item_find->id в команде "$text->item_id = $item_find->id;"
+            $item_find->save();
+
+            //$text = $item->text();
+            $text = Text::where('item_id', $item_find->id)->first();
+            if (!$text) {
+                $text = new Text();
+                $text->item_id = $item_find->id;
+            }
+
+            // присваивание полям наименование строкового значение числа
+            $i = 0;
+            foreach (config('app.locales') as $lang_key => $lang_value) {
+                if ($i == 0) {
+                    $item_find['name_lang_' . $lang_key] = GlobalController::itnm_left($values[$index]);
+                    $text['name_lang_' . $lang_key] = $values[$index];
+                } else {
+                    if ($link->parent_base->is_one_value_lst_str_txt == true) {
+                        // Одно значение для наименований у всех языков
+                        $item_find['name_lang_' . $lang_key] = GlobalController::itnm_left($values[$index]);
+                        $text['name_lang_' . $lang_key] = $values[$index];
+                    } else {
+                        $item_find['name_lang_' . $lang_key] = GlobalController::itnm_left($strings_inputs[$link->id . '_' . $lang_key]);
+                        $text['name_lang_' . $lang_key] = $strings_inputs[$link->id . '_' . $lang_key];
+                    }
+                }
+                $i = $i + 1;
+            }
+            // Нужно чтобы сохранить name_lang_0 - name_lang_3
+            $item_find->save();
+
+            $text->save();
             $main->parent_item_id = $item_find->id;
             // заменяем значение в массиве ссылкой на $item вместо значения
             $valits[$index] = $item_find->id;
@@ -1365,9 +1480,9 @@ class ItemController extends Controller
         }
 
         // Проверка на обязательность ввода
-        if ($item->base->is_required_lst_num_str_img_doc == true && $item->base->is_calcname_lst == false) {
-            // Тип - список или строка
-            if ($item->base->type_is_list() || $item->base->type_is_string()) {
+        if ($item->base->is_required_lst_num_str_txt_img_doc == true && $item->base->is_calcname_lst == false) {
+            // Тип - список, строка или текст
+            if ($item->base->type_is_list() || $item->base->type_is_string() || $item->base->type_is_text()) {
                 $name_lang_array = array();
                 // значения null в ""
                 $name_lang_array[0] = isset($request->name_lang_0) ? $request->name_lang_0 : "";
@@ -1377,9 +1492,9 @@ class ItemController extends Controller
                 $errors = false;
                 $i = 0;
                 foreach (config('app.locales') as $lang_key => $lang_value) {
-                    if (($item->base->is_one_value_lst_str == true && $lang_key == 0) || ($item->base->is_one_value_lst_str == false)) {
+                    if (($item->base->is_one_value_lst_str_txt == true && $lang_key == 0) || ($item->base->is_one_value_lst_str_txt == false)) {
                         if ($name_lang_array[$i] === '') {
-                            $array_mess['name_lang_' . $i] = trans('main.is_required_lst_num_str_img_doc') . '!';
+                            $array_mess['name_lang_' . $i] = trans('main.is_required_lst_num_str_txt_img_doc') . '!';
                             $errors = true;
                         }
                         $i = $i + 1;
@@ -1398,7 +1513,7 @@ class ItemController extends Controller
                 $errors = false;
                 // "$value === '0'" использовать для точного сравнения (например, при $link->parent_base->type_is_string())
                 if ($name_lang_0_val === '0') {
-                    $array_mess['name_lang_0'] = trans('main.is_required_lst_num_str_img_doc') . '!';
+                    $array_mess['name_lang_0'] = trans('main.is_required_lst_num_str_txt_img_doc') . '!';
                     $errors = true;
                 }
                 if ($errors) {
@@ -1412,7 +1527,7 @@ class ItemController extends Controller
                 $errors = false;
                 if (!$item->img_doc_exist()) {
                     if (!$request->hasFile('name_lang_0')) {
-                        $array_mess['name_lang_0'] = trans('main.is_required_lst_num_str_img_doc') . '!';
+                        $array_mess['name_lang_0'] = trans('main.is_required_lst_num_str_txt_img_doc') . '!';
                         $errors = true;
                     }
                 }
@@ -1427,7 +1542,7 @@ class ItemController extends Controller
                 $errors = false;
                 if (!$item->img_doc_exist()) {
                     if (!$request->hasFile('name_lang_0')) {
-                        $array_mess['name_lang_0'] = trans('main.is_required_lst_num_str_img_doc') . '!';
+                        $array_mess['name_lang_0'] = trans('main.is_required_lst_num_str_txt_img_doc') . '!';
                         $errors = true;
                     }
                 }
@@ -1493,10 +1608,21 @@ class ItemController extends Controller
 
         // далее этот блок
         // похожие формула выше (в этой же процедуре)
+
+        // тип - логический
         if ($item->base->type_is_boolean()) {
             $item->name_lang_0 = isset($request->name_lang_0) ? "1" : "0";
-        } elseif ($item->base->type_is_number()) {
+
+        } // тип - число
+        elseif ($item->base->type_is_number()) {
             $item->name_lang_0 = GlobalController::save_number_to_item($item->base, $request->name_lang_0);
+
+        } // тип - текст
+        elseif ($item->base->type_is_text()) {
+            $item->name_lang_0 = GlobalController::itnm_left($request->name_lang_0);
+            $item->name_lang_1 = GlobalController::itnm_left($request->name_lang_1);
+            $item->name_lang_2 = GlobalController::itnm_left($request->name_lang_2);
+            $item->name_lang_3 = GlobalController::itnm_left($request->name_lang_3);
         }
 
         // затем этот блок (используется "$item->base")
@@ -1523,7 +1649,7 @@ class ItemController extends Controller
         $string_names = array();
         $i = 0;
         foreach ($string_langs as $key => $link) {
-            if ($link->parent_base->type_is_string()) {
+            if ($link->parent_base->type_is_string() || $link->parent_base->type_is_text()) {
                 $i = 0;
                 foreach (config('app.locales') as $lang_key => $lang_value) {
                     // начиная со второго(индекс==1) элемента массива языков сохранять
@@ -1544,6 +1670,17 @@ class ItemController extends Controller
 
         // загрузить в $inputs все поля ввода, кроме $excepts, $string_names, $string_codes, array_merge() - функция суммирования двух и более массивов
         $inputs = $request->except(array_merge($excepts, $string_names, $code_names));
+
+        $it_texts = null;
+        if ($item->base->type_is_text()) {
+            $only = array('name_lang_0', 'name_lang_1', 'name_lang_2', 'name_lang_3');
+            $it_texts = $request->only($only);
+
+            foreach ($it_texts as $it_key => $it_text) {
+                $it_texts[$it_key] = isset($it_texts[$it_key]) ? $it_texts[$it_key] : "";
+            }
+
+        }
 
         foreach ($inputs as $key => $value) {
             $link = Link::findOrFail($key);
@@ -1623,7 +1760,7 @@ class ItemController extends Controller
                 // Тип - изображение
                 if ($link->parent_base->type_is_image() || $link->parent_base->type_is_document()) {
                     // Проверка на обязательность ввода
-                    if ($link->parent_base->is_required_lst_num_str_img_doc == true) {
+                    if ($link->parent_base->is_required_lst_num_str_txt_img_doc == true) {
                         $item_seek = MainController::get_parent_item_from_main($item->id, $link->id);
                         $check = false;
                         if ($item_seek) {
@@ -1636,7 +1773,7 @@ class ItemController extends Controller
 
                         $errors = false;
                         if ($check && !$request->hasFile($link->id)) {
-                            $array_mess[$link->id] = trans('main.is_required_lst_num_str_img_doc') . '!';
+                            $array_mess[$link->id] = trans('main.is_required_lst_num_str_txt_img_doc') . '!';
                             $errors = true;
                         }
                         if ($errors) {
@@ -1671,7 +1808,7 @@ class ItemController extends Controller
             if ($work_base->type_is_list()) {
                 // так не использовать
                 // Проверка на обязательность ввода
-                if ($work_base->is_required_lst_num_str_img_doc == true) {
+                if ($work_base->is_required_lst_num_str_txt_img_doc == true) {
                     $control_required = true;
                 }
                 // это правильно
@@ -1679,13 +1816,13 @@ class ItemController extends Controller
             } // Тип - число
             elseif ($work_base->type_is_number()) {
                 // Проверка на обязательность ввода
-                if ($work_base->is_required_lst_num_str_img_doc == true) {
+                if ($work_base->is_required_lst_num_str_txt_img_doc == true) {
                     $control_required = true;
                 }
-            } // Тип - строка
-            elseif ($work_base->type_is_string()) {
+            } // Тип - строка или текст
+            elseif ($work_base->type_is_string() || $work_base->type_is_text()) {
                 // Проверка на обязательность ввода
-                if ($work_base->is_required_lst_num_str_img_doc == true) {
+                if ($work_base->is_required_lst_num_str_txt_img_doc == true) {
                     $control_required = true;
                 }
             } // Тип - дата
@@ -1695,14 +1832,14 @@ class ItemController extends Controller
 
             // при типе корректировки поля "строка", "логический" проверять на обязательность заполнения не нужно
             if ($control_required == true) {
-                // Тип - строка
-                if ($work_base->type_is_string()) {
+                // Тип - строка или текст
+                if ($work_base->type_is_string() || $work_base->type_is_text()) {
                     // поиск в таблице items значение с таким же названием и base_id
                     $name_lang_value = null;
                     $name_lang_key = null;
                     $i = 0;
                     foreach (config('app.locales') as $lang_key => $lang_value) {
-                        if (($work_base->is_one_value_lst_str == true && $lang_key == 0) || ($work_base->is_one_value_lst_str == false)) {
+                        if (($work_base->is_one_value_lst_str_txt == true && $lang_key == 0) || ($work_base->is_one_value_lst_str_txt == false)) {
                             if ($i == 0) {
                                 $name_lang_key = $key;
                                 $name_lang_value = $value;
@@ -1746,7 +1883,7 @@ class ItemController extends Controller
         }
 
         // Одно значение у всех языков
-        if ($item->base->is_one_value_lst_str == true) {
+        if ($item->base->is_one_value_lst_str_txt == true) {
             $item->name_lang_1 = $item->name_lang_0;
             $item->name_lang_2 = $item->name_lang_0;
             $item->name_lang_3 = $item->name_lang_0;
@@ -1759,9 +1896,36 @@ class ItemController extends Controller
         try {
             // начало транзакции
             // $array_plan передается при корректировке
-            DB::transaction(function ($r) use ($item, $keys, $values, $strings_inputs) {
+            DB::transaction(function ($r) use ($item, $it_texts, $keys, $values, $strings_inputs) {
 
                 //$item->save();
+
+                // тип - текст
+                if ($it_texts) {
+                    if ($item->base->type_is_text()) {
+                        //$text = $item->text();
+                        $text = Text::where('item_id', $item->id)->first();
+                        if (!$text) {
+                            $text = new Text();
+                            $text->item_id = $item->id;
+                        }
+                        $text->name_lang_0 = $it_texts['name_lang_0'];
+                        // Одно значение у всех языков для тип - текст
+                        if ($item->base->is_one_value_lst_str_txt == true) {
+                            $text->name_lang_1 = $text->name_lang_0;
+                            $text->name_lang_2 = $text->name_lang_0;
+                            $text->name_lang_3 = $text->name_lang_0;
+                        } else {
+                            $text->name_lang_1 = "";
+                            $text->name_lang_2 = "";
+                            $text->name_lang_2 = "";
+                            foreach ($it_texts as $it_key => $it_text) {
+                                $text[$it_key] = $it_texts[$it_key];
+                            }
+                        }
+                        $text->save();
+                    }
+                }
 
                 $this->save_reverse_sets($item);
 
@@ -2262,6 +2426,8 @@ class ItemController extends Controller
                             } else {
                                 $result_item_name = "<a href='" . Storage::url($item->filename()) . "'><img src='" . Storage::url($item->filename()) . "' height='50' alt='' title='" . $item->filename() . "'></a>";
                             }
+                        } elseif($item->base->type_is_text()) {
+                            $result_item_name = GlobalController::it_txnm_n2b($item);
                         } else {
                             // $numcat = false - не выводить числовых поля с разрядом тысячи/миллионы/миллиарды
                             $result_item_name = $item->name();
@@ -2530,6 +2696,37 @@ class ItemController extends Controller
             $item->save();
         }
         return redirect()->back();
+    }
+
+    function verify_table_texts()
+    {
+        $result = trans('main.deleted') . ' text.ids: ';
+        $i = 0;
+        $texts = Text::get();
+        foreach ($texts as $text) {
+            $item = Item::find($text->item_id);
+            $delete = false;
+            // Если найдено
+            if ($item) {
+                if (!$item->base->type_is_text()) {
+                    $delete = true;
+                }
+                // Если не найдено
+            } else {
+                $delete = true;
+            }
+            if ($delete) {
+                $text->delete();
+                if ($i > 0) {
+                    $result = $result . ", ";
+                }
+                $result = $result . $text->id;
+                $i = $i + 1;
+            }
+        }
+        $result = $result . " - " . $i . " " . mb_strtolower(trans('main.recs_genitive_case')) . ".";
+        return view('message', ['message' => $result]);
+        //return redirect()->back();
     }
 
     function item_from_base_code(Base $base, Project $project, $code)

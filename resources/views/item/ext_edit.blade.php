@@ -178,6 +178,46 @@
                     <div class="col-sm-2">
                     </div>
                 </div>
+                {{--                            если тип корректировки поля - текст--}}
+            @elseif($base->type_is_text())
+                <div class="form-group row">
+                    @foreach (config('app.locales') as $key=>$value)
+                        @if(($base->is_one_value_lst_str_txt == true && $key == 0) || ($base->is_one_value_lst_str_txt == false))
+                            <div class="col-sm-3 text-right">
+                                <label for="name_lang_{{$key}}" class="col-form-label">{{trans('main.name')}}
+                                    @if($base->is_one_value_lst_str_txt == false)
+                                        ({{trans('main.' . $value)}})
+                                    @endif<span
+                                        class="text-danger">*</span></label>
+                            </div>
+                            <div class="col-sm-7">
+                                <textarea
+                                    name="name_lang_{{$key}}"
+                                    id="name_lang_{{$key}}"
+                                    rows="5"
+                                    class="form-control @error('name_lang_' . $key) is-invalid @enderror"
+                                    placeholder="">
+                                       {{ old('name_lang_' . $key) ?? ($item->text['name_lang_' . $key] ?? '') }}"
+                                </textarea>
+                                {{--                            <div class="invalid-feedback">--}}
+                                {{--                                Не заполнена строка!--}}
+                                {{--                            </div>--}}
+                                @error('name_lang_' . $key)
+                                <div class="text-danger">
+                                    {{$message}}
+                                </div>
+                                @enderror
+                                {{--                            <div class="text-danger">--}}
+                                {{--                                session('errors') передается командой в контроллере "return--}}
+                                {{--                                redirect()->back()->withInput()->withErrors(...)"--}}
+                                {{--                                {{session('errors')!=null ? session('errors')->first('"name_lang_' . $key): ''}}--}}
+                                {{--                            </div>--}}
+                            </div>
+                            <div class="col-sm-2">
+                            </div>
+                        @endif
+                    @endforeach
+                </div>
             @elseif($base->type_is_image())
                 @include('edit.img_base',['update'=>$update, 'base'=>$base,'item'=>$item ?? null, 'name'=>"name_lang_0",'id'=>"name_lang_0", 'size'=>"small"])
                 {{--                            если тип корректировки поля - документ--}}
@@ -188,10 +228,10 @@
                 @if($base->is_calcname_lst == false)
                     <div class="form-group row">
                         @foreach (config('app.locales') as $key=>$value)
-                            @if(($base->is_one_value_lst_str == true && $key == 0) || ($base->is_one_value_lst_str == false))
+                            @if(($base->is_one_value_lst_str_txt == true && $key == 0) || ($base->is_one_value_lst_str_txt == false))
                                 <div class="col-sm-3 text-right">
                                     <label for="name_lang_{{$key}}" class="col-form-label">{{trans('main.name')}}
-                                        @if($base->is_one_value_lst_str == false)
+                                        @if($base->is_one_value_lst_str_txt == false)
                                             ({{trans('main.' . $value)}})
                                         @endif<span
                                             class="text-danger">*</span></label>
@@ -273,7 +313,7 @@
                             {{--                                Открыть документ--}}
                             {{--                            </a>--}}
                         @else
-                            <span class="form-label text-success"
+                            <span class="form-label text-related"
                                   name="calc{{$key}}"
                                   id="link{{$key}}"></span>
                         @endif
@@ -350,7 +390,7 @@
                             </button>
                         </div>
                         <div class="col-sm-6">
-                                <span class="form-label text-success"
+                                <span class="form-label text-related"
                                       name="name{{$key}}"
                                       id="name{{$key}}"></span>
                         </div>
@@ -542,12 +582,12 @@
                                 // $input_name = $key . ($lang_key == 0) ? '' : '_' . $lang_key;  // так не работает, дает '' в результате
                                 $input_name = ($lang_key == 0) ? $key : $key . '_' . $lang_key;  // такой вариант работает
                                 ?>
-                                @if(($link->parent_base->is_one_value_lst_str == true && $lang_key == 0)
-                                    || ($link->parent_base->is_one_value_lst_str == false))
+                                @if(($link->parent_base->is_one_value_lst_str_txt == true && $lang_key == 0)
+                                    || ($link->parent_base->is_one_value_lst_str_txt == false))
                                     <div class="col-sm-3 text-right">
                                         <label for="{{$input_name}}"
                                                class="col-form-label">{{$result['result_parent_label']}}
-                                            @if($link->parent_base->is_one_value_lst_str == false)
+                                            @if($link->parent_base->is_one_value_lst_str_txt == false)
                                                 ({{trans('main.' . $lang_value)}})
                                             @endif
                                             <span
@@ -562,6 +602,68 @@
                                                value="{{(old($input_name)) ?? (($value != null) ? Item::find($value)['name_lang_'.$lang_key] : '')}}
                                                    "
                                         >
+                                        @error($input_name)
+                                        <div class="invalid-feedback">
+                                            {{--                                    <div class="text-danger">--}}
+                                            {{$message}}
+                                        </div>
+                                        @enderror
+                                        {{--                                                            <div class="text-danger">--}}
+                                        {{--                                                                 session('errors') передается командой в контроллере "return redirect()->back()->withInput()->withErrors(...)"--}}
+                                        {{--                                                                {{session('errors')!=null ? session('errors')->first($input_name): ''}}--}}
+                                        {{--                                                            </div>--}}
+
+                                    </div>
+                                    <div class="col-sm-2">
+                                    </div>
+                                @endif
+                            @endforeach
+                        </div>
+                    </fieldset>
+
+                    {{--                                если тип корректировки поля - текст--}}
+                @elseif($link->parent_base->type_is_text())
+                    <fieldset id="link{{$key}}"
+                              @if($base_link_right['is_edit_link_read'] == true)
+                              disabled
+                              @else
+                              @if($par_link)
+                              @if ($key == $par_link->id)
+                              disabled
+                        @endif
+                        @endif
+                        @endif
+                    >
+                        <div class="form-group row">
+                            @foreach (config('app.locales') as $lang_key=>$lang_value)
+                                <?php
+                                // для первого (нулевого) языка $input_name = $key
+                                // для последующих языков $input_name = $key . '_' . $lang_key;
+                                // это же правило используется в ItemController.php
+                                // $input_name = $key . ($lang_key == 0) ? '' : '_' . $lang_key;  // так не работает, дает '' в результате
+                                $input_name = ($lang_key == 0) ? $key : $key . '_' . $lang_key;  // такой вариант работает
+                                ?>
+                                @if(($link->parent_base->is_one_value_lst_str_txt == true && $lang_key == 0)
+                                    || ($link->parent_base->is_one_value_lst_str_txt == false))
+                                    <div class="col-sm-3 text-right">
+                                        <label for="{{$input_name}}"
+                                               class="col-form-label">{{$result['result_parent_label']}}
+                                            @if($link->parent_base->is_one_value_lst_str_txt == false)
+                                                ({{trans('main.' . $lang_value)}})
+                                            @endif
+                                            <span
+                                                class="text-danger">*</span></label>
+                                    </div>
+                                    <div class="col-sm-7">
+                                            <textarea type="text"
+                                                      name="{{$input_name}}"
+                                                      id="link{{$input_name}}"
+                                                      rows="5"
+                                                      class="form-control @error($input_name) is-invalid @enderror"
+                                                      placeholder="">
+                                                   {{(old($input_name)) ?? (($value != null) ? Item::find($value)['name_lang_'.$lang_key] : '')}}
+                                            </textarea>
+
                                         @error($input_name)
                                         <div class="invalid-feedback">
                                             {{--                                    <div class="text-danger">--}}
@@ -611,9 +713,12 @@
                                 @endif
                             >
                                 @if ((count($items) == 0)))
-                                <option value='0'>Нет информации по "{{$result['result_parent_base_name']}}"!
+                                <option value='0'>{{trans('main.no_information_on')}} "{{$result['result_parent_base_name']}}"!
                                 </option>
                                 @else
+                                    @if(!$link->parent_base->is_required_lst_num_str_txt_img_doc)
+                                        <option value="0">-- {{mb_strtolower(trans('main.empty'))}} --</option>
+                                    @endif
                                     @foreach ($items as $item_work)
                                         <option value="{{$item_work->id}}"
                                                 @if (((old($key)) ?? (($value != null) ? $value : 0)) == $item_work->id)

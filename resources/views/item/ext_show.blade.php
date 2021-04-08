@@ -48,7 +48,15 @@
             {{--            похожая проверка в base_index.blade.php--}}
             @if(GlobalController::is_base_calcname_check($base, $base_right))
                 {{--                                            $numcat = true - вывод числовых полей с разрядом тысячи/миллионы/миллиарды--}}
-                {{trans('main.name')}}: <b>{{$item->name(true)}}</b>
+                {{trans('main.name')}}: <b>
+                    @if($base->type_is_text())
+                        <?php
+                        echo GlobalController::it_txnm_n2b($item);
+                        ?>
+                    @else
+                        {{$item->name(true)}}
+                    @endif
+                </b>
             @endif
         @endif
         {{--            <br>--}}
@@ -72,7 +80,6 @@
     <p class="text-label">
         @foreach($array_calc as $key=>$value)
             <?php
-
             $link = Link::find($key);
             $item_find = MainController::view_info($item->id, $key);
             ?>
@@ -82,14 +89,20 @@
                 ?>
                 @if($base_link_right['is_show_link_enable'] == true)
                     {{$link->parent_label()}}:
-                    @if($link->parent_base->type_is_image)
+                    @if($link->parent_base->type_is_text())
+                        <b>
+                            <?php
+                            echo GlobalController::it_txnm_n2b($item_find);
+                            ?>
+                        </b>
+                    @elseif($link->parent_base->type_is_image())
                         {{--                            <br>--}}
                         @include('view.img',['item'=>$item_find, 'size'=>"medium", 'filenametrue'=>false, 'link'=>true, 'img_fluid'=>false, 'title'=>""])
                         {{--                            <a href="{{Storage::url($item_find->filename())}}">--}}
                         {{--                                <img src="{{Storage::url($item_find->filename())}}" height="250"--}}
                         {{--                                     alt="" title="{{$item_find->title_img()}}">--}}
                         {{--                            </a>--}}
-                    @elseif($link->parent_base->type_is_document)
+                    @elseif($link->parent_base->type_is_document())
                         @include('view.doc',['item'=>$item_find])
                         {{--                            <a href="{{Storage::url($item_find->filename())}}" target="_blank">--}}
                         {{--                                Открыть документ--}}
@@ -132,21 +145,21 @@
                     {{trans('main.delete')}}
                 </button>
             @endif
-            {{--                С base_index.blade.php--}}
-            {{--                                Не удалять: нужно для просмотра Пространства--}}
-            {{--                                                                            проверка, если link - вычисляемое поле--}}
-            {{--                                    @if ($link->parent_is_parent_related == true || $link->parent_is_numcalc == true)--}}
-            {{--                                        <a href="{{route('item.item_index', ['item'=>$item_find, 'role'=>$role])}}">--}}
-            {{--                                            @else--}}
-            {{--                                                <a href="{{route('item.item_index', ['item'=>$item_find, 'role'=>$role,'par_link'=>$link])}}">--}}
-            {{--                                                    @endif--}}
-            {{--Не удалять--}}
-            {{--            <button type="button" class="btn btn-dreamer mb-1 mb-sm-0"--}}
-            {{--                    onclick='document.location="{{route('item.item_index', ['item'=>$item, 'role'=>$role])}}"'--}}
-            {{--                    title="{{trans('main.space')}}">--}}
-            {{--                <i class="fas fa-atlas"></i>--}}
-            {{--                {{trans('main.space')}}--}}
-            {{--            </button>--}}
+{{--                            С base_index.blade.php--}}
+{{--                                            Не удалять: нужно для просмотра Пространства--}}
+{{--                                                                                        проверка, если link - вычисляемое поле--}}
+{{--                                                @if ($link->parent_is_parent_related == true || $link->parent_is_numcalc == true)--}}
+{{--                                                    <a href="{{route('item.item_index', ['item'=>$item_find, 'role'=>$role])}}">--}}
+{{--                                                        @else--}}
+{{--                                                            <a href="{{route('item.item_index', ['item'=>$item_find, 'role'=>$role,'par_link'=>$link])}}">--}}
+{{--                                                                @endif--}}
+{{--            Не удалять--}}
+{{--                        <button type="button" class="btn btn-dreamer mb-1 mb-sm-0"--}}
+{{--                                onclick='document.location="{{route('item.item_index', ['item'=>$item, 'role'=>$role])}}"'--}}
+{{--                                title="{{trans('main.space')}}">--}}
+{{--                            <i class="fas fa-atlas"></i>--}}
+{{--                            {{trans('main.space')}}--}}
+{{--                        </button>--}}
             <button type="button" class="btn btn-dreamer mb-1 mb-sm-0"
                     title="{{trans('main.cancel')}}" @include('layouts.item.base_index.previous_url')>
                 <i class="fas fa-arrow-left"></i>

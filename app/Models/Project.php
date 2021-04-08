@@ -28,9 +28,9 @@ class Project extends Model
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
             $result = $this['name_lang_' . $index];
         }
-        if ($result == "") {
-            $result = $this->name_lang_0;
-        };
+//        if ($result == "") {
+//            $result = $this->name_lang_0;
+//        };
         $result = $result . ' (' . $this->user->name . ')';
         return $result;
     }
@@ -42,9 +42,9 @@ class Project extends Model
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
             $result = $this['dc_ext_lang_' . $index];
         }
-        if ($result == "") {
-            $result = $this->dc_ext_lang_0;
-        }
+//        if ($result == "") {
+//            $result = $this->dc_ext_lang_0;
+//        }
         return $result;
     }
 
@@ -55,9 +55,9 @@ class Project extends Model
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
             $result = $this['dc_int_lang_' . $index];
         }
-        if ($result == "") {
-            $result = $this->dc_int_lang_0;
-        }
+//        if ($result == "") {
+//            $result = $this->dc_int_lang_0;
+//        }
         return $result;
     }
 

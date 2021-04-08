@@ -37,8 +37,8 @@
     <p>{{trans('main.is_suggest_max_code')}}: <b>{{$base->is_suggest_max_code}}</b></p>
     <p>{{trans('main.is_recalc_code')}}: <b>{{$base->is_recalc_code}}</b></p>
     <p>{{trans('main.digits_num')}}: <b>{{$base->digits_num}}</b></p>
-    <p>{{trans('main.is_required_lst_num_str_img_doc')}}: <b>{{$base->name_is_required_lst_num_str_img_doc()}}</b></p>
-    <p>{{trans('main.is_one_value_lst_str')}}: <b>{{$base->name_is_one_value_lst_str()}}</b></p>
+    <p>{{trans('main.is_required_lst_num_str_txt_img_doc')}}: <b>{{$base->name_is_required_lst_num_str_txt_img_doc()}}</b></p>
+    <p>{{trans('main.is_one_value_lst_str_txt')}}: <b>{{$base->name_is_one_value_lst_str_txt()}}</b></p>
     <p>{{trans('main.is_calcname_lst')}}: <b>{{$base->name_is_calcname_lst()}}</b></p>
     <p>{{trans('main.sepa_calcname')}}: <b>{{$base->sepa_calcname}}</b></p>
     <p>{{trans('main.is_same_small_calcname')}}: <b>{{$base->name_is_same_small_calcname()}}</b></p>

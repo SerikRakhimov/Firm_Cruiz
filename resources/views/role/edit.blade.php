@@ -173,12 +173,37 @@
                        type="checkbox"
                        name="is_all_base_calcname_enable"
                        placeholder=""
-                       {{--                       "$role->is_all_base_calcname_enable ?? true" - "true" значение по умолчанию--}}
+                       {{--                       "$role->is_all_base_calcname_enable ?? false" - "false" значение по умолчанию--}}
                        @if ((old('is_all_base_calcname_enable') ?? ($role->is_all_base_calcname_enable ?? false)) ==  true)
                        checked
                     @endif
                 >
                 @error('is_all_base_calcname_enable')
+                <div class="invalid-feedback">
+                    {{$message}}
+                </div>
+                @enderror
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div>
+
+        <div class="form-group row" id="is_list_base_sort_creation_date_desc_form_group">
+            <div class="col-sm-3 text-right">
+                <label class="form-label"
+                       for="is_list_base_sort_creation_date_desc">{{trans('main.is_list_base_sort_creation_date_desc')}}</label>
+            </div>
+            <div class="col-sm-7">
+                <input class="@error('is_list_base_sort_creation_date_desc') is-invalid @enderror"
+                       type="checkbox"
+                       name="is_list_base_sort_creation_date_desc"
+                       placeholder=""
+                       {{--                       "$role->is_list_base_sort_creation_date_desc ?? false" - "false" значение по умолчанию--}}
+                       @if ((old('is_list_base_sort_creation_date_desc') ?? ($role->is_list_base_sort_creation_date_desc ?? false)) ==  true)
+                       checked
+                    @endif
+                >
+                @error('is_list_base_sort_creation_date_desc')
                 <div class="invalid-feedback">
                     {{$message}}
                 </div>

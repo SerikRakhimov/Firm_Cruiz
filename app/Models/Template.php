@@ -36,9 +36,9 @@ class Template extends Model
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
             $result = $this['name_lang_' . $index];
         }
-        if ($result == "") {
-            $result = $this->name_lang_0;
-        }
+//        if ($result == "") {
+//            $result = $this->name_lang_0;
+//        }
         return $result;
     }
 
@@ -49,9 +49,9 @@ class Template extends Model
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
             $result = $this['desc_lang_' . $index];
         }
-        if ($result == "") {
-            $result = $this->desc_lang_0;
-        }
+//        if ($result == "") {
+//            $result = $this->desc_lang_0;
+//        }
         return $result;
     }
 

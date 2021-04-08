@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Access;
+use App\Models\Base;
 use App\Models\Item;
 use Illuminate\Support\Facades\App;
 use App\User;
@@ -110,6 +111,44 @@ class ProjectController extends Controller
             }
         }
         return view('project/show', ['type_form' => 'show', 'user' => $user, 'project' => $project]);
+    }
+
+
+    function project(Project $project, Role $role = null)
+    {
+        if (!$role) {
+            $role = Role::where('template_id', $project->template_id)->where('is_default_for_external', true)->first();
+            if (!$role) {
+                return view('message', ['message' => trans('main.role_default_for_external_not_found')]);
+            }
+        }
+        if (GlobalController::check_project_user($project, $role) == false) {
+            return view('message', ['message' => trans('main.info_user_changed')]);
+        }
+        $template = $project->template;
+        $bases = Base::where('template_id', $template->id);
+        $index = array_search(App::getLocale(), config('app.locales'));
+        if ($index !== false) {   // '!==' использовать, '!=' не использовать
+            switch ($index) {
+                case 0:
+                    //$bases = Base::all()->sortBy('name_lang_0');
+                    $bases = $bases->orderBy('name_lang_0');
+                    break;
+                case 1:
+                    //$bases = Base::all()->sortBy(function($row){return $row->name_lang_1 . $row->name_lang_0;});
+                    $bases = $bases->orderBy('name_lang_1')->orderBy('name_lang_0');
+                    break;
+                case 2:
+                    $bases = $bases->orderBy('name_lang_2')->orderBy('name_lang_0');
+                    break;
+                case 3:
+                    $bases = $bases->orderBy('name_lang_3')->orderBy('name_lang_0');
+                    break;
+            }
+        }
+        session(['bases_previous_url' => request()->url()]);
+        return view('project/start', ['project' => $project, 'role' => $role, 'bases' => $bases->paginate(60)]);
+
     }
 
     function create_template(Template $template)

@@ -2,8 +2,6 @@
    color: #ffdc28;
 }
 
-
-
 /*
 Пурпурная кнопка
 */
@@ -168,8 +166,11 @@ Dreamer
 /*    padding: 10px 20px;*/
 /*}*/
 
-a, a:visited, a:hover {
+a, a:visited, a:hover  {
     color: #833029;
+}
+.navbar-light .navbar-brand {
+    color: #1c5145;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -202,6 +203,16 @@ label {
 .text-label {
     color: #833029;
 }
+
+.text-related {
+    color: #1c5145;
+}
+
+.badge-related {
+    background-color: #5f7a91;
+    color: white;
+}
+
 
 .text-from-refer {
     color: blue;

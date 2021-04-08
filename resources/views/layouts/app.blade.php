@@ -151,7 +151,7 @@ use App\Models\Project;
                                 {{ Auth::user()->name }}<span class="caret"></span>
                             </a>
                             @if(Auth::user()->isAdmin())
-                                <span class="badge badge-primary">{{trans('main.admin')}}</span>
+                                <span class="badge badge-related">{{trans('main.admin')}}</span>
                             @endif
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="{{ route('logout') }}"
@@ -177,19 +177,19 @@ use App\Models\Project;
                                         <a class="dropdown-item" href="{{route('moderation.index')}}"
                                            title="{{trans('main.moderation')}}">
                                             {{trans('main.moderation')}}(<span
-                                                class="badge badge-primary">{{trans('main.moderator')}}</span>)
+                                                class="badge badge-related">{{trans('main.moderator')}}</span>)
                                         </a>
                                     @endif
                                     @if(Auth::user()->isAdmin())
                                         <a class="dropdown-item" href="{{route('template.index')}}"
                                            title="{{trans('main.configuring_templates')}}">
                                             {{trans('main.configuring_templates')}}(<span
-                                                class="badge badge-primary">{{trans('main.admin')}}</span>)
+                                                class="badge badge-related">{{trans('main.admin')}}</span>)
                                         </a>
                                         <a class="dropdown-item" href="{{route('user.index')}}"
                                            title="{{trans('main.users')}}">
                                             {{trans('main.users')}}(<span
-                                                class="badge badge-primary">{{trans('main.admin')}}</span>)
+                                                class="badge badge-related">{{trans('main.admin')}}</span>)
                                         </a>
                                     @endif
                                 @endauth
@@ -201,6 +201,11 @@ use App\Models\Project;
         </div>
     </nav>
     <main class="py-4 w-75 mw-75 mx-auto">
+        @guest
+            <p>
+            <h5 class="display-5 text-danger text-center">{{trans('main.please_login_or_register')}}</h5>
+            </p>
+        @endguest
         {{--                <div class="mx-auto" style="width: 1200px;">--}}
         @yield('content')
         {{--                </div>--}}

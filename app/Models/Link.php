@@ -39,9 +39,9 @@ class Link extends Model
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
             $result = $this['child_labels_lang_' . $index];
         }
-        if ($result == "") {
-            $result = $this->child_labels_lang_0;
-        }
+//        if ($result == "") {
+//            $result = $this->child_labels_lang_0;
+//        }
         return $result;
     }
 
@@ -52,9 +52,9 @@ class Link extends Model
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
             $result = $this['parent_label_lang_' . $index];
         }
-        if ($result == "") {
-            $result = $this->parent_label_lang_0;
-        }
+//        if ($result == "") {
+//            $result = $this->parent_label_lang_0;
+//        }
         return $result;
     }
 

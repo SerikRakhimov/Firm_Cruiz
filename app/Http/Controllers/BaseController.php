@@ -68,37 +68,6 @@ class BaseController extends Controller
         return view('base/index', ['template' => $template, 'bases' => $bases->paginate(60)]);
     }
 
-    function template_index(Project $project, Role $role)
-    {
-        if (GlobalController::check_project_user($project, $role) == false) {
-            return view('message', ['message' => trans('main.info_user_changed')]);
-        }
-        $template = $project->template;
-        $bases = Base::where('template_id', $template->id);
-        $index = array_search(App::getLocale(), config('app.locales'));
-        if ($index !== false) {   // '!==' использовать, '!=' не использовать
-            switch ($index) {
-                case 0:
-                    //$bases = Base::all()->sortBy('name_lang_0');
-                    $bases = $bases->orderBy('name_lang_0');
-                    break;
-                case 1:
-                    //$bases = Base::all()->sortBy(function($row){return $row->name_lang_1 . $row->name_lang_0;});
-                    $bases = $bases->orderBy('name_lang_1')->orderBy('name_lang_0');
-                    break;
-                case 2:
-                    $bases = $bases->orderBy('name_lang_2')->orderBy('name_lang_0');
-                    break;
-                case 3:
-                    $bases = $bases->orderBy('name_lang_3')->orderBy('name_lang_0');
-                    break;
-            }
-        }
-        session(['bases_previous_url' => request()->url()]);
-        return view('base/template_index', ['project' => $project, 'role' => $role, 'bases' => $bases->paginate(60)]);
-
-    }
-
     function show(Base $base)
     {
         if (!
@@ -155,9 +124,9 @@ class BaseController extends Controller
         $base->is_suggest_code = isset($request->is_suggest_code) ? "1" : "0";
         $base->is_suggest_max_code = isset($request->is_suggest_max_code) ? "1" : "0";
         $base->is_recalc_code = isset($request->is_recalc_code) ? "1" : "0";
-        $base->is_required_lst_num_str_img_doc = isset($request->is_required_lst_num_str_img_doc) ? "1" : "0";
+        $base->is_required_lst_num_str_txt_img_doc = isset($request->is_required_lst_num_str_txt_img_doc) ? "1" : "0";
         $base->is_to_moderate_image = isset($request->is_to_moderate_image) ? "1" : "0";
-        $base->is_one_value_lst_str = isset($request->is_one_value_lst_str) ? "1" : "0";
+        $base->is_one_value_lst_str_txt = isset($request->is_one_value_lst_str_txt) ? "1" : "0";
         $base->is_calcname_lst = isset($request->is_calcname_lst) ? "1" : "0";
         $base->is_same_small_calcname = isset($request->is_same_small_calcname) ? "1" : "0";
 
@@ -180,6 +149,7 @@ class BaseController extends Controller
                 $base->type_is_string = false;
                 $base->type_is_date = false;
                 $base->type_is_boolean = false;
+                $base->type_is_text = false;
                 $base->type_is_image = false;
                 $base->type_is_document = false;
                 $base->digits_num = 0;
@@ -194,10 +164,11 @@ class BaseController extends Controller
                 $base->type_is_string = false;
                 $base->type_is_date = false;
                 $base->type_is_boolean = false;
+                $base->type_is_text = false;
                 $base->type_is_image = false;
                 $base->type_is_document = false;
                 $base->is_code_needed = "0";
-                $base->is_one_value_lst_str = "0";
+                $base->is_one_value_lst_str_txt = "0";
                 $base->is_calcname_lst = "0";
                 $base->sepa_calcname = "";
                 $base->is_same_small_calcname = "0";
@@ -214,6 +185,7 @@ class BaseController extends Controller
                 $base->type_is_string = true;
                 $base->type_is_date = false;
                 $base->type_is_boolean = false;
+                $base->type_is_text = false;
                 $base->type_is_image = false;
                 $base->type_is_document = false;
                 $base->is_code_needed = "0";
@@ -234,13 +206,14 @@ class BaseController extends Controller
                 $base->type_is_string = false;
                 $base->type_is_date = true;
                 $base->type_is_boolean = false;
+                $base->type_is_text = false;
                 $base->type_is_image = false;
                 $base->type_is_document = false;
                 $base->is_code_needed = "0";
                 $base->digits_num = 0;
-                $base->is_required_lst_num_str_img_doc = "0";
+                $base->is_required_lst_num_str_txt_img_doc = "0";
                 $base->is_to_moderate_image = "0";
-                $base->is_one_value_lst_str = "0";
+                $base->is_one_value_lst_str_txt = "0";
                 $base->is_calcname_lst = "0";
                 $base->sepa_calcname = "";
                 $base->is_same_small_calcname = "0";
@@ -256,13 +229,14 @@ class BaseController extends Controller
                 $base->type_is_string = false;
                 $base->type_is_date = false;
                 $base->type_is_boolean = true;
+                $base->type_is_text = false;
                 $base->type_is_image = false;
                 $base->type_is_document = false;
                 $base->is_code_needed = "0";
                 $base->digits_num = 0;
-                $base->is_required_lst_num_str_img_doc = "0";
+                $base->is_required_lst_num_str_txt_img_doc = "0";
                 $base->is_to_moderate_image = "0";
-                $base->is_one_value_lst_str = "0";
+                $base->is_one_value_lst_str_txt = "0";
                 $base->is_calcname_lst = "0";
                 $base->sepa_calcname = "";
                 $base->is_same_small_calcname = "0";
@@ -271,26 +245,28 @@ class BaseController extends Controller
                 $base->maxfilesize_img_doc = 0;
                 $base->maxfilesize_title_img_doc = "";
                 break;
-            // Изображение
+            // Текст
             case 5:
-                $request->validate($this->maxfilesize_rules());
                 $base->type_is_list = false;
                 $base->type_is_number = false;
                 $base->type_is_string = false;
                 $base->type_is_date = false;
                 $base->type_is_boolean = false;
-                $base->type_is_image = true;
+                $base->type_is_text = true;
+                $base->type_is_image = false;
                 $base->type_is_document = false;
                 $base->is_code_needed = "0";
                 $base->digits_num = 0;
-                $base->is_one_value_lst_str = "0";
                 $base->is_calcname_lst = "0";
                 $base->sepa_calcname = "";
                 $base->is_same_small_calcname = "0";
                 $base->sepa_same_left_calcname = "";
                 $base->sepa_same_right_calcname = "";
+                $base->is_to_moderate_image = "0";
+                $base->maxfilesize_img_doc = 0;
+                $base->maxfilesize_title_img_doc = "";
                 break;
-            // Документ
+            // Изображение
             case 6:
                 $request->validate($this->maxfilesize_rules());
                 $base->type_is_list = false;
@@ -298,11 +274,32 @@ class BaseController extends Controller
                 $base->type_is_string = false;
                 $base->type_is_date = false;
                 $base->type_is_boolean = false;
+                $base->type_is_text = false;
+                $base->type_is_image = true;
+                $base->type_is_document = false;
+                $base->is_code_needed = "0";
+                $base->digits_num = 0;
+                $base->is_one_value_lst_str_txt = "0";
+                $base->is_calcname_lst = "0";
+                $base->sepa_calcname = "";
+                $base->is_same_small_calcname = "0";
+                $base->sepa_same_left_calcname = "";
+                $base->sepa_same_right_calcname = "";
+                break;
+            // Документ
+            case 7:
+                $request->validate($this->maxfilesize_rules());
+                $base->type_is_list = false;
+                $base->type_is_number = false;
+                $base->type_is_string = false;
+                $base->type_is_date = false;
+                $base->type_is_boolean = false;
+                $base->type_is_text = false;
                 $base->type_is_image = false;
                 $base->type_is_document = true;
                 $base->is_code_needed = "0";
                 $base->digits_num = 0;
-                $base->is_one_value_lst_str = "0";
+                $base->is_one_value_lst_str_txt = "0";
                 $base->is_calcname_lst = "0";
                 $base->sepa_calcname = "";
                 $base->is_same_small_calcname = "0";
@@ -345,6 +342,7 @@ class BaseController extends Controller
 
     function update(Request $request, Base $base)
     {
+
         if (!
         Auth::user()->isAdmin()) {
             return redirect()->route('project.all_index');
@@ -381,9 +379,9 @@ class BaseController extends Controller
         $base->is_suggest_code = isset($request->is_suggest_code) ? "1" : "0";
         $base->is_suggest_max_code = isset($request->is_suggest_max_code) ? "1" : "0";
         $base->is_recalc_code = isset($request->is_recalc_code) ? "1" : "0";
-        $base->is_required_lst_num_str_img_doc = isset($request->is_required_lst_num_str_img_doc) ? "1" : "0";
+        $base->is_required_lst_num_str_txt_img_doc = isset($request->is_required_lst_num_str_txt_img_doc) ? "1" : "0";
         $base->is_to_moderate_image = isset($request->is_to_moderate_image) ? "1" : "0";
-        $base->is_one_value_lst_str = isset($request->is_one_value_lst_str) ? "1" : "0";
+        $base->is_one_value_lst_str_txt = isset($request->is_one_value_lst_str_txt) ? "1" : "0";
         $base->is_calcname_lst = isset($request->is_calcname_lst) ? "1" : "0";
         $base->is_same_small_calcname = isset($request->is_same_small_calcname) ? "1" : "0";
 
@@ -406,6 +404,7 @@ class BaseController extends Controller
                 $base->type_is_string = false;
                 $base->type_is_date = false;
                 $base->type_is_boolean = false;
+                $base->type_is_text = false;
                 $base->type_is_image = false;
                 $base->type_is_document = false;
                 $base->digits_num = 0;
@@ -420,10 +419,11 @@ class BaseController extends Controller
                 $base->type_is_string = false;
                 $base->type_is_date = false;
                 $base->type_is_boolean = false;
+                $base->type_is_text = false;
                 $base->type_is_image = false;
                 $base->type_is_document = false;
                 $base->is_code_needed = "0";
-                $base->is_one_value_lst_str = "0";
+                $base->is_one_value_lst_str_txt = "0";
                 $base->is_calcname_lst = "0";
                 $base->sepa_calcname = "";
                 $base->is_same_small_calcname = "0";
@@ -440,6 +440,7 @@ class BaseController extends Controller
                 $base->type_is_string = true;
                 $base->type_is_date = false;
                 $base->type_is_boolean = false;
+                $base->type_is_text = false;
                 $base->type_is_image = false;
                 $base->type_is_document = false;
                 $base->is_code_needed = "0";
@@ -460,13 +461,14 @@ class BaseController extends Controller
                 $base->type_is_string = false;
                 $base->type_is_date = true;
                 $base->type_is_boolean = false;
+                $base->type_is_text = false;
                 $base->type_is_image = false;
                 $base->type_is_document = false;
                 $base->is_code_needed = "0";
                 $base->digits_num = 0;
-                $base->is_required_lst_num_str_img_doc = "0";
+                $base->is_required_lst_num_str_txt_img_doc = "0";
                 $base->is_to_moderate_image = "0";
-                $base->is_one_value_lst_str = "0";
+                $base->is_one_value_lst_str_txt = "0";
                 $base->is_calcname_lst = "0";
                 $base->sepa_calcname = "";
                 $base->is_same_small_calcname = "0";
@@ -482,13 +484,14 @@ class BaseController extends Controller
                 $base->type_is_string = false;
                 $base->type_is_date = false;
                 $base->type_is_boolean = true;
+                $base->type_is_text = false;
                 $base->type_is_image = false;
                 $base->type_is_document = false;
                 $base->is_code_needed = "0";
                 $base->digits_num = 0;
-                $base->is_required_lst_num_str_img_doc = "0";
+                $base->is_required_lst_num_str_txt_img_doc = "0";
                 $base->is_to_moderate_image = "0";
-                $base->is_one_value_lst_str = "0";
+                $base->is_one_value_lst_str_txt = "0";
                 $base->is_calcname_lst = "0";
                 $base->sepa_calcname = "";
                 $base->is_same_small_calcname = "0";
@@ -497,26 +500,28 @@ class BaseController extends Controller
                 $base->maxfilesize_img_doc = 0;
                 $base->maxfilesize_title_img_doc = "";
                 break;
-            // Изображение
+            // Текст
             case 5:
-                $request->validate($this->maxfilesize_rules());
                 $base->type_is_list = false;
                 $base->type_is_number = false;
                 $base->type_is_string = false;
                 $base->type_is_date = false;
                 $base->type_is_boolean = false;
-                $base->type_is_image = true;
+                $base->type_is_text = true;
+                $base->type_is_image = false;
                 $base->type_is_document = false;
                 $base->is_code_needed = "0";
                 $base->digits_num = 0;
-                $base->is_one_value_lst_str = "0";
                 $base->is_calcname_lst = "0";
                 $base->sepa_calcname = "";
                 $base->is_same_small_calcname = "0";
                 $base->sepa_same_left_calcname = "";
                 $base->sepa_same_right_calcname = "";
+                $base->is_to_moderate_image = "0";
+                $base->maxfilesize_img_doc = 0;
+                $base->maxfilesize_title_img_doc = "";
                 break;
-            // Документ
+            // Изображение
             case 6:
                 $request->validate($this->maxfilesize_rules());
                 $base->type_is_list = false;
@@ -524,11 +529,32 @@ class BaseController extends Controller
                 $base->type_is_string = false;
                 $base->type_is_date = false;
                 $base->type_is_boolean = false;
+                $base->type_is_text = false;
+                $base->type_is_image = true;
+                $base->type_is_document = false;
+                $base->is_code_needed = "0";
+                $base->digits_num = 0;
+                $base->is_one_value_lst_str_txt = "0";
+                $base->is_calcname_lst = "0";
+                $base->sepa_calcname = "";
+                $base->is_same_small_calcname = "0";
+                $base->sepa_same_left_calcname = "";
+                $base->sepa_same_right_calcname = "";
+                break;
+            // Документ
+            case 7:
+                $request->validate($this->maxfilesize_rules());
+                $base->type_is_list = false;
+                $base->type_is_number = false;
+                $base->type_is_string = false;
+                $base->type_is_date = false;
+                $base->type_is_boolean = false;
+                $base->type_is_text = false;
                 $base->type_is_image = false;
                 $base->type_is_document = true;
                 $base->is_code_needed = "0";
                 $base->digits_num = 0;
-                $base->is_one_value_lst_str = "0";
+                $base->is_one_value_lst_str_txt = "0";
                 $base->is_calcname_lst = "0";
                 $base->sepa_calcname = "";
                 $base->is_same_small_calcname = "0";
@@ -537,6 +563,7 @@ class BaseController extends Controller
                 $base->is_to_moderate_image = "0";
                 break;
         }
+
         if ($base->is_code_needed == "0") {
             $base->is_code_number = "0";
         }

@@ -16,9 +16,9 @@ class Task extends Model
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
             $result = $this['name_lang_' . $index];
         }
-        if ($result == "") {
-            $result = $this->name_lang_0;
-        }
+//        if ($result == "") {
+//            $result = $this->name_lang_0;
+//        }
         return $result;
     }
 

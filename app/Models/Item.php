@@ -67,6 +67,11 @@ class Item extends Model
         return $this->hasMany(Main::class, 'parent_item_id');
     }
 
+    public function text()
+    {
+        return $this->hasOne(Text::class);
+    }
+
     // name() используется для отображения значений полей
     // $numcat = true/false - вывод числовых полей с разрядом тысячи/миллионы/миллиарды
     function name_start($numcat = false)
@@ -117,6 +122,7 @@ class Item extends Model
 //        if ($result == "") {
 //            $result = $this->name_lang_0;
 //        }
+
         return $result;
     }
 
@@ -154,6 +160,7 @@ class Item extends Model
                 $base = $this->base;
                 if ($base) {
                     // Эта строка нужна, не удалять
+                    // Для полей типа текст ө наименование берется из $item->name_lang_x, а не с $text->name_lang_x
                     $name = $this['name_lang_' . $lang_key];
                     if ($base->type_is_date()) {
                         $name = date_create($name)->Format(trans('main.format_date'));

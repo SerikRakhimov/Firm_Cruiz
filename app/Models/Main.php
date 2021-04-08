@@ -20,7 +20,6 @@ class Main extends Model
         return $this->belongsTo(Item::class, 'parent_item_id');
     }
 
-
     function updated_user()
     {
         return $this->belongsTo(User::class, 'updated_user_id');

@@ -33,9 +33,9 @@ class Base extends Model
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
             $result = $this['name_lang_' . $index];
         }
-        if ($result == "") {
-            $result = $this->name_lang_0;
-        }
+//        if ($result == "") {
+//            $result = $this->name_lang_0;
+//        }
         return $result;
     }
 
@@ -48,9 +48,9 @@ class Base extends Model
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
             $result = $this['names_lang_' . $index];
         }
-        if ($result == "") {
-            $result = $this->names_lang_0;
-        }
+//        if ($result == "") {
+//            $result = $this->names_lang_0;
+//        }
         return $result;
     }
 
@@ -65,8 +65,9 @@ class Base extends Model
             "2" => trans('main.string'),
             "3" => trans('main.date'),
             "4" => trans('main.boolean'),
-            "5" => trans('main.image'),
-            "6" => trans('main.document')
+            "5" => trans('main.text'),
+            "6" => trans('main.image'),
+            "7" => trans('main.document')
         );
     }
 
@@ -84,10 +85,12 @@ class Base extends Model
             $result = 3;
         } else if ($this->type_is_boolean == true) {
             $result = 4;
-        } else if ($this->type_is_image == true) {
+        } else if ($this->type_is_text == true) {
             $result = 5;
-        } else if ($this->type_is_document == true) {
+        } else if ($this->type_is_image == true) {
             $result = 6;
+        } else if ($this->type_is_document == true) {
+            $result = 7;
         }
         return $result;
     }
@@ -112,9 +115,12 @@ class Base extends Model
                 $result = trans('main.boolean');
                 break;
             case 5:
-                $result = trans('main.image');
+                $result = trans('main.text');
                 break;
             case 6:
+                $result = trans('main.image');
+                break;
+            case 7:
                 $result = trans('main.document');
                 break;
         }
@@ -144,6 +150,11 @@ class Base extends Model
     function type_is_boolean()
     {
         return $this->type_is_boolean == true;
+    }
+
+    function type_is_text()
+    {
+        return $this->type_is_text == true;
     }
 
     function type_is_image()
@@ -183,16 +194,16 @@ class Base extends Model
 
 
 //    Похожие строки в Item.php
-    function name_is_required_lst_num_str_img_doc()
+    function name_is_required_lst_num_str_txt_img_doc()
     {
-        return $this->is_required_lst_num_str_img_doc == "1" ? html_entity_decode('	&#9745;')
-            : ($this->is_required_lst_num_str_img_doc == "0" ? html_entity_decode('&#10065;') : trans('main.empty'));
+        return $this->is_required_lst_num_str_txt_img_doc == "1" ? html_entity_decode('	&#9745;')
+            : ($this->is_required_lst_num_str_txt_img_doc == "0" ? html_entity_decode('&#10065;') : trans('main.empty'));
     }
 
-    function name_is_one_value_lst_str()
+    function name_is_one_value_lst_str_txt()
     {
-        return $this->is_one_value_lst_str == "1" ? html_entity_decode('	&#9745;')
-            : ($this->is_one_value_lst_str == "0" ? html_entity_decode('&#10065;') : trans('main.empty'));
+        return $this->is_one_value_lst_str_txt == "1" ? html_entity_decode('	&#9745;')
+            : ($this->is_one_value_lst_str_txt == "0" ? html_entity_decode('&#10065;') : trans('main.empty'));
     }
 
     function name_is_calcname_lst()
@@ -228,18 +239,21 @@ class Base extends Model
 //    }
 
     //Возвращает истину, если вид отображения информации - плитка, и если есть основное изображение в links
-    function tile_view()
+    function tile_view($base_right)
     {
-        $links = $this->child_links();
-        $link = $links->where('parent_is_primary_image', true)->first();
         $result = false;
-        if ($link) {
-            if ($link->parent_base->type_is_image()) {
-                $result = true;
+        $link = null;
+        // Только чтение данных(без создания, корректировки и удаления)
+        if ($base_right['is_list_base_read'] == true) {
+            $links = $this->child_links();
+            $link = $links->where('parent_is_primary_image', true)->first();
+            if ($link) {
+                if ($link->parent_base->type_is_image()) {
+                    $result = true;
+                }
             }
         }
-        return ['result'=>$result, 'link'=>$link];
+        return ['result' => $result, 'link' => $link];
     }
-
 
 }

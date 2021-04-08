@@ -4,14 +4,10 @@
     <?php
     Use App\Models\Role;
     ?>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12 text-center">
-                <h3>{{$title}}</h3>
-            </div>
-        </div>
-    </div>
+    <p>
+    <h3 class="display-5 text-center">{{$title}}</h3>
     </p>
+    <br>
     <?php
     $i = $projects->firstItem() - 1;
     ?>
@@ -60,6 +56,7 @@
             <div class="card shadow">
                 <img class="card-img-top" src="{{Storage::url('background.png')}}" alt="Card image">
                 <p class="card-header">Id = {{$project->id}}</p>
+
                 <div class="card-block">
                     <p class="card-text ml-3 mt-2"><small class="text-muted">{{$project->template->name()}}</small></p>
                 </div>
@@ -70,10 +67,14 @@
 
                     {{--                ($my_projects ? 1 : 0)--}}
                     <button type="button" class="btn btn-dreamer" title="{{trans('main.start')}}"
-                            onclick="document.location='{{route('base.template_index', ['project'=>$project, 'role'=>$role])}}'">
+                            onclick="document.location='{{route('project.project', ['project'=>$project->id, 'role'=>$role])}}'">
                         <i class="fas fa-play d-inline"></i>
                         {{trans('main.start')}}
                     </button>
+                    @if ($all_projects == true)
+                           <p class="card-text mt-3">
+                               <small class="text-muted">{{$_SERVER['SERVER_NAME']}}/project/{{$project->id}} - {{mb_strtolower(trans('main.project_link'))}}</small></p>
+                    @endif
                 </div>
                 <div class="card-footer">
                     <small class="text-muted">{{$project->user->name()}}</small>

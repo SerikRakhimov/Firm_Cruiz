@@ -124,22 +124,22 @@
             </div>
         </div>
 
-        <div class="form-group row" id="is_required_lst_num_str_img_doc_form_group">
+        <div class="form-group row" id="is_required_lst_num_str_txt_img_doc_form_group">
             <div class="col-sm-3 text-right">
                 <label class="form-label"
-                       for="is_required_lst_num_str_img_doc">{{trans('main.is_required_lst_num_str_img_doc')}}</label>
+                       for="is_required_lst_num_str_txt_img_doc">{{trans('main.is_required_lst_num_str_txt_img_doc')}}</label>
             </div>
             <div class="col-sm-7">
                 <input class="@error($key) is-invalid @enderror"
                        type="checkbox"
-                       name="is_required_lst_num_str_img_doc"
-                       id="linkis_required_lst_num_str_img_doc"
+                       name="is_required_lst_num_str_txt_img_doc"
+                       id="linkis_required_lst_num_str_txt_img_doc"
                        placeholder=""
-                       @if ((old('is_required_lst_num_str_img_doc') ?? ($base->is_required_lst_num_str_img_doc ?? false)) ==  true)
+                       @if ((old('is_required_lst_num_str_txt_img_doc') ?? ($base->is_required_lst_num_str_txt_img_doc ?? false)) ==  true)
                        checked
                     @endif
                 >
-                @error('is_required_lst_num_str_img_doc')
+                @error('is_required_lst_num_str_txt_img_doc')
                 <div class="invalid-feedback">
                     {{$message}}
                 </div>
@@ -415,22 +415,22 @@
             </div>
         </div>
 
-        <div class="form-group row" id="is_one_value_lst_str_form_group">
+        <div class="form-group row" id="is_one_value_lst_str_txt_form_group">
             <div class="col-sm-3 text-right">
                 <label class="form-label"
-                       for="is_one_value_lst_str">{{trans('main.is_one_value_lst_str')}}</label>
+                       for="is_one_value_lst_str_txt">{{trans('main.is_one_value_lst_str_txt')}}</label>
             </div>
             <div class="col-sm-7">
                 <input class="@error($key) is-invalid @enderror"
                        type="checkbox"
-                       name="is_one_value_lst_str"
-                       id="linkis_one_value_lst_str"
+                       name="is_one_value_lst_str_txt"
+                       id="linkis_one_value_lst_str_txt"
                        placeholder=""
-                       @if ((old('is_one_value_lst_str') ?? ($base->is_one_value_lst_str ?? false)) ==  true)
+                       @if ((old('is_one_value_lst_str_txt') ?? ($base->is_one_value_lst_str_txt ?? false)) ==  true)
                        checked
                     @endif
                 >
-                @error('is_one_value_lst_str')
+                @error('is_one_value_lst_str_txt')
                 <div class="invalid-feedback">
                     {{$message}}
                 </div>
@@ -599,11 +599,11 @@
         var is_suggest_code = document.getElementById('is_suggest_code_form_group');
         var is_suggest_max_code = document.getElementById('is_suggest_max_code_form_group');
         var is_recalc_code = document.getElementById('is_recalc_code_form_group');
-        var is_required_lst_num_str_img_doc = document.getElementById('is_required_lst_num_str_img_doc_form_group');
+        var is_required_lst_num_str_txt_img_doc = document.getElementById('is_required_lst_num_str_txt_img_doc_form_group');
         var is_tomoderate_img = document.getElementById('is_to_moderate_image_form_group');
         var maxfilesize_img_doc = document.getElementById('maxfilesize_img_doc_form_group');
         var maxfilesize_title_img_doc = document.getElementById('maxfilesize_title_img_doc_form_group');
-        var is_onevalue_str = document.getElementById('is_one_value_lst_str_form_group');
+        var is_onevalue_str = document.getElementById('is_one_value_lst_str_txt_form_group');
         var is_calcname_lst = document.getElementById('is_calcname_lst_form_group');
         var sepa_calcname = document.getElementById('sepa_calcname_form_group');
         var is_same_small_calcname = document.getElementById('is_same_small_calcname_form_group');
@@ -686,22 +686,27 @@
                     val_required_num_str = "visible";
                     val_onevalue_str = "visible";
                     break;
-                // Изображение
+                // Текст
                 case "5":
+                    val_required_num_str = "visible";
+                    val_onevalue_str = "visible";
+                    break;
+                // Изображение
+                case "6":
                     val_required_num_str = "visible";
                     val_tomoderate_img = "visible";
                     val_maxfilesize_img_doc = "visible";
                     val_maxfilesize_title_img_doc = "visible";
                     break;
                 // Документ
-                case "6":
+                case "7":
                     val_required_num_str = "visible";
                     val_maxfilesize_img_doc = "visible";
                     val_maxfilesize_title_img_doc = "visible";
                     break;
             }
             // digits_num.style.display = val_digits_num;
-            // is_required_lst_num_str_img_doc.style.display = val_required_num_str;
+            // is_required_lst_num_str_txt_img_doc.style.display = val_required_num_str;
             // is_onevalue_str.style.display = val_onevalue_str;
             is_code_needed.style.visibility = val_code_needed;
             is_limit_sign_code.style.visibility = val_limit_sign_code;
@@ -712,7 +717,7 @@
             is_suggest_max_code.style.visibility = val_suggest_max_code;
             is_recalc_code.style.visibility = val_recalc_code;
             digits_num.style.visibility = val_digits_num;
-            is_required_lst_num_str_img_doc.style.visibility = val_required_num_str;
+            is_required_lst_num_str_txt_img_doc.style.visibility = val_required_num_str;
             is_tomoderate_img.style.visibility = val_tomoderate_img;
             maxfilesize_img_doc.style.visibility = val_maxfilesize_img_doc;
             maxfilesize_title_img_doc.style.visibility = val_maxfilesize_title_img_doc;
