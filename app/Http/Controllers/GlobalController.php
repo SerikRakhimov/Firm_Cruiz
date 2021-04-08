@@ -87,9 +87,9 @@ class GlobalController extends Controller
         // "$is_list_base_calc = true" нужно
         $is_list_base_calc = true;
         if (!$is_no_sndb_pd_rule) {
-            if ($role->is_list_base_sndb == false) {
+            if ($role->is_list_base_sndbt == false) {
                 if ($base->type_is_number == true || $base->type_is_string == true ||
-                    $base->type_is_date == true || $base->type_is_boolean == true) {
+                    $base->type_is_date == true || $base->type_is_boolean == true  || $base->type_is_txt == true) {
                     $is_list_base_calc = false;
                 }
             }

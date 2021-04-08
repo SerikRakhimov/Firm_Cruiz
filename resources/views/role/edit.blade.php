@@ -115,21 +115,21 @@
             </div>
         </div>
 
-        <div class="form-group row" id="is_list_base_sndb_form_group">
+        <div class="form-group row" id="is_list_base_sndbt_form_group">
             <div class="col-sm-3 text-right">
                 <label class="form-label"
-                       for="is_list_base_sndb">{{trans('main.is_list_base_sndb')}}</label>
+                       for="is_list_base_sndbt">{{trans('main.is_list_base_sndbt')}}</label>
             </div>
             <div class="col-sm-7">
-                <input class="@error('is_list_base_sndb') is-invalid @enderror"
+                <input class="@error('is_list_base_sndbt') is-invalid @enderror"
                        type="checkbox"
-                       name="is_list_base_sndb"
+                       name="is_list_base_sndbt"
                        placeholder=""
-                       @if ((old('is_list_base_sndb') ?? ($role->is_list_base_sndb ?? false)) ==  true)
+                       @if ((old('is_list_base_sndbt') ?? ($role->is_list_base_sndbt ?? false)) ==  true)
                        checked
                     @endif
                 >
-                @error('is_list_base_sndb')
+                @error('is_list_base_sndbt')
                 <div class="invalid-feedback">
                     {{$message}}
                 </div>

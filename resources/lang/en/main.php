@@ -182,7 +182,7 @@ return [
     'user_not_found' => 'User not found',
     'guest' => 'Guest',
     'start' => 'Start',
-    'is_list_base_sndb' => 'Show Bases with types String, Number, Date, Boolean',
+    'is_list_base_sndbt' => 'Show Bases with types String, Number, Date, Boolean, Text',
     'is_list_base_id' => 'Show Bases with types Image, Document',
     'is_all_base_calcname_enable' => 'Show Base with calculated name',
     'is_list_base_sort_creation_date_desc'=>'Sort by record creation date in descending order',
