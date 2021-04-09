@@ -24,7 +24,7 @@
             <img class="card-img-top" src="{{Storage::url('background.png')}}" alt="Card image">
                 <h4 class="card-header">{{$template->name()}}</h4>
                 <div class="card-body">
-                    <p class="card-text">
+                    <p class="card-text text-label">
                         <?php
                         echo nl2br($template->desc());
                         ?>
