@@ -137,7 +137,7 @@ class ItemController extends Controller
                 }
             }
         }
-        return view('item/browser', ['base' => $base, 'project' => $project, 'role' => $role, 'sort_by_code' => $sort_by_code, 'save_by_code' => $save_by_code,
+        return view('item/browser', ['base' => $base, 'project' => $project, 'role' => $role, 'base_right' => $base_right, 'sort_by_code' => $sort_by_code, 'save_by_code' => $save_by_code,
             'items' => $items->paginate(30), 'search' => $search]);
     }
 

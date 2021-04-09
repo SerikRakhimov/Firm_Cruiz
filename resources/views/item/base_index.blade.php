@@ -11,7 +11,6 @@
     use \App\Http\Controllers\MainController;
     $links = $base->child_links->sortBy('parent_base_number');
     $base_right = GlobalController::base_right($base, $role);
-
     ?>
     @include('layouts.show_project_role',['project'=>$project, 'role'=>$role])
     <div class="container-fluid">

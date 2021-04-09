@@ -50,7 +50,7 @@ use \App\Http\Controllers\MainController;
 
 @if(count($items) !=0)
     <?php
-    $tile_view = $base->tile_view();
+    $tile_view = $base->tile_view($base_right);
     $link_image = $tile_view['link'];
     $i = 0;
     ?>
