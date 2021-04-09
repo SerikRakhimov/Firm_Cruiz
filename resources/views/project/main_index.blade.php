@@ -67,13 +67,13 @@
 
                     {{--                ($my_projects ? 1 : 0)--}}
                     <button type="button" class="btn btn-dreamer" title="{{trans('main.start')}}"
-                            onclick="document.location='{{route('project.project', ['project'=>$project->id, 'role'=>$role])}}'">
+                            onclick="document.location='{{route('project.start', ['project'=>$project->id, 'role'=>$role])}}'">
                         <i class="fas fa-play d-inline"></i>
                         {{trans('main.start')}}
                     </button>
                     @if ($all_projects == true)
                            <p class="card-text mt-3">
-                               <small class="text-muted">{{$_SERVER['SERVER_NAME']}}/project/{{$project->id}} - {{mb_strtolower(trans('main.project_link'))}}</small></p>
+                               <small class="text-muted">{{$_SERVER['SERVER_NAME']}}/project/start/{{$project->id}} - {{mb_strtolower(trans('main.project_link'))}}</small></p>
                     @endif
                 </div>
                 <div class="card-footer">

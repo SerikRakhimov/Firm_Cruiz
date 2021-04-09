@@ -397,8 +397,8 @@ Route::get('/project/show_user/{project}', 'ProjectController@show_user')
     ->middleware('auth');
 
 // "->middleware('auth')" не использовать
-Route::get('/project/{project}/{role?}', 'ProjectController@project')
-    ->name('project.project');
+Route::get('/project/start/{project}/{role?}', 'ProjectController@start')
+    ->name('project.start');
 
 Route::get('/project/create_template/{template}', 'ProjectController@create_template')
     ->name('project.create_template')

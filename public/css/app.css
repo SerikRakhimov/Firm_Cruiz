@@ -213,6 +213,12 @@ label {
     color: white;
 }
 
+.text-project {
+    /*background-color: #5f7a91;*/
+    color: #1c5145;
+    font-size: 16px;
+}
+
 
 .text-from-refer {
     color: blue;

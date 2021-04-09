@@ -114,7 +114,7 @@ class ProjectController extends Controller
     }
 
 
-    function project(Project $project, Role $role = null)
+    function start(Project $project, Role $role = null)
     {
         if (!$role) {
             $role = Role::where('template_id', $project->template_id)->where('is_default_for_external', true)->first();
