@@ -276,5 +276,5 @@ return [
     'online_now' => 'Online now',
     'visitors_info' => 'Visitors',
     'sort_by' => 'Sort by',
-    'project_link' => 'Link to the project (it can be sent to users or placed in your account of any social network to attract users)',
+    'project_link' => 'Link to the project (it can be sent to users or placed in your account of any social network to attract customers)',
 ];

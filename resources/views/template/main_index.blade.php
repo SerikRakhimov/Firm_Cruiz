@@ -24,7 +24,11 @@
             <img class="card-img-top" src="{{Storage::url('background.png')}}" alt="Card image">
                 <h4 class="card-header">{{$template->name()}}</h4>
                 <div class="card-body">
-                    <p class="card-text">{{$template->desc()}}</p>
+                    <p class="card-text">
+                        <?php
+                        echo nl2br($template->desc());
+                        ?>
+                    </p>
                     {{--                ($my_projects ? 1 : 0)--}}
                     <button type="button" class="btn btn-dreamer" title="{{trans('main.create_project')}}"
                             onclick="document.location='{{route('project.create_template_user', ['template'=>$template])}}'">
