@@ -89,7 +89,7 @@ class GlobalController extends Controller
         if (!$is_no_sndb_pd_rule) {
             if ($role->is_list_base_sndbt == false) {
                 if ($base->type_is_number() || $base->type_is_string() ||
-                    $base->type_is_date() || $base->type_is_boolean()  || $base->type_is_text()) {
+                    $base->type_is_date() || $base->type_is_boolean() || $base->type_is_text()) {
                     $is_list_base_calc = false;
                 }
             }
@@ -309,7 +309,6 @@ class GlobalController extends Controller
         // Обязательно фильтр на два запроса:
         // where('base_id', $base->id)->where('project_id', $project->id)
         $items = Item::where('base_id', $base->id)->where('project_id', $project->id);
-        echo "count1 = " . count($items->get())." ";
 
         // Сортировать по дате создания записи в порядке убывания
         if ($base_right['is_list_base_sort_creation_date_desc'] == true) {
@@ -327,26 +326,25 @@ class GlobalController extends Controller
             $collection = collect();
             $items = $items->orderBy($name);
 
-            if (count($items->get()) > 0) {
-                // Такая же проверка и в ItemController (function browser(), get_items_for_link())
-                if ($base_right['is_list_base_byuser'] == true) {
-                    if (Auth::check()) {
-                        $items = $items->where('created_user_id', GlobalController::glo_user_id());
-                        echo "count2 = " . count($items->get())." ";
-                    } else {
-                        $items = null;
-                        $collection = null;
-                    }
+            //if (count($items->get()) > 0) {
+            // Такая же проверка и в ItemController (function browser(), get_items_for_link())
+            if ($base_right['is_list_base_byuser'] == true) {
+                if (Auth::check()) {
+                    $items = $items->where('created_user_id', GlobalController::glo_user_id());
+                } else {
+                    $items = null;
+                    $collection = null;
                 }
+            }
 
-                if ($items != null) {
-                    if (count($items->get()) > 0) {
-                        // Сортировка по mains
-                        // иначе Сортировка по наименованию
-                        if (!GlobalController::is_base_calcname_check($base, $base_right)) {
+            if ($items != null) {
+                //if (count($items->get()) > 0) {
+                // Сортировка по mains
+                // иначе Сортировка по наименованию
+                if (!GlobalController::is_base_calcname_check($base, $base_right)) {
 
-                            // Не попадают в список $mains изображения/документы,
-                            // а также связанные поля (они в Mains не хранятся)
+                    // Не попадают в список $mains изображения/документы,
+                    // а также связанные поля (они в Mains не хранятся)
 //            $mains = Main::select(DB::Raw('mains.child_item_id as item_id'))
 //                ->join('links as ln', 'mains.link_id', '=', 'ln.id')
 //                ->join('items as ct', 'mains.child_item_id', '=', 'ct.id')
@@ -359,37 +357,37 @@ class GlobalController extends Controller
 //                ->orderBy('ct.' . $name)
 //                ->distinct();
 
-                            // Не попадают в список $links изображения/документы,
-                            $links = Link::select(DB::Raw('links.*'))
-                                ->join('bases as pb', 'links.parent_base_id', '=', 'pb.id')
-                                ->where('links.child_base_id', '=', $base->id)
-                                ->where('pb.type_is_image', false)
-                                ->where('pb.type_is_document', false)
-                                ->orderBy('links.parent_base_number')->get();
+                    // Не попадают в список $links изображения/документы,
+                    $links = Link::select(DB::Raw('links.*'))
+                        ->join('bases as pb', 'links.parent_base_id', '=', 'pb.id')
+                        ->where('links.child_base_id', '=', $base->id)
+                        ->where('pb.type_is_image', false)
+                        ->where('pb.type_is_document', false)
+                        ->orderBy('links.parent_base_number')->get();
 
-                            $items = $items->get();
-                            $str = "";
-                            foreach ($items as $item) {
-                                $str = "";
-                                foreach ($links as $link) {
-                                    $item_find = MainController::view_info($item->id, $link->id);
-                                    if ($item_find) {
-                                        // Формирование вычисляемой строки для сортировки
-                                        // Для строковых данных для сортировки берутся первые 50 символов
-                                        if ($item_find->base->type_is_list() || $item_find->base->type_is_string()) {
-                                            $str = $str . str_pad(trim($item_find[$name]), 50);
-                                        } else {
-                                            $str = $str . trim($item_find[$name]);
-                                        }
-
-                                    }
+                    $items = $items->get();
+                    $str = "";
+                    foreach ($items as $item) {
+                        $str = "";
+                        foreach ($links as $link) {
+                            $item_find = MainController::view_info($item->id, $link->id);
+                            if ($item_find) {
+                                // Формирование вычисляемой строки для сортировки
+                                // Для строковых данных для сортировки берутся первые 50 символов
+                                if ($item_find->base->type_is_list() || $item_find->base->type_is_string()) {
+                                    $str = $str . str_pad(trim($item_find[$name]), 50);
+                                } else {
+                                    $str = $str . trim($item_find[$name]);
                                 }
-                                // В $collection сохраняется в key - $item->id
-                                $collection[$item->id] = $str;
+
                             }
+                        }
+                        // В $collection сохраняется в key - $item->id
+                        $collection[$item->id] = $str;
+                    }
 
 //            Сортировка коллекции по значению
-                            $collection = $collection->sort();
+                    $collection = $collection->sort();
 
 //              Не удалять
 //            $mains = Main::select(DB::Raw('mains.child_item_id as item_id'))
@@ -408,13 +406,13 @@ class GlobalController extends Controller
 //            $items = Item::joinSub($mains, 'mains', function ($join) {
 //                $join->on('items.id', '=', 'mains.item_id');
 //            });
-                            $ids = $collection->keys()->toArray();
-                            $items = Item::whereIn('id', $ids)
-                                ->orderBy(\DB::raw("FIELD(id, " . implode(',', $ids) . ")"));
-                        }
-                    }
+                    $ids = $collection->keys()->toArray();
+                    $items = Item::whereIn('id', $ids)
+                        ->orderBy(\DB::raw("FIELD(id, " . implode(',', $ids) . ")"));
+                    //}
                 }
             }
+            //}
         }
         $itget = null;
         if ($items != null) {
