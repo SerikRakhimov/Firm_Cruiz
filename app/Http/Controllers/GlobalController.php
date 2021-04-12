@@ -337,7 +337,7 @@ class GlobalController extends Controller
             }
 
             if ($items != null) {
-                //if (count($items->get()) > 0) {
+                if (count($items->get()) > 0) {
                 // Сортировка по mains
                 // иначе Сортировка по наименованию
                 if (!GlobalController::is_base_calcname_check($base, $base_right)) {
@@ -408,7 +408,7 @@ class GlobalController extends Controller
                     $ids = $collection->keys()->toArray();
                     $items = Item::whereIn('id', $ids)
                         ->orderBy(\DB::raw("FIELD(id, " . implode(',', $ids) . ")"));
-                    //}
+                    }
                 }
             }
             //}
