@@ -321,7 +321,6 @@ class GlobalController extends Controller
                 $name = 'name_lang_' . $index;
             }
 
-
             // В $collection сохраняется в key - $item->id
             $collection = collect();
             $items = $items->orderBy($name);
