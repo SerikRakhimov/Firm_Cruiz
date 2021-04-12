@@ -309,6 +309,7 @@ class GlobalController extends Controller
         // Обязательно фильтр на два запроса:
         // where('base_id', $base->id)->where('project_id', $project->id)
         $items = Item::where('base_id', $base->id)->where('project_id', $project->id);
+        echo "count1 = " . count($items->get())." ";
 
         // Сортировать по дате создания записи в порядке убывания
         if ($base_right['is_list_base_sort_creation_date_desc'] == true) {
@@ -331,11 +332,13 @@ class GlobalController extends Controller
                 if ($base_right['is_list_base_byuser'] == true) {
                     if (Auth::check()) {
                         $items = $items->where('created_user_id', GlobalController::glo_user_id());
+                        echo "count2 = " . count($items->get())." ";
                     } else {
                         $items = null;
                         $collection = null;
                     }
                 }
+
                 if ($items != null) {
                     if (count($items->get()) > 0) {
                         // Сортировка по mains
