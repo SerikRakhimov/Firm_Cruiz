@@ -148,10 +148,6 @@
             </tr>
             </thead>
             <tbody>
-            <?php
-            //            $i = $items->firstItem() - 1;
-            $i = 0;
-            ?>
             @foreach($items as $item)
                 <?php
                 $i++;
