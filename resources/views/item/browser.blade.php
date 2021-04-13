@@ -103,12 +103,12 @@ use \App\Http\Controllers\MainController;
                         </div>
                     @endif
                     <div class="card-body">
-                        <h4 class="card-title ml-1 mt-2"><a href="#"
+                        <h5 class="card-title ml-1 mt-2"><a href="#"
                                                             onclick="SelectFile('{{$item->id}}', '{{$item->code}}', '{{$item->name()}}')"
                                                             title="{{$item->name()}}">
                                 {{--                            Где $item->name() выходит в cards выводить "<?php echo GlobalController::to_html();?>"--}}
                                 <?php echo $item->nmbr();?>
-                            </a></h4>
+                            </a></h5>
                     </div>
                 </div>
                 {{--                    </div>--}}
