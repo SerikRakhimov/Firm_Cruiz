@@ -2,18 +2,18 @@
 <div class="container-fluid">
         <p class="text-center">
             <a href="{{route('project.start', ['project' => $project->id, 'role' => $role])}}" title="{{trans('main.bases')}}">
-                <span class="text-project">{{$project->name()}}</span>
+                <mark class="text-project">{{$project->name()}}</mark>
             </a>
         </p>
     <div class="row">
         <div class="col-6 text-left">
             <a href="{{route('project.start', ['project' => $project->id, 'role' => $role])}}" title="{{trans('main.bases')}}">
-                <span class="text-project">@guest{{trans('main.guest')}}@endguest @auth{{Auth::user()->name()}}@endauth</span>
+                <mark class="text-project">@guest{{trans('main.guest')}}@endguest @auth{{Auth::user()->name()}}@endauth</mark>
             </a>
         </div>
         <div class="col-6 text-right">
             <a href="{{route('project.start', ['project' => $project->id, 'role' => $role])}}" title="{{trans('main.bases')}}">
-                <span class="text-project">{{$role->name()}}</span>
+                <mark class="text-project">{{$role->name()}}</mark>
             </a>
         </div>
     </div>

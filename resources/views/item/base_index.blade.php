@@ -66,6 +66,14 @@
     $link_image = $tile_view['link'];
     $i = $items->firstItem() - 1;
     ?>
+    <!---->
+    {{--    <p>Выберите любимого персонажа:</p>--}}
+    {{--    <p><input list="character">--}}
+    {{--        <datalist id="character">--}}
+    {{--            <option value="Чебурашка"></option>--}}
+    {{--            <option value="Крокодил Гена"></option>--}}
+    {{--            <option value="Шапокляк"></option>--}}
+    {{--        </datalist></p>--}}
 
     @if($tile_view['result'] == true)
         <div class="card-columns">
@@ -76,31 +84,34 @@
                 ?>
                 {{--                <div class="card text-center">--}}
                 {{--                    <div class="card card-inverse text-center" style="background-color: rgba(222,255,162,0.23); border-color: #3548ee;">--}}
-                <div class="card text-center">
+                <div class="card shadow">
                     @if($base->is_code_needed == true)
                         <a href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}" title="{{$item->name()}}">
                             <p class="card-header text-label">{{trans('main.code')}}: {{$item->code}}</p>
                         </a>
                     @endif
-                    {{--                        <div class="card-body">--}}
-                    <div class="card-block">
-                        {{--                                https://askdev.ru/q/kak-vyzvat-funkciyu-javascript-iz-tega-href-v-html-276225/--}}
-                        <a href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}" title="{{$item->name()}}">
-                            @if($item_find)
+                    @if($item_find)
+                        <div class="card-block">
+                            {{--                                https://askdev.ru/q/kak-vyzvat-funkciyu-javascript-iz-tega-href-v-html-276225/--}}
+                            <a href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}"
+                               title="{{$item->name()}}">
                                 @include('view.img',['item'=>$item_find, 'size'=>"medium", 'filenametrue'=>false, 'link'=>false, 'img_fluid'=>true, 'title'=>$item->name()])
                                 {{--                            @else--}}
                                 {{--                                <div class="text-danger">--}}
                                 {{--                                    {{GlobalController::empty_html()}}</div>--}}
-                            @endif
-                        </a>
+                            </a>
+                        </div>
+                    @endif
+                    <div class="card-body">
+                        {{--                    <div class="card-footer">--}}
+                        <h5 class="card-title ml-3 mt-2"><a
+                                href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}"
+                                title="{{$item->name()}}">
+                                {{--                            Где $item->name() выходит в cards выводить "<?php echo GlobalController::to_html();?>"--}}
+                                <?php echo $item->nmbr();?>
+                            </a></h5>
+                        {{--                    </div>--}}
                     </div>
-                    {{--                    <div class="card-footer">--}}
-                    <h5 class="card-title mt-2"><a href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}"
-                                                   title="{{$item->name()}}">
-                            {{--                            Где $item->name() выходит в cards выводить "<?php echo GlobalController::to_html();?>"--}}
-                            <?php echo $item->nmbr();?>
-                        </a></h5>
-                    {{--                    </div>--}}
                 </div>
             @endforeach
         </div>
@@ -278,7 +289,7 @@
         </table>
     @endif
     {{$items->links()}}
-{{--    <blockquote class="text-title pt-1 pl-5 pr-5"><?php echo nl2br($project->dc_ext()); ?></blockquote>--}}
+    {{--    <blockquote class="text-title pt-1 pl-5 pr-5"><?php echo nl2br($project->dc_ext()); ?></blockquote>--}}
     <blockquote class="text-title pt-1 pl-5 pr-5"><?php echo nl2br($project->dc_int()); ?></blockquote>
 
 @endsection

@@ -21,9 +21,9 @@
         $i++;
         ?>
         <div class="card shadow">
-            <img class="card-img-top" src="{{Storage::url('background.png')}}" alt="Card image">
-                <h4 class="card-header">{{$template->name()}}</h4>
+{{--            <img class="card-img-top" src="{{Storage::url('background.png')}}" alt="Card image">--}}
                 <div class="card-body">
+                    <h4 class="card-title mb-4">{{$template->name()}}</h4>
                     <p class="card-text text-label">
                         <?php
                         echo nl2br($template->desc());

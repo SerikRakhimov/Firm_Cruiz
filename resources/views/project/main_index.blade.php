@@ -54,13 +54,13 @@
         {{--        </div>--}}
         @if($role)
             <div class="card shadow">
-                <img class="card-img-top" src="{{Storage::url('background.png')}}" alt="Card image">
+{{--                <img class="card-img-top" src="{{Storage::url('background.png')}}" alt="Card image">--}}
                 <p class="card-header">Id = {{$project->id}}</p>
 
                 <div class="card-block">
                     <p class="card-text ml-3 mt-2"><small class="text-muted">{{$project->template->name()}}</small></p>
                 </div>
-                <div class="card-body mb-3">
+                <div class="card-body">
                     <h4 class="card-title mb-4">{{$project->name()}}</h4>
                     {{--                <p class="card-text">{{$project->desc()}}</p>--}}
                     <p class="card-text"><?php echo nl2br($project->dc_ext()); ?></p>

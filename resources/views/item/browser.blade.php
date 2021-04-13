@@ -83,30 +83,33 @@ use \App\Http\Controllers\MainController;
                 {{--                <div class="row">--}}
                 {{--                    @endif--}}
                 {{--                    <div class="col-4">--}}
-                <div class="card text-center">
+                <div class="card shadow">
                     <a href="#"
-                       onclick="javascript:SelectFile('{{$item->id}}', '{{$item->code}}', '{{$item->name()}}')" title="{{$item->name()}}">
+                       onclick="javascript:SelectFile('{{$item->id}}', '{{$item->code}}', '{{$item->name()}}')"
+                       title="{{$item->name()}}">
                         <p class="card-header text-label">{{trans('main.code')}}: {{$item->code}}</p>
                     </a>
-                    <div class="card-block">
-                        {{--                                https://askdev.ru/q/kak-vyzvat-funkciyu-javascript-iz-tega-href-v-html-276225/--}}
-                        <a href="#"
-                           onclick="SelectFile('{{$item->id}}', '{{$item->code}}', '{{$item->name()}}')" title="{{$item->name()}}">
-                            @if($item_find)
+                    @if($item_find)
+                        <div class="card-block text-center">
+                            {{--                                https://askdev.ru/q/kak-vyzvat-funkciyu-javascript-iz-tega-href-v-html-276225/--}}
+                            <a href="#"
+                               onclick="SelectFile('{{$item->id}}', '{{$item->code}}', '{{$item->name()}}')"
+                               title="{{$item->name()}}">
                                 @include('view.img',['item'=>$item_find, 'size'=>"medium", 'filenametrue'=>false, 'link'=>false, 'img_fluid'=>true, 'title'=>$item->name()])
                                 {{--                            @else--}}
                                 {{--                                <div class="text-danger">--}}
                                 {{--                                    {{GlobalController::empty_html()}}</div>--}}
-                            @endif
-                        </a>
-                    </div>
-{{--                    <div class="card-footer">--}}
-                        <h5 class="card-title mt-2"><a href="#"
-                                                  onclick="SelectFile('{{$item->id}}', '{{$item->code}}', '{{$item->name()}}')" title="{{$item->name()}}">
+                            </a>
+                        </div>
+                    @endif
+                    <div class="card-body">
+                        <h5 class="card-title ml-1 mt-2"><a href="#"
+                                                            onclick="SelectFile('{{$item->id}}', '{{$item->code}}', '{{$item->name()}}')"
+                                                            title="{{$item->name()}}">
                                 {{--                            Где $item->name() выходит в cards выводить "<?php echo GlobalController::to_html();?>"--}}
                                 <?php echo $item->nmbr();?>
                             </a></h5>
-{{--                    </div>--}}
+                    </div>
                 </div>
                 {{--                    </div>--}}
 
@@ -169,7 +172,7 @@ use \App\Http\Controllers\MainController;
 @endif
 
 <script>
-     function seach_click() {
+    function seach_click() {
         param = '/{{$sort_by_code == true?"1":"0"}}';
         // " + param + param" правильно
         open('{{route('item.browser', '')}}' + '/' + {{$base->id}} +'/' + {{$project->id}} +'/' + {{$role->id}} +param + param
