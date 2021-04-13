@@ -174,7 +174,8 @@ a, a:visited, a:hover  {
 }
 
 h1, h2, h3, h4, h5, h6 {
-    color: #f79a1c;
+    /*color: #f79a1c;*/
+    color: rgba(247, 154, 28, 0.76);
 }
 
 table {
