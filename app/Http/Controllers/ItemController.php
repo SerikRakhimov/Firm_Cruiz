@@ -1219,13 +1219,14 @@ class ItemController extends Controller
         $link = Link::findOrFail($keys[$index]);
 
         // тип корректировки поля - список
-        if ($link->parent_base->type_is_list()) {
+        if ($link->parent_base->type_is_list() ) {
             if ($values[$index] == 0) {
                 // Нужно
                 // Если запись main существует - то удалить ее
                 if (isset($main->id)) {
                     $main->delete();
                 }
+                // Нужно
                 return;
             }
             $main->parent_item_id = $values[$index];
@@ -1290,6 +1291,17 @@ class ItemController extends Controller
 
         } // тип корректировки поля - строка
         elseif ($link->parent_base->type_is_string()) {
+            if ($link->parent_base->is_required_lst_num_str_txt_img_doc == false) {
+                if ($values[$index] == "") {
+                    // Нужно
+                    // Если запись main существует - то удалить ее
+                    if (isset($main->id)) {
+                        $main->delete();
+                    }
+                    // Нужно
+                    return;
+                }
+            }
             // поиск в таблице items значение с таким же названием и base_id
             $item_find = Item::where('base_id', $link->parent_base_id)->where('project_id', $item->project_id)->where('name_lang_0', $values[$index]);
             if ($link->parent_base->is_one_value_lst_str_txt == false) {
@@ -1343,6 +1355,17 @@ class ItemController extends Controller
         // краткие (ограниченные 255 - размером полей хранятся в $item->name_lang_0 - $item->name_lang_3)
         // связь между таблицами items и text - "один-к-одному", по полю $item->id = $text->item->id
         elseif ($link->parent_base->type_is_text()) {
+            if ($link->parent_base->is_required_lst_num_str_txt_img_doc == false) {
+                if ($values[$index] == "") {
+                    // Нужно
+                    // Если запись main существует - то удалить ее
+                    if (isset($main->id)) {
+                        $main->delete();
+                    }
+                    // Нужно
+                    return;
+                }
+            }
             $item_find = Text::find($main->parent_item_id);
             if (!$item_find) {
                 // создание новой записи в items
@@ -1394,6 +1417,17 @@ class ItemController extends Controller
 
             // тип корректировки поля - не строка и не список
         } else {
+            if (($link->parent_base->type_is_number()) && ($link->parent_base->is_required_lst_num_str_txt_img_doc == false)) {
+                if ($values[$index] == 0) {
+                    // Нужно
+                    // Если запись main существует - то удалить ее
+                    if (isset($main->id)) {
+                        $main->delete();
+                    }
+                    // Нужно
+                    return;
+                }
+            }
             // поиск в таблице items значение с таким же названием и base_id
             $item_find = Item::where('base_id', $link->parent_base_id)->where('project_id', $item->project_id)->where('name_lang_0', $values[$index])->first();
             // если не найдено
