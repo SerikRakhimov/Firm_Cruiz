@@ -563,9 +563,13 @@ class GlobalController extends Controller
         return $result;
     }
 
-    // возвращает первые 255 символов переданной строки
+    // Возвращает первые 255 символов переданной строки
     static function itnm_left($str)
     {
+        // Убрать HTML-теги
+        $str = strip_tags($str);
+        // Нужно - убрать символы перевода строки (https://php.ru/forum/threads/udalenie-simvolov-perevoda-stroki.25065/)
+        $str = str_replace(array("\r\n", "\r", "\n"), '', $str);
         //ограниченные 255 - размером полей хранятся в $item->name_lang_0 - $item->name_lang_3
         $maxlen = 255;
         $result = "";
@@ -593,6 +597,66 @@ class GlobalController extends Controller
     {
         $result = nl2br(self::it_text_name($item));
         return $result;
+    }
+
+    // Проверяет текст на запрещенные html-теги
+    static function text_html_check($text)
+    {
+        // Пробелы нужны "< html" и т.д.
+        $array = array(
+//            "< html",
+            "<html",
+            "<head",
+            "<body",
+            "<script",
+            "<applet",
+            "<form",
+            "<input",
+            "<button",
+            "<audio",
+            "<img",
+            "<video",
+            "<a",
+            "onblur",
+            "onchange",
+            "onclick",
+            "ondblclick",
+            "onfocus",
+            "onkeydown",
+            "onkeypress",
+            "onkeyup",
+            "onload",
+            "onmousedown",
+            "onmousemove",
+            "onmouseout",
+            "onmouseover",
+            "onmouseup",
+            "onreset",
+            "onselect",
+            "onsubmit",
+            "onunload"
+        );
+        $result = false;
+        $message = "";
+        if ($text == "" || $text == null) {
+            $result = false;
+        } else {
+            foreach ($array as $value) {
+                // Для поиска используется без пробела, например "<html" stripos
+                //     if (mb_strpos(mb_strtolower($text), str_replace(" ", "", $value)) === false) {
+                // Поиск без учета регистра с помощью функции stripos
+                // Нужно так проверять "=== false" (https://fb.ru/article/375154/funktsiya-strpos-v-php-opredelenie-pozitsii-podstroki)
+                //if (mb_stripos($text, str_replace(" ", "", $value)) === false) {
+                if (mb_stripos($text, $value) === false) {
+                } else {
+                    $result = true;
+                    // В переменную message присваивается с пробелом, чтобы при выводе echo $message эти теги не срабатывали
+                    $message = trans('main.text_must_not_contain') . " '" . $value . "'";
+                    break;
+                }
+            }
+        }
+        return ['result' => $result, 'message' => $message];
     }
 
 }

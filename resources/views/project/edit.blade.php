@@ -41,8 +41,8 @@
                             <option value="{{$template->id}}"
                             @if ($update)
                                 "(int) 0" нужно
-{{--                                @if ((old('template_id') ?? ($key ?? (int) 0)) ==  $project->template_id)--}}
-                                    @if ((old('template_id') ?? ($project->template_id ?? (int) 0)) ==  $template->id)
+                                {{--                                @if ((old('template_id') ?? ($key ?? (int) 0)) ==  $project->template_id)--}}
+                                @if ((old('template_id') ?? ($project->template_id ?? (int) 0)) ==  $template->id)
                                     selected
                                 @endif
                             @endif
@@ -74,12 +74,14 @@
                            class="form-control @error('name_lang_' . $key) is-invalid @enderror"
                            placeholder=""
                            value="{{ old('name_lang_' . $key) ?? ($project['name_lang_' . $key] ?? '') }}">
+                    @error('name_lang_' . $key)
+                    <div class="text-danger">
+                        {{$message}}
+                    </div>
+                    @enderror
                 </div>
-                @error('name_lang_' . $key)
-                <div class="text-danger">
-                    {{$message}}
+                <div class="col-sm-2">
                 </div>
-                @enderror
             @endforeach
         </div>
 
@@ -94,17 +96,19 @@
                     <textarea
                         name="dc_ext_lang_{{$key}}"
                         id="dc_ext_lang_{{$key}}"
-                        rows = "5"
+                        rows="5"
                         class="form-control @error('dc_ext_lang_' . $key) is-invalid @enderror"
                         placeholder="">
                         {{ old('dc_ext_lang_' . $key) ?? ($project['dc_ext_lang_' . $key] ?? '') }}
                         </textarea>
+                    @error('dc_ext_lang_' . $key)
+                    <div class="text-danger">
+                        {{$message}}
+                    </div>
+                    @enderror
                 </div>
-                @error('dc_ext_lang_' . $key)
-                <div class="text-danger">
-                    {{$message}}
+                <div class="col-sm-2">
                 </div>
-                @enderror
             @endforeach
         </div>
 
@@ -119,17 +123,19 @@
                     <textarea
                         name="dc_int_lang_{{$key}}"
                         id="dc_int_lang_{{$key}}"
-                        rows = "5"
+                        rows="5"
                         class="form-control @error('dc_int_lang_' . $key) is-invalid @enderror"
                         placeholder="">
                         {{ old('dc_int_lang_' . $key) ?? ($project['dc_int_lang_' . $key] ?? '') }}
                         </textarea>
+                    @error('dc_int_lang_' . $key)
+                    <div class="text-danger">
+                        {{$message}}
+                    </div>
+                    @enderror
                 </div>
-                @error('dc_int_lang_' . $key)
-                <div class="text-danger">
-                    {{$message}}
+                <div class="col-sm-2">
                 </div>
-                @enderror
             @endforeach
         </div>
 
@@ -191,10 +197,10 @@
                     <button type="button" class="btn btn-dreamer" title="{{trans('main.cancel')}}"
                             @if($is_template && $is_user)
                             onclick="document.location='{{route('template.main_index')}}'"
-                        @else
-                            @include('layouts.project.previous_url')
+                    @else
+                        @include('layouts.project.previous_url')
                         @endif
-                        >
+                    >
                         {{--                    <i class="fas fa-arrow-left"></i>--}}
                         {{trans('main.cancel')}}
                     </button>

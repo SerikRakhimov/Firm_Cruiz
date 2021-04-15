@@ -464,6 +464,23 @@ class ItemController extends Controller
                 }
             }
         }
+        // Проверка полей с типом "текст" на наличие запрещенных тегов HTML
+        if ($base->type_is_text()) {
+            $errors = false;
+            foreach (config('app.locales') as $lang_key => $lang_value) {
+                $text_html_check = GlobalController::text_html_check($request['name_lang_' . $lang_key]);
+                if ($text_html_check['result'] == true) {
+                    $array_mess['name_lang_' . $lang_key] = $text_html_check['message'] . '!';
+                    $errors = true;
+                }
+            }
+            if ($errors) {
+                // повторный вызов формы
+                return redirect()->back()
+                    ->withInput()
+                    ->withErrors($array_mess);
+            }
+        }
 
         if ($base->type_is_image() || $base->type_is_document()) {
             if ($request->hasFile('name_lang_0')) {
@@ -767,6 +784,30 @@ class ItemController extends Controller
                         $array_mess[$key] = trans('main.no_data_on') . ' "' . $link->parent_base->name() . '"!';
                         $errors = true;
                     }
+                }
+            }
+            // Проверка полей с типом "текст" на наличие запрещенных тегов HTML
+            if ($work_base->type_is_text()) {
+                // поиск в таблице items значение с таким же названием и base_id
+                $name_lang_value = null;
+                $name_lang_key = null;
+                $i = 0;
+                foreach (config('app.locales') as $lang_key => $lang_value) {
+                    if ($i == 0) {
+                        $name_lang_key = $key;
+                        $name_lang_value = $value;
+                    }
+                    // начиная со второго(индекс==1) элемента массива языков учитывать
+                    if ($i > 0) {
+                        $name_lang_key = $key . '_' . $lang_key;
+                        $name_lang_value = $strings_inputs[$name_lang_key];
+                    }
+                    $text_html_check = GlobalController::text_html_check($name_lang_value);
+                    if ($text_html_check['result'] == true) {
+                        $array_mess[$name_lang_key] = $text_html_check['message'] . '!';
+                        $errors = true;
+                    }
+                    $i = $i + 1;
                 }
             }
         }
@@ -1182,7 +1223,7 @@ class ItemController extends Controller
             if ($values[$index] == 0) {
                 // Нужно
                 // Если запись main существует - то удалить ее
-                if(isset($main->id)){
+                if (isset($main->id)) {
                     $main->delete();
                 }
                 return;
@@ -1555,6 +1596,24 @@ class ItemController extends Controller
             }
         }
 
+        // Проверка полей с типом "текст" на наличие запрещенных тегов HTML
+        if ($item->base->type_is_text()) {
+            $errors = false;
+            foreach (config('app.locales') as $lang_key => $lang_value) {
+                $text_html_check = GlobalController::text_html_check($request['name_lang_' . $lang_key]);
+                if ($text_html_check['result'] == true) {
+                    $array_mess['name_lang_' . $lang_key] = $text_html_check['message'] . '!';
+                    $errors = true;
+                }
+            }
+            if ($errors) {
+                // повторный вызов формы
+                return redirect()->back()
+                    ->withInput()
+                    ->withErrors($array_mess);
+            }
+        }
+
         if ($item->base->type_is_image() || $item->base->type_is_document()) {
             if ($request->hasFile('name_lang_0')) {
                 $fs = $request->file('name_lang_0')->getSize();
@@ -1873,8 +1932,31 @@ class ItemController extends Controller
                     }
                 }
             }
+            // Проверка полей с типом "текст" на наличие запрещенных тегов HTML
+            if ($work_base->type_is_text()) {
+                // поиск в таблице items значение с таким же названием и base_id
+                $name_lang_value = null;
+                $name_lang_key = null;
+                $i = 0;
+                foreach (config('app.locales') as $lang_key => $lang_value) {
+                    if ($i == 0) {
+                        $name_lang_key = $key;
+                        $name_lang_value = $value;
+                    }
+                    // начиная со второго(индекс==1) элемента массива языков учитывать
+                    if ($i > 0) {
+                        $name_lang_key = $key . '_' . $lang_key;
+                        $name_lang_value = $strings_inputs[$name_lang_key];
+                    }
+                    $text_html_check = GlobalController::text_html_check($name_lang_value);
+                    if ($text_html_check['result'] == true) {
+                        $array_mess[$name_lang_key] = $text_html_check['message'] . '!';
+                        $errors = true;
+                    }
+                    $i = $i + 1;
+                }
+            }
         }
-
         if ($errors) {
             // повторный вызов формы
             return redirect()->back()
@@ -2426,7 +2508,7 @@ class ItemController extends Controller
                             } else {
                                 $result_item_name = "<a href='" . Storage::url($item->filename()) . "'><img src='" . Storage::url($item->filename()) . "' height='50' alt='' title='" . $item->filename() . "'></a>";
                             }
-                        } elseif($item->base->type_is_text()) {
+                        } elseif ($item->base->type_is_text()) {
                             $result_item_name = GlobalController::it_txnm_n2b($item);
                         } else {
                             // $numcat = false - не выводить числовых поля с разрядом тысячи/миллионы/миллиарды

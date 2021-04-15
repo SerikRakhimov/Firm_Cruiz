@@ -77,12 +77,23 @@ class TemplateController extends Controller
         }
         $request->validate($this->rules());
 
+        $array_mess = [];
+        $this->check($request, $array_mess);
+
+        if (count($array_mess) > 0) {
+            return redirect()->back()
+                ->withInput()
+                ->withErrors($array_mess);
+        }
+
         // установка часового пояса нужно для сохранения времени
         date_default_timezone_set('Asia/Almaty');
 
         $template = new Template($request->except('_token', '_method'));
 
         $this->set($request, $template);
+
+
         //https://laravel.demiart.ru/laravel-sessions/
         if ($request->session()->has('templates_previous_url')) {
             return redirect(session('templates_previous_url'));
@@ -101,6 +112,15 @@ class TemplateController extends Controller
             $request->validate($this->rules());
         }
 
+        $array_mess = [];
+        $this->check($request, $array_mess);
+
+        if (count($array_mess) > 0) {
+            return redirect()->back()
+                ->withInput()
+                ->withErrors($array_mess);
+        }
+
         $data = $request->except('_token', '_method');
 
         $template->fill($data);
@@ -113,6 +133,16 @@ class TemplateController extends Controller
             return redirect()->back();
         }
     }
+
+    function check(Request $request, &$array_mess)
+    {
+        foreach (config('app.locales') as $lang_key => $lang_value) {
+            $text_html_check = GlobalController::text_html_check($request['desc_lang_' . $lang_key]);
+            if ($text_html_check['result'] == true) {
+                $array_mess['desc_lang_' . $lang_key] = $text_html_check['message'] . '!';
+            }
+        }
+     }
 
     function set(Request $request, Template &$template)
     {

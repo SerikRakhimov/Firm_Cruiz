@@ -61,12 +61,14 @@
                            placeholder="">
                         {{ old('desc_lang_' . $key) ?? ($template['desc_lang_' . $key] ?? '') }}
                         </textarea>
-                </div>
-                @error('desc_lang_' . $key)
+                  @error('desc_lang_' . $key)
                 <div class="text-danger">
                     {{$message}}
                 </div>
                 @enderror
+                </div>
+                <div class="col-2">
+                </div>
             @endforeach
         </div>
 

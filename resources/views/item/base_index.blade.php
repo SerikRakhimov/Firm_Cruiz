@@ -74,7 +74,10 @@
     {{--            <option value="Крокодил Гена"></option>--}}
     {{--            <option value="Шапокляк"></option>--}}
     {{--        </datalist></p>--}}
-
+    {{--    <details>--}}
+    {{--        <summary>Информация об авторе</summary>--}}
+    {{--        <p>Бендер Родригез</p>--}}
+    {{--    </details>--}}
     @if($tile_view['result'] == true)
         <div class="card-columns">
             @foreach($items as $item)
@@ -92,13 +95,13 @@
                     @endif
                     @if($item_find)
                         <div class="card-block">
-                            {{--                                https://askdev.ru/q/kak-vyzvat-funkciyu-javascript-iz-tega-href-v-html-276225/--}}
+                            {{-- https://askdev.ru/q/kak-vyzvat-funkciyu-javascript-iz-tega-href-v-html-276225/--}}
                             <a href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}"
                                title="{{$item->name()}}">
-                                @include('view.img',['item'=>$item_find, 'size'=>"medium", 'filenametrue'=>false, 'link'=>false, 'img_fluid'=>true, 'title'=>$item->name()])
-                                {{--                            @else--}}
-                                {{--                                <div class="text-danger">--}}
-                                {{--                                    {{GlobalController::empty_html()}}</div>--}}
+                            @include('view.img',['item'=>$item_find, 'size'=>"medium", 'filenametrue'=>false, 'link'=>false, 'img_fluid'=>true, 'title'=>$item->name()])
+                                {{--                                                            @else--}}
+                                {{--                                                                <div class="text-danger">--}}
+                                {{--                                                                    {{GlobalController::empty_html()}}</div>--}}
                             </a>
                         </div>
                     @endif

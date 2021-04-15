@@ -208,6 +208,15 @@ class ProjectController extends Controller
         }
         $request->validate($this->rules());
 
+        $array_mess = [];
+        $this->check($request, $array_mess);
+
+        if (count($array_mess) > 0) {
+            return redirect()->back()
+                ->withInput()
+                ->withErrors($array_mess);
+        }
+
         // установка часового пояса нужно для сохранения времени
         date_default_timezone_set('Asia/Almaty');
 
@@ -247,6 +256,15 @@ class ProjectController extends Controller
             $request->validate($this->rules());
         }
 
+        $array_mess = [];
+        $this->check($request, $array_mess);
+
+        if (count($array_mess) > 0) {
+            return redirect()->back()
+                ->withInput()
+                ->withErrors($array_mess);
+        }
+
         $data = $request->except('_token', '_method');
 
         $project->fill($data);
@@ -257,6 +275,20 @@ class ProjectController extends Controller
             return redirect(session('projects_previous_url'));
         } else {
             return redirect()->back();
+        }
+    }
+
+    function check(Request $request, &$array_mess)
+    {
+        foreach (config('app.locales') as $lang_key => $lang_value) {
+            $text_html_check = GlobalController::text_html_check($request['dc_ext_lang_' . $lang_key]);
+            if ($text_html_check['result'] == true) {
+                 $array_mess['dc_ext_lang_' . $lang_key] = $text_html_check['message'] . '!';
+            }
+            $text_html_check = GlobalController::text_html_check($request['dc_int_lang_' . $lang_key]);
+            if ($text_html_check['result'] == true) {
+                $array_mess['dc_int_lang_' . $lang_key] = $text_html_check['message'] . '!';
+            }
         }
     }
 

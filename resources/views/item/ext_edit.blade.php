@@ -661,9 +661,8 @@
                                                       rows="5"
                                                       class="form-control @error($input_name) is-invalid @enderror"
                                                       placeholder="">
-                                                   {{(old($input_name)) ?? (($value != null) ? Item::find($value)['name_lang_'.$lang_key] : '')}}
+                                                   {{(old($input_name)) ?? (($value != null) ? Item::find($value)->text['name_lang_'.$lang_key] : '')}}
                                             </textarea>
-
                                         @error($input_name)
                                         <div class="invalid-feedback">
                                             {{--                                    <div class="text-danger">--}}
@@ -713,7 +712,8 @@
                                 @endif
                             >
                                 @if ((count($items) == 0)))
-                                <option value='0'>{{trans('main.no_information_on')}} "{{$result['result_parent_base_name']}}"!
+                                <option value='0'>{{trans('main.no_information_on')}}
+                                    "{{$result['result_parent_base_name']}}"!
                                 </option>
                                 @else
                                     @if(!$link->parent_base->is_required_lst_num_str_txt_img_doc)
