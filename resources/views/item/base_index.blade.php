@@ -107,7 +107,7 @@
                     @endif
                     <div class="card-body">
                         {{--                    <div class="card-footer">--}}
-                        <h5 class="card-title ml-3"><a
+                        <h5 class="card-title text-center"><a
                                 href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}"
                                 title="{{$item->name()}}">
                                 {{--                            Где $item->name() выходит в cards выводить "<?php echo GlobalController::to_html();?>"--}}
