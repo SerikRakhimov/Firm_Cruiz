@@ -797,10 +797,12 @@ class ItemController extends Controller
                         $name_lang_key = $key;
                         $name_lang_value = $value;
                     }
-                    // начиная со второго(индекс==1) элемента массива языков учитывать
-                    if ($i > 0) {
-                        $name_lang_key = $key . '_' . $lang_key;
-                        $name_lang_value = $strings_inputs[$name_lang_key];
+                    if ($link->parent_base->is_one_value_lst_str_txt == false) {
+                        // начиная со второго(индекс==1) элемента массива языков учитывать
+                        if ($i > 0) {
+                            $name_lang_key = $key . '_' . $lang_key;
+                            $name_lang_value = $strings_inputs[$name_lang_key];
+                        }
                     }
                     $text_html_check = GlobalController::text_html_check($name_lang_value);
                     if ($text_html_check['result'] == true) {
@@ -1219,7 +1221,7 @@ class ItemController extends Controller
         $link = Link::findOrFail($keys[$index]);
 
         // тип корректировки поля - список
-        if ($link->parent_base->type_is_list() ) {
+        if ($link->parent_base->type_is_list()) {
             if ($values[$index] == 0) {
                 // Нужно
                 // Если запись main существует - то удалить ее
@@ -1292,7 +1294,18 @@ class ItemController extends Controller
         } // тип корректировки поля - строка
         elseif ($link->parent_base->type_is_string()) {
             if ($link->parent_base->is_required_lst_num_str_txt_img_doc == false) {
-                if ($values[$index] == "") {
+                $main_delete = $values[$index] == "";
+                if ($link->parent_base->is_one_value_lst_str_txt == false) {
+                    $i = 0;
+                    foreach (config('app.locales') as $lang_key => $lang_value) {
+                        // начиная со второго(индекс==1) элемента массива языков учитывать
+                        if ($i > 0) {
+                            $main_delete = $main_delete && ($strings_inputs[$link->id . '_' . $lang_key] == "");
+                        }
+                        $i = $i + 1;
+                    }
+                }
+                if ($main_delete) {
                     // Нужно
                     // Если запись main существует - то удалить ее
                     if (isset($main->id)) {
@@ -1356,7 +1369,18 @@ class ItemController extends Controller
         // связь между таблицами items и text - "один-к-одному", по полю $item->id = $text->item->id
         elseif ($link->parent_base->type_is_text()) {
             if ($link->parent_base->is_required_lst_num_str_txt_img_doc == false) {
-                if ($values[$index] == "") {
+                $main_delete = $values[$index] == "";
+                if ($link->parent_base->is_one_value_lst_str_txt == false) {
+                    $i = 0;
+                    foreach (config('app.locales') as $lang_key => $lang_value) {
+                        // начиная со второго(индекс==1) элемента массива языков учитывать
+                        if ($i > 0) {
+                            $main_delete = $main_delete && ($strings_inputs[$link->id . '_' . $lang_key] == "");
+                        }
+                        $i = $i + 1;
+                    }
+                }
+                if ($main_delete) {
                     // Нужно
                     // Если запись main существует - то удалить ее
                     if (isset($main->id)) {
@@ -1977,10 +2001,12 @@ class ItemController extends Controller
                         $name_lang_key = $key;
                         $name_lang_value = $value;
                     }
-                    // начиная со второго(индекс==1) элемента массива языков учитывать
-                    if ($i > 0) {
-                        $name_lang_key = $key . '_' . $lang_key;
-                        $name_lang_value = $strings_inputs[$name_lang_key];
+                    if ($link->parent_base->is_one_value_lst_str_txt == false) {
+                        // начиная со второго(индекс==1) элемента массива языков учитывать
+                        if ($i > 0) {
+                            $name_lang_key = $key . '_' . $lang_key;
+                            $name_lang_value = $strings_inputs[$name_lang_key];
+                        }
                     }
                     $text_html_check = GlobalController::text_html_check($name_lang_value);
                     if ($text_html_check['result'] == true) {
