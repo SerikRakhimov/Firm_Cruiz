@@ -196,7 +196,8 @@
                                     id="name_lang_{{$key}}"
                                     rows="5"
                                     class="form-control @error('name_lang_' . $key) is-invalid @enderror"
-                                    placeholder="">
+                                    placeholder=""
+                                    maxlength="1000">
                                        {{ old('name_lang_' . $key) ?? ($item->text['name_lang_' . $key] ?? '') }}"
                                 </textarea>
                                 {{--                            <div class="invalid-feedback">--}}
@@ -242,7 +243,8 @@
                                            id="name_lang_{{$key}}"
                                            class="form-control @error('name_lang_' . $key) is-invalid @enderror"
                                            placeholder=""
-                                           value="{{ old('name_lang_' . $key) ?? ($item['name_lang_' . $key] ?? '') }}">
+                                           value="{{ old('name_lang_' . $key) ?? ($item['name_lang_' . $key] ?? '') }}"
+                                           maxlength="255">
                                     {{--                            <div class="invalid-feedback">--}}
                                     {{--                                Не заполнена строка!--}}
                                     {{--                            </div>--}}
@@ -599,9 +601,8 @@
                                                id="link{{$input_name}}"
                                                class="form-control @error($input_name) is-invalid @enderror"
                                                placeholder=""
-                                               value="{{(old($input_name)) ?? (($value != null) ? Item::find($value)['name_lang_'.$lang_key] : '')}}
-                                                   "
-                                        >
+                                               value="{{(old($input_name)) ?? (($value != null) ? Item::find($value)['name_lang_'.$lang_key] : '')}}"
+                                               maxlength="255">
                                         @error($input_name)
                                         <div class="invalid-feedback">
                                             {{--                                    <div class="text-danger">--}}
@@ -660,7 +661,8 @@
                                                       id="link{{$input_name}}"
                                                       rows="5"
                                                       class="form-control @error($input_name) is-invalid @enderror"
-                                                      placeholder="">
+                                                      placeholder=""
+                                                      maxlength="1000">
                                                    {{(old($input_name)) ?? (($value != null) ? Item::find($value)->text['name_lang_'.$lang_key] : '')}}
                                             </textarea>
                                         @error($input_name)

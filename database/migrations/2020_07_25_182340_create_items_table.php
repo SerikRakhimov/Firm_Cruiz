@@ -17,12 +17,12 @@ class CreateItemsTable extends Migration
         Schema::create('items', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('base_id')->default(0);
-            // размер строкового поля 1000 также прописан в ItemController::calc_value_func()
-            $table->string('code',255)->default("");
-            $table->string('name_lang_0',500)->default("");
-            $table->string('name_lang_1',500)->default("");
-            $table->string('name_lang_2',500)->default("");
-            $table->string('name_lang_3',500)->default("");
+            // размер строкового поля 255 также прописан в ItemController::calc_value_func()
+            $table->string('code',50)->default("");
+            $table->string('name_lang_0',255)->default("");
+            $table->string('name_lang_1',255)->default("");
+            $table->string('name_lang_2',255)->default("");
+            $table->string('name_lang_3',255)->default("");
             $table->timestamps();
             $table->index('base_id');
             //$table->unique(['base_id', 'code']);
