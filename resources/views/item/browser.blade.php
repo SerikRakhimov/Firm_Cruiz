@@ -87,7 +87,7 @@ use \App\Http\Controllers\MainController;
                     <a href="#"
                        onclick="javascript:SelectFile('{{$item->id}}', '{{$item->code}}', '{{$item->name()}}')"
                        title="{{$item->name()}}">
-                        <p class="card-header text-label">{{trans('main.code')}}: {{$item->code}}</p>
+                        <p class="card-header text-center text-label">{{trans('main.code')}}: {{$item->code}}</p>
                     </a>
                     @if($item_find)
                         <div class="card-block text-center">

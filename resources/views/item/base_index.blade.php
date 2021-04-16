@@ -90,7 +90,7 @@
                 <div class="card shadow">
                     @if($base->is_code_needed == true)
                         <a href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}" title="{{$item->name()}}">
-                            <p class="card-header text-label">{{trans('main.code')}}: {{$item->code}}</p>
+                            <p class="card-header text-center text-label">{{trans('main.code')}}: {{$item->code}}</p>
                         </a>
                     @endif
                     @if($item_find)
