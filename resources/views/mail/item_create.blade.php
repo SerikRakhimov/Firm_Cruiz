@@ -3,8 +3,10 @@ use App\Http\Controllers\MainController;
 $link_image = $item->base->link_primary_image();
 $item_find = null;
 if ($link_image) {
+    echo "111";
     $item_find = MainController::view_info($item->id, $link_image->id);
 } else {
+    echo "000";
     $item_find = null;
 }
 ?>
