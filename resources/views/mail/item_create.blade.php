@@ -1,12 +1,12 @@
 <?php
 use App\Http\Controllers\MainController;
-$link_image = $item->base->link_primary_image();
-$item_find = null;
-if ($link_image) {
-    $item_find = MainController::view_info($item->id, $link_image->id);
-} else {
-    $item_find = null;
-}
+//$link_image = $item->base->link_primary_image();
+//$item_find = null;
+//if ($link_image) {
+//    $item_find = MainController::view_info($item->id, $link_image->id);
+//} else {
+//    $item_find = null;
+//}
 ?>
 <p>{{trans('main.project')}}: <b>{{$item->project->name()}}</b></p>
 <hr>
@@ -16,16 +16,9 @@ if ($link_image) {
 @if($item->base->is_code_needed == true)
     <p>{{trans('main.code')}}: <b>{{$item->code}}</b></p>
 @endif
-@if($link_image)
-    111111111111111111111 {{$item->base_id}}
-@else
-    000000000000000000000 {{$item->base_id}}
-@endif
-@if($item_find)
-    @include('view.img',['item'=>$item_find, 'size'=>"medium", 'filenametrue'=>false, 'link'=>false, 'img_fluid'=>true, 'title'=>$item->name()])
-    @else
-    NONONONO
-@endif
+{{--@if($item_find)--}}
+{{--    @include('view.img',['item'=>$item_find, 'size'=>"medium", 'filenametrue'=>false, 'link'=>false, 'img_fluid'=>true, 'title'=>$item->name()])--}}
+{{--@endif--}}
 <p>{{trans('main.name')}}:<br><b><?php echo $item->nmbr();?></b></p><br>
 <p class="text-label">{{trans('main.created_user_date_time')}}:
     <b>{{$item->created_user_date_time()}}</b><br>
