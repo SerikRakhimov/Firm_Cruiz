@@ -95,6 +95,7 @@
         <div class="title_small m-b-md">
             {{mb_strtolower(trans('main.app_info_second'))}}
         </div>
+        <img src="{{Storage::url('logotype.png')}}" width="250" height="250" class="d-inline-block align-top" alt="" loading="lazy">
         <p><a href="mailto:support@abakusonline.com">support@abakusonline.com</a></p>
         {{--                <div class="title m-b-md">--}}
         {{--                    Abakus - учетная платформа--}}
