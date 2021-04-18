@@ -3,10 +3,8 @@ use App\Http\Controllers\MainController;
 $link_image = $item->base->link_primary_image();
 $item_find = null;
 if ($link_image) {
-    echo "111";
     $item_find = MainController::view_info($item->id, $link_image->id);
 } else {
-    echo "000";
     $item_find = null;
 }
 ?>
@@ -18,8 +16,15 @@ if ($link_image) {
 @if($item->base->is_code_needed == true)
     <p>{{trans('main.code')}}: <b>{{$item->code}}</b></p>
 @endif
+@if($link_image)
+    111111111111111111111
+@else
+    000000000000000000000
+@endif
 @if($item_find)
     @include('view.img',['item'=>$item_find, 'size'=>"medium", 'filenametrue'=>false, 'link'=>false, 'img_fluid'=>true, 'title'=>$item->name()])
+    @else
+    NONONONO
 @endif
 <p>{{trans('main.name')}}:<br><b><?php echo $item->nmbr();?></b></p><br>
 <p class="text-label">{{trans('main.created_user_date_time')}}:
