@@ -1,5 +1,6 @@
 <?php
 use App\Http\Controllers\GlobalController;
+$base_right = GlobalController::base_right($item->base, $role);
 $tile_view = $item->base->tile_view($base_right);
 $link_image = $tile_view['link'];
 $item_find = MainController::view_info($item->id, $link_image->id);
