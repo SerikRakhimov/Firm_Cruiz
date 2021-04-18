@@ -19,7 +19,7 @@ if ($link_image) {
 @if($link_image)
     111111111111111111111 {{$item->base_id}}
 @else
-    000000000000000000000
+    000000000000000000000 {{$item->base_id}}
 @endif
 @if($item_find)
     @include('view.img',['item'=>$item_find, 'size'=>"medium", 'filenametrue'=>false, 'link'=>false, 'img_fluid'=>true, 'title'=>$item->name()])
