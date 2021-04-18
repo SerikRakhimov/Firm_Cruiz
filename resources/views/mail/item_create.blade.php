@@ -17,7 +17,7 @@ if ($link_image) {
     <p>{{trans('main.code')}}: <b>{{$item->code}}</b></p>
 @endif
 @if($link_image)
-    111111111111111111111
+    111111111111111111111 {{$item->base_id}}
 @else
     000000000000000000000
 @endif
