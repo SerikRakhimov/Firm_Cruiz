@@ -256,4 +256,17 @@ class Base extends Model
         return ['result' => $result, 'link' => $link];
     }
 
+    function link_primary_image()
+    {
+        $link = null;
+        $links = $this->child_links();
+        $link = $links->where('parent_is_primary_image', true)->first();
+        if ($link) {
+            if ($link->parent_base->type_is_image()==false) {
+                $link = null;
+            }
+        }
+        return $link;
+    }
+
 }

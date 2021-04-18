@@ -958,7 +958,7 @@ class ItemController extends Controller
             if ($base_right['is_edit_email_base_create'] == true) {
                 $email_to = $item->project->user->email;
                 $appname = config('app.name', 'Abakus');
-                Mail::send(['html' => 'mail/item_create'], ['item' => $item, 'role' => $role],
+                Mail::send(['html' => 'mail/item_create'], ['item' => $item],
                     function ($message) use ($email_to, $appname, $item) {
                         $message->to($email_to, '')->subject(trans('main.new_record') . ' - ' . $item->base->name());
                         $message->from(env('MAIL_FROM_ADDRESS', ''), $appname);

@@ -1,11 +1,8 @@
 <?php
 use App\Http\Controllers\MainController;
-use App\Http\Controllers\GlobalController;
-$base_right = GlobalController::base_right($item->base, $role);
-$tile_view = $item->base->tile_view($base_right);
-$link_image = $tile_view['link'];
+$link_image = $item->base->link_primary_image();
 $item_find = null;
-if ($tile_view['result'] == true) {
+if ($link_image) {
     $item_find = MainController::view_info($item->id, $link_image->id);
 } else {
     $item_find = null;
