@@ -1,5 +1,5 @@
 <?php
-use App\Http\Controllers\GlobalController;
+use App\Http\Controllers\MainController;
 use App\Http\Controllers\GlobalController;
 $base_right = GlobalController::base_right($item->base, $role);
 $tile_view = $item->base->tile_view($base_right);
