@@ -4,20 +4,20 @@ use \App\Http\Controllers\GlobalController;
 
 ?>
 @if($item->base->type_is_image())
-    @if($item->img_doc_exist())
-        @if($filenametrue == true)
-            @if($link == true)
+                 @if($item->img_doc_exist())
+                                    @if($filenametrue == true)
+                        @if($link == true)
                 <a href="{{Storage::url($item->filename(true))}}">
-                    @endif
+                            @endif
                     <img src="{{Storage::url($item->filename(true))}}"
                     @else
-                        @if($link == true)
+                                        @if($link == true)
                             <a href="{{Storage::url($item->filename())}}">
-                                @endif
+                                        @endif
                                 <img
-                                    @if($img_fluid == true)
+                                        @if($img_fluid == true)
                                     class="img-fluid"
-                                    @endif
+                                        @endif
                                     src="{{Storage::url($item->filename())}}"
                                     @endif
                                     height=
@@ -25,15 +25,15 @@ use \App\Http\Controllers\GlobalController;
                                         alt="" title=
                                     @if($title == "")
                                         "{{$item->title_img()}}"
-                                @elseif($title == "empty")
+                                    @elseif($title == "empty")
                                     ""
-                                @else
+                                    @else
                                     "{{$title}}"
-                                @endif
+                                    @endif
                                 >
                                 @if($link == true)
-                            </a>
-                        @endif
+                                    </a>
+                                @endif
                         @if($item->is_moderation_info() == true)
                             <div class="text-danger">
                                 {{$item->title_img()}}</div>
