@@ -77,7 +77,7 @@
     {{--        @endif--}}
     {{--    @endforeach--}}
 
-    <p class="text-label">
+        <p class="text-label">
         @foreach($array_calc as $key=>$value)
             <?php
             $link = Link::find($key);
@@ -96,7 +96,7 @@
                             ?>
                         </span>
                     @elseif($link->parent_base->type_is_image())
-                        {{--                            <br>--}}
+                                                    <br>
                         @include('view.img',['item'=>$item_find, 'size'=>"medium", 'filenametrue'=>false, 'link'=>true, 'img_fluid'=>false, 'title'=>""])
                         {{--                            <a href="{{Storage::url($item_find->filename())}}">--}}
                         {{--                                <img src="{{Storage::url($item_find->filename())}}" height="250"--}}
