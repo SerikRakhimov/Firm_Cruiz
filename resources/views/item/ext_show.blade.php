@@ -48,7 +48,7 @@
             {{--            похожая проверка в base_index.blade.php--}}
             @if(GlobalController::is_base_calcname_check($base, $base_right))
                 {{--                                            $numcat = true - вывод числовых полей с разрядом тысячи/миллионы/миллиарды--}}
-                {{trans('main.name')}}: <span class="text-related">
+                <p class="text-label">{{trans('main.name')}}: <span class="text-related"></p>
                     @if($base->type_is_text())
                         <?php
                         echo GlobalController::it_txnm_n2b($item);
