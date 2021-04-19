@@ -2763,10 +2763,10 @@ class ItemController extends Controller
         }
         // меняем и возвращаем $item
         // 255 - макс.размер строковых полей name_lang_x в items
-        $calc_lang_0 = mb_substr($calc_lang_0, 0, 255);
-        $calc_lang_1 = mb_substr($calc_lang_1, 0, 255);
-        $calc_lang_2 = mb_substr($calc_lang_2, 0, 255);
-        $calc_lang_3 = mb_substr($calc_lang_3, 0, 255);
+        $calc_lang_0 = GlobalController::itnm_left($calc_lang_0);
+        $calc_lang_1 = GlobalController::itnm_left($calc_lang_1);
+        $calc_lang_2 = GlobalController::itnm_left($calc_lang_2);
+        $calc_lang_3 = GlobalController::itnm_left($calc_lang_3);
         return ['calc_lang_0' => $calc_lang_0, 'calc_lang_1' => $calc_lang_1, 'calc_lang_2' => $calc_lang_2, 'calc_lang_3' => $calc_lang_3];
     }
 
