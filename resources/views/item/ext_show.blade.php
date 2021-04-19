@@ -117,12 +117,12 @@
         @endforeach
     </p>
 
-    <small>
+    <i>
         <p class="text-label">{{trans('main.created_user_date_time')}}:
         <span class="text-related">{{$item->created_user_date_time()}}</span><br>
         {{trans('main.updated_user_date_time')}}:
         <span class="text-related">{{$item->updated_user_date_time()}}</span></p>
-    </small>
+    </i>
 
     <!--    --><?php
     //    //        Не удалять
