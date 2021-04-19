@@ -98,7 +98,7 @@
                             {{-- https://askdev.ru/q/kak-vyzvat-funkciyu-javascript-iz-tega-href-v-html-276225/--}}
                             <a href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}"
                                title="{{$item->name()}}">
-                            @include('view.img',['item'=>$item_find, 'size'=>"medium", 'filenametrue'=>false, 'link'=>true, 'img_fluid'=>true, 'title'=>$item->name()])
+                            @include('view.img',['item'=>$item_find, 'size'=>"medium", 'filenametrue'=>false, 'link'=>false, 'img_fluid'=>true, 'title'=>$item->name()])
                                 {{--                                                            @else--}}
                                 {{--                                                                <div class="text-danger">--}}
                                 {{--                                                                    {{GlobalController::empty_html()}}</div>--}}
