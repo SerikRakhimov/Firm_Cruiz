@@ -283,7 +283,7 @@ class ProjectController extends Controller
         foreach (config('app.locales') as $lang_key => $lang_value) {
             $text_html_check = GlobalController::text_html_check($request['dc_ext_lang_' . $lang_key]);
             if ($text_html_check['result'] == true) {
-                 $array_mess['dc_ext_lang_' . $lang_key] = $text_html_check['message'] . '!';
+                $array_mess['dc_ext_lang_' . $lang_key] = $text_html_check['message'] . '!';
             }
             $text_html_check = GlobalController::text_html_check($request['dc_int_lang_' . $lang_key]);
             if ($text_html_check['result'] == true) {
@@ -341,8 +341,10 @@ class ProjectController extends Controller
     function delete_question(Project $project)
     {
         $user = User::findOrFail($project->user_id);
-        if (GlobalController::glo_user_id() != $user->id) {
-            return redirect()->route('project.all_index');
+        if (!Auth::user()->isAdmin()) {
+            if (GlobalController::glo_user_id() != $user->id) {
+                return redirect()->route('project.all_index');
+            }
         }
         $template = Template::findOrFail($project->template_id);
         return view('project/show', ['type_form' => 'delete_question', 'template' => $template, 'project' => $project]);
@@ -351,10 +353,11 @@ class ProjectController extends Controller
     function delete(Request $request, Project $project)
     {
         $user = User::findOrFail($project->user_id);
-        if (GlobalController::glo_user_id() != $user->id) {
-            return redirect()->route('project.all_index');
+        if (!Auth::user()->isAdmin()) {
+            if (GlobalController::glo_user_id() != $user->id) {
+                return redirect()->route('project.all_index');
+            }
         }
-
         $project->delete();
 
         if ($request->session()->has('projects_previous_url')) {
