@@ -22,14 +22,14 @@
         <span class="text-label">-</span> <span class="text-title">{{$item->base->info()}}</span>
     </h3>
     <br>
-    <p class="text-label">Id: <b>{{$item->id}}</b></p>
+    <p class="text-label">Id: <span class="text-related">{{$item->id}}</span></p>
     @if($base_right['is_show_base_enable'] == true)
         {{--        <p>--}}
         @if($base->is_code_needed == true)
-            <p class="text-label">{{trans('main.code')}}: <b>{{$item->code}}</b></p>
+            <p class="text-label">{{trans('main.code')}}: <span class="text-related">{{$item->code}}</span></p>
         @endif
         {{--        @foreach (config('app.locales') as $key=>$value)--}}
-        {{--            {{trans('main.name')}} ({{trans('main.' . $value)}}): <b>{{$item['name_lang_' . $key]}}</b><br>--}}
+        {{--            {{trans('main.name')}} ({{trans('main.' . $value)}}): <span class="text-related">{{$item['name_lang_' . $key]}}</span><br>--}}
         {{--        @endforeach--}}
         @if($base->type_is_image)
             @include('view.img',['item'=>$item, 'size'=>"medium", 'filenametrue'=>false, 'link'=>true, 'img_fluid'=>false, 'title'=>""])
@@ -48,7 +48,7 @@
             {{--            похожая проверка в base_index.blade.php--}}
             @if(GlobalController::is_base_calcname_check($base, $base_right))
                 {{--                                            $numcat = true - вывод числовых полей с разрядом тысячи/миллионы/миллиарды--}}
-                {{trans('main.name')}}: <b>
+                {{trans('main.name')}}: <span class="text-related">
                     @if($base->type_is_text())
                         <?php
                         echo GlobalController::it_txnm_n2b($item);
@@ -56,7 +56,7 @@
                     @else
                         {{$item->name(true)}}
                     @endif
-                </b>
+                </span>
             @endif
         @endif
         {{--            <br>--}}
@@ -73,7 +73,7 @@
     {{--        @if($item_work)--}}
     {{--            --}}{{--            <p>{{$result['result_parent_label']}} ({{$result['result_parent_base_name']}}):--}}
     {{--            <p>{{$result['result_parent_label']}}:--}}
-    {{--                <b>{{$item_work->name()}}</b></p>--}}
+    {{--                <span class="text-related">{{$item_work->name()}}</span></p>--}}
     {{--        @endif--}}
     {{--    @endforeach--}}
 
@@ -90,11 +90,11 @@
                 @if($base_link_right['is_show_link_enable'] == true)
                     {{$link->parent_label()}}:
                     @if($link->parent_base->type_is_text())
-                        <b>
+                        <span class="text-related">
                             <?php
                             echo GlobalController::it_txnm_n2b($item_find);
                             ?>
-                        </b>
+                        </span>
                     @elseif($link->parent_base->type_is_image())
                         {{--                            <br>--}}
                         @include('view.img',['item'=>$item_find, 'size'=>"medium", 'filenametrue'=>false, 'link'=>true, 'img_fluid'=>false, 'title'=>""])
@@ -109,7 +109,7 @@
                         {{--                            </a>--}}
                     @else
                         {{--                                            $numcat = true - вывод числовых полей с разрядом тысячи/миллионы/миллиарды--}}
-                        <b>{{$item_find->name(true)}}</b>
+                        <span class="text-related">{{$item_find->name(true)}}</span>
                     @endif
                     <br>
                 @endif
@@ -118,9 +118,9 @@
     </p>
 
     <p class="text-label">{{trans('main.created_user_date_time')}}:
-        <b>{{$item->created_user_date_time()}}</b><br>
+        <span class="text-related">{{$item->created_user_date_time()}}</span><br>
         {{trans('main.updated_user_date_time')}}:
-        <b>{{$item->updated_user_date_time()}}</b></p>
+        <span class="text-related">{{$item->updated_user_date_time()}}</span></p>
 
     <!--    --><?php
     //    //        Не удалять
