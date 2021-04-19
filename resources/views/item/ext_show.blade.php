@@ -163,9 +163,9 @@
 {{--                            {{trans('main.space')}}--}}
 {{--                        </button>--}}
             <button type="button" class="btn btn-dreamer mb-1 mb-sm-0"
-                    title="{{trans('main.cancel')}}" @include('layouts.item.base_index.previous_url')>
+                    title="{{trans('main.return')}}" @include('layouts.item.base_index.previous_url')>
                 <i class="fas fa-arrow-left"></i>
-                {{trans('main.cancel')}}
+                {{trans('main.return')}}
             </button>
         </p>
     @elseif($type_form == 'delete_question')
@@ -180,9 +180,9 @@
                     {{trans('main.delete')}}
                 </button>
                 <button type="button" class="btn btn-dreamer"
-                        title="{{trans('main.cancel')}}" @include('layouts.item.base_index.previous_url')>
+                        title="{{trans('main.return')}}" @include('layouts.item.base_index.previous_url')>
                     <i class="fas fa-arrow-left"></i>
-                    {{trans('main.cancel')}}
+                    {{trans('main.return')}}
                 </button>
             </p>
         </form>
