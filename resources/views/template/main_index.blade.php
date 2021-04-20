@@ -22,6 +22,7 @@
         ?>
         <div class="card shadow">
 {{--            <img class="card-img-top" src="{{Storage::url('background.png')}}" alt="Card image">--}}
+            <p class="card-header">Id = {{$template->id}}</p>
                 <div class="card-body">
                     <h4 class="card-title mb-4">{{$template->name()}}</h4>
                     <p class="card-text text-label">

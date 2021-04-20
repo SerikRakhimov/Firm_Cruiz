@@ -56,7 +56,6 @@
             <div class="card shadow">
 {{--                <img class="card-img-top" src="{{Storage::url('background.png')}}" alt="Card image">--}}
                 <p class="card-header">Id = {{$project->id}}</p>
-
                 <div class="card-block">
                     <p class="card-text ml-3 mt-2"><small class="text-muted">{{$project->template->name()}}</small></p>
                 </div>

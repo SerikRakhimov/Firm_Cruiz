@@ -175,7 +175,8 @@ a, a:visited, a:hover  {
 
 h1, h2, h3, h4, h5, h6 {
     /*color: #f79a1c;*/
-    color: rgba(247, 154, 28, 0.76);
+    /*color: rgba(247, 154, 28, 0.76);*/
+    color: #c57b16;
 }
 
 table {
@@ -199,20 +200,23 @@ b {
 
 .card-header{
     //background: rgba(95, 122, 145, 0.12);
-    background: rgba(247, 154, 28, 0.05);
+    //background: rgba(247, 154, 28, 0.05);
+    background: #fdead1;
 }
 .card-block{
     //background: rgba(95, 122, 145, 0.10);
-    background: rgba(247, 154, 28, 0.03);
+    //background: rgba(247, 154, 28, 0.03);
+    background: #fef4e8;
 }
 .card-body{
-//    background: rgba(95, 122, 145, 0.10);
     //background: rgba(95, 122, 145, 0.10);
-    background: rgba(247, 154, 28, 0.03);
+    //background: rgba(247, 154, 28, 0.03);
+    background: #fef4e8;
 }
 .card-footer{
     //background: rgba(95, 122, 145, 0.12);
-    background: rgba(247, 154, 28, 0.04);
+    //background: rgba(247, 154, 28, 0.04);
+    background: #fef4e8;
 }
 
 label {
