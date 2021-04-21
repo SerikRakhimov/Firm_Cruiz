@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Http\Controllers\GlobalController;
+use App\Http\Controllers\ItemController;
 use Illuminate\Support\Facades\App;
 use Illuminate\Database\Eloquent\Model;
 use App\User;
@@ -115,7 +116,15 @@ class Item extends Model
             } else {
                 $index = array_search(App::getLocale(), config('app.locales'));
                 if ($index !== false) {   // '!==' использовать, '!=' не использовать
-                    $result = $this['name_lang_' . $index];
+                    $result = trim($this['name_lang_' . $index]);
+                    //ограниченные 255 - размером полей хранятся в $item->name_lang_0 - $item->name_lang_3
+                    $maxlen = 255;
+                    if (($base->is_calcname_lst == true) && (strlen($result) == 255)) {
+                        if (mb_substr($result, $maxlen - 3, 3) == "...") {
+                            // Полное наименование, более 255 символов
+                            $result = ItemController::calc_value_func($this)['calc_full_lang_' . $index];
+                        }
+                    }
                 }
             }
         }
@@ -128,7 +137,9 @@ class Item extends Model
 
     // "\~" - символ перевода каретки (используется также в Item.php: функции name() nmbr())
     // "\~" - символ перевода каретки (используется также в ItemController.php: функция calc_value_func())
-    function name($numcat = false){
+    // $numcat = true/false - вывод числовых полей с разрядом тысячи/миллионы/миллиарды
+    function name($numcat = false)
+    {
         $result = self::name_start($numcat);
         $result = str_replace('\~', '', $result);
         return $result;
@@ -136,7 +147,9 @@ class Item extends Model
 
     // "\~" - символ перевода каретки (используется также в Item.php: функции name() nmbr())
     // "\~" - символ перевода каретки (используется также в ItemController.php: функция calc_value_func())
-    function nmbr($numcat = false){
+    // $numcat = true/false - вывод числовых полей с разрядом тысячи/миллионы/миллиарды
+    function nmbr($numcat = false)
+    {
         $result = self::name_start($numcat);
         $result = str_replace('\~', '<br>', $result);
         return $result;

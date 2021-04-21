@@ -2631,7 +2631,7 @@ class ItemController extends Controller
     }
 
 // Функция calc_value_func() вычисляет наименования для записи $item
-    private
+    static
     function calc_value_func(Item $item, $level = 0, $first_run = true)
     {
         // Эта функция только для base с вычисляемым наименованием
@@ -2640,7 +2640,7 @@ class ItemController extends Controller
         }
         $level = $level + 1;
 
-        $array_calc = $this->get_array_calc_edit($item)['array_calc'];
+        $array_calc = self::get_array_calc_edit($item)['array_calc'];
         $item_find = null;
         $item_result = null;
         $result_func = null;
@@ -2676,7 +2676,7 @@ class ItemController extends Controller
                                             // Функция get_parent_item_from_calc_child_item() ищет вычисляемое поля от первого невычисляемого
                                             // Например: значение вычисляемого (через "Бабушка со стороны матери") "Прабабушка со стороны матери" находится от значение поля "Мать",
                                             // т.е. не зависит от промежуточных значений ("Бабушка со стороны матери")
-                                            $result_func = $this->get_parent_item_from_calc_child_item($item_find, $link, false);
+                                            $result_func = self::get_parent_item_from_calc_child_item($item_find, $link, false);
                                             // Сохранить значение в массиве
                                             $array_calc[$link->id] = $result_func['result_item_id'];
                                             $item_result = $result_func['result_item'];
@@ -2697,7 +2697,7 @@ class ItemController extends Controller
                     if ($item->base_id == $item_result->base_id) {
                         if ($level == 1) {
                             // всего два запуска этой функции (основной и этот), только для однородных значений (например: ФизЛицо имеет поле Мать(ФизЛицо), Отец(ФизЛицо))
-                            $rs = $this->calc_value_func($item_result, $level, false);
+                            $rs = self::calc_value_func($item_result, $level, false);
                             $dop_name_0 = $rs['calc_lang_0'] == "" ? "" : $item->base->sepa_same_left_calcname . $rs['calc_lang_0'] . $item->base->sepa_same_right_calcname;
                             $dop_name_1 = $rs['calc_lang_1'] == "" ? "" : $item->base->sepa_same_left_calcname . $rs['calc_lang_1'] . $item->base->sepa_same_right_calcname;
                             $dop_name_2 = $rs['calc_lang_2'] == "" ? "" : $item->base->sepa_same_left_calcname . $rs['calc_lang_2'] . $item->base->sepa_same_right_calcname;
@@ -2761,13 +2761,26 @@ class ItemController extends Controller
                 }
             }
         }
+        $calc_full_lang_0 = $calc_lang_0;
+        $calc_full_lang_1 = $calc_lang_1;
+        $calc_full_lang_2 = $calc_lang_2;
+        $calc_full_lang_3 = $calc_lang_3;
+
+//        // меняем и возвращаем $item
+//        // 1000 - макс.размер строковых полей name_lang_x в items
+//        $calc_lang_0 = mb_substr($calc_lang_0, 0, 1000);
+//        $calc_lang_1 = mb_substr($calc_lang_1, 0, 1000);
+//        $calc_lang_2 = mb_substr($calc_lang_2, 0, 1000);
+//        $calc_lang_3 = mb_substr($calc_lang_3, 0, 1000);
         // меняем и возвращаем $item
         // 255 - макс.размер строковых полей name_lang_x в items
         $calc_lang_0 = GlobalController::itnm_left($calc_lang_0);
         $calc_lang_1 = GlobalController::itnm_left($calc_lang_1);
         $calc_lang_2 = GlobalController::itnm_left($calc_lang_2);
         $calc_lang_3 = GlobalController::itnm_left($calc_lang_3);
-        return ['calc_lang_0' => $calc_lang_0, 'calc_lang_1' => $calc_lang_1, 'calc_lang_2' => $calc_lang_2, 'calc_lang_3' => $calc_lang_3];
+        return ['calc_full_lang_0' => $calc_full_lang_0, 'calc_full_lang_1' => $calc_full_lang_1,
+                'calc_full_lang_2' => $calc_full_lang_2, 'calc_full_lang_3' => $calc_full_lang_3,
+                'calc_lang_0' => $calc_lang_0, 'calc_lang_1' => $calc_lang_1, 'calc_lang_2' => $calc_lang_2, 'calc_lang_3' => $calc_lang_3];
     }
 
     function calculate_name(Base $base, Project $project)
