@@ -113,6 +113,7 @@ class Item extends Model
 //                $result = $this->name_lang_0 == "1" ? "1-".trans('main.true')
 //                    : ($this->name_lang_0 == "0" ? "0-".trans('main.false') : trans('main.empty'));
                 //
+
             } else {
                 $index = array_search(App::getLocale(), config('app.locales'));
                 if ($index !== false) {   // '!==' использовать, '!=' не использовать
