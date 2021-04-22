@@ -120,7 +120,7 @@ class Item extends Model
                     $result = trim($this['name_lang_' . $index]);
                     //ограниченные 255 - размером полей хранятся в $item->name_lang_0 - $item->name_lang_3
                     $maxlen = 255;
-                    if (($base->is_calcname_lst == true) && (strlen($result) == 255)) {
+                    if (($base->is_calcname_lst == true) && (strlen($result) >= $maxlen)) {
                         if (mb_substr($result, $maxlen - 3, 3) == "...") {
                             // Полное наименование, более 255 символов
                             $result = ItemController::calc_value_func($this)['calc_full_lang_' . $index];
