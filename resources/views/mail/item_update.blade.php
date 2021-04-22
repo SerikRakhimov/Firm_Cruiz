@@ -1,14 +1,11 @@
 <?php
 use App\Http\Controllers\GlobalController;
-use Illuminate\Support\Facades\Storage;
 ?>
 <p>{{trans('main.project')}}: <b>{{$item->project->name()}}</b></p>
 <hr>
 <h3>{{$item->created_user->name()}}!</h3>
 <h3 class="display-5 text-center">{{trans('main.edit_record')}} - {{$item->base->name()}}</h3>
 <p>Id: <b>{{$item->id}}</b></p>
-Картинка=
-<img src="{{Storage::url('edit_record.png')}}">
 @if($item->base->is_code_needed == true)
     <p>{{trans('main.code')}}: <b>{{$item->code}}</b></p>
 @endif
