@@ -120,7 +120,7 @@ class Item extends Model
                     $result = trim($this['name_lang_' . $index]);
                     //ограниченные 255 - размером полей хранятся в $item->name_lang_0 - $item->name_lang_3
                     $maxlen = 255;
-                    if (($base->is_calcname_lst == true) && (strlen($result) >= $maxlen)) {
+                    if (($base->is_calcname_lst == true) && (mb_strlen($result) >= $maxlen)) {
                         // похожи GlobalController::itnm_left() и Item.php ("...")
                         if (mb_substr($result, $maxlen - 3, 3) == "...") {
                             // Полное наименование, более 255 символов
