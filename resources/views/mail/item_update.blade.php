@@ -6,7 +6,7 @@ use App\Http\Controllers\GlobalController;
 <h3>{{$item->created_user->name()}}!</h3>
 <h3 class="display-5 text-center">{{trans('main.edit_record')}} - {{$item->base->name()}}</h3>
 <p>Id: <b>{{$item->id}}</b></p>
-ллл=
+Картинка=
 <img src="{{Storage::url('edit_record.png')}}">
 <img src="https://www.abakusonline.com/storage/4/22/bHeO19ZVuodXxEGNl0K6CEF0gyvRD7tdseVgqcUR.jpeg">
 @if($item->base->is_code_needed == true)
