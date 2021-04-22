@@ -67,17 +67,42 @@
     $i = $items->firstItem() - 1;
     ?>
     <!---->
-    {{--    <p>Выберите любимого персонажа:</p>--}}
-    {{--    <p><input list="character">--}}
-    {{--        <datalist id="character">--}}
-    {{--            <option value="Чебурашка"></option>--}}
-    {{--            <option value="Крокодил Гена"></option>--}}
-    {{--            <option value="Шапокляк"></option>--}}
-    {{--        </datalist></p>--}}
-    {{--    <details>--}}
-    {{--        <summary>Информация об авторе</summary>--}}
-    {{--        <p>Бендер Родригез</p>--}}
-    {{--    </details>--}}
+{{--        <p>Выберите любимого персонажа:</p>--}}
+{{--        <p><input list="character">--}}
+{{--            <datalist id="character">--}}
+{{--                <option value="Чебурашка"></option>--}}
+{{--                <option value="Крокодил Гена"></option>--}}
+{{--                <option value="Шапокляк"></option>--}}
+{{--            </datalist></p>--}}
+{{--        <details>--}}
+{{--            <details>--}}
+{{--                <summary><span class="text-title">Информация об авторе1</span></summary>--}}
+{{--                <p>Бендер Родригез1</p>--}}
+{{--            </details>--}}
+{{--            <summary>Информация об авторе2</summary>--}}
+{{--            <p>Бендер Родригез2</p>--}}
+{{--        </details>--}}
+{{--    <table border="1" cellpadding="4" cellspacing="0">--}}
+{{--        <thead>--}}
+{{--        <tr>--}}
+{{--            <th rowspan="2">#</th>--}}
+{{--            <th rowspan="2">Id</th>--}}
+{{--            <th  rowspan="2">Дата</th>--}}
+{{--            <th colspan="3">Товар</th>--}}
+{{--            <th  rowspan="2">Browser1</th><th rowspan="2">Browser2</th>--}}
+{{--            <th colspan="2">Firefox</th>--}}
+{{--        </tr>--}}
+{{--        <tr>--}}
+{{--            <th>Наименование</th><th>Изображение</th><th>Код</th><th>1.0</th><th>2.0</th>--}}
+{{--        </tr>--}}
+{{--        </thead>--}}
+{{--        <tbody>--}}
+{{--        <tr align="center">--}}
+{{--            <td>1</td><td>14578547</td>--}}
+{{--            <td>22/04/2021</td><td>Молоко</td><td>Картинка</td><td>1</td><td>Да</td><td>Да</td><td>Да</td><td>Да</td>--}}
+{{--        </tr>--}}
+{{--        </tbody>--}}
+{{--    </table>--}}
     @if($tile_view['result'] == true)
         <div class="card-columns">
             @foreach($items as $item)
@@ -98,7 +123,7 @@
                             {{-- https://askdev.ru/q/kak-vyzvat-funkciyu-javascript-iz-tega-href-v-html-276225/--}}
                             <a href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}"
                                title="{{$item->name()}}">
-                            @include('view.img',['item'=>$item_find, 'size'=>"medium", 'filenametrue'=>false, 'link'=>false, 'img_fluid'=>true, 'title'=>$item->name()])
+                                @include('view.img',['item'=>$item_find, 'size'=>"medium", 'filenametrue'=>false, 'link'=>false, 'img_fluid'=>true, 'title'=>$item->name()])
                                 {{--                                                            @else--}}
                                 {{--                                                                <div class="text-danger">--}}
                                 {{--                                                                    {{GlobalController::empty_html()}}</div>--}}

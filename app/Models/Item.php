@@ -121,10 +121,11 @@ class Item extends Model
                     //ограниченные 255 - размером полей хранятся в $item->name_lang_0 - $item->name_lang_3
                     $maxlen = 255;
                     if (($base->is_calcname_lst == true) && (strlen($result) >= $maxlen)) {
+                        // похожи GlobalController::itnm_left() и Item.php ("...")
                         if (mb_substr($result, $maxlen - 3, 3) == "...") {
                             // Полное наименование, более 255 символов
+                            https://stackoverflow.com/questions/19693946/non-static-method-should-not-be-called-statically
                             $result = (new ItemController)->calc_value_func($this)['calc_full_lang_' . $index];
-                            //$result = ItemController::calc_value_func($this)['calc_full_lang_' . $index];
                         }
                     }
                 }

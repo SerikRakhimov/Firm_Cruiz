@@ -573,6 +573,7 @@ class GlobalController extends Controller
         //ограниченные 255 - размером полей хранятся в $item->name_lang_0 - $item->name_lang_3
         $maxlen = 255;
         $result = "";
+        // похожи GlobalController::itnm_left() и Item.php ("...")
         if (strlen($str) > $maxlen) {
             $result = mb_substr($str, 0, $maxlen - 3) . "...";
         } else {
