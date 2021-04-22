@@ -934,7 +934,7 @@ class ItemController extends Controller
                     $i = $i + 1;
                 }
 
-                $rs = self::calc_value_func($item);
+                $rs = $this->calc_value_func($item);
                 if ($rs != null) {
                     $item->name_lang_0 = $rs['calc_lang_0'];
                     $item->name_lang_1 = $rs['calc_lang_1'];
@@ -1193,7 +1193,7 @@ class ItemController extends Controller
                     }
                 }
 
-                $rs = self::calc_value_func($item_seek);
+                $rs = $this->calc_value_func($item_seek);
                 if ($rs != null) {
                     $item_seek->name_lang_0 = $rs['calc_lang_0'];
                     $item_seek->name_lang_1 = $rs['calc_lang_1'];
@@ -2120,7 +2120,7 @@ class ItemController extends Controller
                     $i = $i + 1;
                 }
 
-                $rs = self::calc_value_func($item);
+                $rs = $this->calc_value_func($item);
                 if ($rs != null) {
                     $item->name_lang_0 = $rs['calc_lang_0'];
                     $item->name_lang_1 = $rs['calc_lang_1'];
@@ -2631,7 +2631,6 @@ class ItemController extends Controller
     }
 
 // Функция calc_value_func() вычисляет наименования для записи $item
-    static
     function calc_value_func(Item $item, $level = 0, $first_run = true)
     {
         // Эта функция только для base с вычисляемым наименованием
@@ -2640,7 +2639,7 @@ class ItemController extends Controller
         }
         $level = $level + 1;
 
-        $array_calc = self::get_array_calc_edit($item)['array_calc'];
+        $array_calc = $this->get_array_calc_edit($item)['array_calc'];
         $item_find = null;
         $item_result = null;
         $result_func = null;
@@ -2697,7 +2696,7 @@ class ItemController extends Controller
                     if ($item->base_id == $item_result->base_id) {
                         if ($level == 1) {
                             // всего два запуска этой функции (основной и этот), только для однородных значений (например: ФизЛицо имеет поле Мать(ФизЛицо), Отец(ФизЛицо))
-                            $rs = self::calc_value_func($item_result, $level, false);
+                            $rs = $this->calc_value_func($item_result, $level, false);
                             $dop_name_0 = $rs['calc_lang_0'] == "" ? "" : $item->base->sepa_same_left_calcname . $rs['calc_lang_0'] . $item->base->sepa_same_right_calcname;
                             $dop_name_1 = $rs['calc_lang_1'] == "" ? "" : $item->base->sepa_same_left_calcname . $rs['calc_lang_1'] . $item->base->sepa_same_right_calcname;
                             $dop_name_2 = $rs['calc_lang_2'] == "" ? "" : $item->base->sepa_same_left_calcname . $rs['calc_lang_2'] . $item->base->sepa_same_right_calcname;
@@ -2788,7 +2787,7 @@ class ItemController extends Controller
         $items = Item::where('base_id', $base->id)->where('project_id', $project->id)->get();
         $rs = false;
         foreach ($items as $item) {
-            $rs = self::calc_value_func($item);
+            $rs = $this->calc_value_func($item);
             $item->name_lang_0 = $rs['calc_lang_0'];
             $item->name_lang_1 = $rs['calc_lang_1'];
             $item->name_lang_2 = $rs['calc_lang_2'];

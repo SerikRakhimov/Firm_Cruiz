@@ -123,7 +123,8 @@ class Item extends Model
                     if (($base->is_calcname_lst == true) && (strlen($result) >= $maxlen)) {
                         if (mb_substr($result, $maxlen - 3, 3) == "...") {
                             // Полное наименование, более 255 символов
-                            $result = ItemController::calc_value_func($this)['calc_full_lang_' . $index];
+                            $result = (new ItemController)->calc_value_func($this)['calc_full_lang_' . $index];
+                            //$result = ItemController::calc_value_func($this)['calc_full_lang_' . $index];
                         }
                     }
                 }
