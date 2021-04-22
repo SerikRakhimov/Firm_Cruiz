@@ -934,7 +934,7 @@ class ItemController extends Controller
                     $i = $i + 1;
                 }
 
-                $rs = $this->calc_value_func($item);
+                $rs = self::calc_value_func($item);
                 if ($rs != null) {
                     $item->name_lang_0 = $rs['calc_lang_0'];
                     $item->name_lang_1 = $rs['calc_lang_1'];
@@ -1193,7 +1193,7 @@ class ItemController extends Controller
                     }
                 }
 
-                $rs = $this->calc_value_func($item_seek);
+                $rs = self::calc_value_func($item_seek);
                 if ($rs != null) {
                     $item_seek->name_lang_0 = $rs['calc_lang_0'];
                     $item_seek->name_lang_1 = $rs['calc_lang_1'];
@@ -2120,7 +2120,7 @@ class ItemController extends Controller
                     $i = $i + 1;
                 }
 
-                $rs = $this->calc_value_func($item);
+                $rs = self::calc_value_func($item);
                 if ($rs != null) {
                     $item->name_lang_0 = $rs['calc_lang_0'];
                     $item->name_lang_1 = $rs['calc_lang_1'];
@@ -2788,7 +2788,7 @@ class ItemController extends Controller
         $items = Item::where('base_id', $base->id)->where('project_id', $project->id)->get();
         $rs = false;
         foreach ($items as $item) {
-            $rs = $this->calc_value_func($item);
+            $rs = self::calc_value_func($item);
             $item->name_lang_0 = $rs['calc_lang_0'];
             $item->name_lang_1 = $rs['calc_lang_1'];
             $item->name_lang_2 = $rs['calc_lang_2'];
