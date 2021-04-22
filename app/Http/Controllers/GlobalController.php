@@ -576,7 +576,7 @@ class GlobalController extends Controller
         // похожи GlobalController::itnm_left() и Item.php ("...")
         if (strlen($str) > $maxlen) {
             //$result = mb_substr($str, 0, $maxlen - 3) . "...";
-            $result = mb_substr($str, 0, $maxlen - 3) . strlen($str);
+            $result = mb_substr($str, 0, $maxlen - 3) . $maxlen;
         } else {
             $result = mb_substr($str, 0, $maxlen);
         }
