@@ -8,7 +8,6 @@ use App\Http\Controllers\GlobalController;
 <p>Id: <b>{{$item->id}}</b></p>
 Картинка=
 <img src="{{Storage::url('edit_record.png')}}">
-<img src="https://www.abakusonline.com/storage/4/22/bHeO19ZVuodXxEGNl0K6CEF0gyvRD7tdseVgqcUR.jpeg">
 @if($item->base->is_code_needed == true)
     <p>{{trans('main.code')}}: <b>{{$item->code}}</b></p>
 @endif
