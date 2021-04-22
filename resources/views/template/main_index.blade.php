@@ -15,14 +15,14 @@
     <?php
     $i = $templates->firstItem() - 1;
     ?>
-    {{--    <div class="card-deck">--}}
-    @foreach($templates as $template)
-        <?php
-        $i++;
-        ?>
-        <div class="card shadow">
-{{--            <img class="card-img-top" src="{{Storage::url('background.png')}}" alt="Card image">--}}
-            <p class="card-header">Id = {{$template->id}}</p>
+    <div class="card-columns">
+        @foreach($templates as $template)
+            <?php
+            $i++;
+            ?>
+            <div class="card shadow">
+                {{--            <img class="card-img-top" src="{{Storage::url('background.png')}}" alt="Card image">--}}
+                <p class="card-header">Id = {{$template->id}}</p>
                 <div class="card-body">
                     <h4 class="card-title mb-4">{{$template->name()}}</h4>
                     <p class="card-text text-label">
@@ -40,12 +40,11 @@
                 <div class="card-footer">
                     <small class="text-muted">{{trans('main.projects')}}: {{$template->projects_count}}</small>
                 </div>
-        </div>
-        <br>
+            </div>
+            <br>
 
-    @endforeach
-
-    {{--    </div>--}}
+        @endforeach
+    </div>
 
     {{--    <div class="card">--}}
     {{--        <h3 class="card-header">Featured</h3>--}}
