@@ -1,5 +1,6 @@
 <?php
 use App\Http\Controllers\GlobalController;
+use Illuminate\Support\Facades\Storage;
 ?>
 <p>{{trans('main.project')}}: <b>{{$item->project->name()}}</b></p>
 <hr>
