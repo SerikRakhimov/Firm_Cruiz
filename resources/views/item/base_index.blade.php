@@ -153,16 +153,16 @@
             <caption>{{trans('main.select_record_for_work')}}</caption>
             <thead>
             <tr>
-                <th class="text-center align-middle">#</th>
+                <th class="text-center align-top">#</th>
                 @if($base_right['is_list_base_enable'] == true)
                     @if($base->is_code_needed == true)
-                        <th class="text-center align-middle">{{trans('main.code')}}</th>
+                        <th class="text-center align-top">{{trans('main.code')}}</th>
                     @endif
                     {{--                Если тип-вычисляемое поле и Показывать Основу с вычисляемым наименованием--}}
                     {{--                или если тип-не вычисляемое наименование--}}
                     {{--            похожая проверка в ext_show.blade.php--}}
                     @if(GlobalController::is_base_calcname_check($base, $base_right))
-                        <th @include('layouts.class_from_base',['base'=>$base, 'align_middle'=>true])>
+                        <th @include('layouts.class_from_base',['base'=>$base, 'align_top'=>true])>
                             {{trans('main.name')}}</th>
                     @endif
                 @endif
