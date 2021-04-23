@@ -174,7 +174,7 @@
                         {{--                    <th--}}
                         {{--                        @include('layouts.class_from_base',['base'=>$link->parent_base])--}}
                         {{--                    >--}}
-                        <th class="text-center align-middle">
+                        <th class="text-center align-top">
                             <a href="{{route('item.base_index',['base'=>$link->parent_base_id, 'project'=>$project, 'role'=>$role])}}"
                                title="{{$link->parent_base->names()}}">
                                 {{$link->parent_label()}}
