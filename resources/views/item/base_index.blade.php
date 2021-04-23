@@ -153,10 +153,10 @@
             <caption>{{trans('main.select_record_for_work')}}</caption>
             <thead>
             <tr>
-                <th class="text-center">#</th>
+                <th class="text-center align-middle">#</th>
                 @if($base_right['is_list_base_enable'] == true)
                     @if($base->is_code_needed == true)
-                        <th class="text-center">{{trans('main.code')}}</th>
+                        <th class="text-center align-middle">{{trans('main.code')}}</th>
                     @endif
                     {{--                Если тип-вычисляемое поле и Показывать Основу с вычисляемым наименованием--}}
                     {{--                или если тип-не вычисляемое наименование--}}
@@ -174,7 +174,7 @@
                         {{--                    <th--}}
                         {{--                        @include('layouts.class_from_base',['base'=>$link->parent_base])--}}
                         {{--                    >--}}
-                        <th class="text-center">
+                        <th class="text-center align-middle">
                             <a href="{{route('item.base_index',['base'=>$link->parent_base_id, 'project'=>$project, 'role'=>$role])}}"
                                title="{{$link->parent_base->names()}}">
                                 {{$link->parent_label()}}
