@@ -67,8 +67,8 @@
 
         @foreach (config('app.locales') as $key=>$value)
             <div class="form-group">
-                <label for="child_labels_lang_{{$key}}">{{trans('main.child_labels')}} ({{trans('main.' . $value)}}
-                    )<span class="text-danger">*</span></label>
+                <label for="child_labels_lang_{{$key}}">{{trans('main.child_labels')}} ({{trans('main.' . $value)}})
+                    <span class="text-danger">*</span></label>
                 <input type="text"
                        name="child_labels_lang_{{$key}}"
                        id="child_labels_lang_{{$key}}"
