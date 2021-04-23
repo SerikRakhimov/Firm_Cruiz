@@ -162,7 +162,7 @@
                     {{--                или если тип-не вычисляемое наименование--}}
                     {{--            похожая проверка в ext_show.blade.php--}}
                     @if(GlobalController::is_base_calcname_check($base, $base_right))
-                        <th @include('layouts.class_from_base',['base'=>$base])>
+                        <th @include('layouts.class_from_base',['base'=>$base]) class="align-middle">
                             {{trans('main.name')}}</th>
                     @endif
                 @endif
