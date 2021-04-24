@@ -39,11 +39,11 @@ class LoginController extends Controller
     public function __construct()
     {
 //        Было
-//        $this->middleware('guest')->except('logout');
+        $this->middleware('guest')->except('logout');
 
 //        https://askdev.ru/q/laravel-5-auth-logout-ne-rabotaet-199140/
 // https://stackoverflow.com/questions/34479994/laravel-5-2-authlogout-is-not-working/34667356#34667356
-        $this->middleware('guest', ['except' => ['logout', 'getLogout']]);
+       // $this->middleware('guest', ['except' => ['logout', 'getLogout']]);
     }
 
 }
