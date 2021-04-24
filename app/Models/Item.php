@@ -143,7 +143,8 @@ class Item extends Model
     // $numcat = true/false - вывод числовых полей с разрядом тысячи/миллионы/миллиарды
     function name($numcat = false)
     {
-        $result = self::name_start($numcat);
+        //$result = self::name_start($numcat);
+        $result="ggg";
         $result = str_replace('\~', '', $result);
         return $result;
     }
