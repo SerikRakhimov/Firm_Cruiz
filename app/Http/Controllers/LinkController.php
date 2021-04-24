@@ -463,12 +463,12 @@ class LinkController extends Controller
         $link = $link_init;
         $i = 0;
             // проверка, если link - вычисляемое поле
-//            while (($link->parent_is_parent_related == true) && ($i < $maxi) && $link) {
-//                // добавление элемента в конец массива
-//                array_unshift($link_ids, $link->id);
-//                $i = $i + 1;
-//                $link = Link::find($link->parent_parent_related_start_link_id);
-//            }
+            while (($link->parent_is_parent_related == true) && ($i < $maxi) && $link) {
+                // добавление элемента в конец массива
+                array_unshift($link_ids, $link->id);
+                $i = $i + 1;
+                $link = Link::find($link->parent_parent_related_start_link_id);
+            }
         // если зацикливание или $link не найден - возвратить null и пустой массив
         if (($i >= $maxi) || (!$link)) {
             $const_link_id_start = null;
