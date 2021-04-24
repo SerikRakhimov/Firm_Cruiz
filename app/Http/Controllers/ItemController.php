@@ -2287,7 +2287,7 @@ class ItemController extends Controller
             $item = $item_copy;
             if (env('MAIL_ENABLED') == 'yes') {
                 $base_right = GlobalController::base_right($item->base, $role);
-                if ($base_right['is_edit_email_base_update'] == true) {
+                if ($base_right['is_show_email_base_delete'] == true) {
                     $email_to = $item->created_user->email;
                     $deleted_user_date_time = GlobalController::deleted_user_date_time();
                     $appname = config('app.name', 'Abakus');
