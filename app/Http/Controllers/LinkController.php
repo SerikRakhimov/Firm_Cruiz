@@ -180,6 +180,11 @@ class LinkController extends Controller
             $link->parent_parent_related_start_link_id = 0;
             $link->parent_parent_related_result_link_id = 0;
         }
+        if ($link->parent_parent_related_start_link_id == 0 || $link->parent_parent_related_result_link_id == 0) {
+            $link->parent_is_parent_related = false;
+            $link->parent_parent_related_start_link_id = 0;
+            $link->parent_parent_related_result_link_id = 0;
+        }
 
         $link->parent_is_child_related = isset($request->parent_is_child_related) ? true : false;
         if ($link->parent_is_child_related) {
@@ -189,6 +194,12 @@ class LinkController extends Controller
             $link->parent_child_related_start_link_id = 0;
             $link->parent_child_related_result_link_id = 0;
         }
+        if ($link->parent_child_related_start_link_id == 0 || $link->parent_child_related_result_link_id == 0) {
+            $link->parent_is_child_related = false;
+            $link->parent_child_related_start_link_id = 0;
+            $link->parent_child_related_result_link_id = 0;
+        }
+
         if ($link->parent_base->type_is_number == false) {
             $link->parent_is_numcalc = 0;
             $link->parent_is_nc_viewonly = 0;
@@ -304,6 +315,11 @@ class LinkController extends Controller
             $link->parent_parent_related_start_link_id = 0;
             $link->parent_parent_related_result_link_id = 0;
         }
+        if ($link->parent_parent_related_start_link_id == 0 || $link->parent_parent_related_result_link_id == 0) {
+            $link->parent_is_parent_related = false;
+            $link->parent_parent_related_start_link_id = 0;
+            $link->parent_parent_related_result_link_id = 0;
+        }
 
         $link->parent_is_child_related = isset($request->parent_is_child_related) ? true : false;
         if ($link->parent_is_child_related) {
@@ -313,6 +329,12 @@ class LinkController extends Controller
             $link->parent_child_related_start_link_id = 0;
             $link->parent_child_related_result_link_id = 0;
         }
+        if ($link->parent_child_related_start_link_id == 0 || $link->parent_child_related_result_link_id == 0) {
+            $link->parent_is_child_related = false;
+            $link->parent_child_related_start_link_id = 0;
+            $link->parent_child_related_result_link_id = 0;
+        }
+
         if ($link->parent_base->type_is_number == false) {
             $link->parent_is_numcalc = 0;
             $link->parent_is_nc_viewonly = 0;
