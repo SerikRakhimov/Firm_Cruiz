@@ -462,7 +462,7 @@ class LinkController extends Controller
         $link_ids = array();
         $link = $link_init;
         $i = 0;
-        dd($link->parent_is_parent_related);
+        dd($link->parent_is_parent_related==true);
         // проверка, если link - вычисляемое поле
         while (($link->parent_is_parent_related == true) && ($i < $maxi) && $link) {
             // добавление элемента в конец массива
