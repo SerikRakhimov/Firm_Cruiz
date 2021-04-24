@@ -394,7 +394,11 @@
                         <div class="col-sm-6">
                                 <span class="form-label text-related"
                                       name="name{{$key}}"
-                                      id="name{{$key}}"></span>
+                                      id="name{{$key}}"
+                                      @if($link->parent_is_hidden_field == true)
+                                            hidden
+                                        @endif
+                                    ></span>
                         </div>
                         {{--                                <span class="form-label text-success"--}}
                         {{--                                      name="calc{{$key}}"--}}
