@@ -103,6 +103,85 @@
 {{--        </tr>--}}
 {{--        </tbody>--}}
 {{--    </table>--}}
+
+{{--    <!-- Карточка (border-primary - цвет границ карточки) -->--}}
+{{--    <div class="card border-info">--}}
+{{--        <!-- Шапка (bg-primary - цвет фона, text-white - цвет текста) -->--}}
+{{--        <div class="card-header bg-primary text-white">--}}
+{{--            Название панели--}}
+{{--        </div>--}}
+{{--        <!-- Текстовый контент -->--}}
+{{--        <div class="card-body">--}}
+{{--            <h4 class="card-title">Заголовок</h4>--}}
+{{--            <p class="card-text">...</p>--}}
+{{--            <a href="#" class="btn btn-primary">Ссылка</a>--}}
+{{--        </div>--}}
+{{--    </div><!-- Конец карточки -->--}}
+
+{{--    <!-- Карточка с текстовым контентом и списком -->--}}
+{{--    <div class="card">--}}
+{{--        <!-- Текстовый контент -->--}}
+{{--        <div class="card-body">--}}
+{{--            <!-- Текстовое содержимое карточки -->--}}
+{{--        </div>--}}
+{{--        <!-- Список List groups -->--}}
+{{--        <ul class="list-group list-group-flush">--}}
+{{--            <li class="list-group-item">1...</li>--}}
+{{--            <li class="list-group-item">2...</li>--}}
+{{--            <li class="list-group-item">3...</li>--}}
+{{--        </ul>--}}
+{{--    </div><!-- Конец карточки -->--}}
+
+{{--    <!-- Карточка с шапкой и списком -->--}}
+{{--    <div class="card">--}}
+{{--        <!-- Шапка (header) карточки -->--}}
+{{--        <div class="card-header">--}}
+{{--            Шапка карточки--}}
+{{--        </div>--}}
+{{--        <!-- Список List groups -->--}}
+{{--        <ul class="list-group list-group-flush">--}}
+{{--            <li class="list-group-item">1...</li>--}}
+{{--            <li class="list-group-item">2...</li>--}}
+{{--            <li class="list-group-item">3...</li>--}}
+{{--        </ul>--}}
+{{--    </div><!-- Конец карточки -->--}}
+{{--    <!-- Карточка с навигацией (в заголовке) -->--}}
+{{--    <div class="card">--}}
+{{--        <!-- Шапка с навигацией -->--}}
+{{--        <div class="card-header">--}}
+{{--            <ul class="nav nav-tabs card-header-tabs">--}}
+{{--                <li class="nav-item">--}}
+{{--                    <a class="nav-link active" data-toggle="tab" href="#item1">Заказать товар</a>--}}
+{{--                </li>--}}
+{{--                <li class="nav-item">--}}
+{{--                    <a class="nav-link" data-toggle="tab" href="#item2">Справочники</a>--}}
+{{--                </li>--}}
+{{--                <li class="nav-item">--}}
+{{--                    <a class="nav-link disabled" data-toggle="tab" href="#item3">Item 3</a>--}}
+{{--                </li>--}}
+{{--                <li class="nav-item">--}}
+{{--                    <a class="nav-link" data-toggle="tab" href="#item3">Настройки</a>--}}
+{{--                </li>--}}
+{{--            </ul>--}}
+{{--        </div>--}}
+{{--        <!-- Текстовый контент -->--}}
+{{--        <div class="card-body tab-content">--}}
+{{--            <div class="tab-pane fade show active" id="item1">--}}
+{{--                <a href="#" class="card-link">Ссылка №1</a>--}}
+{{--            </div>--}}
+{{--            <div class="tab-pane fade" id="item2">--}}
+{{--                <ul class="list-group list-group-flush">--}}
+{{--                    <li class="list-group-item">1...</li>--}}
+{{--                    <li class="list-group-item">2...</li>--}}
+{{--                    <li class="list-group-item">3...</li>--}}
+{{--                </ul>--}}
+{{--            </div>--}}
+{{--            <div class="tab-pane fade" id="item3">--}}
+{{--                Некоторое содержимое для Item 3...--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--    </div><!-- Конец карточки -->--}}
+
     @if($tile_view['result'] == true)
         <div class="card-columns">
             @foreach($items as $item)
@@ -112,7 +191,7 @@
                 ?>
                 {{--                <div class="card text-center">--}}
                 {{--                    <div class="card card-inverse text-center" style="background-color: rgba(222,255,162,0.23); border-color: #3548ee;">--}}
-                <div class="card shadow">
+                <div class="card shadow border-warning">
                     @if($base->is_code_needed == true)
                         <a href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}" title="{{$item->name()}}">
                             <p class="card-header text-center text-label">{{trans('main.code')}}: {{$item->code}}</p>

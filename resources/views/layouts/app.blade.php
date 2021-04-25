@@ -42,7 +42,8 @@ use App\Models\Project;
                 </a>
             @endforeach
             <a class="navbar-brand" href="{{ url('/') }}" title="{{config('app.name')}}">
-                <img src="{{Storage::url('logotype.png')}}" width="30" height="30" class="d-inline-block align-top" alt="" loading="lazy">
+                <img src="{{Storage::url('logotype.png')}}" width="30" height="30" class="d-inline-block align-top"
+                     alt="" loading="lazy">
                 {{config('app.name')}}
             </a>
             <?php
@@ -203,9 +204,15 @@ use App\Models\Project;
     </nav>
     <main class="py-4 w-75 mw-75 mx-auto">
         @guest
-            <p>
-            <h5 class="display-5 text-danger text-center">{{trans('main.please_login_or_register')}}</h5>
-            </p>
+{{--            Похожие строки layouts\app.blade.php и message.blade.php--}}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <p>
+                <h5 class="display-5 text-danger text-center">{{trans('main.please_login_or_register')}}</h5>
+                </p>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
         @endguest
         {{--                <div class="mx-auto" style="width: 1200px;">--}}
         @yield('content')

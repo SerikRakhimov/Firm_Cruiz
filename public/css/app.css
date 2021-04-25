@@ -169,9 +169,16 @@ Dreamer
 a, a:visited, a:hover  {
     color: #833029;
 }
-.navbar-light .navbar-brand {
-    color: #1c5145;
-}
+/*.navbar-light .navbar-brand {*/
+/*    color: #1c5145;*/
+/*}*/
+
+/*.navbar-custom .navbar-brand,*/
+/*.navbar-custom .navbar-text {*/
+
+/*    color: #ff7b62;*/
+
+/*}*/
 
 h1, h2, h3, h4, h5, h6 {
     /*color: #f79a1c;*/
