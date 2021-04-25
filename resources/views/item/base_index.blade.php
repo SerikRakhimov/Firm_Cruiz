@@ -191,7 +191,7 @@
                 ?>
                 {{--                <div class="card text-center">--}}
                 {{--                    <div class="card card-inverse text-center" style="background-color: rgba(222,255,162,0.23); border-color: #3548ee;">--}}
-                <div class="card shadow border-warning">
+                <div class="card shadow">
                     @if($base->is_code_needed == true)
                         <a href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}" title="{{$item->name()}}">
                             <p class="card-header text-center text-label">{{trans('main.code')}}: {{$item->code}}</p>
