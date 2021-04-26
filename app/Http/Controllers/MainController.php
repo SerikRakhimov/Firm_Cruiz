@@ -250,11 +250,11 @@ class MainController extends Controller
         $item_find = Item::find($child_item_id);
         $link_find = Link::find($link_id);
         if ($item_find && $link_find) {
-            if ($link_find->parent_is_parent_related == true) {
-                $item = ItemController::get_parent_item_from_calc_child_item($item_find, $link_find, true)['result_item'];
-            } else {
+         //   if ($link_find->parent_is_parent_related == true) {
+         //       $item = ItemController::get_parent_item_from_calc_child_item($item_find, $link_find, true)['result_item'];
+         //   } else {
                 $item = self::get_parent_item_from_main($child_item_id, $link_id);
-            }
+         //   }
         }
         return $item;
     }
