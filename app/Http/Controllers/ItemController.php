@@ -364,6 +364,7 @@ class ItemController extends Controller
         $code_new = $this->calculate_new_code($base, $project);
         // Похожая строка внизу
         $code_uniqid = uniqid($base->id . '_', true);
+        echo "111111111111111111";
 
         return view('item/ext_edit', ['base' => $base,
             'code_new' => $code_new, 'code_uniqid' => $code_uniqid,
