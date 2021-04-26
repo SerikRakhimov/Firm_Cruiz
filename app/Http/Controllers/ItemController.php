@@ -2523,9 +2523,10 @@ class ItemController extends Controller
         $result_item_name = null;
         $result_item_name_options = null;
 
-        $rs = LinkController::get_link_ids_from_calc_link($link_result);
-        $const_link_id_start = $rs['const_link_id_start'];
-        $item = MainController::get_parent_item_from_main($item_start->id, $const_link_id_start);
+//        $rs = LinkController::get_link_ids_from_calc_link($link_result);
+//        $const_link_id_start = $rs['const_link_id_start'];
+//        $link_find = Link::find($link_id);
+        $item = MainController::get_parent_item_from_main($item_start->id, $link_result);
 
         if ($item) {
             $result_item = $item;
