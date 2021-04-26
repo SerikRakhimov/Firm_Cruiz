@@ -2522,32 +2522,32 @@ class ItemController extends Controller
         $result_item_id = null;
         $result_item_name = null;
         $result_item_name_options = null;
-
-//        $rs = LinkController::get_link_ids_from_calc_link($link_result);
-//        $const_link_id_start = $rs['const_link_id_start'];
-//        $link_find = Link::find($link_id);
-        $item = MainController::get_parent_item_from_main($item_start->id, $link_result);
-
-        if ($item) {
-            $result_item = $item;
-            $result_item_id = $item->id;
-            if ($item->base->type_is_image() || $item->base->type_is_document()) {
-                //$result_item_name = "<a href='" . Storage::url($item->filename()) . "'><img src='" . Storage::url($item->filename()) . "' height='50' alt='' title='" . $item->filename() . "'></a>";
-                if ($item->base->type_is_image()) {
-                    $result_item_name = "<img src='" . Storage::url($item->filename()) . "' height='250' alt='' title='" . $item->title_img() . "'>";
-                } else {
-                    $result_item_name = "<a href='" . Storage::url($item->filename()) . "'><img src='" . Storage::url($item->filename()) . "' height='50' alt='' title='" . $item->filename() . "'></a>";
-                }
-            } elseif ($item->base->type_is_text()) {
-                $result_item_name = GlobalController::it_txnm_n2b($item);
-            } else {
-                // $numcat = false - не выводить числовых поля с разрядом тысячи/миллионы/миллиарды
-                $result_item_name = $item->name();
-            }
-            $result_item_name_options = "<option value='" . $item->id . "'>" . $item->name() . "</option>";
-        }
-
-        if (1 == 2) {
+//
+////        $rs = LinkController::get_link_ids_from_calc_link($link_result);
+////        $const_link_id_start = $rs['const_link_id_start'];
+////        $link_find = Link::find($link_id);
+//        $item = MainController::get_parent_item_from_main($item_start->id, $link_result);
+//
+//        if ($item) {
+//            $result_item = $item;
+//            $result_item_id = $item->id;
+//            if ($item->base->type_is_image() || $item->base->type_is_document()) {
+//                //$result_item_name = "<a href='" . Storage::url($item->filename()) . "'><img src='" . Storage::url($item->filename()) . "' height='50' alt='' title='" . $item->filename() . "'></a>";
+//                if ($item->base->type_is_image()) {
+//                    $result_item_name = "<img src='" . Storage::url($item->filename()) . "' height='250' alt='' title='" . $item->title_img() . "'>";
+//                } else {
+//                    $result_item_name = "<a href='" . Storage::url($item->filename()) . "'><img src='" . Storage::url($item->filename()) . "' height='50' alt='' title='" . $item->filename() . "'></a>";
+//                }
+//            } elseif ($item->base->type_is_text()) {
+//                $result_item_name = GlobalController::it_txnm_n2b($item);
+//            } else {
+//                // $numcat = false - не выводить числовых поля с разрядом тысячи/миллионы/миллиарды
+//                $result_item_name = $item->name();
+//            }
+//            $result_item_name_options = "<option value='" . $item->id . "'>" . $item->name() . "</option>";
+//        }
+//
+//        if (1 == 2) {
             // проверка, если link - вычисляемое поле
             if ($link_result->parent_is_parent_related == true) {
                 // возвращает маршрут $link_ids по вычисляемым полям до первого найденного постоянного link_id ($const_link_id_start)
@@ -2605,7 +2605,7 @@ class ItemController extends Controller
                     }
                 }
             }
-        }
+//        }
 
         return ['result_item' => $result_item,
             'result_item_id' => $result_item_id,
