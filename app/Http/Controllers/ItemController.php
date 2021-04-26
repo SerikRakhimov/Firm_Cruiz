@@ -2523,63 +2523,89 @@ class ItemController extends Controller
         $result_item_name = null;
         $result_item_name_options = null;
 
-        // проверка, если link - вычисляемое поле
-        if ($link_result->parent_is_parent_related == true) {
-            // возвращает маршрут $link_ids по вычисляемым полям до первого найденного постоянного link_id ($const_link_id_start)
-            $rs = LinkController::get_link_ids_from_calc_link($link_result);
-            $const_link_id_start = $rs['const_link_id_start'];
-            $link_ids = $rs['link_ids'];
-            // вычисляем первоначальный $item;
-            if ($item_calc == true) {
-                $item = MainController::get_parent_item_from_main($item_start->id, $const_link_id_start);
+        $rs = LinkController::get_link_ids_from_calc_link($link_result);
+        $const_link_id_start = $rs['const_link_id_start'];
+        $item = MainController::get_parent_item_from_main($item_start->id, $const_link_id_start);
+
+        if ($item) {
+            $result_item = $item;
+            $result_item_id = $item->id;
+            if ($item->base->type_is_image() || $item->base->type_is_document()) {
+                //$result_item_name = "<a href='" . Storage::url($item->filename()) . "'><img src='" . Storage::url($item->filename()) . "' height='50' alt='' title='" . $item->filename() . "'></a>";
+                if ($item->base->type_is_image()) {
+                    $result_item_name = "<img src='" . Storage::url($item->filename()) . "' height='250' alt='' title='" . $item->title_img() . "'>";
+                } else {
+                    $result_item_name = "<a href='" . Storage::url($item->filename()) . "'><img src='" . Storage::url($item->filename()) . "' height='50' alt='' title='" . $item->filename() . "'></a>";
+                }
+            } elseif ($item->base->type_is_text()) {
+                $result_item_name = GlobalController::it_txnm_n2b($item);
             } else {
-                $item = $item_start;
+                // $numcat = false - не выводить числовых поля с разрядом тысячи/миллионы/миллиарды
+                $result_item_name = $item->name();
             }
-            if ($item) {
-                if ($const_link_id_start && $link_ids) {
-                    $error = false;
-                    // цикл по вычисляемым полям
-                    foreach (@$link_ids as $link_id) {
-                        $link_find = Link::find($link_id);
-                        if (!$link_find) {
-                            $error = true;
-                            break;
-                        }
-                        $link_find = Link::find($link_find->parent_parent_related_result_link_id);
-                        if (!$link_find) {
-                            $error = true;
-                            break;
-                        }
-                        // используется поле link->parent_parent_related_result_link_id
-                        // находим новый $item (невычисляемый)
-                        // $item меняется внутри цикла
-                        $item = self::get_parent_item_from_child_item($item, $link_find)['result_item'];
-                        if (!$item) {
-                            $error = true;
-                            break;
-                        }
-                    }
-                    if (!$error && $item) {
-                        $result_item = $item;
-                        $result_item_id = $item->id;
-                        if ($item->base->type_is_image() || $item->base->type_is_document()) {
-                            //$result_item_name = "<a href='" . Storage::url($item->filename()) . "'><img src='" . Storage::url($item->filename()) . "' height='50' alt='' title='" . $item->filename() . "'></a>";
-                            if ($item->base->type_is_image()) {
-                                $result_item_name = "<img src='" . Storage::url($item->filename()) . "' height='250' alt='' title='" . $item->title_img() . "'>";
-                            } else {
-                                $result_item_name = "<a href='" . Storage::url($item->filename()) . "'><img src='" . Storage::url($item->filename()) . "' height='50' alt='' title='" . $item->filename() . "'></a>";
+            $result_item_name_options = "<option value='" . $item->id . "'>" . $item->name() . "</option>";
+        }
+
+        if (1 == 2) {
+            // проверка, если link - вычисляемое поле
+            if ($link_result->parent_is_parent_related == true) {
+                // возвращает маршрут $link_ids по вычисляемым полям до первого найденного постоянного link_id ($const_link_id_start)
+                $rs = LinkController::get_link_ids_from_calc_link($link_result);
+                $const_link_id_start = $rs['const_link_id_start'];
+                $link_ids = $rs['link_ids'];
+                // вычисляем первоначальный $item;
+                if ($item_calc == true) {
+                    $item = MainController::get_parent_item_from_main($item_start->id, $const_link_id_start);
+                } else {
+                    $item = $item_start;
+                }
+                if ($item) {
+                    if ($const_link_id_start && $link_ids) {
+                        $error = false;
+                        // цикл по вычисляемым полям
+                        foreach (@$link_ids as $link_id) {
+                            $link_find = Link::find($link_id);
+                            if (!$link_find) {
+                                $error = true;
+                                break;
                             }
-                        } elseif ($item->base->type_is_text()) {
-                            $result_item_name = GlobalController::it_txnm_n2b($item);
-                        } else {
-                            // $numcat = false - не выводить числовых поля с разрядом тысячи/миллионы/миллиарды
-                            $result_item_name = $item->name();
+                            $link_find = Link::find($link_find->parent_parent_related_result_link_id);
+                            if (!$link_find) {
+                                $error = true;
+                                break;
+                            }
+                            // используется поле link->parent_parent_related_result_link_id
+                            // находим новый $item (невычисляемый)
+                            // $item меняется внутри цикла
+                            $item = self::get_parent_item_from_child_item($item, $link_find)['result_item'];
+                            if (!$item) {
+                                $error = true;
+                                break;
+                            }
                         }
-                        $result_item_name_options = "<option value='" . $item->id . "'>" . $item->name() . "</option>";
+                        if (!$error && $item) {
+                            $result_item = $item;
+                            $result_item_id = $item->id;
+                            if ($item->base->type_is_image() || $item->base->type_is_document()) {
+                                //$result_item_name = "<a href='" . Storage::url($item->filename()) . "'><img src='" . Storage::url($item->filename()) . "' height='50' alt='' title='" . $item->filename() . "'></a>";
+                                if ($item->base->type_is_image()) {
+                                    $result_item_name = "<img src='" . Storage::url($item->filename()) . "' height='250' alt='' title='" . $item->title_img() . "'>";
+                                } else {
+                                    $result_item_name = "<a href='" . Storage::url($item->filename()) . "'><img src='" . Storage::url($item->filename()) . "' height='50' alt='' title='" . $item->filename() . "'></a>";
+                                }
+                            } elseif ($item->base->type_is_text()) {
+                                $result_item_name = GlobalController::it_txnm_n2b($item);
+                            } else {
+                                // $numcat = false - не выводить числовых поля с разрядом тысячи/миллионы/миллиарды
+                                $result_item_name = $item->name();
+                            }
+                            $result_item_name_options = "<option value='" . $item->id . "'>" . $item->name() . "</option>";
+                        }
                     }
                 }
             }
         }
+
         return ['result_item' => $result_item,
             'result_item_id' => $result_item_id,
             'result_item_name' => $result_item_name,
@@ -2778,8 +2804,8 @@ class ItemController extends Controller
         $calc_lang_2 = GlobalController::itnm_left($calc_lang_2);
         $calc_lang_3 = GlobalController::itnm_left($calc_lang_3);
         return ['calc_full_lang_0' => $calc_full_lang_0, 'calc_full_lang_1' => $calc_full_lang_1,
-                'calc_full_lang_2' => $calc_full_lang_2, 'calc_full_lang_3' => $calc_full_lang_3,
-                'calc_lang_0' => $calc_lang_0, 'calc_lang_1' => $calc_lang_1, 'calc_lang_2' => $calc_lang_2, 'calc_lang_3' => $calc_lang_3];
+            'calc_full_lang_2' => $calc_full_lang_2, 'calc_full_lang_3' => $calc_full_lang_3,
+            'calc_lang_0' => $calc_lang_0, 'calc_lang_1' => $calc_lang_1, 'calc_lang_2' => $calc_lang_2, 'calc_lang_3' => $calc_lang_3];
     }
 
     function calculate_name(Base $base, Project $project)
