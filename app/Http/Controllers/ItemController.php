@@ -354,19 +354,16 @@ class ItemController extends Controller
     function ext_create(Base $base, Project $project, Role $role, $heading = 0, Link $par_link = null, Item $parent_item = null)
         // '$heading = 0' использовать; аналог '$heading = false', в этом случае так /item/ext_create/{base}//
     {
-        echo "111111111111111111";
         if (GlobalController::check_project_user($project, $role) == false) {
             return view('message', ['message' => trans('main.info_user_changed')]);
         }
 
         $arrays = $this->get_array_calc_create($base, $par_link, $parent_item);
-        echo "222222222222222222222";
         $array_calc = $arrays['array_calc'];
         $array_disabled = $arrays['array_disabled'];
         $code_new = $this->calculate_new_code($base, $project);
         // Похожая строка внизу
         $code_uniqid = uniqid($base->id . '_', true);
-        echo "33333333333333333333";
 
         return view('item/ext_edit', ['base' => $base,
             'code_new' => $code_new, 'code_uniqid' => $code_uniqid,
