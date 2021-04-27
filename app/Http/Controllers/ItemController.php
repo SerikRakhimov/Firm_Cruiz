@@ -365,6 +365,8 @@ class ItemController extends Controller
         // Похожая строка внизу
         $code_uniqid = uniqid($base->id . '_', true);
 
+        $array_parent_related = GlobalController::get_array_parent_related($base);
+
         return view('item/ext_edit', ['base' => $base,
             'code_new' => $code_new, 'code_uniqid' => $code_uniqid,
             'heading' => $heading,
@@ -372,7 +374,8 @@ class ItemController extends Controller
             'role' => $role,
             'array_calc' => $array_calc,
             'array_disabled' => $array_disabled,
-            'par_link' => $par_link, 'parent_item' => $parent_item]);
+            'par_link' => $par_link, 'parent_item' => $parent_item,
+            'array_parent_related' => $array_parent_related]);
     }
 
     function create()

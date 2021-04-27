@@ -357,7 +357,7 @@ class GlobalController extends Controller
 //                ->orderBy('ct.' . $name)
 //                ->distinct();
 
-                        // Не попадают в список $links изображения/документы,
+                        // Не попадают в список $links изображения/документы
                         $links = Link::select(DB::Raw('links.*'))
                             ->join('bases as pb', 'links.parent_base_id', '=', 'pb.id')
                             ->where('links.child_base_id', '=', $base->id)
@@ -425,6 +425,38 @@ class GlobalController extends Controller
 
         return ['items' => $items, 'itget' => $itget, 'view_count' => '(' . $view_count . ')'];
     }
+
+    static function get_array_parent_related(Base $base)
+    {
+        $array_start = false;
+        $array_result = false;
+
+        $collection_start = collect();
+        $collection_result = collect();
+
+        // Связанные связи/поля выбираются
+        $links = Link::select(DB::Raw('*'))
+            ->where('child_base_id', '=', $base->id)
+            ->where('parent_is_parent_related', true)
+            ->orderBy('parent_base_number')->get();
+        if ($links) {
+
+            foreach ($links as $link) {
+                // В $collection_result в key сохраняется $link->parent_parent_related_start_link_id
+                $collection_start[$link->parent_parent_related_start_link_id] = true;
+                // В $collection сохраняется в key - $link->parent_parent_related_start_link_id
+                $collection_result[] = ['parent_parent_related_start_link_id' => $link->parent_parent_related_start_link_id,
+                    'parent_parent_related_result_link_id' => $link->parent_parent_related_result_link_id];
+            }
+
+            $array_start = $collection_start->keys()->toArray();
+            $array_result = $collection_result->toArray();
+        }
+
+        return ['array_start' => $array_start, 'array_result' => $array_result];
+
+    }
+
 
     static function empty_html()
     {
@@ -563,7 +595,7 @@ class GlobalController extends Controller
         return $result;
     }
 
-    // Возвращает первые 255 символов переданной строки
+// Возвращает первые 255 символов переданной строки
     static function itnm_left($str)
     {
         // Убрать HTML-теги
@@ -600,24 +632,24 @@ class GlobalController extends Controller
         return $result;
     }
 
-    // Проверяет текст на запрещенные html-теги
+// Проверяет текст на запрещенные html-теги
     static function text_html_check($text)
     {
         // Пробелы нужны "< html" и т.д.
         $array = array(
 //            "< html",
-            "<html","</html",
-            "<head","</head",
-            "<body","</body",
-            "<script","</script",
-            "<applet","</applet",
-            "<form","</form",
-            "<input","</input",
-            "<button","</button",
-            "<audio","</audio",
-            "<img","</img",
-            "<video","</video",
-            "<a","</a",
+            "<html", "</html",
+            "<head", "</head",
+            "<body", "</body",
+            "<script", "</script",
+            "<applet", "</applet",
+            "<form", "</form",
+            "<input", "</input",
+            "<button", "</button",
+            "<audio", "</audio",
+            "<img", "</img",
+            "<video", "</video",
+            "<a", "</a",
             "onblur",
             "onchange",
             "onclick",
