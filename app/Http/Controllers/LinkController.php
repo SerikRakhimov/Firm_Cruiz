@@ -386,6 +386,7 @@ class LinkController extends Controller
         if ($base != null) {
             // список links по выбранному base_id
             $links = Link::all()->where('child_base_id', $base->id)->sortBy('parent_base_number');
+            //$links = Link::all()->where('child_base_id', $base->id)->where('parent_is_parent_related', false)->sortBy('parent_base_number');
             // при корректировке записи текущую запись не отображать в списке
             if ($link_current) {
                 $links = $links->where('id', '!=', $link_current->id);

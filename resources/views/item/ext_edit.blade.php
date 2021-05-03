@@ -280,7 +280,8 @@
                 @continue
             @endif
             <?php
-            $result = ItemController::get_items_for_link($link, $project, $role);
+            //$result = ItemController::get_items_for_link($link, $project, $role);
+            $result = ItemController::get_items_ext_edit_for_link($link, $project, $role);
             $items = $result['result_parent_base_items'];
             $code_find = null;
             if ($value != null) {
@@ -396,7 +397,7 @@
                                       name="name{{$key}}"
                                       id="name{{$key}}"
                                       @if($link->parent_is_hidden_field == true)
-                                            hidden
+                                      hidden
                                         @endif
                                     ></span>
                         </div>
@@ -690,12 +691,16 @@
 
                     {{--                            если тип корректировки поля - изображение--}}
                 @elseif($link->parent_base->type_is_image())
-                    @include('edit.img_link',['update'=>$update, 'base'=>$link->parent_base,'result'=>$result,'value'=>$value, 'name'=>$key,'id'=>"link".$key, 'size'=>"small"])
+                    {{--                        @include('edit.img_link',['update'=>$update, 'base'=>$link->parent_base,'result'=>$result,'value'=>$value, 'name'=>$key,'id'=>"link".$key, 'size'=>"small"])--}}
+                    @include('edit.img_link',['update'=>$update, 'base'=>$link->parent_base,'value'=>$value, 'name'=>$key,'id'=>"link".$key, 'size'=>"small"])
 
                     {{--                            если тип корректировки поля - документ--}}
                 @elseif($link->parent_base->type_is_document())
-                    @include('edit.doc_link',['update'=>$update, 'base'=>$link->parent_base,'result'=>$result,'value'=>$value, 'name'=>$key,'id'=>"link".$key])
+                    {{--                        @include('edit.doc_link',['update'=>$update, 'base'=>$link->parent_base,'result'=>$result,'value'=>$value, 'name'=>$key,'id'=>"link".$key])--}}
+                    @include('edit.doc_link',['update'=>$update, 'base'=>$link->parent_base,'value'=>$value, 'name'=>$key,'id'=>"link".$key])
 
+                    {{--                         Такая же проверка ItemController::get_items_ext_edit_for_link(),--}}
+                    {{--                         в ext_edit.php--}}
                 @elseif($link->parent_base->type_is_list())
                     <div class="form-group row">
                         <div class="col-sm-3 text-right">
@@ -776,6 +781,18 @@
         </div>
         {{--    <audio id="sound"><source src="https://ozarnik.ru/uploads/files/2019-02/1549784984_dj-ozarnik-primite-zakaz.mp3" type="audio/mp3"></audio>--}}
     </form>
+    {{--    <?php--}}
+    {{--    $array_start = $array_parent_related['array_start'];--}}
+    {{--    $array_result = $array_parent_related['array_result'];--}}
+    {{--    ?>--}}
+    {{--    <script>--}}
+    {{--            @foreach($array_start as $value)--}}
+    {{--        var parent_related_start_{{$value}} = document.getElementById('link{{$value}}');--}}
+    {{--            @endforeach--}}
+    {{--            @foreach($array_result as $value)--}}
+    {{--        var parent_related_result_{{$value['link_id']}} = document.getElementById('link{{$value['link_id']}}');--}}
+    {{--        @endforeach--}}
+    {{--    </script>--}}
     <?php
     $functions = array();
     $functs_numcalc = array();
@@ -886,6 +903,81 @@
 
             </script>
         @endif
+        {{--        @if($link_parent)--}}
+        {{--            <script>--}}
+        {{--                    @if($const_link_start->parent_base->is_code_needed==true && $const_link_start->parent_is_enter_refer==true)--}}
+
+        {{--                var child_base_id{{$prefix}}{{$link->id}} = document.getElementById('{{$const_link_id_start}}');--}}
+        {{--                var child_code_id{{$prefix}}{{$link->id}} = document.getElementById('code{{$const_link_id_start}}');--}}
+        {{--                var parent_base_id{{$prefix}}{{$link->id}} = document.getElementById('link{{$link->id}}');--}}
+
+        {{--                <?php--}}
+        {{--                $functs_parent_refer[count($functs_parent_refer)] = "link_id_change_" . $prefix . $link->id;--}}
+        {{--                //           $functions[count($functions)] = "link_id_change_" . $prefix . $link->id;--}}
+        {{--                ?>--}}
+        {{--                function link_id_change_{{$prefix}}{{$link->id}}(first = false) {--}}
+        {{--                    //alert('{{$link->id}} - {{$link_parent->id}} - {{$const_link_id_start}} - {{$const_link_start->parent_base->is_code_needed}} - {{$const_link_start->parent_is_enter_refer}}');--}}
+        {{--                    //alert('child_base_id{{$prefix}}{{$link->id}}.value = ' + child_base_id{{$prefix}}{{$link->id}}.value);--}}
+        {{--                    if (child_base_id{{$prefix}}{{$link->id}}.value == 0) {--}}
+        {{--                        parent_base_id{{$prefix}}{{$link->id}}.innerHTML = "{{trans('main.no_information') . '!'}}";--}}
+        {{--                        //alert('---->'+"{{trans('main.no_information') . '!'}}")--}}
+        {{--                    } else {--}}
+        {{--                        axios.get('/item/get_parent_item_from_calc_child_item/'--}}
+        {{--                            + child_base_id{{$prefix}}{{$link->id}}.value--}}
+        {{--                            + '/{{$link->id}}'--}}
+        {{--                            + '/0'--}}
+        {{--                        ).then(function (res) {--}}
+        {{--                                parent_base_id{{$prefix}}{{$link->id}}.innerHTML = res.data['result_item_name'];--}}
+        {{--                                //alert('---->'+res.data['result_item_name'])--}}
+        {{--                                @if($link->parent_is_nc_parameter == true)--}}
+        {{--                                on_numcalc();--}}
+        {{--                                @endif--}}
+        {{--                            }--}}
+        {{--                        );--}}
+        {{--                        // При просмотре фото может неправильно работать при просмотре фото по связанному полю - проэтому закомментарено--}}
+        {{--                        // вызываем состояние "элемент изменился", в связи с этим запустятся функции - обработчики "change"--}}
+        {{--                        // child_code_id{{$prefix}}{{$link->id}}.dispatchEvent(new Event('input'));--}}
+        {{--                    }--}}
+        {{--                }--}}
+
+        {{--                // Эта команда не нужна--}}
+        {{--                //child_code_id{{$prefix}}{{$link->id}}.addEventListener("change", link_id_change_{{$prefix}}{{$link->id}});--}}
+
+        {{--                    @elseif($const_link_start->parent_base->type_is_list())--}}
+        {{--                var child_base_id{{$prefix}}{{$link->id}} = document.getElementById('link{{$const_link_id_start}}');--}}
+        {{--                var parent_base_id{{$prefix}}{{$link->id}} = document.getElementById('link{{$link->id}}');--}}
+
+        {{--                <?php--}}
+        {{--                $functions[count($functions)] = "link_id_changeOption_" . $prefix . $link->id;--}}
+        {{--                ?>--}}
+        {{--                function link_id_changeOption_{{$prefix}}{{$link->id}}(first = false) {--}}
+        {{--//                    alert(child_base_id{{$prefix}}{{$link->id}}.options[child_base_id{{$prefix}}{{$link->id}}.selectedIndex].value);--}}
+        {{--                    if (child_base_id{{$prefix}}{{$link->id}}.options[child_base_id{{$prefix}}{{$link->id}}.selectedIndex].value == 0) {--}}
+        {{--                        parent_base_id{{$prefix}}{{$link->id}}.innerHTML = "{{trans('main.no_information') . '!'}}";--}}
+        {{--                        @if($link->parent_is_nc_parameter == true)--}}
+        {{--                        on_numcalc();--}}
+        {{--                        @endif--}}
+        {{--                    } else {--}}
+        {{--                        axios.get('/item/get_parent_item_from_calc_child_item/'--}}
+        {{--                            + child_base_id{{$prefix}}{{$link->id}}.options[child_base_id{{$prefix}}{{$link->id}}.selectedIndex].value--}}
+        {{--                            + '/{{$link->id}}'--}}
+        {{--                            + '/0'--}}
+        {{--                        ).then(function (res) {--}}
+        {{--                                parent_base_id{{$prefix}}{{$link->id}}.innerHTML = res.data['result_item_name'];--}}
+        {{--                                @if($link->parent_is_nc_parameter == true)--}}
+        {{--                                on_numcalc();--}}
+        {{--                                @endif--}}
+
+        {{--                            }--}}
+        {{--                        );--}}
+        {{--                    }--}}
+        {{--                }--}}
+
+        {{--                child_base_id{{$prefix}}{{$link->id}}.addEventListener("change", link_id_changeOption_{{$prefix}}{{$link->id}});--}}
+
+        {{--                @endif--}}
+        {{--            </script>--}}
+        {{--        @endif--}}
         @if($link_parent)
             <script>
                     @if($const_link_start->parent_base->is_code_needed==true && $const_link_start->parent_is_enter_refer==true)
@@ -915,6 +1007,11 @@
                                 @if($link->parent_is_nc_parameter == true)
                                 on_numcalc();
                                 @endif
+                                {{--    arr = res.data;--}}
+                                {{--for (key in arr) {--}}
+                                {{--    // console.log(`${key} = ${arr[key]}`);--}}
+                                {{--    alert('link_id = {{$link->id}} key = ' + key + ' value = ' + arr[key]);--}}
+                                {{--}--}}
                             }
                         );
                         // При просмотре фото может неправильно работать при просмотре фото по связанному полю - проэтому закомментарено
@@ -1015,6 +1112,7 @@
                     );
                     // Команда "on_parent_refer();" нужна, для вызова функция обновления данных с зависимых таблиц
                     // Функция code_input_{{$prefix}}{{$link->id}}(first) выполняется не сразу
+
                     on_parent_refer();
                     //alert('code{{$link->id}}=' + code{{$link->id}}.value);
                     // Команда нужна!

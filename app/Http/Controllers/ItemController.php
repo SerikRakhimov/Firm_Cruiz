@@ -126,7 +126,7 @@ class ItemController extends Controller
         }
         if ($items != null) {
             // Такая же проверка и в GlobalController (function items_right()),
-            // в ItemController (function browser(), get_items_for_link())
+            // в ItemController (function browser(), get_items_for_link(), get_items_ext_edit_for_link())
             if ($base_right['is_list_base_byuser'] == true) {
                 $items = $items->where('created_user_id', GlobalController::glo_user_id());
             }
@@ -365,7 +365,7 @@ class ItemController extends Controller
         // Похожая строка внизу
         $code_uniqid = uniqid($base->id . '_', true);
 
-        $array_parent_related = GlobalController::get_array_parent_related($base);
+        //$array_parent_related = GlobalController::get_array_parent_related($base);
 
         return view('item/ext_edit', ['base' => $base,
             'code_new' => $code_new, 'code_uniqid' => $code_uniqid,
@@ -374,8 +374,7 @@ class ItemController extends Controller
             'role' => $role,
             'array_calc' => $array_calc,
             'array_disabled' => $array_disabled,
-            'par_link' => $par_link, 'parent_item' => $parent_item,
-            'array_parent_related' => $array_parent_related]);
+            'par_link' => $par_link, 'parent_item' => $parent_item]);
     }
 
     function create()
@@ -2336,6 +2335,8 @@ class ItemController extends Controller
         return Main::where('parent_item_id', $item->id)->exists();
     }
 
+    // Функции get_items_for_link() и get_items_ext_edit_for_link()
+    // в целом похожи в части возвращаемых 'result_parent_label', 'result_parent_base_items'
     static function get_items_for_link(Link $link, Project $project, Role $role)
     {
         $result_parent_label = '';
@@ -2371,7 +2372,7 @@ class ItemController extends Controller
                 $base_right = GlobalController::base_right($link->parent_base, $role);
                 $result_parent_base_items = Item::select(['id', 'base_id', 'name_lang_0', 'name_lang_1', 'name_lang_2', 'name_lang_3', 'created_user_id'])->where('base_id', $link->parent_base_id)->where('project_id', $project->id)->orderBy($name);
                 // Такая же проверка и в GlobalController (function items_right()),
-                // в ItemController (function browser(), get_items_for_link())
+                // в ItemController (function browser(), get_items_for_link(), get_items_ext_edit_for_link())
                 if ($base_right['is_list_base_byuser'] == true) {
                     $result_parent_base_items = $result_parent_base_items->where('created_user_id', GlobalController::glo_user_id());
                 }
@@ -2389,6 +2390,37 @@ class ItemController extends Controller
             'result_parent_base_items' => $result_parent_base_items,
             'result_child_base_items_options' => $result_child_base_items_options,
             'result_parent_base_items_options' => $result_parent_base_items_options,
+        ];
+    }
+
+    // Функции get_items_for_link() и get_items_ext_edit_for_link()
+    // в целом похожи в части возвращаемых 'result_parent_label', 'result_parent_base_items'
+    static function get_items_ext_edit_for_link(Link $link, Project $project, Role $role)
+    {
+        // наименование
+        $result_parent_label = $link->parent_label();
+        $result_parent_base_items = [];
+        // Такая же проверка ItemController::get_items_ext_edit_for_link(),
+        // в ext_edit.php
+        if ($link->parent_base->type_is_list()) {
+            $name = "";  // нужно, не удалять
+            $index = array_search(App::getLocale(), config('app.locales'));
+            if ($index !== false) {   // '!==' использовать, '!=' не использовать
+                $name = 'name_lang_' . $index;
+            }
+            // список items по выбранному parent_base_id
+            $base_right = GlobalController::base_right($link->parent_base, $role);
+            $result_parent_base_items = Item::select(['id', 'base_id', 'name_lang_0', 'name_lang_1', 'name_lang_2', 'name_lang_3', 'created_user_id'])->where('base_id', $link->parent_base_id)->where('project_id', $project->id)->orderBy($name);
+            // Такая же проверка и в GlobalController (function items_right()),
+            // в ItemController (function browser(), get_items_for_link(), get_items_ext_edit_for_link())
+            if ($base_right['is_list_base_byuser'] == true) {
+                $result_parent_base_items = $result_parent_base_items->where('created_user_id', GlobalController::glo_user_id());
+            }
+            $result_parent_base_items = $result_parent_base_items->get();
+        }
+        return [
+            'result_parent_label' => $result_parent_label,
+            'result_parent_base_items' => $result_parent_base_items,
         ];
     }
 
@@ -2566,60 +2598,60 @@ class ItemController extends Controller
             // ------------------------------------------------------------
             // Не удалять - сложный алгоритм поиска, например, прабабушка мамы
 //            if (1 == 2) {
-                // возвращает маршрут $link_ids по вычисляемым полям до первого найденного постоянного link_id ($const_link_id_start)
-                $rs = LinkController::get_link_ids_from_calc_link($link_result);
-                $const_link_id_start = $rs['const_link_id_start'];
-                $link_ids = $rs['link_ids'];
-                // Вычисляем первоначальный $item;
-                if ($item_calc == true) {
-                    $item = MainController::get_parent_item_from_main($item_start->id, $const_link_id_start);
-                } else {
-                    $item = $item_start;
-                }
-                if ($item) {
-                    if ($const_link_id_start && $link_ids) {
-                        $error = false;
-                        // цикл по вычисляемым полям
-                        foreach (@$link_ids as $link_id) {
-                            $link_find = Link::find($link_id);
-                            if (!$link_find) {
-                                $error = true;
-                                break;
-                            }
-                            $link_find = Link::find($link_find->parent_parent_related_result_link_id);
-                            if (!$link_find) {
-                                $error = true;
-                                break;
-                            }
-                            // используется поле link->parent_parent_related_result_link_id
-                            // находим новый $item (невычисляемый)
-                            // $item меняется внутри цикла
-                            $item = self::get_parent_item_from_child_item($item, $link_find)['result_item'];
-                            if (!$item) {
-                                $error = true;
-                                break;
-                            }
+            // возвращает маршрут $link_ids по вычисляемым полям до первого найденного постоянного link_id ($const_link_id_start)
+            $rs = LinkController::get_link_ids_from_calc_link($link_result);
+            $const_link_id_start = $rs['const_link_id_start'];
+            $link_ids = $rs['link_ids'];
+            // Вычисляем первоначальный $item;
+            if ($item_calc == true) {
+                $item = MainController::get_parent_item_from_main($item_start->id, $const_link_id_start);
+            } else {
+                $item = $item_start;
+            }
+            if ($item) {
+                if ($const_link_id_start && $link_ids) {
+                    $error = false;
+                    // цикл по вычисляемым полям
+                    foreach (@$link_ids as $link_id) {
+                        $link_find = Link::find($link_id);
+                        if (!$link_find) {
+                            $error = true;
+                            break;
                         }
-                        if (!$error && $item) {
-                            $result_item = $item;
-                            $result_item_id = $item->id;
-                            if ($item->base->type_is_image() || $item->base->type_is_document()) {
-                                //$result_item_name = "<a href='" . Storage::url($item->filename()) . "'><img src='" . Storage::url($item->filename()) . "' height='50' alt='' title='" . $item->filename() . "'></a>";
-                                if ($item->base->type_is_image()) {
-                                    $result_item_name = "<img src='" . Storage::url($item->filename()) . "' height='250' alt='' title='" . $item->title_img() . "'>";
-                                } else {
-                                    $result_item_name = "<a href='" . Storage::url($item->filename()) . "'><img src='" . Storage::url($item->filename()) . "' height='50' alt='' title='" . $item->filename() . "'></a>";
-                                }
-                            } elseif ($item->base->type_is_text()) {
-                                $result_item_name = GlobalController::it_txnm_n2b($item);
-                            } else {
-                                // $numcat = false - не выводить числовых поля с разрядом тысячи/миллионы/миллиарды
-                                $result_item_name = $item->name();
-                            }
-                            $result_item_name_options = "<option value='" . $item->id . "'>" . $item->name() . "</option>";
+                        $link_find = Link::find($link_find->parent_parent_related_result_link_id);
+                        if (!$link_find) {
+                            $error = true;
+                            break;
+                        }
+                        // используется поле link->parent_parent_related_result_link_id
+                        // находим новый $item (невычисляемый)
+                        // $item меняется внутри цикла
+                        $item = self::get_parent_item_from_child_item($item, $link_find)['result_item'];
+                        if (!$item) {
+                            $error = true;
+                            break;
                         }
                     }
+                    if (!$error && $item) {
+                        $result_item = $item;
+                        $result_item_id = $item->id;
+                        if ($item->base->type_is_image() || $item->base->type_is_document()) {
+                            //$result_item_name = "<a href='" . Storage::url($item->filename()) . "'><img src='" . Storage::url($item->filename()) . "' height='50' alt='' title='" . $item->filename() . "'></a>";
+                            if ($item->base->type_is_image()) {
+                                $result_item_name = "<img src='" . Storage::url($item->filename()) . "' height='250' alt='' title='" . $item->title_img() . "'>";
+                            } else {
+                                $result_item_name = "<a href='" . Storage::url($item->filename()) . "'><img src='" . Storage::url($item->filename()) . "' height='50' alt='' title='" . $item->filename() . "'></a>";
+                            }
+                        } elseif ($item->base->type_is_text()) {
+                            $result_item_name = GlobalController::it_txnm_n2b($item);
+                        } else {
+                            // $numcat = false - не выводить числовых поля с разрядом тысячи/миллионы/миллиарды
+                            $result_item_name = $item->name();
+                        }
+                        $result_item_name_options = "<option value='" . $item->id . "'>" . $item->name() . "</option>";
+                    }
                 }
+            }
             //}
             // --------------------------------------------------------------
         }

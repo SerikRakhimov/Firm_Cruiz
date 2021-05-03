@@ -326,7 +326,8 @@ class GlobalController extends Controller
             $items = $items->orderBy($name);
 
             //if (count($items->get()) > 0) {
-            // Такая же проверка и в ItemController (function browser(), get_items_for_link())
+            // Такая же проверка и в GlobalController (function items_right()),
+            // в ItemController (function browser(), get_items_for_link(), get_items_ext_edit_for_link())
             if ($base_right['is_list_base_byuser'] == true) {
                 if (Auth::check()) {
                     $items = $items->where('created_user_id', GlobalController::glo_user_id());
@@ -445,7 +446,8 @@ class GlobalController extends Controller
                 // В $collection_result в key сохраняется $link->parent_parent_related_start_link_id
                 $collection_start[$link->parent_parent_related_start_link_id] = true;
                 // В $collection сохраняется в key - $link->parent_parent_related_start_link_id
-                $collection_result[] = ['parent_parent_related_start_link_id' => $link->parent_parent_related_start_link_id,
+                $collection_result[] = ['link_id' => $link->id,
+                    'parent_parent_related_start_link_id' => $link->parent_parent_related_start_link_id,
                     'parent_parent_related_result_link_id' => $link->parent_parent_related_result_link_id];
             }
 
