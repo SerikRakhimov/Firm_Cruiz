@@ -2336,7 +2336,7 @@ class ItemController extends Controller
     }
 
     // Функции get_items_for_link() и get_items_ext_edit_for_link()
-    // в целом похожи в части возвращаемых 'result_parent_label', 'result_parent_base_items'
+    // в целом похожи в части возвращаемых 'result_parent_label', 'result_parent_base_name', 'result_parent_base_items'
     static function get_items_for_link(Link $link, Project $project, Role $role)
     {
         $result_parent_label = '';
@@ -2394,11 +2394,12 @@ class ItemController extends Controller
     }
 
     // Функции get_items_for_link() и get_items_ext_edit_for_link()
-    // в целом похожи в части возвращаемых 'result_parent_label', 'result_parent_base_items'
+    // в целом похожи в части возвращаемых 'result_parent_label', 'result_parent_base_name', 'result_parent_base_items'
     static function get_items_ext_edit_for_link(Link $link, Project $project, Role $role)
     {
         // наименование
         $result_parent_label = $link->parent_label();
+        $result_parent_base_name = $link->parent_base->name();
         $result_parent_base_items = [];
         // Такая же проверка ItemController::get_items_ext_edit_for_link(),
         // в ext_edit.php
@@ -2420,6 +2421,7 @@ class ItemController extends Controller
         }
         return [
             'result_parent_label' => $result_parent_label,
+            'result_parent_base_name' => $result_parent_base_name,
             'result_parent_base_items' => $result_parent_base_items,
         ];
     }
