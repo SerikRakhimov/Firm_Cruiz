@@ -2353,8 +2353,9 @@ class ItemController extends Controller
             $result_child_base_name = $link->child_base->name();
             $result_parent_base_name = $link->parent_base->name();
             // если это фильтрируемое поле - то, тогда загружать весь список не нужно
-            $link_exists = Link::where('parent_is_child_related', true)->where('parent_child_related_start_link_id', $link->id)->exists();
-            if ($link_exists == null) {
+
+            //$link_exists = Link::where('parent_is_child_related', true)->where('parent_child_related_start_link_id', $link->id)->exists();
+            //if ($link_exists == null) {
 
                 $name = "";  // нужно, не удалять
                 $index = array_search(App::getLocale(), config('app.locales'));
@@ -2380,7 +2381,7 @@ class ItemController extends Controller
                 foreach ($result_parent_base_items as $item) {
                     $result_parent_base_items_options = $result_parent_base_items_options . "<option value='" . $item->id . "'>" . $item->name() . "</option>";
                 }
-            }
+            //}
         }
         return [
             'result_parent_label' => $result_parent_label,
