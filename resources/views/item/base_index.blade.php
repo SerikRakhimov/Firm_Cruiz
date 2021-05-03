@@ -215,7 +215,7 @@
                                 href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}"
                                 title="{{$item->name()}}">
                                 {{--                            Где $item->name() выходит в cards выводить "<?php echo GlobalController::to_html();?>"--}}
-                                <?php echo $item->nmbr();?>
+                                <?php echo $item->nmbr(false);?>
                             </a></h5>
                         {{--                    </div>--}}
                     </div>
