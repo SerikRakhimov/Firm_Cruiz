@@ -2367,6 +2367,7 @@ class ItemController extends Controller
                 // "$result_child_base_items = $result_child_base_items->get()" нужно, при этом нет замедления
                 $result_child_base_items = $result_child_base_items->get();
                 foreach ($result_child_base_items as $item) {
+                    //$item->name() - для быстрого получения $item->name()
                     $result_child_base_items_options = $result_child_base_items_options . "<option value='" . $item->id . "'>" . $item->name() . "</option>";
                 }
 

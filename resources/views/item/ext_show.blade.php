@@ -54,7 +54,7 @@
                             echo GlobalController::it_txnm_n2b($item);
                             ?>
                         @else
-                            {{$item->name(true)}}
+                            {{$item->name(false, true)}}
                         @endif
                 </span>
                 </p>
@@ -110,7 +110,7 @@
                         {{--                            </a>--}}
                     @else
                         {{--                                            $numcat = true - вывод числовых полей с разрядом тысячи/миллионы/миллиарды--}}
-                        <span class="text-related">{{$item_find->name(true)}}</span>
+                        <span class="text-related">{{$item_find->name(false, true)}}</span>
                     @endif
                     <br>
                 @endif

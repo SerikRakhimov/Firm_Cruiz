@@ -75,7 +75,7 @@ class Item extends Model
 
     // name() используется для отображения значений полей
     // $numcat = true/false - вывод числовых полей с разрядом тысячи/миллионы/миллиарды
-    function name_start($numcat = false)
+    function name_start($fullname = false, $numcat = false)
     {
         $result = "";  // нужно, не удалять
 
@@ -118,14 +118,16 @@ class Item extends Model
                 $index = array_search(App::getLocale(), config('app.locales'));
                 if ($index !== false) {   // '!==' использовать, '!=' не использовать
                     $result = trim($this['name_lang_' . $index]);
-                    //ограниченные 255 - размером полей хранятся в $item->name_lang_0 - $item->name_lang_3
-                    $maxlen = 255;
-                    if (($base->is_calcname_lst == true) && (mb_strlen($result) >= $maxlen)) {
-                        // похожи GlobalController::itnm_left() и Item.php ("...")
-                        if (mb_substr($result, $maxlen - 3, 3) == "...") {
-                            // Полное наименование, более 255 символов
-                            https://stackoverflow.com/questions/19693946/non-static-method-should-not-be-called-statically
-                            $result = (new ItemController)->calc_value_func($this)['calc_full_lang_' . $index];
+                    if ($fullname == true) {
+                        //ограниченные 255 - размером полей хранятся в $item->name_lang_0 - $item->name_lang_3
+                        $maxlen = 255;
+                        if (($base->is_calcname_lst == true) && (mb_strlen($result) >= $maxlen)) {
+                            // похожи GlobalController::itnm_left() и Item.php ("...")
+                            if (mb_substr($result, $maxlen - 3, 3) == "...") {
+                                // Полное наименование, более 255 символов
+                                //https://stackoverflow.com/questions/19693946/non-static-method-should-not-be-called-statically
+                                $result = (new ItemController)->calc_value_func($this)['calc_full_lang_' . $index];
+                            }
                         }
                     }
                 }
@@ -141,9 +143,9 @@ class Item extends Model
     // "\~" - символ перевода каретки (используется также в Item.php: функции name() nmbr())
     // "\~" - символ перевода каретки (используется также в ItemController.php: функция calc_value_func())
     // $numcat = true/false - вывод числовых полей с разрядом тысячи/миллионы/миллиарды
-    function name($numcat = false)
+    function name($fullname = false, $numcat = false)
     {
-        $result = self::name_start($numcat);
+        $result = self::name_start($fullname, $numcat);
         $result = str_replace('\~', '', $result);
         return $result;
     }
