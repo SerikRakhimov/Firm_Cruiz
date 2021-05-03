@@ -1112,9 +1112,8 @@
                     );
                     // Команда "on_parent_refer();" нужна, для вызова функция обновления данных с зависимых таблиц
                     // Функция code_input_{{$prefix}}{{$link->id}}(first) выполняется не сразу
-
                     on_parent_refer();
-                    //alert('code{{$link->id}}=' + code{{$link->id}}.value);
+
                     // Команда нужна!
                     //document.getElementById('code{{$link->id}}').dispatchEvent(new Event('change'));
 
@@ -1276,7 +1275,7 @@
             @endforeach
             // on_parent_refer();
 
-            // Не нужно вызывать функцию on_calc(),
+            // Не нужно вызывать функцию on_numcalc(),
             // это связано с разрешенной корректировкой вычисляемых полей ($link->parent_is_nc_viewonly)
             // on_numcalc();
             @foreach($array_disabled as $key=>$value)
