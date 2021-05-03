@@ -279,9 +279,7 @@
             @if($base_link_right['is_edit_link_enable'] == false)
                 @continue
             @endif
-            <h3>{{$link->parent_base->name()}} {{time()}}</h3>
             <?php
-            $st = time();
             $result = ItemController::get_items_for_link($link, $project, $role);
             //$result = ItemController::get_items_ext_edit_for_link($link, $project, $role);
             $items = $result['result_parent_base_items'];
@@ -291,7 +289,6 @@
                 $code_find = $item_find->code;
             }
             ?>
-            <h3>{{$result['result_parent_label']}} {{time()}} {{time()-$st}} sec. </h3>
             {{--                            проверка для вычисляемых полей--}}
             @if($link->parent_is_parent_related == true)
                 <div class="form-group row"
