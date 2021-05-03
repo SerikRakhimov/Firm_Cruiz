@@ -2364,8 +2364,8 @@ class ItemController extends Controller
                 // список items по выбранному child_base_id
                 // "->get()" не использовать, т.к. замедляет выполнение (примерно 3 секунды выполняется)
                 $result_child_base_items = Item::select(['id', 'base_id', 'name_lang_0', 'name_lang_1', 'name_lang_2', 'name_lang_3'])->where('base_id', $link->child_base_id)->where('project_id', $project->id)->orderBy($name);
-                // "$result_parent_base_items = $result_parent_base_items->get()" нужно, при этом нет замедления
-                $result_parent_base_items = $result_parent_base_items->get();
+                // "$result_child_base_items = $result_child_base_items->get()" нужно, при этом нет замедления
+                $result_child_base_items = $result_child_base_items->get();
                 foreach ($result_child_base_items as $item) {
                     $result_child_base_items_options = $result_child_base_items_options . "<option value='" . $item->id . "'>" . $item->name() . "</option>";
                 }
