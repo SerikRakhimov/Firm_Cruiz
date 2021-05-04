@@ -42,16 +42,25 @@
                 ?>
                 <tr>
                     {{--                                    <th scope="row">{{$i}}</th>--}}
-                    <td class="text-center">{{$i}}</td>
+                    <td class="text-center"><h5>
+                            <a
+                                href="{{route('item.base_index',['base'=>$base, 'project' => $project, 'role' => $role])}}"
+                                title="{{$base->names()}}">
+                                {{$i}}
+                            </a></h5></td>
                     <td class="text-left">
-                        <a
-                            href="{{route('item.base_index',['base'=>$base, 'project' => $project, 'role' => $role])}}"
-                            title="{{$base->names()}}">
-                            {{$base->names()}}
-{{--                            @auth--}}
-                            {{GlobalController::items_right($base, $project, $role)['view_count']}}
-{{--                            @endauth--}}
-                          </a>
+                        <h5>
+                            <a
+                                href="{{route('item.base_index',['base'=>$base, 'project' => $project, 'role' => $role])}}"
+                                title="{{$base->names()}}">
+                                {{$base->names()}}
+                                {{--                            @auth--}}
+                                <span
+                                    class="text-muted text-related">{{GlobalController::items_right($base, $project, $role)['view_count']}}
+                                </span>
+                                {{--                            @endauth--}}
+                            </a>
+                        </h5>
                     </td>
                 </tr>
             @endif
@@ -59,7 +68,92 @@
         </tbody>
     </table>
     {{$bases->links()}}
+
+    {{--    <h3 class="text-center">Справочники</h3><br>--}}
+
+    {{--    <div class="card-deck">--}}
+    {{--        <?php--}}
+    {{--        $i = $bases->firstItem() - 1;--}}
+    {{--        ?>--}}
+    {{--        @foreach($bases as $base)--}}
+    {{--            <?php--}}
+    {{--            $base_right = GlobalController::base_right($base, $role);--}}
+    {{--            ?>--}}
+    {{--            @if($base_right['is_list_base_calc'] == true)--}}
+    {{--                <?php--}}
+    {{--                $i++;--}}
+    {{--                ?>--}}
+    {{--                <div class="card shadow">--}}
+    {{--                    --}}{{--                                        <p class="card-header text-center">{{$i}}</p>--}}
+    {{--                    <div class="card-body">--}}
+    {{--                        <h5 class="card-title text-center">--}}
+    {{--                            <a--}}
+    {{--                                href="{{route('item.base_index',['base'=>$base, 'project' => $project, 'role' => $role])}}"--}}
+    {{--                                title="{{$base->names()}}">--}}
+    {{--                                {{$base->names()}}--}}
+
+    {{--                                <small class="text-related">--}}
+    {{--                                    {{GlobalController::items_right($base, $project, $role)['view_count']}}--}}
+    {{--                                </small>--}}
+    {{--                            </a>--}}
+    {{--                        </h5>--}}
+    {{--                    </div>--}}
+    {{--                    --}}{{--                    <div class="card-footer text-center">--}}
+    {{--                    --}}{{--                        <small class="text-muted">--}}
+    {{--                    --}}{{--                            {{GlobalController::items_right($base, $project, $role)['view_count']}}--}}
+    {{--                    --}}{{--                        </small>--}}
+    {{--                    --}}{{--                    </div>--}}
+    {{--                </div>--}}
+    {{--            @endif--}}
+    {{--        @endforeach--}}
+    {{--        {{$bases->links()}}--}}
+
+    {{--    </div>--}}
+
+    @if(1==2)
+        <?php
+        $i = $bases->firstItem() - 1;
+        ?>
+        <div class="row">
+            <div class="col-2">
+            </div>
+            <div class="col-8">
+                <ul class="list-group">
+                    @foreach($bases as $base)
+                        <?php
+                        $base_right = GlobalController::base_right($base, $role);
+                        ?>
+                        @if($base_right['is_list_base_calc'] == true)
+                            <?php
+                            $i++;
+                            ?>
+                            <li class="list-group-item d-flex justify-content-between align-items-center listgroup">
+                                <h5 class="card-title text-center">
+                                    <a
+                                        href="{{route('item.base_index',['base'=>$base, 'project' => $project, 'role' => $role])}}"
+                                        title="{{$base->names()}}">
+                                        {{$base->names()}}
+                                    </a>
+                                </h5>
+                                <span
+                                    class="badge badge-related badge-pill">{{GlobalController::items_right($base, $project, $role)['view_count']}}</span>
+                            </li>
+                            {{--                    <div class="card-footer text-center">--}}
+                            {{--                        <small class="text-muted">--}}
+                            {{--                            {{GlobalController::items_right($base, $project, $role)['view_count']}}--}}
+                            {{--                        </small>--}}
+                            {{--                    </div>--}}
+                        @endif
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+        {{$bases->links()}}
+    @endif
+
+
+
     <blockquote class="text-title pt-1 pl-5 pr-5"><?php echo nl2br($project->dc_ext()); ?></blockquote>
-{{--    <blockquote class="text-title pt-1 pl-5 pr-5"><?php echo nl2br($project->dc_int()); ?></blockquote>--}}
+    {{--    <blockquote class="text-title pt-1 pl-5 pr-5"><?php echo nl2br($project->dc_int()); ?></blockquote>--}}
 @endsection
 
