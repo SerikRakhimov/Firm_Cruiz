@@ -20,7 +20,7 @@
         </div>
     </div>
     </p>
-    <table class="table table-sm table-bordered table-hover">
+    <table class="table table-sm table-bordered table-hover listgroup">
         <caption>{{trans('main.select_record_for_work')}}</caption>
         <thead>
         <tr>
