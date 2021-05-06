@@ -2671,7 +2671,8 @@ class ItemController extends Controller
         $result = self::form_tree_start($items, $item_id, 0);
         if ($result != '') {
             //$result = '<ul type="circle"><li>' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b>' . $result . '</li></ul>';
-            $result = '<details><summary>' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b></summary>' . $result . '</details>';
+//            $result = '<details><summary>' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b></summary>' . $result . '</details>';
+            $result = '' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b>' . $result . '';
         }
         return $result;
     }
