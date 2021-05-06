@@ -2705,9 +2705,9 @@ class ItemController extends Controller
             $str = self::form_tree_start($items, $main->parent_item_id, $level);
 //          $result = $result . '<li>' . $main->link->parent_base->name() . ': ' . '<b>' . $main->parent_item->name() . '</b>' . $str . '</li>';
             if ($str == '') {
-                $result = $result . '<li>' . $main->link->parent_base->name() . ': ' . '<b>' . $main->parent_item->name() . '</b>' . $str . '</li>';
+                $result = $result . '<li>' . $main->link->parent_label() . ': ' . '<b>' . $main->parent_item->name() . '</b>' . $str . '</li>';
             } else {
-                $result = $result . '<li><details><summary>' . $main->link->parent_base->name() . ': ' . '<b>' . $main->parent_item->name() . '</b></summary>' . $str . '</details></li>';
+                $result = $result . '<li><details><summary>' . $main->link->parent_label() . ': ' . '<b>' . $main->parent_item->name() . '</b></summary>' . $str . '</details></li>';
             }
         }
         $result = $result . "</ul>";
