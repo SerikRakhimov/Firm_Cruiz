@@ -22,63 +22,70 @@
         <span class="text-label">-</span> <span class="text-title">{{$item->base->info()}}</span>
     </h3>
     <br>
-    <p class="text-label">Id: <span class="text-related">{{$item->id}}</span></p>
-    @if($base_right['is_show_base_enable'] == true)
-        {{--        <p>--}}
-        @if($base->is_code_needed == true)
-            <p class="text-label">{{trans('main.code')}}: <span class="text-related">{{$item->code}}</span></p>
-        @endif
-        {{--        @foreach (config('app.locales') as $key=>$value)--}}
-        {{--            {{trans('main.name')}} ({{trans('main.' . $value)}}): <span class="text-related">{{$item['name_lang_' . $key]}}</span><br>--}}
-        {{--        @endforeach--}}
-        @if($base->type_is_image)
-            @include('view.img',['item'=>$item, 'size'=>"medium", 'filenametrue'=>false, 'link'=>true, 'img_fluid'=>false, 'title'=>""])
-            {{--                <a href="{{Storage::url($item->filename())}}">--}}
-            {{--                    <img src="{{Storage::url($item->filename())}}" height="250"--}}
-            {{--                         alt="" title="{{$item->title_img()}}">--}}
-            {{--                </a>--}}
-        @elseif($base->type_is_document)
-            @include('view.doc',['item'=>$item])
-            {{--                <a href="{{Storage::url($item->filename())}}" target="_blank">--}}
-            {{--                    Открыть документ--}}
-            {{--                </a>--}}
-        @else
-            {{--                Если тип-вычисляемое поле и Показывать Основу с вычисляемым наименованием--}}
-            {{--                или если тип-не вычисляемое наименование--}}
-            {{--            похожая проверка в base_index.blade.php--}}
-            @if(GlobalController::is_base_calcname_check($base, $base_right))
-                {{--                                            $numcat = true - вывод числовых полей с разрядом тысячи/миллионы/миллиарды--}}
-                <p class="text-label">{{trans('main.name')}}: <span class="text-related">
-                    @if($base->type_is_text())
-                            <?php
-                            echo GlobalController::it_txnm_n2b($item);
-                            ?>
-                        @else
-                            {{$item->name(false, true)}}
-                        @endif
-                </span>
-                </p>
+    <ul type="circle">
+        <p class="text-label">Id: <span class="text-related">{{$item->id}}</span></p>
+        @if($base_right['is_show_base_enable'] == true)
+            {{--        <p>--}}
+            @if($base->is_code_needed == true)
+                <p class="text-label">{{trans('main.code')}}: <span class="text-related">{{$item->code}}</span></p>
             @endif
+            {{--        @foreach (config('app.locales') as $key=>$value)--}}
+            {{--            {{trans('main.name')}} ({{trans('main.' . $value)}}): <span class="text-related">{{$item['name_lang_' . $key]}}</span><br>--}}
+            {{--        @endforeach--}}
+            @if($base->type_is_image)
+                <li>
+                    @include('view.img',['item'=>$item, 'size'=>"medium", 'filenametrue'=>false, 'link'=>true, 'img_fluid'=>false, 'title'=>""])
+                    {{--                <a href="{{Storage::url($item->filename())}}">--}}
+                    {{--                    <img src="{{Storage::url($item->filename())}}" height="250"--}}
+                    {{--                         alt="" title="{{$item->title_img()}}">--}}
+                    {{--                </a>--}}
+                </li>
+            @elseif($base->type_is_document)
+                <li>
+                    @include('view.doc',['item'=>$item])
+                    {{--                <a href="{{Storage::url($item->filename())}}" target="_blank">--}}
+                    {{--                    Открыть документ--}}
+                    {{--                </a>--}}
+                </li>
+            @else
+                {{--                Если тип-вычисляемое поле и Показывать Основу с вычисляемым наименованием--}}
+                {{--                или если тип-не вычисляемое наименование--}}
+                {{--            похожая проверка в base_index.blade.php--}}
+                @if(GlobalController::is_base_calcname_check($base, $base_right))
+                    {{--                                            $numcat = true - вывод числовых полей с разрядом тысячи/миллионы/миллиарды--}}
+                    <li>
+                        <p class="text-label">{{trans('main.name')}}: <span class="text-related">
+                    @if($base->type_is_text())
+                                    <?php
+                                    echo GlobalController::it_txnm_n2b($item);
+                                    ?>
+                                @else
+                                    {{$item->name(false, true)}}
+                                @endif
+                </span>
+                        </p>
+                    </li>
+                @endif
+            @endif
+            {{--            <br>--}}
+            {{--        </p>--}}
         @endif
-        {{--            <br>--}}
-        {{--        </p>--}}
-    @endif
 
-    {{--    @foreach($array_plan as $key=>$value)--}}
-    {{--        <?php--}}
-    {{--        $result = ItemController::get_items_for_link(Link::find($key));--}}
-    {{--        $items = $result['result_parent_base_items'];--}}
-    {{--        $item_work = Item::find($value);--}}
-    {{--        ?>--}}
-    {{--        --}}{{--    проверка нужна; для правильного вывода '$item_work->name()'--}}
-    {{--        @if($item_work)--}}
-    {{--            --}}{{--            <p>{{$result['result_parent_label']}} ({{$result['result_parent_base_name']}}):--}}
-    {{--            <p>{{$result['result_parent_label']}}:--}}
-    {{--                <span class="text-related">{{$item_work->name()}}</span></p>--}}
-    {{--        @endif--}}
-    {{--    @endforeach--}}
+        {{--    @foreach($array_plan as $key=>$value)--}}
+        {{--        <?php--}}
+        {{--        $result = ItemController::get_items_for_link(Link::find($key));--}}
+        {{--        $items = $result['result_parent_base_items'];--}}
+        {{--        $item_work = Item::find($value);--}}
+        {{--        ?>--}}
+        {{--        --}}{{--    проверка нужна; для правильного вывода '$item_work->name()'--}}
+        {{--        @if($item_work)--}}
+        {{--            --}}{{--            <p>{{$result['result_parent_label']}} ({{$result['result_parent_base_name']}}):--}}
+        {{--            <p>{{$result['result_parent_label']}}:--}}
+        {{--                <span class="text-related">{{$item_work->name()}}</span></p>--}}
+        {{--        @endif--}}
+        {{--    @endforeach--}}
 
-    <p class="text-label">
+        <p class="text-label">
         @foreach($array_calc as $key=>$value)
             <?php
             $link = Link::find($key);
@@ -89,34 +96,37 @@
                 $base_link_right = GlobalController::base_link_right($link, $role);
                 ?>
                 @if($base_link_right['is_show_link_enable'] == true)
-                    {{$link->parent_label()}}:
-                    @if($link->parent_base->type_is_text())
-                        <span class="text-related">
+                    <li>
+                        {{$link->parent_label()}}:
+                        @if($link->parent_base->type_is_text())
+                            <span class="text-related">
                             <?php
-                            echo GlobalController::it_txnm_n2b($item_find);
-                            ?>
+                                echo GlobalController::it_txnm_n2b($item_find);
+                                ?>
                         </span>
-                    @elseif($link->parent_base->type_is_image())
-                        <br>
-                        @include('view.img',['item'=>$item_find, 'size'=>"medium", 'filenametrue'=>false, 'link'=>true, 'img_fluid'=>false, 'title'=>""])
-                        {{--                            <a href="{{Storage::url($item_find->filename())}}">--}}
-                        {{--                                <img src="{{Storage::url($item_find->filename())}}" height="250"--}}
-                        {{--                                     alt="" title="{{$item_find->title_img()}}">--}}
-                        {{--                            </a>--}}
-                    @elseif($link->parent_base->type_is_document())
-                        @include('view.doc',['item'=>$item_find])
-                        {{--                            <a href="{{Storage::url($item_find->filename())}}" target="_blank">--}}
-                        {{--                                Открыть документ--}}
-                        {{--                            </a>--}}
-                    @else
-                        {{--                                            $numcat = true - вывод числовых полей с разрядом тысячи/миллионы/миллиарды--}}
-                        <span class="text-related">{{$item_find->name(false, true)}}</span>
+                        @elseif($link->parent_base->type_is_image())
+                            <br>
+                            @include('view.img',['item'=>$item_find, 'size'=>"medium", 'filenametrue'=>false, 'link'=>true, 'img_fluid'=>false, 'title'=>""])
+                            {{--                            <a href="{{Storage::url($item_find->filename())}}">--}}
+                            {{--                                <img src="{{Storage::url($item_find->filename())}}" height="250"--}}
+                            {{--                                     alt="" title="{{$item_find->title_img()}}">--}}
+                            {{--                            </a>--}}
+                        @elseif($link->parent_base->type_is_document())
+                            @include('view.doc',['item'=>$item_find])
+                            {{--                            <a href="{{Storage::url($item_find->filename())}}" target="_blank">--}}
+                            {{--                                Открыть документ--}}
+                            {{--                            </a>--}}
+                        @else
+                            {{--                                            $numcat = true - вывод числовых полей с разрядом тысячи/миллионы/миллиарды--}}
+                            <span class="text-related">{{$item_find->name(false, true)}}</span>
+                        @endif
+                    </li>
+                    {{--                    <br>--}}
                     @endif
-                    <br>
-                @endif
-            @endif
-        @endforeach
-    </p>
+                    @endif
+                    @endforeach
+                    </p>
+    </ul>
 
     <i>
         <p class="text-label">{{trans('main.created_user_date_time')}}:
