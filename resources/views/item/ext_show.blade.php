@@ -136,8 +136,8 @@
     </i>
     <?php
     //        Не удалять
-    $result = ItemController::form_tree($item->id);
-    echo $result;
+    //$result = ItemController::form_tree($item->id);
+    //echo $result;
     ?>
     @if ($type_form == 'show')
         <p>
