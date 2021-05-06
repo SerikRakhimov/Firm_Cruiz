@@ -67,120 +67,179 @@
     $i = $items->firstItem() - 1;
     ?>
     <!---->
-{{--        <p>Выберите любимого персонажа:</p>--}}
-{{--        <p><input list="character">--}}
-{{--            <datalist id="character">--}}
-{{--                <option value="Чебурашка"></option>--}}
-{{--                <option value="Крокодил Гена"></option>--}}
-{{--                <option value="Шапокляк"></option>--}}
-{{--            </datalist></p>--}}
+{{--    <p>Выберите любимого персонажа:</p>--}}
+{{--    <p><input list="character">--}}
+{{--        <datalist id="character">--}}
+{{--            <option value="Чебурашка"></option>--}}
+{{--            <option value="Крокодил Гена"></option>--}}
+{{--            <option value="Шапокляк"></option>--}}
+{{--        </datalist>--}}
+{{--    </p>--}}
+
+{{--    <details>--}}
+{{--        <summary>Информация об авторе2</summary>--}}
 {{--        <details>--}}
-{{--            <details>--}}
-{{--                <summary><span class="text-title">Информация об авторе1</span></summary>--}}
-{{--                <p>Бендер Родригез1</p>--}}
-{{--            </details>--}}
-{{--            <summary>Информация об авторе2</summary>--}}
-{{--            <p>Бендер Родригез2</p>--}}
+{{--            <summary><span class="text-title">Информация об авторе1</span></summary>--}}
+{{--            <p>Бендер Родригез1</p>--}}
 {{--        </details>--}}
-{{--    <table border="1" cellpadding="4" cellspacing="0">--}}
-{{--        <thead>--}}
-{{--        <tr>--}}
-{{--            <th rowspan="2">#</th>--}}
-{{--            <th rowspan="2">Id</th>--}}
-{{--            <th  rowspan="2">Дата</th>--}}
-{{--            <th colspan="3">Товар</th>--}}
-{{--            <th  rowspan="2">Browser1</th><th rowspan="2">Browser2</th>--}}
-{{--            <th colspan="2">Firefox</th>--}}
-{{--        </tr>--}}
-{{--        <tr>--}}
-{{--            <th>Наименование</th><th>Изображение</th><th>Код</th><th>1.0</th><th>2.0</th>--}}
-{{--        </tr>--}}
-{{--        </thead>--}}
-{{--        <tbody>--}}
-{{--        <tr align="center">--}}
-{{--            <td>1</td><td>14578547</td>--}}
-{{--            <td>22/04/2021</td><td>Молоко</td><td>Картинка</td><td>1</td><td>Да</td><td>Да</td><td>Да</td><td>Да</td>--}}
-{{--        </tr>--}}
-{{--        </tbody>--}}
-{{--    </table>--}}
-
-{{--    <!-- Карточка (border-primary - цвет границ карточки) -->--}}
-{{--    <div class="card border-info">--}}
-{{--        <!-- Шапка (bg-primary - цвет фона, text-white - цвет текста) -->--}}
-{{--        <div class="card-header bg-primary text-white">--}}
-{{--            Название панели--}}
-{{--        </div>--}}
-{{--        <!-- Текстовый контент -->--}}
-{{--        <div class="card-body">--}}
-{{--            <h4 class="card-title">Заголовок</h4>--}}
-{{--            <p class="card-text">...</p>--}}
-{{--            <a href="#" class="btn btn-primary">Ссылка</a>--}}
-{{--        </div>--}}
-{{--    </div><!-- Конец карточки -->--}}
-
-{{--    <!-- Карточка с текстовым контентом и списком -->--}}
-{{--    <div class="card">--}}
-{{--        <!-- Текстовый контент -->--}}
-{{--        <div class="card-body">--}}
-{{--            <!-- Текстовое содержимое карточки -->--}}
-{{--        </div>--}}
-{{--        <!-- Список List groups -->--}}
-{{--        <ul class="list-group list-group-flush">--}}
-{{--            <li class="list-group-item">1...</li>--}}
-{{--            <li class="list-group-item">2...</li>--}}
-{{--            <li class="list-group-item">3...</li>--}}
-{{--        </ul>--}}
-{{--    </div><!-- Конец карточки -->--}}
-
-{{--    <!-- Карточка с шапкой и списком -->--}}
-{{--    <div class="card">--}}
-{{--        <!-- Шапка (header) карточки -->--}}
-{{--        <div class="card-header">--}}
-{{--            Шапка карточки--}}
-{{--        </div>--}}
-{{--        <!-- Список List groups -->--}}
-{{--        <ul class="list-group list-group-flush">--}}
-{{--            <li class="list-group-item">1...</li>--}}
-{{--            <li class="list-group-item">2...</li>--}}
-{{--            <li class="list-group-item">3...</li>--}}
-{{--        </ul>--}}
-{{--    </div><!-- Конец карточки -->--}}
-{{--    <!-- Карточка с навигацией (в заголовке) -->--}}
-{{--    <div class="card">--}}
-{{--        <!-- Шапка с навигацией -->--}}
-{{--        <div class="card-header">--}}
-{{--            <ul class="nav nav-tabs card-header-tabs">--}}
-{{--                <li class="nav-item">--}}
-{{--                    <a class="nav-link active" data-toggle="tab" href="#item1">Заказать товар</a>--}}
-{{--                </li>--}}
-{{--                <li class="nav-item">--}}
-{{--                    <a class="nav-link" data-toggle="tab" href="#item2">Справочники</a>--}}
-{{--                </li>--}}
-{{--                <li class="nav-item">--}}
-{{--                    <a class="nav-link disabled" data-toggle="tab" href="#item3">Item 3</a>--}}
-{{--                </li>--}}
-{{--                <li class="nav-item">--}}
-{{--                    <a class="nav-link" data-toggle="tab" href="#item3">Настройки</a>--}}
-{{--                </li>--}}
+{{--        <p>Бендер Родригез2</p>--}}
+{{--    </details>--}}
+{{--    <ul type="circle">--}}
+{{--        <li>Text01--}}
+{{--            <ul type="circle">--}}
+{{--                <li>Text11</li>--}}
+{{--                <li>Text12</li>--}}
+{{--                <li>Text13</li>--}}
 {{--            </ul>--}}
-{{--        </div>--}}
-{{--        <!-- Текстовый контент -->--}}
-{{--        <div class="card-body tab-content">--}}
-{{--            <div class="tab-pane fade show active" id="item1">--}}
-{{--                <a href="#" class="card-link">Ссылка №1</a>--}}
-{{--            </div>--}}
-{{--            <div class="tab-pane fade" id="item2">--}}
-{{--                <ul class="list-group list-group-flush">--}}
-{{--                    <li class="list-group-item">1...</li>--}}
-{{--                    <li class="list-group-item">2...</li>--}}
-{{--                    <li class="list-group-item">3...</li>--}}
-{{--                </ul>--}}
-{{--            </div>--}}
-{{--            <div class="tab-pane fade" id="item3">--}}
-{{--                Некоторое содержимое для Item 3...--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--    </div><!-- Конец карточки -->--}}
+{{--        </li>--}}
+{{--        <li>Text02</li>--}}
+{{--    </ul>--}}
+{{--    <style>--}}
+{{--        li {--}}
+{{--            list-style-type: none; /* Убираем маркеры */--}}
+{{--        }--}}
+{{--    </style>--}}
+{{--    <details>--}}
+{{--        <summary>Main menu</summary>--}}
+{{--        <ul>--}}
+{{--            <li>--}}
+{{--                <details>--}}
+{{--                    <summary>Text01</summary>--}}
+{{--                    --}}{{--            Text11--}}
+{{--                    --}}{{--            Text12--}}
+{{--                    --}}{{--            Text13--}}
+{{--                    <ul>--}}
+{{--                        <li>--}}
+{{--                            <details>--}}
+{{--                                <summary>Text11</summary>--}}
+{{--                                <ul type="circle">--}}
+{{--                                    <li>Text111</li>--}}
+{{--                                    <li>Text112</li>--}}
+{{--                                    <li>Text113</li>--}}
+{{--                                </ul>--}}
+{{--                            </details>--}}
+{{--                        </li>--}}
+{{--                        <li>Text12</li>--}}
+{{--                        <li>Text13</li>--}}
+{{--                    </ul>--}}
+{{--                </details>--}}
+{{--            </li>--}}
+{{--            <li>--}}
+{{--                <details>--}}
+{{--                    <summary>Text02</summary>--}}
+{{--                    Text02--}}
+{{--                </details>--}}
+{{--            </li>--}}
+{{--        </ul>--}}
+{{--    </details>--}}
+{{--    <details>--}}
+{{--        <summary>Информация об авторе2</summary>--}}
+{{--        <details>--}}
+{{--            <summary><span class="text-title">Информация об авторе1</span></summary>--}}
+{{--            <p>Бендер Родригез1</p>--}}
+{{--        </details>--}}
+{{--        <p>Бендер Родригез2</p>--}}
+{{--    </details>--}}
+{{--    --}}
+    {{--    <table border="1" cellpadding="4" cellspacing="0">--}}
+    {{--        <thead>--}}
+    {{--        <tr>--}}
+    {{--            <th rowspan="2">#</th>--}}
+    {{--            <th rowspan="2">Id</th>--}}
+    {{--            <th  rowspan="2">Дата</th>--}}
+    {{--            <th colspan="3">Товар</th>--}}
+    {{--            <th  rowspan="2">Browser1</th><th rowspan="2">Browser2</th>--}}
+    {{--            <th colspan="2">Firefox</th>--}}
+    {{--        </tr>--}}
+    {{--        <tr>--}}
+    {{--            <th>Наименование</th><th>Изображение</th><th>Код</th><th>1.0</th><th>2.0</th>--}}
+    {{--        </tr>--}}
+    {{--        </thead>--}}
+    {{--        <tbody>--}}
+    {{--        <tr align="center">--}}
+    {{--            <td>1</td><td>14578547</td>--}}
+    {{--            <td>22/04/2021</td><td>Молоко</td><td>Картинка</td><td>1</td><td>Да</td><td>Да</td><td>Да</td><td>Да</td>--}}
+    {{--        </tr>--}}
+    {{--        </tbody>--}}
+    {{--    </table>--}}
+
+    {{--    <!-- Карточка (border-primary - цвет границ карточки) -->--}}
+    {{--    <div class="card border-info">--}}
+    {{--        <!-- Шапка (bg-primary - цвет фона, text-white - цвет текста) -->--}}
+    {{--        <div class="card-header bg-primary text-white">--}}
+    {{--            Название панели--}}
+    {{--        </div>--}}
+    {{--        <!-- Текстовый контент -->--}}
+    {{--        <div class="card-body">--}}
+    {{--            <h4 class="card-title">Заголовок</h4>--}}
+    {{--            <p class="card-text">...</p>--}}
+    {{--            <a href="#" class="btn btn-primary">Ссылка</a>--}}
+    {{--        </div>--}}
+    {{--    </div><!-- Конец карточки -->--}}
+
+    {{--    <!-- Карточка с текстовым контентом и списком -->--}}
+    {{--    <div class="card">--}}
+    {{--        <!-- Текстовый контент -->--}}
+    {{--        <div class="card-body">--}}
+    {{--            <!-- Текстовое содержимое карточки -->--}}
+    {{--        </div>--}}
+    {{--        <!-- Список List groups -->--}}
+    {{--        <ul class="list-group list-group-flush">--}}
+    {{--            <li class="list-group-item">1...</li>--}}
+    {{--            <li class="list-group-item">2...</li>--}}
+    {{--            <li class="list-group-item">3...</li>--}}
+    {{--        </ul>--}}
+    {{--    </div><!-- Конец карточки -->--}}
+
+    {{--    <!-- Карточка с шапкой и списком -->--}}
+    {{--    <div class="card">--}}
+    {{--        <!-- Шапка (header) карточки -->--}}
+    {{--        <div class="card-header">--}}
+    {{--            Шапка карточки--}}
+    {{--        </div>--}}
+    {{--        <!-- Список List groups -->--}}
+    {{--        <ul class="list-group list-group-flush">--}}
+    {{--            <li class="list-group-item">1...</li>--}}
+    {{--            <li class="list-group-item">2...</li>--}}
+    {{--            <li class="list-group-item">3...</li>--}}
+    {{--        </ul>--}}
+    {{--    </div><!-- Конец карточки -->--}}
+    {{--    <!-- Карточка с навигацией (в заголовке) -->--}}
+    {{--    <div class="card">--}}
+    {{--        <!-- Шапка с навигацией -->--}}
+    {{--        <div class="card-header">--}}
+    {{--            <ul class="nav nav-tabs card-header-tabs">--}}
+    {{--                <li class="nav-item">--}}
+    {{--                    <a class="nav-link active" data-toggle="tab" href="#item1">Заказать товар</a>--}}
+    {{--                </li>--}}
+    {{--                <li class="nav-item">--}}
+    {{--                    <a class="nav-link" data-toggle="tab" href="#item2">Справочники</a>--}}
+    {{--                </li>--}}
+    {{--                <li class="nav-item">--}}
+    {{--                    <a class="nav-link disabled" data-toggle="tab" href="#item3">Item 3</a>--}}
+    {{--                </li>--}}
+    {{--                <li class="nav-item">--}}
+    {{--                    <a class="nav-link" data-toggle="tab" href="#item3">Настройки</a>--}}
+    {{--                </li>--}}
+    {{--            </ul>--}}
+    {{--        </div>--}}
+    {{--        <!-- Текстовый контент -->--}}
+    {{--        <div class="card-body tab-content">--}}
+    {{--            <div class="tab-pane fade show active" id="item1">--}}
+    {{--                <a href="#" class="card-link">Ссылка №1</a>--}}
+    {{--            </div>--}}
+    {{--            <div class="tab-pane fade" id="item2">--}}
+    {{--                <ul class="list-group list-group-flush">--}}
+    {{--                    <li class="list-group-item">1...</li>--}}
+    {{--                    <li class="list-group-item">2...</li>--}}
+    {{--                    <li class="list-group-item">3...</li>--}}
+    {{--                </ul>--}}
+    {{--            </div>--}}
+    {{--            <div class="tab-pane fade" id="item3">--}}
+    {{--                Некоторое содержимое для Item 3...--}}
+    {{--            </div>--}}
+    {{--        </div>--}}
+    {{--    </div><!-- Конец карточки -->--}}
 
     @if($tile_view['result'] == true)
         <div class="card-columns">

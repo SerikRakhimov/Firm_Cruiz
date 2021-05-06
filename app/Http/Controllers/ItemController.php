@@ -2670,9 +2670,8 @@ class ItemController extends Controller
         $items = array();
         $result = self::form_tree_start($items, $item_id, 0);
         if ($result != '') {
-//            $result = '<ul type="circle"><li>'
-//                . $item->base->name() . ' (' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b>)' . $result . '</li></ul>';
-            $result = '<ul type="circle"><li>' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b>' . $result . '</li></ul>';
+            //$result = '<ul type="circle"><li>' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b>' . $result . '</li></ul>';
+            $result = '<details><summary>' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b></summary>' . $result . '</details>';
         }
         return $result;
     }
@@ -2684,6 +2683,7 @@ class ItemController extends Controller
     {
         $level = $level + 1;
         $result = '<ul type="circle">';
+        //$result = '<ul>';
 //        $mains = Main::all()->where('child_item_id', $id)->sortBy(function ($row) {
 //            return $row->parent_item->name();
 //        });
@@ -2702,7 +2702,12 @@ class ItemController extends Controller
 //            $result = $result . '<li>' . $main->link->id . ' ' . $main->link->parent_label() . ' (' . $main->link->parent_base->name() . ': ' . '<b>' . $main->parent_item->name() . '</b>)'
 //                . $str . '</li>';
             $str = self::form_tree_start($items, $main->parent_item_id, $level);
-            $result = $result . '<li>' . $main->link->parent_base->name() . ': ' . '<b>' . $main->parent_item->name() . '</b>' . $str . '</li>';
+//          $result = $result . '<li>' . $main->link->parent_base->name() . ': ' . '<b>' . $main->parent_item->name() . '</b>' . $str . '</li>';
+            if ($str == '') {
+                $result = $result . '<li>' . $main->link->parent_base->name() . ': ' . '<b>' . $main->parent_item->name() . '</b>' . $str . '</li>';
+            } else {
+                $result = $result . '<li><details><summary>' . $main->link->parent_base->name() . ': ' . '<b>' . $main->parent_item->name() . '</b></summary>' . $str . '</details></li>';
+            }
         }
         $result = $result . "</ul>";
         return $result;
