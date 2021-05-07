@@ -2669,12 +2669,13 @@ class ItemController extends Controller
         $item = Item::find($item_id);
         $items = array();
         $result = self::form_tree_start($items, $item_id, 0);
-        if ($result != '') {
+        //if ($result != '') {
             //$result = '<ul type="circle"><li>' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b>' . $result . '</li></ul>';
 //            $result = '<details><summary>' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b></summary>' . $result . '</details>';
-            //$result = '' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b>' . $result . '';
-            $result = '' . $result . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b>' . '';
-        }
+//            $result = '' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b>' . $result . '';
+            //$result = '' . $result . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b>' . '';
+        //}
+        $result = '' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b><br><br>Карточка:<br>' . $result . '';
         return $result;
     }
 
@@ -2721,11 +2722,11 @@ class ItemController extends Controller
         $item = Item::find($item_id);
         $items = array();
         $result = self::form_child_tree_start($items, $item_id, 0);
-        if ($result != '') {
+        //if ($result != '') {
             //$result = '<ul type="circle"><li>' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b>' . $result . '</li></ul>';
 //            $result = '<details><summary>' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b></summary>' . $result . '</details>';
-            $result = '' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b>' . $result . '';
-        }
+//            $result = '' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b>' . $result . '';
+        //}
         return $result;
     }
 
