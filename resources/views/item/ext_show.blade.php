@@ -135,7 +135,7 @@
             <span class="text-related">{{$item->updated_user_date_time()}}</span></p>
     </i>
     <?php
-    if (1 == 2) {
+    //if (1 == 2) {
         //        Не удалять
         $result = ItemController::form_tree($item->id);
 //    echo "<br>Карточка:<br>";
@@ -143,7 +143,7 @@
         $result = ItemController::form_child_tree($item->id);
         echo "Записи:<br>";
         echo $result;
-    }
+    //}
     ?>
     @if ($type_form == 'show')
         <p>

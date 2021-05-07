@@ -2682,7 +2682,7 @@ class ItemController extends Controller
 // $items нужно - чтобы не было бесконечного цикла
 //static function form_tree_start($items, $id, $level)   - можно использовать так
 //static function form_tree_start(&$items, $id, $level)  - и так - результаты разные
-    static function form_tree_start($items, $id, $level)
+    static function form_tree_start(&$items, $id, $level)
     {
         $level = $level + 1;
         $result = '<ul type="circle">';
@@ -2733,10 +2733,10 @@ class ItemController extends Controller
 // $items нужно - чтобы не было бесконечного цикла
 //static function form_tree_start($items, $id, $level)   - можно использовать так
 //static function form_tree_start(&$items, $id, $level)  - и так - результаты разные
-    static function form_child_tree_start($items, $id, $level)
+    static function form_child_tree_start(&$items, $id, $level)
     {
         $level = $level + 1;
-        $result = '<ul type="circle">';
+        $result = '<ul type="disc">';
         //$result = '<ul>';
 
 //        $mains = Main::all()->where('child_item_id', $id)->sortBy(function ($row) {
