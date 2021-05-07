@@ -2672,7 +2672,8 @@ class ItemController extends Controller
         if ($result != '') {
             //$result = '<ul type="circle"><li>' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b>' . $result . '</li></ul>';
 //            $result = '<details><summary>' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b></summary>' . $result . '</details>';
-            $result = '' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b>' . $result . '';
+            //$result = '' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b>' . $result . '';
+            $result = '' . $result . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b>' . '';
         }
         return $result;
     }
@@ -2680,7 +2681,7 @@ class ItemController extends Controller
 // $items нужно - чтобы не было бесконечного цикла
 //static function form_tree_start($items, $id, $level)   - можно использовать так
 //static function form_tree_start(&$items, $id, $level)  - и так - результаты разные
-    static function form_tree_start(&$items, $id, $level)
+    static function form_tree_start($items, $id, $level)
     {
         $level = $level + 1;
         $result = '<ul type="circle">';
@@ -2713,6 +2714,61 @@ class ItemController extends Controller
         $result = $result . "</ul>";
         return $result;
     }
+
+
+    static function form_child_tree($item_id)
+    {
+        $item = Item::find($item_id);
+        $items = array();
+        $result = self::form_child_tree_start($items, $item_id, 0);
+        if ($result != '') {
+            //$result = '<ul type="circle"><li>' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b>' . $result . '</li></ul>';
+//            $result = '<details><summary>' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b></summary>' . $result . '</details>';
+            $result = '' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b>' . $result . '';
+        }
+        return $result;
+    }
+
+// $items нужно - чтобы не было бесконечного цикла
+//static function form_tree_start($items, $id, $level)   - можно использовать так
+//static function form_tree_start(&$items, $id, $level)  - и так - результаты разные
+    static function form_child_tree_start($items, $id, $level)
+    {
+        $level = $level + 1;
+        $result = '<ul type="circle">';
+        //$result = '<ul>';
+
+//        $mains = Main::all()->where('child_item_id', $id)->sortBy(function ($row) {
+//            return $row->link->parent_base_number;
+//        });
+
+        $mains = Main::all()->where('parent_item_id', $id)->sortBy(function ($row) {
+            return $row->child_item->name();
+        });
+
+        if (count($mains) == 0) {
+            return '';
+        }
+        if (!(array_search($id, $items) === false)) {
+            return '';
+        }
+        $items[count($items)] = $id;
+        foreach ($mains as $main) {
+            $str = '';
+//            $result = $result . '<li>' . $main->link->id . ' ' . $main->link->child_label() . ' (' . $main->link->child_base->name() . ': ' . '<b>' . $main->child_item->name() . '</b>)'
+//                . $str . '</li>';
+            $str = self::form_child_tree_start($items, $main->child_item_id, $level);
+//          $result = $result . '<li>' . $main->link->child_base->name() . ': ' . '<b>' . $main->child_item->name() . '</b>' . $str . '</li>';
+            if ($str == '') {
+                $result = $result . '<li>' . $main->link->child_label() . ': ' . '<b>' . $main->child_item->name() . '</b>' . $str . '</li>';
+            } else {
+                $result = $result . '<li><details><summary>' . $main->link->child_label() . ': ' . '<b>' . $main->child_item->name() . '</b></summary>' . $str . '</details></li>';
+            }
+        }
+        $result = $result . "</ul>";
+        return $result;
+    }
+
 
 // Функция calc_value_func() вычисляет наименования для записи $item
     function calc_value_func(Item $item, $level = 0, $first_run = true)

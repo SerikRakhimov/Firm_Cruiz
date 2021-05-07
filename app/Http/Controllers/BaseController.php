@@ -49,18 +49,18 @@ class BaseController extends Controller
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
             switch ($index) {
                 case 0:
-                    //$bases = Base::all()->sortBy('name_lang_0');
-                    $bases = $bases->orderBy('name_lang_0');
+                    //$bases = Base::all()->sortBy('names_lang_0');
+                    $bases = $bases->orderBy('names_lang_0');
                     break;
                 case 1:
-                    //$bases = Base::all()->sortBy(function($row){return $row->name_lang_1 . $row->name_lang_0;});
-                    $bases = $bases->orderBy('name_lang_1')->orderBy('name_lang_0');
+                    //$bases = Base::all()->sortBy(function($row){return $row->names_lang_1 . $row->names_lang_0;});
+                    $bases = $bases->orderBy('names_lang_1')->orderBy('names_lang_0');
                     break;
                 case 2:
-                    $bases = $bases->orderBy('name_lang_2')->orderBy('name_lang_0');
+                    $bases = $bases->orderBy('names_lang_2')->orderBy('names_lang_0');
                     break;
                 case 3:
-                    $bases = $bases->orderBy('name_lang_3')->orderBy('name_lang_0');
+                    $bases = $bases->orderBy('names_lang_3')->orderBy('names_lang_0');
                     break;
             }
         }

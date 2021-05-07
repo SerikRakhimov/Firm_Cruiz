@@ -136,8 +136,12 @@
     </i>
     <?php
     //        Не удалять
-    //$result = ItemController::form_tree($item->id);
-    //echo $result;
+    $result = ItemController::form_tree($item->id);
+    echo "<br>Карточка:<br>";
+    echo $result;
+    $result = ItemController::form_child_tree($item->id);
+    echo "<br><br>Зависимости:<br>";
+    echo $result;
     ?>
     @if ($type_form == 'show')
         <p>
