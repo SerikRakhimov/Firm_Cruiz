@@ -222,7 +222,7 @@
             @endif
             @endif
             @if($rows > 0)
-                @for($i=($rows-1); $i>=0; $i--)
+                @for($i = ($rows-1); $i >= 0; $i--)
                     @if($i != ($rows-1))
                         <tr>
                             @endif

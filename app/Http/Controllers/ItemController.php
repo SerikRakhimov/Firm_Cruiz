@@ -3137,8 +3137,8 @@ class ItemController extends Controller
 
         // Если нет ошибки и есть строки для вывода
         if ($error_message == '') {
-
-            $rows = $rowmax + 1;  // "$rows = $rowmax + 1;" нужно
+            // "$rows = $rowmax + 1;" нужно
+            $rows = $rowmax + 1;
 
             // Цикл расчета 'colspan'
             for ($i = 0; $i < $rows; $i++) {
