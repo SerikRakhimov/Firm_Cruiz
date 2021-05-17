@@ -3089,18 +3089,18 @@ class ItemController extends Controller
         $rows = 5;
         $cols = $k;
 
-        // Сколько строк полностью заполнено
-        // $rowmax - максимальная строка
-        $rowmax = null;  // "$rowmax = null;" нужно
         $error_message = "";
 
+        // Заполнение $matrix[$i][$j]['work_field'] и $matrix[$i][$j]['work_link']
         // 0-ая строка с link->id
         $i = 0;
         for ($j = 0; $j < $cols; $j++) {
             $matrix[$i][$j]['work_field'] = 'link' . $matrix[$i][$j]['link_id'];
             $matrix[$i][$j]['work_link'] = true;
         }
-
+        // Сколько строк полностью заполнено
+        // $rowmax - максимальная строка
+        $rowmax = 0;  // "$rowmax = 0;" нужно, как минимум одна 0-ая строка есть
         // "$i = 1" - начинать с 1-ой строки, т.к. 0-ая заполнена link->id
         for ($i = 1; $i < $rows; $i++) {
             $k = 0;
@@ -3123,81 +3123,76 @@ class ItemController extends Controller
                 $rowmax = $i;
             }
         }
-        // $rows_exist = true - есть строки для вывода
-        // По идее, всегда должно быть true, т.к. есть 0-ая строка с link->id
-        $rows_exist = $rowmax != null;
 
-        if ($rows_exist == true) {
-            // "$i = 1" - начинать с 1-ой строки, т.к. 0-ая заполнена link->id
-            for ($i = 1; $i < $rowmax; $i++) {
-                for ($j = 0; $j < $cols; $j++) {
-                    if ($matrix[$i][$j]['work_field'] == null) {
-                        $error_message = trans('main.levels_row_is_not_populated_in_settings')
-                            . ' (' . mb_strtolower(trans('main.level')) . '_' . ($i - 1) . ')!';
-                        break;
-                    }
+        // "$i = 1" - начинать с 1-ой строки, т.к. 0-ая заполнена link->id
+        for ($i = 1; $i < $rowmax; $i++) {
+            for ($j = 0; $j < $cols; $j++) {
+                if ($matrix[$i][$j]['work_field'] == null) {
+                    $error_message = trans('main.levels_row_is_not_populated_in_settings')
+                        . ' (' . mb_strtolower(trans('main.level')) . '_' . ($i - 1) . ')!';
+                    break;
                 }
-            }
-
-            // Если нет ошибки и есть строки для вывода
-            if ($error_message == '') {
-
-                $rows = $rowmax + 1;  // "$rows = $rowmax + 1;" нужно
-
-                // Цикл расчета 'colspan'
-                for ($i = 0; $i < $rows; $i++) {
-                    $k = 0;
-                    for ($j = 0; $j < $cols; $j++) {
-                        if ($matrix[$i][$j]['work_field'] != $matrix[$i][$k]['work_field']) {
-                            $k = $j;
-                        }
-                        $matrix[$i][$k]['colspan'] = $matrix[$i][$k]['colspan'] + 1;
-                    }
-                }
-
-                // Цикл расчета 'rowspan'
-                for ($j = 0; $j < $cols; $j++) {
-                    $k = $rowmax;
-                    for ($i = $rowmax; $i >= 0; $i--) {
-                        // Проверка '$matrix[$i][$j]['colspan'] != $matrix[$k][$j]['colspan']' нужна,
-                        // признак того, что выше этой ячейки подниматься не следует
-                        // даже при равенстве '$matrix[$i][$j]['parent_level_id'] = $matrix[$k][$j]['parent_level_id']'
-                        if ($matrix[$i][$j]['work_field'] != $matrix[$k][$j]['work_field']
-                            || $matrix[$i][$j]['colspan'] != $matrix[$k][$j]['colspan']) {
-                            $k = $i;
-                        }
-                        $matrix[$k][$j]['rowspan'] = $matrix[$k][$j]['rowspan'] + 1;
-                    }
-                }
-
-                // Цикл заполнения $matrix[$i][$j]['view_field'] и $matrix[$i][$j]['view_name']
-                for ($i = 0; $i < $rows; $i++) {
-                    for ($j = 0; $j < $cols; $j++) {
-                        if ($matrix[$i][$j]['colspan'] != 0 && $matrix[$i][$j]['rowspan'] != 0) {
-                            $matrix[$i][$j]['view_field'] = $matrix[$i][$j]['work_field'];
-                            if ($matrix[$i][$j]['work_link'] == true) {
-                                $link_id = $matrix[$i][$j]['link_id'];
-                                $link = Link::findOrFail($link_id);
-                                $matrix[$i][$j]['view_name'] = $link->parent_label();
-                            } else {
-                                $level_id = $matrix[$i][$j]['parent_level_id'];
-                                $level = Level::findOrFail($level_id);
-                                $matrix[$i][$j]['view_name'] = $level->name();
-                            }
-                        }
-                    }
-                }
-
-            } else {
-                // Нужно, не удалять
-                // Для '<th rowspan="{{$rows + 1}}">' в item/base_index.php при выводе в "шапке" столбцов №, кода и наименования
-                $rows = 0;
-                $cols = 0;
             }
         }
 
+        // Если нет ошибки и есть строки для вывода
+        if ($error_message == '') {
+
+            $rows = $rowmax + 1;  // "$rows = $rowmax + 1;" нужно
+
+            // Цикл расчета 'colspan'
+            for ($i = 0; $i < $rows; $i++) {
+                $k = 0;
+                for ($j = 0; $j < $cols; $j++) {
+                    if ($matrix[$i][$j]['work_field'] != $matrix[$i][$k]['work_field']) {
+                        $k = $j;
+                    }
+                    $matrix[$i][$k]['colspan'] = $matrix[$i][$k]['colspan'] + 1;
+                }
+            }
+
+            // Цикл расчета 'rowspan'
+            for ($j = 0; $j < $cols; $j++) {
+                $k = $rowmax;
+                for ($i = $rowmax; $i >= 0; $i--) {
+                    // Проверка '$matrix[$i][$j]['colspan'] != $matrix[$k][$j]['colspan']' нужна,
+                    // признак того, что выше этой ячейки подниматься не следует
+                    // даже при равенстве '$matrix[$i][$j]['parent_level_id'] = $matrix[$k][$j]['parent_level_id']'
+                    if ($matrix[$i][$j]['work_field'] != $matrix[$k][$j]['work_field']
+                        || $matrix[$i][$j]['colspan'] != $matrix[$k][$j]['colspan']) {
+                        $k = $i;
+                    }
+                    $matrix[$k][$j]['rowspan'] = $matrix[$k][$j]['rowspan'] + 1;
+                }
+            }
+
+            // Цикл заполнения $matrix[$i][$j]['view_field'] и $matrix[$i][$j]['view_name']
+            for ($i = 0; $i < $rows; $i++) {
+                for ($j = 0; $j < $cols; $j++) {
+                    if ($matrix[$i][$j]['colspan'] != 0 && $matrix[$i][$j]['rowspan'] != 0) {
+                        $matrix[$i][$j]['view_field'] = $matrix[$i][$j]['work_field'];
+                        if ($matrix[$i][$j]['work_link'] == true) {
+                            $link_id = $matrix[$i][$j]['link_id'];
+                            $link = Link::findOrFail($link_id);
+                            $matrix[$i][$j]['view_name'] = $link->parent_label();
+                        } else {
+                            $level_id = $matrix[$i][$j]['parent_level_id'];
+                            $level = Level::findOrFail($level_id);
+                            $matrix[$i][$j]['view_name'] = $level->name();
+                        }
+                    }
+                }
+            }
+
+        } else {
+            // Нужно, не удалять
+            // Для '<th rowspan="{{$rows + 1}}">' в item/base_index.php при выводе в "шапке" столбцов №, кода и наименования
+            $rows = 0;
+            $cols = 0;
+        }
+
         return ['link_id_array' => $link_id_array, 'matrix' => $matrix,
-            'rows_exist' => $rows_exist, 'rows' => $rows, 'cols' => $cols, 'error_message' => $error_message];
+            'rows' => $rows, 'cols' => $cols, 'error_message' => $error_message];
     }
 
 }

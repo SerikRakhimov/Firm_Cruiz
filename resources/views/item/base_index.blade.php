@@ -201,7 +201,6 @@
         <?php
         $link_id_array = $links_info['link_id_array'];
         $matrix = $links_info['matrix'];
-        $rows_exist = $links_info['rows_exist'];
         $rows = $links_info['rows'];
         $cols = $links_info['cols'];
         ?>
@@ -222,7 +221,7 @@
                             {{trans('main.name')}}</th>
             @endif
             @endif
-            @if($rows_exist!=null)
+            @if($rows > 0)
                 @for($i=($rows-1); $i>=0; $i--)
                     @if($i != ($rows-1))
                         <tr>
