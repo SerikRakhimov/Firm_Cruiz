@@ -9,8 +9,6 @@
     use \App\Http\Controllers\GlobalController;
     use \App\Http\Controllers\ItemController;
     use \App\Http\Controllers\MainController;
-    $links = $base->child_links->sortBy('parent_base_number');
-    $base_right = GlobalController::base_right($base, $role);
     ?>
     @include('layouts.show_project_role',['project'=>$project, 'role'=>$role])
     <div class="container-fluid">
@@ -67,101 +65,14 @@
     $i = $items->firstItem() - 1;
     ?>
     <!---->
-{{--    <p>Выберите любимого персонажа:</p>--}}
-{{--    <p><input list="character">--}}
-{{--        <datalist id="character">--}}
-{{--            <option value="Чебурашка"></option>--}}
-{{--            <option value="Крокодил Гена"></option>--}}
-{{--            <option value="Шапокляк"></option>--}}
-{{--        </datalist>--}}
-{{--    </p>--}}
-
-{{--    <details>--}}
-{{--        <summary>Информация об авторе2</summary>--}}
-{{--        <details>--}}
-{{--            <summary><span class="text-title">Информация об авторе1</span></summary>--}}
-{{--            <p>Бендер Родригез1</p>--}}
-{{--        </details>--}}
-{{--        <p>Бендер Родригез2</p>--}}
-{{--    </details>--}}
-{{--    <ul type="circle">--}}
-{{--        <li>Text01--}}
-{{--            <ul type="circle">--}}
-{{--                <li>Text11</li>--}}
-{{--                <li>Text12</li>--}}
-{{--                <li>Text13</li>--}}
-{{--            </ul>--}}
-{{--        </li>--}}
-{{--        <li>Text02</li>--}}
-{{--    </ul>--}}
-{{--    <style>--}}
-{{--        li {--}}
-{{--            list-style-type: none; /* Убираем маркеры */--}}
-{{--        }--}}
-{{--    </style>--}}
-{{--    <details>--}}
-{{--        <summary>Main menu</summary>--}}
-{{--        <ul>--}}
-{{--            <li>--}}
-{{--                <details>--}}
-{{--                    <summary>Text01</summary>--}}
-{{--                    --}}{{--            Text11--}}
-{{--                    --}}{{--            Text12--}}
-{{--                    --}}{{--            Text13--}}
-{{--                    <ul>--}}
-{{--                        <li>--}}
-{{--                            <details>--}}
-{{--                                <summary>Text11</summary>--}}
-{{--                                <ul type="circle">--}}
-{{--                                    <li>Text111</li>--}}
-{{--                                    <li>Text112</li>--}}
-{{--                                    <li>Text113</li>--}}
-{{--                                </ul>--}}
-{{--                            </details>--}}
-{{--                        </li>--}}
-{{--                        <li>Text12</li>--}}
-{{--                        <li>Text13</li>--}}
-{{--                    </ul>--}}
-{{--                </details>--}}
-{{--            </li>--}}
-{{--            <li>--}}
-{{--                <details>--}}
-{{--                    <summary>Text02</summary>--}}
-{{--                    Text02--}}
-{{--                </details>--}}
-{{--            </li>--}}
-{{--        </ul>--}}
-{{--    </details>--}}
-{{--    <details>--}}
-{{--        <summary>Информация об авторе2</summary>--}}
-{{--        <details>--}}
-{{--            <summary><span class="text-title">Информация об авторе1</span></summary>--}}
-{{--            <p>Бендер Родригез1</p>--}}
-{{--        </details>--}}
-{{--        <p>Бендер Родригез2</p>--}}
-{{--    </details>--}}
-{{--    --}}
-    {{--    <table border="1" cellpadding="4" cellspacing="0">--}}
-    {{--        <thead>--}}
-    {{--        <tr>--}}
-    {{--            <th rowspan="2">#</th>--}}
-    {{--            <th rowspan="2">Id</th>--}}
-    {{--            <th  rowspan="2">Дата</th>--}}
-    {{--            <th colspan="3">Товар</th>--}}
-    {{--            <th  rowspan="2">Browser1</th><th rowspan="2">Browser2</th>--}}
-    {{--            <th colspan="2">Firefox</th>--}}
-    {{--        </tr>--}}
-    {{--        <tr>--}}
-    {{--            <th>Наименование</th><th>Изображение</th><th>Код</th><th>1.0</th><th>2.0</th>--}}
-    {{--        </tr>--}}
-    {{--        </thead>--}}
-    {{--        <tbody>--}}
-    {{--        <tr align="center">--}}
-    {{--            <td>1</td><td>14578547</td>--}}
-    {{--            <td>22/04/2021</td><td>Молоко</td><td>Картинка</td><td>1</td><td>Да</td><td>Да</td><td>Да</td><td>Да</td>--}}
-    {{--        </tr>--}}
-    {{--        </tbody>--}}
-    {{--    </table>--}}
+    {{--    <p>Выберите любимого персонажа:</p>--}}
+    {{--    <p><input list="character">--}}
+    {{--        <datalist id="character">--}}
+    {{--            <option value="Чебурашка"></option>--}}
+    {{--            <option value="Крокодил Гена"></option>--}}
+    {{--            <option value="Шапокляк"></option>--}}
+    {{--        </datalist>--}}
+    {{--    </p>--}}
 
     {{--    <!-- Карточка (border-primary - цвет границ карточки) -->--}}
     {{--    <div class="card border-info">--}}
@@ -287,42 +198,79 @@
             </div>
         </div>
     @else
+        <?php
+        $link_id_array = $links_info['link_id_array'];
+        $matrix = $links_info['matrix'];
+        $rows_exist = $links_info['rows_exist'];
+        $rows = $links_info['rows'];
+        $cols = $links_info['cols'];
+        ?>
         <table class="table table-sm table-bordered table-hover">
             <caption>{{trans('main.select_record_for_work')}}</caption>
             <thead>
             <tr>
-                <th class="text-center align-top">#</th>
+                <th rowspan="{{$rows + 1}}" class="text-center align-top">#</th>
                 @if($base_right['is_list_base_enable'] == true)
                     @if($base->is_code_needed == true)
-                        <th class="text-center align-top">{{trans('main.code')}}</th>
+                        <th class="text-center align-top" rowspan="{{$rows + 1}}">{{trans('main.code')}}</th>
                     @endif
                     {{--                Если тип-вычисляемое поле и Показывать Основу с вычисляемым наименованием--}}
                     {{--                или если тип-не вычисляемое наименование--}}
                     {{--            похожая проверка в ext_show.blade.php--}}
                     @if(GlobalController::is_base_calcname_check($base, $base_right))
-                        <th @include('layouts.class_from_base',['base'=>$base, 'align_top'=>true])>
+                        <th rowspan="{{$rows + 1}}" @include('layouts.class_from_base',['base'=>$base, 'align_top'=>true])>
                             {{trans('main.name')}}</th>
+            @endif
+            @endif
+            @if($rows_exist!=null)
+                @for($i=($rows-1); $i>=0; $i--)
+                    @if($i != ($rows-1))
+                        <tr>
+                            @endif
+                            @for($j=0; $j<$cols;$j++)
+                                @if($matrix[$i][$j]["view_field"] != null)
+                                    <th rowspan="{{$matrix[$i][$j]["rowspan"]}}"
+                                        colspan="{{$matrix[$i][$j]["colspan"]}}"
+                                        class="text-center align-top">
+                                        @if($matrix[$i][$j]["work_link"] == true)
+                                            <?php
+                                            $link = Link::findOrFail($matrix[$i][$j]["link_id"]);
+                                            ?>
+                                            <a href="{{route('item.base_index',['base'=>$link->parent_base_id, 'project'=>$project, 'role'=>$role])}}"
+                                               title="{{$link->parent_base->names()}}">
+                                                {{$matrix[$i][$j]["view_name"]}}
+                                            </a>
+                                        @else
+                                            {{$matrix[$i][$j]["view_name"]}}
+                                        @endif
+                                    </th>
+                                    {{--                    {{$i}} {{$j}}  rowspan = {{$matrix[$i][$j]["rowspan"]}} colspan = {{$matrix[$i][$j]["colspan"]}} view_level_id = {{$matrix[$i][$j]["view_level_id"]}} view_level_name = {{$matrix[$i][$j]["view_level_name"]}}--}}
+                                    {{--                    <br>--}}
+                                @endif
+                            @endfor
+                        </tr>
+                        @endfor
+                        <tr>
                     @endif
-                @endif
-                @foreach($links as $link)
-                    <?php
-                    $base_link_right = GlobalController::base_link_right($link, $role);
-                    ?>
-                    @if($base_link_right['is_list_link_enable'] == true)
-                        {{--                    <th--}}
-                        {{--                        @include('layouts.class_from_base',['base'=>$link->parent_base])--}}
-                        {{--                    >--}}
-                        <th class="text-center align-top">
-                            <a href="{{route('item.base_index',['base'=>$link->parent_base_id, 'project'=>$project, 'role'=>$role])}}"
-                               title="{{$link->parent_base->names()}}">
-                                {{$link->parent_label()}}
-                            </a>
-                        </th>
-                    @endif
-                @endforeach
-                {{--            <th class="text-center">{{trans('main.user')}}</th>--}}
-                {{--            <th class="text-center">{{trans('main.user')}}</th>--}}
-            </tr>
+                    {{--                            @if(1==2)--}}
+                    {{--                                @foreach($link_id_array as $value)--}}
+                    {{--                                    <?php--}}
+                    {{--                                    $link = Link::findOrFail($value);--}}
+                    {{--                                    ?>--}}
+                    {{--                                    --}}{{--                    <th--}}
+                    {{--                                    --}}{{--                        @include('layouts.class_from_base',['base'=>$link->parent_base])--}}
+                    {{--                                    --}}{{--                    >--}}
+                    {{--                                    <th class="text-center align-top">--}}
+                    {{--                                        <a href="{{route('item.base_index',['base'=>$link->parent_base_id, 'project'=>$project, 'role'=>$role])}}"--}}
+                    {{--                                           title="{{$link->parent_base->names()}}">--}}
+                    {{--                                            {{$link->parent_label()}}--}}
+                    {{--                                        </a>--}}
+                    {{--                                    </th>--}}
+                    {{--                                @endforeach--}}
+                    {{--                                --}}{{--            <th class="text-center">{{trans('main.user')}}</th>--}}
+                    {{--                                --}}{{--            <th class="text-center">{{trans('main.user')}}</th>--}}
+                    {{--                        </tr>--}}
+                    {{--                    @endif--}}
             </thead>
             <tbody>
             @foreach($items as $item)
@@ -364,42 +312,41 @@
                         @endif
                     @endif
                     {{--                <td class="text-center">&#8594;</td>--}}
-                    @foreach($links as $link)
+                    @foreach($link_id_array as $value)
                         <?php
-                        $base_link_right = GlobalController::base_link_right($link, $role);
+                        $link = Link::findOrFail($value);
                         ?>
-                        @if($base_link_right['is_list_link_enable'] == true)
-                            <td
-                                @include('layouts.class_from_base',['base'=>$link->parent_base])
-                            >
-                                <?php
-                                $item_find = MainController::view_info($item->id, $link->id);
-                                ?>
-                                @if($item_find)
-                                    @if($link->parent_base->type_is_image())
-                                        @include('view.img',['item'=>$item_find, 'size'=>"small", 'filenametrue'=>false, 'link'=>true, 'img_fluid'=>false, 'title'=>""])
-                                    @elseif($link->parent_base->type_is_document())
-                                        @include('view.doc',['item'=>$item_find])
-                                    @else
-                                        {{--                                Не удалять: просмотр Пространство--}}
-                                        {{--                                                                            проверка, если link - вычисляемое поле--}}
-                                        {{--                                    @if ($link->parent_is_parent_related == true || $link->parent_is_numcalc == true)--}}
-                                        {{--                                        <a href="{{route('item.item_index', ['item'=>$item_find, 'role'=>$role])}}">--}}
-                                        {{--                                            @else--}}
-                                        {{--                                                <a href="{{route('item.item_index', ['item'=>$item_find, 'role'=>$role,'par_link'=>$link])}}">--}}
-                                        {{--                                                    @endif--}}
-                                        {{--                                             Так использовать: 'item'=>$item--}}
-                                        <a href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}">
-                                            {{--                            Где $item->name() выходит в cards выводить "<?php echo GlobalController::to_html();?>"--}}
-                                            {{$item_find->name()}}
-                                        </a>
-                                    @endif
+                        <td
+                            @include('layouts.class_from_base',['base'=>$link->parent_base])
+                        >
+                            <?php
+                            $item_find = MainController::view_info($item->id, $link->id);
+                            ?>
+                            @if($item_find)
+                                @if($link->parent_base->type_is_image())
+                                    @include('view.img',['item'=>$item_find, 'size'=>"small", 'filenametrue'=>false, 'link'=>true, 'img_fluid'=>false, 'title'=>""])
+                                @elseif($link->parent_base->type_is_document())
+                                    @include('view.doc',['item'=>$item_find])
                                 @else
-                                    <div class="text-danger">
-                                        {{GlobalController::empty_html()}}</div>
+                                    {{--                                Не удалять: просмотр Пространство--}}
+                                    {{--                                                                            проверка, если link - вычисляемое поле--}}
+                                    {{--                                    @if ($link->parent_is_parent_related == true || $link->parent_is_numcalc == true)--}}
+                                    {{--                                        <a href="{{route('item.item_index', ['item'=>$item_find, 'role'=>$role])}}">--}}
+                                    {{--                                            @else--}}
+                                    {{--                                                <a href="{{route('item.item_index', ['item'=>$item_find, 'role'=>$role,'par_link'=>$link])}}">--}}
+                                    {{--                                                    @endif--}}
+                                    {{--                                             Так использовать: 'item'=>$item--}}
+                                    <a href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}">
+                                        {{--                            Где $item->name() выходит в cards выводить "<?php echo GlobalController::to_html();?>"--}}
+                                        {{$item_find->name()}}
+                                    </a>
                                 @endif
-                            </td>
-                        @endif
+                            @else
+                                <div class="text-danger">
+                                    {{GlobalController::empty_html()}}
+                                </div>
+                            @endif
+                        </td>
                     @endforeach
                     {{--                    Не удалять--}}
                     {{--                <td>{{$item->created_user_date()}}--}}

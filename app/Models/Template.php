@@ -19,6 +19,11 @@ class Template extends Model
         return $this->hasMany(Role::class, 'template_id');
     }
 
+    function levels()
+    {
+        return $this->hasMany(Level::class, 'template_id');
+    }
+
     function bases()
     {
         return $this->hasMany(Base::class, 'template_id');

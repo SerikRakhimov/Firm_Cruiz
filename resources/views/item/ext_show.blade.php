@@ -22,7 +22,7 @@
         <span class="text-label">-</span> <span class="text-title">{{$item->base->info()}}</span>
     </h3>
     <br>
-    <ul type="circle">
+    <ul>
         <p class="text-label">Id: <span class="text-related">{{$item->id}}</span></p>
         @if($base_right['is_show_base_enable'] == true)
             {{--        <p>--}}
@@ -127,24 +127,23 @@
                     @endforeach
                     </p>
     </ul>
-
+    <?php
+    //if (1 == 2) {
+    //        Не удалять
+    $result = ItemController::form_tree($item->id, $role);
+    //    echo "<br>Предки:<br>";
+    echo $result;
+    $result = ItemController::form_child_tree($item->id, $role);
+    echo "Созданы объекты с моим участием:<br>";
+    echo $result;
+    //}
+    ?>
     <i>
         <p class="text-label">{{trans('main.created_user_date_time')}}:
             <span class="text-related">{{$item->created_user_date_time()}}</span><br>
             {{trans('main.updated_user_date_time')}}:
             <span class="text-related">{{$item->updated_user_date_time()}}</span></p>
     </i>
-    <?php
-    //if (1 == 2) {
-        //        Не удалять
-        $result = ItemController::form_tree($item->id);
-//    echo "<br>Карточка:<br>";
-        echo $result;
-        $result = ItemController::form_child_tree($item->id);
-        echo "Записи:<br>";
-        echo $result;
-    //}
-    ?>
     @if ($type_form == 'show')
         <p>
             @if($base_right['is_list_base_update'] == true)
@@ -172,12 +171,14 @@
             {{--                                                            <a href="{{route('item.item_index', ['item'=>$item_find, 'role'=>$role,'par_link'=>$link])}}">--}}
             {{--                                                                @endif--}}
             {{--            Не удалять--}}
-            {{--                        <button type="button" class="btn btn-dreamer mb-1 mb-sm-0"--}}
-            {{--                                onclick='document.location="{{route('item.item_index', ['item'=>$item, 'role'=>$role])}}"'--}}
-            {{--                                title="{{trans('main.space')}}">--}}
-            {{--                            <i class="fas fa-atlas"></i>--}}
-            {{--                            {{trans('main.space')}}--}}
-            {{--                        </button>--}}
+                @if(1==2)
+                                    <button type="button" class="btn btn-dreamer mb-1 mb-sm-0"
+                                            onclick='document.location="{{route('item.item_index', ['item'=>$item, 'role'=>$role])}}"'
+                                            title="{{trans('main.space')}}">
+                                        <i class="fas fa-atlas"></i>
+                                        {{trans('main.space')}}
+                                    </button>
+                @endif
 
             {{--                                            С base_index.blade.php--}}
             {{--                                                            Не удалять: нужно для просмотра Пространства--}}

@@ -28,6 +28,7 @@
             <th class="text-left">{{trans('main.name')}}</th>
             <th class="text-center">{{trans('main.projects')}}</th>
             <th class="text-center">{{trans('main.roles')}}</th>
+            <th class="text-center">{{trans('main.levels')}}</th>
             <th class="text-center">{{trans('main.bases')}}</th>
             <th class="text-center">{{trans('main.sets')}}</th>
         </tr>
@@ -59,6 +60,12 @@
                 <td class="text-center">
                     <a href="{{route('role.index', $template)}}" title="{{trans('main.roles')}}">
                         <i class="fas fa-user-circle"></i> ({{$template->roles_count}})
+                    </a>
+                </td>
+                <td class="text-center">
+                    <a href="{{route('level.index', $template)}}" title="{{trans('main.levels')}}">
+{{--                        <i class="fas fa-layer-group"></i> ({{$template->levels_counts}})--}}
+                        <i class="fas fa-layer-group"></i> ({{count($template->levels)}})
                     </a>
                 </td>
                 <td class="text-center">

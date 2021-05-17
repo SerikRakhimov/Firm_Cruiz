@@ -17,8 +17,9 @@
     @endforeach
 
     @foreach (config('app.locales') as $key=>$value)
-{{--        <p>{{trans('main.desc')}} ({{trans('main.' . $value)}}): <b>{{$template['desc_lang_' . $key]}}</b></p>--}}
-        <p>{{trans('main.desc')}} ({{trans('main.' . $value)}}): <b><?php echo nl2br($template['desc_lang_' . $key]); ?></b></p>
+        {{--        <p>{{trans('main.desc')}} ({{trans('main.' . $value)}}): <b>{{$template['desc_lang_' . $key]}}</b></p>--}}
+        <p>{{trans('main.desc')}} ({{trans('main.' . $value)}}):
+            <b><?php echo nl2br($template['desc_lang_' . $key]); ?></b></p>
     @endforeach
 
     @if ($type_form == 'show')
@@ -58,6 +59,11 @@
                 <i class="fas fa-user-circle"></i>
                 {{trans('main.roles')}}
             </button>
+            <button type="button" class="btn btn-dreamer  mb-1 mb-sm-0" title="{{trans('main.levels')}}"
+                    onclick="document.location='{{route('level.index', $template)}}'">
+                <i class="fas fa-layer-group"></i>
+                {{trans('main.levels')}}
+            </button>
             <button type="button" class="btn btn-dreamer mb-1 mb-sm-0" title="{{trans('main.bases')}}"
                     onclick="document.location='{{route('base.index', $template)}}'">
                 <i class="fas fa-atom"></i>
@@ -68,6 +74,8 @@
                 <i class="fas fa-equals"></i>
                 {{trans('main.sets')}}
             </button>
+        </p>
+        <p>
             <button type="button" class="btn btn-dreamer mb-1 mb-sm-0"
                     title="{{trans('main.cancel')}}" @include('layouts.template.previous_url')>
                 <i class="fas fa-arrow-left"></i>

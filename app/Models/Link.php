@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Controllers\GlobalController;
 use Illuminate\Support\Facades\App;
 use Illuminate\Database\Eloquent\Model;
 
@@ -42,6 +43,27 @@ class Link extends Model
 //        if ($result == "") {
 //            $result = $this->child_labels_lang_0;
 //        }
+        return $result;
+    }
+
+    function parent_level($index)
+    {
+        $result = "";  // нужно, не удалять
+        if (0 <= $index && $index <= 3) {
+            $value = $this['parent_level_id_' . $index];
+            if ($value == 0){
+                $result = GlobalController::option_empty();
+            }
+            else{
+                $level = Level::find($value);
+                if ($level){
+                    $result = $level->name();
+                }
+                else{
+                    $result = $value;
+                }
+            }
+        }
         return $result;
     }
 

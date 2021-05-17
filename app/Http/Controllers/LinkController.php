@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\App;
 use App\Models\Base;
 use App\Models\Link;
+use App\Models\Level;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -82,7 +83,9 @@ class LinkController extends Controller
             return redirect()->route('project.all_index');
         }
 
-        return view('link/edit', ['base' => $base, 'bases' => Base::where('template_id', $base->template_id)->get()]);
+        return view('link/edit', ['base' => $base,
+            'bases' => Base::where('template_id', $base->template_id)->get(),
+            'levels' => Level::where('template_id', $base->template_id)->get()]);
     }
 
     function store(Request $request)
@@ -111,6 +114,10 @@ class LinkController extends Controller
         $link->child_labels_lang_3 = isset($request->child_labels_lang_3) ? $request->child_labels_lang_3 : "";
         $link->parent_base_number = $request->parent_base_number;
         $link->parent_num_bool_default_value = isset($request->parent_num_bool_default_value) ? $request->parent_num_bool_default_value : "";
+        $link->parent_level_id_0 = isset($request->parent_level_id_0) ? ($request->parent_level_id_0 == 0 ? null : $request->parent_level_id_0) : null;
+        $link->parent_level_id_1 = isset($request->parent_level_id_1) ? ($request->parent_level_id_1 == 0 ? null : $request->parent_level_id_1) : null;
+        $link->parent_level_id_2 = isset($request->parent_level_id_2) ? ($request->parent_level_id_2 == 0 ? null : $request->parent_level_id_2) : null;
+        $link->parent_level_id_3 = isset($request->parent_level_id_3) ? ($request->parent_level_id_3 == 0 ? null : $request->parent_level_id_3) : null;
         $link->parent_label_lang_0 = isset($request->parent_label_lang_0) ? $request->parent_label_lang_0 : "";
         $link->parent_label_lang_1 = isset($request->parent_label_lang_1) ? $request->parent_label_lang_1 : "";
         $link->parent_label_lang_2 = isset($request->parent_label_lang_2) ? $request->parent_label_lang_2 : "";
@@ -246,6 +253,10 @@ class LinkController extends Controller
         $link->child_labels_lang_3 = isset($request->child_labels_lang_3) ? $request->child_labels_lang_3 : "";
         $link->parent_base_number = $request->parent_base_number;
         $link->parent_num_bool_default_value = isset($request->parent_num_bool_default_value) ? $request->parent_num_bool_default_value : "";
+        $link->parent_level_id_0 = isset($request->parent_level_id_0) ? ($request->parent_level_id_0 == 0 ? null : $request->parent_level_id_0) : null;
+        $link->parent_level_id_1 = isset($request->parent_level_id_1) ? ($request->parent_level_id_1 == 0 ? null : $request->parent_level_id_1) : null;
+        $link->parent_level_id_2 = isset($request->parent_level_id_2) ? ($request->parent_level_id_2 == 0 ? null : $request->parent_level_id_2) : null;
+        $link->parent_level_id_3 = isset($request->parent_level_id_3) ? ($request->parent_level_id_3 == 0 ? null : $request->parent_level_id_3) : null;
         $link->parent_label_lang_0 = isset($request->parent_label_lang_0) ? $request->parent_label_lang_0 : "";
         $link->parent_label_lang_1 = isset($request->parent_label_lang_1) ? $request->parent_label_lang_1 : "";
         $link->parent_label_lang_2 = isset($request->parent_label_lang_2) ? $request->parent_label_lang_2 : "";
@@ -356,7 +367,9 @@ class LinkController extends Controller
             return redirect()->route('project.all_index');
         }
 
-        return view('link/edit', ['base' => $base, 'link' => $link, 'bases' => Base::where('template_id', $base->template_id)->get()]);
+        return view('link/edit', ['base' => $base, 'link' => $link,
+            'bases' => Base::where('template_id', $base->template_id)->get(),
+            'levels' => Level::where('template_id', $base->template_id)->get()]);
     }
 
     function delete_question(Link $link)

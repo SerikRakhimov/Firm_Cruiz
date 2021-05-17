@@ -3,6 +3,7 @@
 @section('content')
     <?php
     use App\Models\Link;
+    use \App\Http\Controllers\GlobalController;
     $update = isset($link);
     ?>
     <h3 class="display-5">
@@ -123,7 +124,8 @@
         </div>
 
         <div class="form-group">
-            <label for="parent_num_bool_default_value">{{trans('main.parent')}}_{{trans('main.parent_num_bool_default_value')}}<span
+            <label for="parent_num_bool_default_value">{{trans('main.parent')}}
+                _{{trans('main.parent_num_bool_default_value')}}<span
                     class="text-danger">*</span></label>
             <input type="text"
                    name="parent_num_bool_default_value"
@@ -132,6 +134,102 @@
                    placeholder=""
                    value="{{ old('parent_num_bool_default_value') ?? ($link['parent_num_bool_default_value'] ?? '') }}">
             @error('parent_num_bool_default_value')
+            <div class="text-danger">
+                {{$message}}
+            </div>
+            @enderror
+        </div>
+
+        <div class="form-group">
+            <label for="parent_level_id_0">{{trans('main.parent')}}_{{trans('main.level')}}_0<span
+                    class="text-danger">*</span></label>
+            <select class="form-control"
+                    name="parent_level_id_0"
+                    id="parent_level_id_0"
+                    class="form-control @error('parent_level_id_0') is-invalid @enderror">
+                <option value="0">{{GlobalController::option_empty()}}</option>
+                @foreach ($levels as $level)
+                    <option value="{{$level->id}}"
+                            {{--            "(int) 0" нужно--}}
+                            @if ((old('parent_level_id_0') ?? ($link->parent_level_id_0 ?? (int) 0)) ==  $level->id)
+                            selected
+                        @endif
+                    >{{$level->name()}}</option>
+                @endforeach
+            </select>
+            @error('parent_level_id_0')
+            <div class="text-danger">
+                {{$message}}
+            </div>
+            @enderror
+        </div>
+
+        <div class="form-group">
+            <label for="parent_level_id_1">{{trans('main.parent')}}_{{trans('main.level')}}_1<span
+                    class="text-danger">*</span></label>
+            <select class="form-control"
+                    name="parent_level_id_1"
+                    id="parent_level_id_1"
+                    class="form-control @error('parent_level_id_1') is-invalid @enderror">
+                <option value="0">{{GlobalController::option_empty()}}</option>
+                @foreach ($levels as $level)
+                    <option value="{{$level->id}}"
+                            {{--            "(int) 0" нужно--}}
+                            @if ((old('parent_level_id_1') ?? ($link->parent_level_id_1 ?? (int) 0)) ==  $level->id)
+                            selected
+                        @endif
+                    >{{$level->name()}}</option>
+                @endforeach
+            </select>
+            @error('parent_level_id_1')
+            <div class="text-danger">
+                {{$message}}
+            </div>
+            @enderror
+        </div>
+
+        <div class="form-group">
+            <label for="parent_level_id_2">{{trans('main.parent')}}_{{trans('main.level')}}_2<span
+                    class="text-danger">*</span></label>
+            <select class="form-control"
+                    name="parent_level_id_2"
+                    id="parent_level_id_2"
+                    class="form-control @error('parent_level_id_2') is-invalid @enderror">
+                <option value="0">{{GlobalController::option_empty()}}</option>
+                @foreach ($levels as $level)
+                    <option value="{{$level->id}}"
+                            {{--            "(int) 0" нужно--}}
+                            @if ((old('parent_level_id_2') ?? ($link->parent_level_id_2 ?? (int) 0)) ==  $level->id)
+                            selected
+                        @endif
+                    >{{$level->name()}}</option>
+                @endforeach
+            </select>
+            @error('parent_level_id_2')
+            <div class="text-danger">
+                {{$message}}
+            </div>
+            @enderror
+        </div>
+
+        <div class="form-group">
+            <label for="parent_level_id_3">{{trans('main.parent')}}_{{trans('main.level')}}_3<span
+                    class="text-danger">*</span></label>
+            <select class="form-control"
+                    name="parent_level_id_3"
+                    id="parent_level_id_3"
+                    class="form-control @error('parent_level_id_3') is-invalid @enderror">
+                <option value="0">{{GlobalController::option_empty()}}</option>
+                @foreach ($levels as $level)
+                    <option value="{{$level->id}}"
+                            {{--            "(int) 0" нужно--}}
+                            @if ((old('parent_level_id_3') ?? ($link->parent_level_id_3 ?? (int) 0)) ==  $level->id)
+                            selected
+                        @endif
+                    >{{$level->name()}}</option>
+                @endforeach
+            </select>
+            @error('parent_level_id_3')
             <div class="text-danger">
                 {{$message}}
             </div>
@@ -158,7 +256,8 @@
 
         @foreach (config('app.locales') as $key=>$value)
             <div class="form-group">
-                <label for="parent_calcname_prefix_lang_{{$key}}">{{trans('main.parent_calcname_prefix')}} ({{trans('main.' . $value)}}
+                <label for="parent_calcname_prefix_lang_{{$key}}">{{trans('main.parent_calcname_prefix')}}
+                    ({{trans('main.' . $value)}}
                     )<span class="text-danger">*</span></label>
                 <input type="text"
                        name="parent_calcname_prefix_lang_{{$key}}"
@@ -183,7 +282,8 @@
                        checked
                     @endif
                 >
-                <label class="form-check-label" for="parent_is_enter_refer">{{trans('main.parent_is_enter_refer')}}</label>
+                <label class="form-check-label"
+                       for="parent_is_enter_refer">{{trans('main.parent_is_enter_refer')}}</label>
             </div>
         </div>
 
@@ -209,7 +309,8 @@
                        checked
                     @endif
                 >
-                <label class="form-check-label" for="parent_is_nc_screencalc">{{trans('main.parent_is_nc_screencalc')}}</label>
+                <label class="form-check-label"
+                       for="parent_is_nc_screencalc">{{trans('main.parent_is_nc_screencalc')}}</label>
             </div>
         </div>
 
@@ -222,7 +323,8 @@
                        checked
                     @endif
                 >
-                <label class="form-check-label" for="parent_is_nc_viewonly">{{trans('main.parent_is_nc_viewonly')}}</label>
+                <label class="form-check-label"
+                       for="parent_is_nc_viewonly">{{trans('main.parent_is_nc_viewonly')}}</label>
             </div>
         </div>
 
@@ -235,7 +337,8 @@
                        checked
                     @endif
                 >
-                <label class="form-check-label" for="parent_is_nc_parameter">{{trans('main.parent_is_nc_parameter')}}</label>
+                <label class="form-check-label"
+                       for="parent_is_nc_parameter">{{trans('main.parent_is_nc_parameter')}}</label>
             </div>
         </div>
 
@@ -261,7 +364,8 @@
                        checked
                     @endif
                 >
-                <label class="form-check-label" for="parent_is_left_calcname">{{trans('main.parent_is_left_calcname')}}</label>
+                <label class="form-check-label"
+                       for="parent_is_left_calcname">{{trans('main.parent_is_left_calcname')}}</label>
             </div>
         </div>
 
@@ -274,7 +378,8 @@
                        checked
                     @endif
                 >
-                <label class="form-check-label" for="parent_is_small_calcname">{{trans('main.parent_is_small_calcname')}}</label>
+                <label class="form-check-label"
+                       for="parent_is_small_calcname">{{trans('main.parent_is_small_calcname')}}</label>
             </div>
         </div>
 
@@ -285,9 +390,10 @@
                        {{--            "(int) 0" нужно--}}
                        @if ((old('parent_is_hidden_field') ?? ($link->parent_is_hidden_field ?? false)) ==  true)
                        checked
-                       @endif
-                       >
-                <label class="form-check-label" for="parent_is_hidden_field">{{trans('main.parent_is_hidden_field')}}</label>
+                    @endif
+                >
+                <label class="form-check-label"
+                       for="parent_is_hidden_field">{{trans('main.parent_is_hidden_field')}}</label>
             </div>
         </div>
 
@@ -300,7 +406,8 @@
                        checked
                     @endif
                 >
-                <label class="form-check-label" for="parent_is_primary_image">{{trans('main.parent_is_primary_image')}}</label>
+                <label class="form-check-label"
+                       for="parent_is_primary_image">{{trans('main.parent_is_primary_image')}}</label>
             </div>
         </div>
 
@@ -313,7 +420,8 @@
                        checked
                        @endif
                        onclick="parent_parent_show_or_hide(this)">
-                <label class="form-check-label" for="parent_is_parent_related">{{trans('main.parent_is_parent_related')}}</label>
+                <label class="form-check-label"
+                       for="parent_is_parent_related">{{trans('main.parent_is_parent_related')}}</label>
             </div>
         </div>
 
@@ -359,7 +467,8 @@
                        checked
                        @endif
                        onclick="parent_child_show_or_hide(this)">
-                <label class="form-check-label" for="parent_is_child_related">{{trans('main.parent_is_child_related')}}</label>
+                <label class="form-check-label"
+                       for="parent_is_child_related">{{trans('main.parent_is_child_related')}}</label>
             </div>
         </div>
 

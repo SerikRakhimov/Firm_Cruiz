@@ -14,6 +14,7 @@ use App\Models\Set;
 use App\Models\Project;
 use App\Models\Role;
 use App\Models\Text;
+use App\Models\Level;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
@@ -174,14 +175,20 @@ class ItemController extends Controller
             return view('message', ['message' => trans('main.info_user_changed')]);
         }
 
+        $links_info = ItemController::links_info($base, $role);
+        if ($links_info['error_message'] != "") {
+            return view('message', ['message' => $links_info['error_message']]);
+        }
+
         $base_right = GlobalController::base_right($base, $role);
+
         $items_right = GlobalController::items_right($base, $project, $role);
         $items = $items_right['items'];
 
         if ($items) {
             session(['base_index_previous_url' => ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/' . request()->path()]);
             return view('item/base_index', ['base_right' => $base_right, 'base' => $base, 'project' => $project, 'role' => $role,
-                'items' => $items->paginate(60)]);
+                'items' => $items->paginate(60), 'links_info' => $links_info]);
         } else {
             return view('message', ['message' => trans('main.no_access_for_unregistered_users')]);
         }
@@ -2664,25 +2671,29 @@ class ItemController extends Controller
             'result_item_name_options' => $result_item_name_options];
     }
 
-    static function form_tree($item_id)
+    static function form_tree($item_id, $role)
     {
         $item = Item::find($item_id);
         $items = array();
-        $result = self::form_tree_start($items, $item_id, 0);
+        $result = self::form_tree_start($items, $item_id, 0, $role);
         //if ($result != '') {
-            //$result = '<ul type="circle"><li>' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b>' . $result . '</li></ul>';
+        //$result = '<ul type="circle"><li>' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b>' . $result . '</li></ul>';
 //            $result = '<details><summary>' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b></summary>' . $result . '</details>';
 //            $result = '' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b>' . $result . '';
-            //$result = '' . $result . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b>' . '';
+        //$result = '' . $result . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b>' . '';
         //}
-        $result = '' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b><br><br>Карточка:<br>' . $result . '';
+//        $result = '' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b><br><br>Статусы при создании объекта:<br>' . $result . '';
+        $result = 'Статусы при создании объекта:<br>' . $result . '';
+//        $result = 'Статусы при создании объекта:<br>' . $result . '';
+//        $result = $result . $item->base->name() . ': ' . ' <b>' . $item->name()
+//            . '</b><br><br>';
         return $result;
     }
 
 // $items нужно - чтобы не было бесконечного цикла
 //static function form_tree_start($items, $id, $level)   - можно использовать так
 //static function form_tree_start(&$items, $id, $level)  - и так - результаты разные
-    static function form_tree_start(&$items, $id, $level)
+    static function form_tree_start(&$items, $id, $level, $role)
     {
         $level = $level + 1;
         $result = '<ul type="circle">';
@@ -2704,12 +2715,17 @@ class ItemController extends Controller
             $str = '';
 //            $result = $result . '<li>' . $main->link->id . ' ' . $main->link->parent_label() . ' (' . $main->link->parent_base->name() . ': ' . '<b>' . $main->parent_item->name() . '</b>)'
 //                . $str . '</li>';
-            $str = self::form_tree_start($items, $main->parent_item_id, $level);
+            $str = self::form_tree_start($items, $main->parent_item_id, $level, $role);
 //          $result = $result . '<li>' . $main->link->parent_base->name() . ': ' . '<b>' . $main->parent_item->name() . '</b>' . $str . '</li>';
+            $alink = '<a href="' . route('item.ext_show', ['item' => $main->parent_item_id, 'role' => $role]) . '" title="' .
+                $main->parent_item->name() . '">...</a>';
             if ($str == '') {
-                $result = $result . '<li>' . $main->link->parent_label() . ': ' . '<b>' . $main->parent_item->name() . '</b>' . $str . '</li>';
+                $result = $result . '<li>' . $main->link->parent_label() . ': ' . '<b>' . $main->parent_item->name() . '</b>' . $alink . '</li>';
+                //$result = $result . '<li>' . '<a href="' . route('item.ext_show', ['item' => $main->parent_item_id, 'role' => $role]) .
+                //    '">' . $main->link->parent_label() . ': ' . '<b>' . $main->parent_item->name() . '</b></a>' . '</li>';
             } else {
-                $result = $result . '<li><details><summary>' . $main->link->parent_label() . ': ' . '<b>' . $main->parent_item->name() . '</b></summary>' . $str . '</details></li>';
+                $result = $result . '<li><details><summary>' . $main->link->parent_label() . ': ' . '<b>' . $main->parent_item->name() . '</b>' .
+                    $alink . '</summary>' . $str . '</details></li>';
             }
         }
         $result = $result . "</ul>";
@@ -2717,13 +2733,13 @@ class ItemController extends Controller
     }
 
 
-    static function form_child_tree($item_id)
+    static function form_child_tree($item_id, $role)
     {
         $item = Item::find($item_id);
         $items = array();
-        $result = self::form_child_tree_start($items, $item_id, 0);
+        $result = self::form_child_tree_start($items, $item_id, 0, $role);
         //if ($result != '') {
-            //$result = '<ul type="circle"><li>' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b>' . $result . '</li></ul>';
+        //$result = '<ul type="circle"><li>' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b>' . $result . '</li></ul>';
 //            $result = '<details><summary>' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b></summary>' . $result . '</details>';
 //            $result = '' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b>' . $result . '';
         //}
@@ -2733,7 +2749,7 @@ class ItemController extends Controller
 // $items нужно - чтобы не было бесконечного цикла
 //static function form_tree_start($items, $id, $level)   - можно использовать так
 //static function form_tree_start(&$items, $id, $level)  - и так - результаты разные
-    static function form_child_tree_start(&$items, $id, $level)
+    static function form_child_tree_start(&$items, $id, $level, $role)
     {
         $level = $level + 1;
         $result = '<ul type="disc">';
@@ -2758,12 +2774,16 @@ class ItemController extends Controller
             $str = '';
 //            $result = $result . '<li>' . $main->link->id . ' ' . $main->link->child_label() . ' (' . $main->link->child_base->name() . ': ' . '<b>' . $main->child_item->name() . '</b>)'
 //                . $str . '</li>';
-            $str = self::form_child_tree_start($items, $main->child_item_id, $level);
+            $str = self::form_child_tree_start($items, $main->child_item_id, $level, $role);
 //          $result = $result . '<li>' . $main->link->child_base->name() . ': ' . '<b>' . $main->child_item->name() . '</b>' . $str . '</li>';
+            $alink = '<a href="' . route('item.ext_show', ['item' => $main->child_item_id, 'role' => $role]) . '" title="' .
+                $main->child_item->name() . '">...</a>';
             if ($str == '') {
-                $result = $result . '<li>' . $main->link->child_label() . ': ' . '<b>' . $main->child_item->name() . '</b>' . $str . '</li>';
+                $result = $result . '<li>' . $main->link->child_label() . ': ' . '<b>' . $main->child_item->name() . '</b>' . $alink . '</li>';
             } else {
-                $result = $result . '<li><details><summary>' . $main->link->child_label() . ': ' . '<b>' . $main->child_item->name() . '</b></summary>' . $str . '</details></li>';
+                $result = $result . '<li><details><summary>' . $main->link->child_label() . ': ' . '<b>' . $main->child_item->name() . '</b> ' .
+                    $alink . '</summary>' . $str . '</details></li>';
+
             }
         }
         $result = $result . "</ul>";
@@ -3041,6 +3061,143 @@ class ItemController extends Controller
     {
         return trans('main.size_selected_file') . ' (' . $fs . ' ' . mb_strtolower(trans('main.byte')) . ') '
             . mb_strtolower(trans('main.must_less_equal')) . ' (' . $mx . ' ' . mb_strtolower(trans('main.byte')) . ') !';
+    }
+
+    static function links_info(Base $base, Role $role)
+    {
+        $link_id_array = array();
+        $matrix = array(array());
+        $links = $base->child_links->sortBy('parent_base_number');
+
+        $k = 0;
+        foreach ($links as $link) {
+            $base_link_right = GlobalController::base_link_right($link, $role);
+            if ($base_link_right['is_list_link_enable'] == true) {
+                $link_id_array[] = $link->id;
+                // 0-ая строка с link->id
+                $matrix[0][$k] = ['parent_level_id' => null, 'link_id' => $link->id, 'work_field' => null, 'work_link' => null, 'view_field' => null, 'view_name' => '', 'colspan' => 0, 'rowspan' => 0];
+                // строки с уровнями
+                $matrix[1][$k] = ['parent_level_id' => $link->parent_level_id_0, 'link_id' => $link->id, 'work_field' => null, 'work_link' => null, 'view_field' => null, 'view_name' => '', 'colspan' => 0, 'rowspan' => 0];
+                $matrix[2][$k] = ['parent_level_id' => $link->parent_level_id_1, 'link_id' => $link->id, 'work_field' => null, 'work_link' => null, 'view_field' => null, 'view_name' => '', 'colspan' => 0, 'rowspan' => 0];
+                $matrix[3][$k] = ['parent_level_id' => $link->parent_level_id_2, 'link_id' => $link->id, 'work_field' => null, 'work_link' => null, 'view_field' => null, 'view_name' => '', 'colspan' => 0, 'rowspan' => 0];
+                $matrix[4][$k] = ['parent_level_id' => $link->parent_level_id_3, 'link_id' => $link->id, 'work_field' => null, 'work_link' => null, 'view_field' => null, 'view_name' => '', 'colspan' => 0, 'rowspan' => 0];
+                $k = $k + 1;
+            }
+        }
+
+        // 0-ая строка с link->id + 4 строки с уровнями
+        $rows = 5;
+        $cols = $k;
+
+        // Сколько строк полностью заполнено
+        // $rowmax - максимальная строка
+        $rowmax = null;  // "$rowmax = null;" нужно
+        $error_message = "";
+
+        // 0-ая строка с link->id
+        $i = 0;
+        for ($j = 0; $j < $cols; $j++) {
+            $matrix[$i][$j]['work_field'] = 'link' . $matrix[$i][$j]['link_id'];
+            $matrix[$i][$j]['work_link'] = true;
+        }
+
+        // "$i = 1" - начинать с 1-ой строки, т.к. 0-ая заполнена link->id
+        for ($i = 1; $i < $rows; $i++) {
+            $k = 0;
+            for ($j = 0; $j < $cols; $j++) {
+                if ($matrix[$i][$j]['parent_level_id'] != null) {
+                    $matrix[$i][$j]['work_field'] = 'level' . $matrix[$i][$j]['parent_level_id'];
+                    $matrix[$i][$j]['work_link'] = false;
+                    $k = $k + 1;
+                }
+            }
+            // Есть хотя бы одна заполненная ячейка в строке
+            if ($k > 0) {
+                for ($j = 0; $j < $cols; $j++) {
+                    // Если в links->parent_level_id_x не заполнено, то тогда в эту ячейку выводится link->id (точнее link->parent_label())
+                    if ($matrix[$i][$j]['parent_level_id'] == null) {
+                        $matrix[$i][$j]['work_field'] = 'link' . $matrix[$i][$j]['link_id'];
+                        $matrix[$i][$j]['work_link'] = true;
+                    }
+                }
+                $rowmax = $i;
+            }
+        }
+        // $rows_exist = true - есть строки для вывода
+        // По идее, всегда должно быть true, т.к. есть 0-ая строка с link->id
+        $rows_exist = $rowmax != null;
+
+        if ($rows_exist == true) {
+            // "$i = 1" - начинать с 1-ой строки, т.к. 0-ая заполнена link->id
+            for ($i = 1; $i < $rowmax; $i++) {
+                for ($j = 0; $j < $cols; $j++) {
+                    if ($matrix[$i][$j]['work_field'] == null) {
+                        $error_message = trans('main.levels_row_is_not_populated_in_settings')
+                            . ' (' . mb_strtolower(trans('main.level')) . '_' . ($i - 1) . ')!';
+                        break;
+                    }
+                }
+            }
+
+            // Если нет ошибки и есть строки для вывода
+            if ($error_message == '') {
+
+                $rows = $rowmax + 1;  // "$rows = $rowmax + 1;" нужно
+
+                // Цикл расчета 'colspan'
+                for ($i = 0; $i < $rows; $i++) {
+                    $k = 0;
+                    for ($j = 0; $j < $cols; $j++) {
+                        if ($matrix[$i][$j]['work_field'] != $matrix[$i][$k]['work_field']) {
+                            $k = $j;
+                        }
+                        $matrix[$i][$k]['colspan'] = $matrix[$i][$k]['colspan'] + 1;
+                    }
+                }
+
+                // Цикл расчета 'rowspan'
+                for ($j = 0; $j < $cols; $j++) {
+                    $k = $rowmax;
+                    for ($i = $rowmax; $i >= 0; $i--) {
+                        // Проверка '$matrix[$i][$j]['colspan'] != $matrix[$k][$j]['colspan']' нужна,
+                        // признак того, что выше этой ячейки подниматься не следует
+                        // даже при равенстве '$matrix[$i][$j]['parent_level_id'] = $matrix[$k][$j]['parent_level_id']'
+                        if ($matrix[$i][$j]['work_field'] != $matrix[$k][$j]['work_field']
+                            || $matrix[$i][$j]['colspan'] != $matrix[$k][$j]['colspan']) {
+                            $k = $i;
+                        }
+                        $matrix[$k][$j]['rowspan'] = $matrix[$k][$j]['rowspan'] + 1;
+                    }
+                }
+
+                // Цикл заполнения $matrix[$i][$j]['view_field'] и $matrix[$i][$j]['view_name']
+                for ($i = 0; $i < $rows; $i++) {
+                    for ($j = 0; $j < $cols; $j++) {
+                        if ($matrix[$i][$j]['colspan'] != 0 && $matrix[$i][$j]['rowspan'] != 0) {
+                            $matrix[$i][$j]['view_field'] = $matrix[$i][$j]['work_field'];
+                            if ($matrix[$i][$j]['work_link'] == true) {
+                                $link_id = $matrix[$i][$j]['link_id'];
+                                $link = Link::findOrFail($link_id);
+                                $matrix[$i][$j]['view_name'] = $link->parent_label();
+                            } else {
+                                $level_id = $matrix[$i][$j]['parent_level_id'];
+                                $level = Level::findOrFail($level_id);
+                                $matrix[$i][$j]['view_name'] = $level->name();
+                            }
+                        }
+                    }
+                }
+
+            } else {
+                // Нужно, не удалять
+                // Для '<th rowspan="{{$rows + 1}}">' в item/base_index.php при выводе в "шапке" столбцов №, кода и наименования
+                $rows = 0;
+                $cols = 0;
+            }
+        }
+
+        return ['link_id_array' => $link_id_array, 'matrix' => $matrix,
+            'rows_exist' => $rows_exist, 'rows' => $rows, 'cols' => $cols, 'error_message' => $error_message];
     }
 
 }

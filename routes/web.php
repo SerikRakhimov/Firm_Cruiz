@@ -578,9 +578,40 @@ Route::delete('/base/delete/{base}', 'BaseController@delete')
 Route::get('/base/getBasesAll', 'BaseController@getBasesAll')
     ->name('base.getBasesAll');
 
+// Levels
+Route::get('/level/index/{template}', 'LevelController@index')
+    ->name('level.index')
+    ->middleware('auth');
+
+Route::get('/level/show/{level}', 'LevelController@show')
+    ->name('level.show')
+    ->middleware('auth');
+
+Route::get('/level/create/{template}', 'LevelController@create')
+    ->name('level.create')
+    ->middleware('auth');
+
+Route::get('/level/edit/{level}', 'LevelController@edit')
+    ->name('level.edit')
+    ->middleware('auth');
+
+Route::post('/level/store', 'LevelController@store')
+    ->name('level.store')
+    ->middleware('auth');
+
+Route::put('/level/edit/{level}', 'LevelController@update')
+    ->name('level.update')
+    ->middleware('auth');
+
+Route::get('/level/delete_question/{level}', 'LevelController@delete_question')
+    ->name('level.delete_question')
+    ->middleware('auth');
+
+Route::delete('/level/delete/{level}', 'LevelController@delete')
+    ->name('level.delete')
+    ->middleware('auth');
 
 // Links
-
 Route::get('/link/index', 'LinkController@index')
     ->name('link.index')
     ->middleware('auth');

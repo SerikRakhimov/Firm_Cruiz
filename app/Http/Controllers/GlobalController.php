@@ -694,4 +694,8 @@ class GlobalController extends Controller
         return ['result' => $result, 'message' => $message];
     }
 
+    static function option_empty()
+    {
+        return '-- ' . mb_strtolower(trans('main.empty')) . ' --';
+    }
 }

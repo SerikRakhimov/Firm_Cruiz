@@ -28,8 +28,12 @@
             <th class="text-left">{{trans('main.child')}}_{{trans('main.base')}}</th>
             <th class="text-left">{{trans('main.child_label')}}</th>
             <th class="text-left">{{trans('main.child_labels')}}</th>
-            <th class="text-left">{{trans('main.parent')}}_{{trans('main.serial_number')}}</th>
             <th class="text-left">{{trans('main.parent')}}_{{trans('main.base')}}</th>
+            <th class="text-left">{{trans('main.serial_number')}}</th>
+            <th class="text-left">{{trans('main.level')}}_0</th>
+            <th class="text-left">{{trans('main.level')}}_1</th>
+            <th class="text-left">{{trans('main.level')}}_2</th>
+            <th class="text-left">{{trans('main.level')}}_3</th>
             <th class="text-left">{{trans('main.parent_label')}}</th>
             <th class="text-left">{{trans('main.parent_is_enter_refer')}}</th>
             <th class="text-left">{{trans('main.parent_is_calcname')}}</th>
@@ -70,12 +74,32 @@
                 </td>
                 <td class="text-left">
                     <a href="{{route('link.show',$link)}}">
+                        {{$link->parent_base->info()}}
+                    </a>
+                </td>
+                <td class="text-left">
+                    <a href="{{route('link.show',$link)}}">
                         {{$link->parent_base_number}}
                     </a>
                 </td>
                 <td class="text-left">
                     <a href="{{route('link.show',$link)}}">
-                        {{$link->parent_base->info()}}
+                        {{$link->parent_level(0)}}
+                    </a>
+                </td>
+                <td class="text-left">
+                    <a href="{{route('link.show',$link)}}">
+                        {{$link->parent_level(1)}}
+                    </a>
+                </td>
+                <td class="text-left">
+                    <a href="{{route('link.show',$link)}}">
+                        {{$link->parent_level(2)}}
+                    </a>
+                </td>
+                <td class="text-left">
+                    <a href="{{route('link.show',$link)}}">
+                        {{$link->parent_level(3)}}
                     </a>
                 </td>
                 <td class="text-left">
