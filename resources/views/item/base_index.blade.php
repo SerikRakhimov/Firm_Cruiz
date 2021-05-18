@@ -222,28 +222,28 @@
             @endif
             @endif
             @if($rows > 0)
-                @for($i = ($rows-1); $i >= 0; $i--)
-                    @if($i != ($rows-1))
+                @for($x = ($rows-1); $x >= 0; $x--)
+                    @if($x != ($rows-1))
                         <tr>
                             @endif
-                            @for($j=0; $j<$cols;$j++)
-                                @if($matrix[$i][$j]["view_field"] != null)
-                                    <th rowspan="{{$matrix[$i][$j]["rowspan"]}}"
-                                        colspan="{{$matrix[$i][$j]["colspan"]}}"
+                            @for($y=0; $y<$cols;$y++)
+                                @if($matrix[$x][$y]["view_field"] != null)
+                                    <th rowspan="{{$matrix[$x][$y]["rowspan"]}}"
+                                        colspan="{{$matrix[$x][$y]["colspan"]}}"
                                         class="text-center align-top">
-                                        @if($matrix[$i][$j]["work_link"] == true)
+                                        @if($matrix[$x][$y]["work_link"] == true)
                                             <?php
-                                            $link = Link::findOrFail($matrix[$i][$j]["link_id"]);
+                                            $link = Link::findOrFail($matrix[$x][$y]["link_id"]);
                                             ?>
                                             <a href="{{route('item.base_index',['base'=>$link->parent_base_id, 'project'=>$project, 'role'=>$role])}}"
                                                title="{{$link->parent_base->names()}}">
-                                                {{$matrix[$i][$j]["view_name"]}}
+                                                {{$matrix[$x][$y]["view_name"]}}
                                             </a>
                                         @else
-                                            {{$matrix[$i][$j]["view_name"]}}
+                                            {{$matrix[$x][$y]["view_name"]}}
                                         @endif
                                     </th>
-                                    {{--                    {{$i}} {{$j}}  rowspan = {{$matrix[$i][$j]["rowspan"]}} colspan = {{$matrix[$i][$j]["colspan"]}} view_level_id = {{$matrix[$i][$j]["view_level_id"]}} view_level_name = {{$matrix[$i][$j]["view_level_name"]}}--}}
+                                    {{--                    {{$x}} {{$y}}  rowspan = {{$matrix[$x][$y]["rowspan"]}} colspan = {{$matrix[$x][$y]["colspan"]}} view_level_id = {{$matrix[$x][$y]["view_level_id"]}} view_level_name = {{$matrix[$x][$y]["view_level_name"]}}--}}
                                     {{--                    <br>--}}
                                 @endif
                             @endfor
