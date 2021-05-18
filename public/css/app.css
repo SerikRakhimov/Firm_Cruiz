@@ -192,8 +192,17 @@ table {
     text-align: left;
 }
 
+thead {
+    /*background: #fdead1;*/
+    background: #fef4e8;
+}
+
 th {
     color: #45160f;
+}
+
+tbody {
+    /*background: #fef4e8;*/
 }
 
 td {

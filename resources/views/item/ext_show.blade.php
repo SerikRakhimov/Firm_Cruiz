@@ -128,7 +128,7 @@
                     </p>
     </ul>
     <?php
-    //if (1 == 2) {
+    if (1 == 2) {
     //        Не удалять
     $result = ItemController::form_tree($item->id, $role);
     //    echo "<br>Предки:<br>";
@@ -136,7 +136,7 @@
     $result = ItemController::form_child_tree($item->id, $role);
     echo "Созданы объекты с моим участием:<br>";
     echo $result;
-    //}
+    }
     ?>
     <i>
         <p class="text-label">{{trans('main.created_user_date_time')}}:
