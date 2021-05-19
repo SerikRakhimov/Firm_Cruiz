@@ -372,7 +372,7 @@ class Item extends Model
         return $this->name_lang_0 != "";
     }
 
-// Для типов полей Изображение, Документ
+// Для типа полей Число
     function numval()
     {
         $value = 0;

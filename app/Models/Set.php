@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use \App\Http\Controllers\GlobalController;
 
 class Set extends Model
 {
@@ -98,4 +99,15 @@ class Set extends Model
         }
         return $result;
     }
+
+    function updaction_delete_record_with_zero_value()
+    {
+        // Нужно
+        $result = "";
+        if ($this->is_update == true){
+            $result = GlobalController::name_is_boolean($this->is_upd_delete_record_with_zero_value);
+        }
+        return $result;
+    }
+
 }

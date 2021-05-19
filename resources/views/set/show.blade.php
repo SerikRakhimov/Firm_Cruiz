@@ -15,10 +15,12 @@
 
     <p>Id: <b>{{$set->id}}</b></p>
 
+    <p>{{trans('main.serial_number')}}: <b>{{$set->serial_number}}</b></p>
     <p>{{trans('main.link_from')}}: <b>{{$set->link_from->id}} {{$set->link_from->name()}}</b></p>
     <p>{{trans('main.link_to')}}: <b>{{$set->link_to->id}} {{$set->link_to->name()}}</b></p>
     <p>{{trans('main.forwhat')}}: <b>{{$set->forwhat_name()}}</b></p>
     <p>{{trans('main.updaction')}}: <b>{{$set->updaction_name()}}</b></p>
+    <p>{{trans('main.is_upd_delete_record_with_zero_value')}}: <b>{{$set->updaction_delete_record_with_zero_value()}}</b></p>
 
     @if ($type_form == 'show')
         <p>

@@ -251,6 +251,7 @@ return [
     'ua_plus' => 'Қосу',
     'ua_minus' => 'Алу',
     'ua_replace' => 'Ауыстыру',
+    'is_upd_delete_record_with_zero_value'=>'Жаңарту кезінде нөлдік мәні бар жазбаны жою',
     'the_same_values_are_not_valid'=>'Бірдей мәндер жарамсыз',
     'parent_bases_must_be_the_same'=>'Ата-ананың негіздері бірдей болуы тиіс',
     'parent_bases_must_be_number'=>'Тектік негіздер Нөмір болуы тиіс',

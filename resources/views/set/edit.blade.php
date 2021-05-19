@@ -19,6 +19,28 @@
         @endif
         <input type="hidden" name="template_id" value="{{$template->id}}">
 
+        <div class="form-group row" id="serial_number_form_group">
+            <div class="col-sm-3 text-right">
+                <label for="serial_number">{{trans('main.serial_number')}}<span
+                        class="text-danger">*</span></label>
+            </div>
+            <div class="col-sm-2">
+                <input type="number"
+                       name="serial_number"
+                       id="serial_number"
+                       class="form-control @error('serial_number') is-invalid @enderror"
+                       placeholder=""
+                       value="{{ old('serial_number') ?? ($set['serial_number'] ?? '0') }}">
+                @error('serial_number')
+                <div class="text-danger">
+                    {{$message}}
+                </div>
+                @enderror
+            </div>
+            <div class="col-sm-7">
+            </div>
+        </div>
+
         <div class="form-group row">
             <div class="col-sm-3 text-right">
                 <label for="link_from_id" class="col-form-label">{{trans('main.link_from')}}<span
@@ -141,6 +163,30 @@
             </div>
         </div>
 
+        <div class="form-group row" id="is_upd_delete_record_with_zero_value_form_group">
+            <div class="col-sm-3 text-right">
+                <label class="form-label"
+                       for="is_upd_delete_record_with_zero_value">{{trans('main.is_upd_delete_record_with_zero_value')}}</label>
+            </div>
+            <div class="col-sm-7">
+                <input class="@error('is_upd_delete_record_with_zero_value') is-invalid @enderror"
+                       type="checkbox"
+                       name="is_upd_delete_record_with_zero_value"
+                       placeholder=""
+                       @if ((old('is_upd_delete_record_with_zero_value') ?? ($set->is_upd_delete_record_with_zero_value ?? false)) ==  true)
+                       checked
+                    @endif
+                >
+                @error('is_upd_delete_record_with_zero_value')
+                <div class="invalid-feedback">
+                    {{$message}}
+                </div>
+                @enderror
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div>
+
         <br>
         <div class="container-fluid">
             <div class="row text-center">
@@ -173,6 +219,7 @@
     <script>
         var forwhat = document.getElementById('forwhat');
         var updaction_fg = document.getElementById('updaction_form_group');
+        var upd_delwithzero_fg = document.getElementById('is_upd_delete_record_with_zero_value_form_group');
         var forwhat_value = null;
 
         function forwhat_changeOption(first) {
@@ -194,6 +241,7 @@
                     break;
             }
             updaction_fg.style.visibility = val_updaction;
+            upd_delwithzero_fg.style.visibility = val_updaction;
 
         }
 

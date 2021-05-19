@@ -251,6 +251,7 @@ return [
     'ua_plus' => 'Прибавить',
     'ua_minus' => 'Отнять',
     'ua_replace' => 'Заменить',
+    'is_upd_delete_record_with_zero_value'=>'Удалить запись с нулевым значением при обновлении',
     'the_same_values_are_not_valid' => 'Одинаковые значения недопустимы',
     'parent_bases_must_be_the_same' => 'Родительские основы должны быть одинаковыми',
     'parent_bases_must_be_number' => 'Родительские основы должны быть Число',

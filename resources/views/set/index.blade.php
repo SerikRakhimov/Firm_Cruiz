@@ -27,11 +27,13 @@
         <caption>{{trans('main.select_record_for_work')}}</caption>
         <thead>
         <tr>
-            <th class="text-center">#</th>
-            <th class="text-left">{{trans('main.link_from')}}</th>
-            <th class="text-left">{{trans('main.link_to')}}</th>
-            <th class="text-left">{{trans('main.forwhat')}}</th>
-            <th class="text-left">{{trans('main.updaction')}}</th>
+            <th class="text-center align-top">#</th>
+            <th class="text-center align-top">{{trans('main.serial_number')}}</th>
+            <th class="text-left align-top">{{trans('main.link_from')}}</th>
+            <th class="text-left align-top">{{trans('main.link_to')}}</th>
+            <th class="text-center align-top">{{trans('main.forwhat')}}</th>
+            <th class="text-center align-top">{{trans('main.updaction')}}</th>
+            <th class="text-center align-top">{{trans('main.is_upd_delete_record_with_zero_value')}}</th>
         </tr>
         </thead>
         <tbody>
@@ -47,6 +49,11 @@
                     <a href="{{route('set.show',$set)}}" title="{{trans('main.show')}}">
                         {{$i}}
                     </a></td>
+                <td class="text-center">
+                    <a href="{{route('set.show',$set)}}" title="{{trans('main.show')}}">
+                        {{$set->serial_number}}
+                    </a>
+                </td>
                 <td class="text-left">
                     <a href="{{route('set.show',$set)}}" title="{{trans('main.show')}}">
                         {{$set->link_from->name()}}
@@ -57,14 +64,19 @@
                         {{$set->link_to->name()}}
                     </a>
                 </td>
-                <td class="text-left">
+                <td class="text-center">
                     <a href="{{route('set.show',$set)}}" title="{{trans('main.show')}}">
                         {{$set->forwhat_name()}}
                     </a>
                 </td>
-                <td class="text-left">
+                <td class="text-center">
                     <a href="{{route('set.show',$set)}}" title="{{trans('main.show')}}">
                         {{$set->updaction_name()}}
+                    </a>
+                </td>
+                <td class="text-center">
+                    <a href="{{route('set.show',$set)}}" title="{{trans('main.show')}}">
+                        {{$set->updaction_delete_record_with_zero_value()}}
                     </a>
                 </td>
             </tr>

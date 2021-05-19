@@ -608,9 +608,7 @@ class ItemController extends Controller
             foreach ($it_texts as $it_key => $it_text) {
                 $it_texts[$it_key] = isset($it_texts[$it_key]) ? $it_texts[$it_key] : "";
             }
-
         }
-
 
         foreach ($inputs as $key => $value) {
             $link = Link::findOrFail($key);
@@ -950,7 +948,7 @@ class ItemController extends Controller
                     $item->name_lang_2 = $rs['calc_lang_2'];
                     $item->name_lang_3 = $rs['calc_lang_3'];
                 }
-
+                // в ext_store() вызывается один раз, т.к. запись создается
                 $this->save_sets($item, $keys, $values, $valits, false);
 
                 $item->save();
@@ -980,9 +978,10 @@ class ItemController extends Controller
 //return redirect()->route('item.base_index', ['base'=>$item->base, 'project'=>$item->project, 'role'=>$role]);
 
     }
-
+    // save_info_sets() выполняет все присваивания для $item с отниманием/прибавлением значений
+    // $reverse = true - отнимать, false - прибавлять
     private
-    function save_reverse_sets(Item $item)
+    function save_info_sets(Item $item, bool $reverse)
     {
         $itpv = Item::findOrFail($item->id);
         $mains = $itpv->child_mains()->get();
@@ -1005,9 +1004,10 @@ class ItemController extends Controller
         $keys_reverse = array_keys($inputs_reverse);
         $values_reverse = array_values($invals);
         $valits_reverse = array_values($inputs_reverse);
-        $this->save_sets($itpv, $keys_reverse, $values_reverse, $valits_reverse, true);
+        $this->save_sets($itpv, $keys_reverse, $values_reverse, $valits_reverse, $reverse);
     }
 
+    // Проверка на возможность выполнения присваиваний для переданного $item
     private
     function is_save_sets(Item $item)
     {
@@ -1015,6 +1015,7 @@ class ItemController extends Controller
             ->join('links as lf', 'sets.link_from_id', '=', 'lf.id')
             ->join('links as lt', 'sets.link_to_id', '=', 'lt.id')
             ->where('lf.child_base_id', '=', $item->base_id)
+            ->orderBy('sets.serial_number')
             ->orderBy('sets.link_from_id')
             ->orderBy('sets.link_to_id')->get();
         $result = null;
@@ -1028,6 +1029,7 @@ class ItemController extends Controller
 
     }
 
+    // Обрабатывает присваивания
     private
     function save_sets(Item $item, $keys, $values, $valits, bool $reverse)
     {
@@ -1041,185 +1043,262 @@ class ItemController extends Controller
             ->join('links as lf', 'sets.link_from_id', '=', 'lf.id')
             ->join('links as lt', 'sets.link_to_id', '=', 'lt.id')
             ->where('lf.child_base_id', '=', $item->base_id)
+            ->orderBy('sets.serial_number')
             ->orderBy('sets.link_from_id')
             ->orderBy('sets.link_to_id')->get();
 
-        $set_group_by_base_to = $set_main->groupBy('to_child_base_id')->sortBy('to_child_base_id');
+        // Группировка $set_main по serial_number, индексы массива - serial_number
+        $set_group_by_serial_number = $set_main->groupBy('serial_number')->
+        sortBy('serial_number');
 
         //$table2 = Set::select(DB::Raw('$table1.*'))->get();
-        foreach ($set_group_by_base_to as $to_key => $to_value) {
-            $items = Item::where('base_id', $to_key)->where('project_id', $item->project_id);
-//            $items = $items->whereHas('child_mains', function ($query) {
-//                $query->where('link_id', 41)->where('parent_item_id', 388);
-//            });
-            $set_base_to = $set_main->where('to_child_base_id', '=', $to_key)->sortBy('to_parent_base_id');
-            $set_is_group = $set_base_to->where('is_group', true);
-            //$base_to_id = $key;
-            $error = true;
-            $found = false;
-            $item_seek = null;
-            // Поиск $item_seek
-            foreach ($set_is_group as $key => $value) {
-//                проверка, если link - вычисляемое поле
-                //if ($link->parent_is_parent_related == true || $link->parent_is_numcalc == true)
-                if ($value->link_from->parent_is_parent_related == true) {
+        // Цикл по записям, в каждой итерации цикла свой порядковый номер $sn_key
+        foreach ($set_group_by_serial_number as $sn_key => $sn_value) {
+            // Группировка $set_main по to_child_base_id, индексы массива - to_child_base_id
+            //             + нужный фильтр "where('serial_number', '=', $sn_key)"
+            $set_group_by_base_to = $set_main->where('serial_number', '=', $sn_key)->
+            groupBy('to_child_base_id')->
+            sortBy('to_child_base_id');
+            // Цикл по записям, в каждой итерации цикла свой to_child_base_id в переменной $to_key
+            foreach ($set_group_by_base_to as $to_key => $to_value) {
+                // Выборка из $set_main
+                // "where('serial_number', '=', $sn_key)" нужно
+                $set_base_to = $set_main->where('serial_number', '=', $sn_key)->
+                where('to_child_base_id', '=', $to_key)->
+                sortBy('to_parent_base_id');
 
+                // Группировка данных
+                $set_is_group = $set_base_to->where('is_group', true);
 
-                } else {
-                    //$item_seek = MainController::view_info($item, $value['link_from_id']);
-                    $nk = -1;
-                    foreach ($keys as $k => $v) {
+                $items = Item::where('base_id', $to_key)->where('project_id', $item->project_id);
 
-                        if ($v == $value['link_from_id']) {
-                            $nk = $k;
-                            break;
-                        }
-                    }
-
-                    if ($nk != -1) {
-                        $set_to = $set_is_group->where('link_from_id', $value['link_from_id'])->first();
-                        if ($set_to) {
-                            $nt = $set_to->link_to_id;
-                            $nv = $values[$nk];
-                            $items = $items->whereHas('child_mains', function ($query) use ($nt, $nv) {
-                                $query->where('link_id', $nt)->where('parent_item_id', $nv);
-                            });
-                            $item_seek = $items->first();
-                            $error = false;
-                            if (!$item_seek) {
-                                $found = false;
-                                break;
-                            } else {
-                                $found = true;
-                            }
-                        }
-                    }
-                }
-
-            }
-
-            if (!$error) {
-                if (!$found) {
-                    // создать новую запись
-                    $item_seek = new Item();
-                    $item_seek->base_id = $to_key;
-                    $item_seek->project_id = $item->project_id;
-                    $item_seek->code = uniqid($item_seek->id . '_', true);
-                    $item_seek->name_lang_0 = "";
-                    $item_seek->name_lang_1 = "";
-                    $item_seek->name_lang_2 = "";
-                    $item_seek->name_lang_3 = "";
-                    $item_seek->created_user_id = Auth::user()->id;
-                    $item_seek->updated_user_id = Auth::user()->id;
-                    // Нужно, чтобы id было
-                    $item_seek->save();
-                }
-                //$items = $items->get();
                 $error = true;
                 $found = false;
-                $valnull = false;
-                // Фильтры
-                foreach ($set_base_to as $key => $value) {
-                    $nk = 0;
-                    foreach ($keys as $k => $v) {
-                        if ($v == $value['link_from_id']) {
-                            $nk = $k;
-                            break;
-                        }
-                    }
-                    if ($nk != 0) {
-                        $nt = $value->link_to_id;
-                        $nv = $values[$nk];
-                        $main = Main::where('link_id', $nt)->where('child_item_id', $item_seek->id)->first();
-                        $error = false;
-                        $vl = 0;
-                        if (!$main) {
-                            $main = new Main();
-                            // при создании записи "$item->created_user_id" заполняется
-                            $main->created_user_id = Auth::user()->id;
+                $item_seek = null;
 
-                            $main->link_id = $nt;
-                            $main->child_item_id = $item_seek->id;
-                            $vl = 0;
-                        } else {
-                            $vl = $main->parent_item->numval()['value'];
-                        }
-                        $main->updated_user_id = Auth::user()->id;
-                        $seek_item = false;
-                        $seek_value = 0;
+                // Поиск $item_seek в цикле
+                foreach ($set_is_group as $key => $value) {
+//                проверка, если link - вычисляемое поле
+                    //if ($link->parent_is_parent_related == true || $link->parent_is_numcalc == true)
+                    if ($value->link_from->parent_is_parent_related == true) {
 
-
-                        if ($value->link_to->parent_base->type_is_number() && is_numeric($values[$nk])) {
-                            $ch = $values[$nk];
-                        } else {
-                            $ch = 0;
-                        }
-                        if ($value->is_group == true) {
-                            $main->parent_item_id = $valits[$nk];
-                        } elseif ($value->is_update == true) {
-                            if ($value->is_upd_plus == true) {
-                                $seek_item = true;
-
-                                $seek_value = $vl + $kf * $ch;
-                                if ($seek_value == 0) {
-                                    $valnull = true;
-                                }
-                            } elseif ($value->is_upd_minus == true) {
-                                $seek_item = true;
-                                $seek_value = $vl - $kf * $ch;
-                                if ($seek_value == 0) {
-                                    $valnull = true;
-                                }
-                            } elseif ($value->is_upd_replace == true) {
-                                $main->parent_item_id = $valits[$nk];
+                    } else {
+                        //$item_seek = MainController::view_info($item, $value['link_from_id']);
+                        $nk = -1;
+                        foreach ($keys as $k => $v) {
+                            if ($v == $value['link_from_id']) {
+                                $nk = $k;
+                                break;
                             }
                         }
 
-                        if ($seek_item == true) {
-                            $item_find = Item::where('base_id', $value->link_to->parent_base_id)->where('project_id', $item->project_id)
-                                ->where('name_lang_0', $seek_value)->first();
-                            // если не найдено
-                            if (!$item_find) {
-                                // создание новой записи в items
-                                $item_find = new Item();
-                                $item_find->base_id = $value->link_to->parent_base_id;
-                                // Похожие строки вверху
-                                $item_find->code = uniqid($item_find->base_id . '_', true);
-                                // присваивание полям наименование строкового значение числа
-                                foreach (config('app.locales') as $key => $value) {
-                                    $item_find['name_lang_' . $key] = $seek_value;
+                        if ($nk != -1) {
+                            $set_to = $set_is_group->where('link_from_id', $value['link_from_id'])->first();
+                            if ($set_to) {
+                                $nt = $set_to->link_to_id;
+                                $nv = $values[$nk];
+                                $items = $items->whereHas('child_mains', function ($query) use ($nt, $nv) {
+                                    $query->where('link_id', $nt)->where('parent_item_id', $nv);
+                                });
+                                // похожие строки чуть ниже
+                                $item_seek = $items->first();
+                                $error = false;
+                                if (!$item_seek) {
+                                    $found = false;
+                                    break;
+                                } else {
+                                    $found = true;
                                 }
-                                $item_find->project_id = $item->project_id;
-                                // при создании записи "$item->created_user_id" заполняется
-                                $item_find->created_user_id = Auth::user()->id;
-                                $item_find->updated_user_id = Auth::user()->id;
-                                $item_find->save();
                             }
-                            $main->parent_item_id = $item_find->id;
                         }
-                        $main->save();
-
                     }
                 }
-
-                $rs = $this->calc_value_func($item_seek);
-                if ($rs != null) {
-                    $item_seek->name_lang_0 = $rs['calc_lang_0'];
-                    $item_seek->name_lang_1 = $rs['calc_lang_1'];
-                    $item_seek->name_lang_2 = $rs['calc_lang_2'];
-                    $item_seek->name_lang_3 = $rs['calc_lang_3'];
+                // Если нет группировки
+                if (count($set_is_group) == 0) {
+                    // похожие строки чуть выше
+                    $item_seek = $items->first();
+                    $error = false;
+                    if (!$item_seek) {
+                        $found = false;
+                    } else {
+                        $found = true;
+                    }
                 }
+                if (!$error) {
 
-                $item_seek->save();
+                    $create_item_seek = false;
 
-                // Если остаток нулевой
-                if ($valnull) {
-                    $item_seek->delete();
+                    if (!$found) {
+
+                        $create_item_seek = true;
+
+                        // Эта проверка сделана, чтобы зря не создавать $item_seek
+                        // Фильтры 111 - похоие строки ниже
+                        foreach ($set_base_to as $key => $value) {
+                            $nk = -1;
+                            foreach ($keys as $k => $v) {
+                                if ($v == $value['link_from_id']) {
+                                    $nk = $k;
+                                    break;
+                                }
+                            }
+                            if ($nk == -1) {
+                                $create_item_seek = false;
+                                break;
+                            }
+                        }
+
+                        if ($create_item_seek == true) {
+                            // создать новую запись
+                            $item_seek = new Item();
+                            $item_seek->base_id = $to_key;
+                            $item_seek->project_id = $item->project_id;
+                            $item_seek->code = uniqid($item_seek->id . '_', true);
+                            $item_seek->name_lang_0 = "";
+                            $item_seek->name_lang_1 = "";
+                            $item_seek->name_lang_2 = "";
+                            $item_seek->name_lang_3 = "";
+                            $item_seek->created_user_id = Auth::user()->id;
+                            $item_seek->updated_user_id = Auth::user()->id;
+                            // Нужно, чтобы id было
+                            $item_seek->save();
+                        }
+                    } else {
+                        // "$create_item_seek = true;" нужно
+                        $create_item_seek = true;
+                        // true - с реверсом
+                        $this->save_info_sets($item_seek, true);
+
+                    }
+                    if ($create_item_seek == true) {
+                        //$items = $items->get();
+                        $error = true;
+                        $found = false;
+                        $valnull = false;
+
+                        // Фильтры 111 - похоие строки выше
+                        foreach ($set_base_to as $key => $value) {
+                            $nk = -1;
+                            foreach ($keys as $k => $v) {
+                                if ($v == $value['link_from_id']) {
+                                    $nk = $k;
+                                    break;
+                                }
+                            }
+                            if ($nk != -1) {
+                                $nt = $value->link_to_id;
+                                $nv = $values[$nk];
+                                $main = Main::where('link_id', $nt)->where('child_item_id', $item_seek->id)->first();
+                                $error = false;
+                                $vl = 0;
+                                if (!$main) {
+                                    $main = new Main();
+                                    // при создании записи "$item->created_user_id" заполняется
+                                    $main->created_user_id = Auth::user()->id;
+
+                                    $main->link_id = $nt;
+                                    $main->child_item_id = $item_seek->id;
+                                    $vl = 0;
+                                } else {
+                                    $vl = $main->parent_item->numval()['value'];
+                                }
+                                $main->updated_user_id = Auth::user()->id;
+
+                                // "$seek_item = false" нужно
+                                $seek_item = false;
+                                $seek_value = 0;
+
+                                if ($value->link_to->parent_base->type_is_number() && is_numeric($values[$nk])) {
+                                    $ch = $values[$nk];
+                                } else {
+                                    $ch = 0;
+                                }
+
+                                if ($value->is_group == true) {
+                                    $main->parent_item_id = $valits[$nk];
+                                } elseif ($value->is_update == true) {
+                                    if ($value->is_upd_plus == true) {
+                                        $seek_item = true;
+                                        $seek_value = $vl + $kf * $ch;
+                                        // Удалить запись с нулевым значением при обновлении
+                                        if ($value->is_upd_delete_record_with_zero_value == true) {
+                                            if ($seek_value == 0) {
+                                                $valnull = true;
+                                            }
+                                        }
+                                    } elseif ($value->is_upd_minus == true) {
+                                        $seek_item = true;
+                                        $seek_value = $vl - $kf * $ch;
+                                        // Удалить запись с нулевым значением при обновлении
+                                        if ($value->is_upd_delete_record_with_zero_value == true) {
+                                            if ($seek_value == 0) {
+                                                $valnull = true;
+                                            }
+                                        }
+                                    } elseif ($value->is_upd_replace == true) {
+                                        $main->parent_item_id = $valits[$nk];
+                                        // Удалить запись с нулевым значением при обновлении
+                                        if ($value->is_upd_delete_record_with_zero_value == true) {
+                                            $item_numval = Item::findOrFail($main->parent_item_id);
+                                            $numval = $item_numval->numval();
+                                            if ($numval["result"] == true) {
+                                                if ($numval["value"] == 0) {
+                                                    $valnull = true;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                //  Добавление числа в базу данных
+                                if ($seek_item == true) {
+                                    $item_find = Item::where('base_id', $value->link_to->parent_base_id)->where('project_id', $item->project_id)
+                                        ->where('name_lang_0', $seek_value)->first();
+                                    // если не найдено
+                                    if (!$item_find) {
+                                        // создание новой записи в items
+                                        $item_find = new Item();
+                                        $item_find->base_id = $value->link_to->parent_base_id;
+                                        // Похожие строки вверху
+                                        $item_find->code = uniqid($item_find->base_id . '_', true);
+                                        // присваивание полям наименование строкового значение числа
+                                        foreach (config('app.locales') as $key => $value) {
+                                            $item_find['name_lang_' . $key] = $seek_value;
+                                        }
+                                        $item_find->project_id = $item->project_id;
+                                        // при создании записи "$item->created_user_id" заполняется
+                                        $item_find->created_user_id = Auth::user()->id;
+                                        $item_find->updated_user_id = Auth::user()->id;
+                                        $item_find->save();
+                                    }
+                                    $main->parent_item_id = $item_find->id;
+                                }
+                                $main->save();
+                            }
+                        }
+
+                        $rs = $this->calc_value_func($item_seek);
+                        if ($rs != null) {
+                            $item_seek->name_lang_0 = $rs['calc_lang_0'];
+                            $item_seek->name_lang_1 = $rs['calc_lang_1'];
+                            $item_seek->name_lang_2 = $rs['calc_lang_2'];
+                            $item_seek->name_lang_3 = $rs['calc_lang_3'];
+                        }
+
+                        $item_seek->save();
+
+                        // false - без реверса
+                        // "$this->save_info_sets()" выполнять перед проверкой на удаление
+                        $this->save_info_sets($item_seek, false);
+
+                        // Если "Удалить запись с нулевым значением при обновлении" == true и значение равно нулю,
+                        // то удалить запись
+                        if ($valnull) {
+                            $item_seek->delete();
+                        }
+                    }
                 }
-
             }
         }
-
     }
 
     private
@@ -1227,6 +1306,7 @@ class ItemController extends Controller
     {
         $main->link_id = $keys[$index];
         $main->child_item_id = $item->id;
+
         // поиск должен быть удачным, иначе "$main->link_id = $keys[$index]" может дать ошибку
         $link = Link::findOrFail($keys[$index]);
 
@@ -1451,19 +1531,26 @@ class ItemController extends Controller
 
             // тип корректировки поля - не строка и не список
         } else {
-            if (($link->parent_base->type_is_number()) && ($link->parent_base->is_required_lst_num_str_txt_img_doc == false)) {
-                if ($values[$index] == 0) {
-                    // Нужно
-                    // Если запись main существует - то удалить ее
-                    if (isset($main->id)) {
-                        $main->delete();
-                    }
-                    // Нужно
-                    return;
-                }
-            }
+
+            // Проверка числовых полей
+            // Если равно нулю и "$link->parent_base->is_required_lst_num_str_txt_img_doc == false",
+            // удаляет запись $main, если она есть
+            // и в итоге: вместо нуля отображается null/empty
+//            if (($link->parent_base->type_is_number()) && ($link->parent_base->is_required_lst_num_str_txt_img_doc == false)) {
+//                if ($values[$index] == 0) {
+//                    // Нужно
+//                    // Если запись main существует - то удалить ее
+//                    if (isset($main->id)) {
+//                        $main->delete();
+//                    }
+//                    // Нужно
+//                    return;
+//                }
+//            }
+
             // поиск в таблице items значение с таким же названием и base_id
             $item_find = Item::where('base_id', $link->parent_base_id)->where('project_id', $item->project_id)->where('name_lang_0', $values[$index])->first();
+
             // если не найдено
             if (!$item_find) {
                 // создание новой записи в items
@@ -2079,7 +2166,9 @@ class ItemController extends Controller
                     }
                 }
 
-                $this->save_reverse_sets($item);
+                // только для ext_update()
+                // true - с реверсом
+                $this->save_info_sets($item, true);
 
                 // после ввода данных в форме массив состоит:
                 // индекс массива = link_id (для занесения в links->id)
@@ -2136,7 +2225,7 @@ class ItemController extends Controller
                     $item->name_lang_2 = $rs['calc_lang_2'];
                     $item->name_lang_3 = $rs['calc_lang_3'];
                 }
-
+                // ext_update()
                 $this->save_sets($item, $keys, $values, $valits, false);
 
                 $item->save();
@@ -2276,8 +2365,8 @@ class ItemController extends Controller
                 try {
                     // начало транзакции
                     DB::transaction(function ($r) use ($item) {
-
-                        $this->save_reverse_sets($item);
+                        // true - с реверсом
+                        $this->save_info_sets($item, true);
 
                         $item->delete();
 

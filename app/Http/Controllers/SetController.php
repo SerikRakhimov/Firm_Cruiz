@@ -18,6 +18,7 @@ class SetController extends Controller
     protected function rules(Request $request)
     {
         return [
+            'serial_number' => ['required', new IsUniqueSet($request)],
             'link_from_id' => ['required', new IsUniqueSet($request)],
             'link_to_id' => ['required', new IsUniqueSet($request)],
         ];
@@ -42,6 +43,7 @@ class SetController extends Controller
             ->join('links as lf', 'sets.link_from_id', '=', 'lf.id')
             ->join('links as lt', 'sets.link_to_id', '=', 'lt.id')
             ->where('sets.template_id', $template->id)
+            ->orderBy('sets.serial_number')
             ->orderBy('lf.child_base_id')
             ->orderBy('lt.child_base_id')
             ->orderBy('lf.parent_base_number')
@@ -201,6 +203,7 @@ class SetController extends Controller
     function set(Request $request, Set &$set)
     {
         $set->template_id = $request->template_id;
+        $set->serial_number = $request->serial_number;
         $set->link_from_id = $request->link_from_id;
         $set->link_to_id = $request->link_to_id;
 
@@ -209,6 +212,7 @@ class SetController extends Controller
         $set->is_upd_plus = false;
         $set->is_upd_minus = false;
         $set->is_upd_replace = false;
+        $set->is_upd_delete_record_with_zero_value = false;
 
         // Похожие строки в SetController.php (functions: store(), edit(), check())
         // и в Set.php (functions: get_types(), type(), type_name())
@@ -221,11 +225,13 @@ class SetController extends Controller
                 $set->is_upd_plus = false;
                 $set->is_upd_minus = false;
                 $set->is_upd_replace = false;
+                $set->is_upd_delete_record_with_zero_value = false;
                 break;
             // Обновление
             case 1:
                 $set->is_group = false;
                 $set->is_update = true;
+                $set->is_upd_delete_record_with_zero_value = isset($request->is_upd_delete_record_with_zero_value) ? true : false;
                 switch ($request->updaction) {
                     // Добавить
                     case 0:
