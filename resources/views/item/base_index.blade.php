@@ -151,62 +151,6 @@
     {{--            </div>--}}
     {{--        </div>--}}
     {{--    </div><!-- Конец карточки -->--}}
-    <div id="collapse11" class="collapse in">
-        При указанных обстоятельствах необходимо выпольтить следующее11111111111111...
-    </div>
-    <a data-toggle="collapse" data-parent="#accordion" href="#collapse11">Предки/Потомки</a>
-    <div id="collapse11" class="collapse in">
-        При указанных обстоятельствах необходимо выпольтить следующее222222222222...
-    </div>
-
-    <div class="container">
-        <div class="" id="accordion">
-            <div class="card ">
-                <div id="collapse1" class="card-collapse collapse in">
-                    <div class="card-body">При указанных обстоятельствах необходимо выпольтить следующее1...</div>
-                </div>
-                <div class="card-header">
-                    <h4 class="card-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">Предки/потомки</a>
-                    </h4>
-                </div>
-                <div id="collapse1" class="card-collapse collapse in">
-                    <div class="card-body">При указанных обстоятельствах необходимо выпольтить следующее2...</div>
-                </div>
-            </div>
-            <div class="card ">
-                <div class="card-header">
-                    <h4 class="card-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">Какой параметр стоит
-                            указать при...?</a>
-                    </h4>
-                </div>
-                <div id="collapse2" class="card-collapse collapse">
-                    <div class="card-body">При ... стои указать вот такой параметр.</div>
-                </div>
-            </div>
-            <div class="card ">
-                <div class="card-header">
-                    <h4 class="card-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">Для реализации ... стоит
-                            использовать...?</a>
-                    </h4>
-                </div>
-                <div id="collapse3" class="card-collapse collapse">
-                    <div class="card-body">В указанном случае это лучший вариант.</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="container">
-        <h2 style="color:red;">Сегодня в ТРЦ "*****" проводится акция, по которой вы можете выиграть плазму!</h2>
-        <button type="button" class="btn-lg btn-danger" data-toggle="collapse" data-target="#demo">Подробнее></button>
-        <div id="demo" class="collapse">
-            Для участия Вам необходимо выполнить несколько условий...
-        </div>
-    </div>
-
 
     @if($tile_view['result'] == true)
         <div class="card-columns">
