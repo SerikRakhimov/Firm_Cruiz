@@ -39,6 +39,7 @@
     <p>{{trans('main.is_show_link_enable')}}: <b>{{GlobalController::name_is_boolean($roli->is_show_link_enable)}}</b></p>
     <p>{{trans('main.is_edit_link_read')}}: <b>{{GlobalController::name_is_boolean($roli->is_edit_link_read)}}</b></p>
     <p>{{trans('main.is_edit_link_update')}}: <b>{{GlobalController::name_is_boolean($roli->is_edit_link_update)}}</b></p>
+    <p>{{trans('main.is_hier_link_enable')}}: <b>{{GlobalController::name_is_boolean($roli->is_hier_link_enable)}}</b></p>
     @if ($type_form == 'show')
 {{--        @if (Auth::user()->isAdmin() ||!(($is_user == true) && ($roli->role->is_default_for_external == false)))--}}
             <p>

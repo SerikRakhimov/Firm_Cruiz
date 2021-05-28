@@ -1,4 +1,5 @@
 <?php
+// Алгоритмы одинаковые в view.doc.blade.php и GlobalController::view_doc()
 use \App\Http\Controllers\GlobalController;
 ?>
 @if($item->base->type_is_document())

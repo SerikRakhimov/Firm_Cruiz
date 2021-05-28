@@ -1,7 +1,6 @@
 <?php
-
+// Алгоритмы одинаковые в view.img.blade.php и GlobalController::view_img()
 use \App\Http\Controllers\GlobalController;
-
 ?>
 @if($item->base->type_is_image())
                  @if($item->img_doc_exist())

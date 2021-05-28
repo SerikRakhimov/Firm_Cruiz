@@ -728,7 +728,7 @@
                                 </option>
                                 @else
                                     @if(!$link->parent_base->is_required_lst_num_str_txt_img_doc)
-                                        <option value="0">GlobalController::option_empty()</option>
+                                        <option value="0">{{GlobalController::option_empty()}}</option>
                                     @endif
                                     @foreach ($items as $item_work)
                                         <option value="{{$item_work->id}}"

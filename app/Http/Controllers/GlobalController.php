@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use phpDocumentor\Reflection\Types\Boolean;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Storage;
 
 class GlobalController extends Controller
 {
@@ -77,6 +78,8 @@ class GlobalController extends Controller
         $is_show_link_enable = $role->is_show_link_enable;
         $is_edit_link_read = $role->is_edit_link_read;
         $is_edit_link_update = $role->is_edit_link_update;
+        $is_hier_base_enable = $role->is_hier_base_enable;
+        $is_hier_link_enable = $role->is_hier_link_enable;
         $is_edit_email_base_create = $role->is_edit_email_base_create;
         $is_edit_email_question_base_create = $role->is_edit_email_question_base_create;
         $is_edit_email_base_update = $role->is_edit_email_base_update;
@@ -127,6 +130,8 @@ class GlobalController extends Controller
             $is_roba_show_link_enable = $roba->is_show_link_enable;
             $is_roba_edit_link_read = $roba->is_edit_link_read;
             $is_roba_edit_link_update = $roba->is_edit_link_update;
+            $is_roba_hier_base_enable = $roba->is_hier_base_enable;
+            $is_roba_hier_link_enable = $roba->is_hier_link_enable;
             $is_roba_edit_email_base_create = $roba->is_edit_email_base_create;
             $is_roba_edit_email_question_base_create = $roba->is_edit_email_question_base_create;
             $is_roba_edit_email_base_update = $roba->is_edit_email_base_update;
@@ -163,6 +168,8 @@ class GlobalController extends Controller
             $is_show_link_enable = $is_roba_show_link_enable;
             $is_edit_link_read = $is_roba_edit_link_read;
             $is_edit_link_update = $is_roba_edit_link_update;
+            $is_hier_base_enable = $is_roba_hier_base_enable;
+            $is_hier_link_enable = $is_roba_hier_link_enable;
             $is_edit_email_base_create = $is_roba_edit_email_base_create;
             $is_edit_email_question_base_create = $is_roba_edit_email_question_base_create;
             $is_edit_email_base_update = $is_roba_edit_email_base_update;
@@ -193,6 +200,8 @@ class GlobalController extends Controller
             'is_edit_link_enable' => $is_edit_link_enable,
             'is_edit_link_read' => $is_edit_link_read,
             'is_edit_link_update' => $is_edit_link_update,
+            'is_hier_base_enable' => $is_hier_base_enable,
+            'is_hier_link_enable' => $is_hier_link_enable,
             'is_edit_email_base_create' => $is_edit_email_base_create,
             'is_edit_email_question_base_create' => $is_edit_email_question_base_create,
             'is_edit_email_base_update' => $is_edit_email_base_update,
@@ -202,10 +211,17 @@ class GlobalController extends Controller
         ];
     }
 
-    static function base_link_right(Link $link, Role $role)
+    static function base_link_right(Link $link, Role $role, bool $child_base = false)
     {
-        $base = $link->parent_base;
-        $base_right = self::base_right($base, $role, true);
+        $base = null;
+        if ($child_base == true) {
+            $base = $link->child_base;
+        } else {
+            $base = $link->parent_base;
+        }
+
+        //$base_right = self::base_right($base, $role, true);
+        $base_right = self::base_right($base, $role, false);
 
         $is_list_base_calc = $base_right['is_list_base_calc'];
         $is_all_base_calcname_enable = $base_right['is_all_base_calcname_enable'];
@@ -225,6 +241,8 @@ class GlobalController extends Controller
         $is_show_link_enable = $base_right['is_show_link_enable'];
         $is_edit_link_read = $base_right['is_edit_link_read'];
         $is_edit_link_update = $base_right['is_edit_link_update'];
+        $is_hier_base_enable = $base_right['is_hier_base_enable'];
+        $is_hier_link_enable = $base_right['is_hier_link_enable'];
         $is_edit_email_base_create = $base_right['is_edit_email_base_create'];
         $is_edit_email_question_base_create = $base_right['is_edit_email_question_base_create'];
         $is_edit_email_base_update = $base_right['is_edit_email_base_update'];
@@ -236,6 +254,8 @@ class GlobalController extends Controller
             $is_list_link_enable = false;
             $is_show_link_enable = false;
             $is_edit_link_read = false;
+            $is_hier_base_enable = false;
+            $is_hier_link_enable = false;
             // При корректировке в форме ставится пометка hidden
             //$is_edit_link_update = false;
         }
@@ -246,6 +266,8 @@ class GlobalController extends Controller
             $is_show_link_enable = $roli->is_show_link_enable;
             $is_edit_link_read = $roli->is_edit_link_read;
             $is_edit_link_update = $roli->is_edit_link_update;
+            $is_hier_base_enable = $roli->is_hier_base_enable;
+            $is_hier_link_enable = $roli->is_hier_link_enable;
         }
         $is_edit_link_enable = $is_edit_link_read || $is_edit_link_update;
 
@@ -268,6 +290,8 @@ class GlobalController extends Controller
             'is_edit_link_enable' => $is_edit_link_enable,
             'is_edit_link_read' => $is_edit_link_read,
             'is_edit_link_update' => $is_edit_link_update,
+            'is_hier_base_enable' => $is_hier_base_enable,
+            'is_hier_link_enable' => $is_hier_link_enable,
             'is_edit_email_base_create' => $is_edit_email_base_create,
             'is_edit_email_question_base_create' => $is_edit_email_question_base_create,
             'is_edit_email_base_update' => $is_edit_email_base_update,
@@ -698,4 +722,78 @@ class GlobalController extends Controller
     {
         return '-- ' . mb_strtolower(trans('main.empty')) . ' --';
     }
+
+    // Алгоритмы одинаковые в types.img.height.blade.php и GlobalController::types_img_height()
+    static function types_img_height($size)
+    {
+        $result = '';
+        if ($size == "small") {
+            $result = '"50"';
+        } elseif ($size == "medium") {
+            $result = '"250"';
+        } elseif ($size == "big") {
+            $result = '"450"';
+        }
+        return $result;
+    }
+
+    // Алгоритмы одинаковые в view.img.blade.php и GlobalController::view_img()
+    static function view_img(Item $item, $size, $filenametrue, $link, $img_fluid, $title)
+    {
+        $result = '';
+        if ($item->base->type_is_image()) {
+            if ($item->img_doc_exist()) {
+                if ($filenametrue == true) {
+                    if ($link == true) {
+                        $result = '<a href="' . Storage::url($item->filename(true)) . '">';
+                    }
+                    $result = $result . '<img src="' . Storage::url($item->filename(true)) . '"';
+                } else {
+                    if ($link == true)
+                        $result = $result . '<a href="' . Storage::url($item->filename()) . '">';
+                }
+                $result = $result . '<img ';
+                if ($img_fluid == true) {
+                    $result = $result . 'class="img-fluid"';
+                }
+                $result = $result . 'src="' . Storage::url($item->filename()) . '"';
+                $result = $result . 'height=' . GlobalController::types_img_height($size)
+                    . 'alt="" title=';
+                if ($title == "") {
+                    $result = $result . '"' . $item->title_img() . '"';
+                } elseif ($title == "empty") {
+                    $result = $result . '""';
+                } else {
+                    $result = $result . '"' . $title . '"';
+                }
+                $result = $result . '>';
+                if ($link == true) {
+                    $result = $result . '</a>';
+                }
+                if ($item->is_moderation_info() == true) {
+                    $result = $result . '<div class="text-danger">';
+                    $result = $result . $item->title_img() . '</div>';
+                }
+            } else {
+                $result = $result . '<div class="text-danger">';
+                $result = $result . GlobalController::image_is_missing_html() . '</div>';
+            }
+        }
+        return $result;
+    }
+
+    // Алгоритмы одинаковые в view.doc.blade.php и GlobalController::view_doc()
+    static function view_doc(Item $item)
+    {
+        $result = '';
+        if ($item->base->type_is_document()) {
+            if ($item->img_doc_exist()) {
+                $result = '<a href = "' . Storage::url($item->filename()) . '" target = "_blank"  alt = "" title = "' . $item->title_img() . '" >' . trans('main.open_document') . '</a>';
+            } else {
+                $result = '<div class="text-danger">' . GlobalController::empty_html() . '</div>';
+            }
+        }
+        return $result;
+    }
+
 }

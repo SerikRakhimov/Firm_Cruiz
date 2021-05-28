@@ -202,6 +202,8 @@ return [
     'is_show_link_enable' => 'Read Links when viewing',
     'is_edit_link_read' => 'Reading Links in the form',
     'is_edit_link_update' => 'Update of the Link in the form',
+    'is_hier_base_enable' => 'Show Base in hierarchy',
+    'is_hier_link_enable' => 'Show Link in hierarchy',
     'is_edit_email_base_create' => 'Send e-mail after creating the Bases in the form',
     'is_edit_email_question_base_create' => 'E-mail request after Bases is created',
     'is_edit_email_base_update' => 'Send e-mail after updating the Bases in the form',
@@ -282,4 +284,6 @@ return [
     'project_link' => 'Link to the project (it can be sent to users or placed in your account of any social network to attract customers)',
     'text_must_not_contain'=>'Text must not contain',
     'levels_row_is_not_populated_in_settings'=>'Levels row is not populated in settings',
+    'ancestors'=>'Ancestors',
+    'descendants'=>'Descendants',
 ];

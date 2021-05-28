@@ -2760,122 +2760,174 @@ class ItemController extends Controller
             'result_item_name_options' => $result_item_name_options];
     }
 
-    static function form_tree($item_id, $role)
+
+    static function form_parent_coll_hier($item_id, $role)
     {
         $item = Item::find($item_id);
         $items = array();
-        $result = self::form_tree_start($items, $item_id, 0, $role);
-        //if ($result != '') {
-        //$result = '<ul type="circle"><li>' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b>' . $result . '</li></ul>';
-//            $result = '<details><summary>' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b></summary>' . $result . '</details>';
-//            $result = '' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b>' . $result . '';
-        //$result = '' . $result . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b>' . '';
-        //}
-//        $result = '' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b><br><br>Статусы при создании объекта:<br>' . $result . '';
-        $result = 'Статусы при создании объекта:<br>' . $result . '';
-//        $result = 'Статусы при создании объекта:<br>' . $result . '';
-//        $result = $result . $item->base->name() . ': ' . ' <b>' . $item->name()
-//            . '</b><br><br>';
+        $result = self::form_parent_hier_coll_start($items, $item_id, 0, $role);
+        if ($result != "") {
+            $kod = 0;
+            $result = '<a data-toggle="collapse" href="#collapse' . $kod . '">' . trans('main.ancestors') . '</br>' .
+                '' . '</a>' .
+                '<span id="collapse' . $kod . '" class="collapse in">' . $result . '</span>' .
+                '<hr>';
+        }
+        return $result . '';
+    }
+
+// $items нужно - чтобы не было бесконечного цикла
+//static function form_parent_coll_hier_start($items, $item_id, $level, $role)   - можно использовать так
+//static function form_parent_coll_hier_start(&$items, $item_id, $level, $role)  - и так - результаты разные
+    static function form_parent_hier_coll_start(&$items, $item_id, $level, $role)
+    {
+        $result = '';
+        $level = $level + 1;
+        $item = Item::findOrFail($item_id);
+        $base = Base::findOrFail($item->base_id);
+        $base_right = GlobalController::base_right($base, $role);
+        if ($base_right['is_hier_base_enable'] == true) {
+            $mains = Main::all()->where('child_item_id', $item_id)->sortBy(function ($row) {
+                return $row->link->parent_base_number;
+            });
+            if (count($mains) == 0) {
+                return '';
+            }
+            if (!(array_search($item_id, $items) === false)) {
+                return '';
+            }
+            $items[count($items)] = $item_id;
+            foreach ($mains as $main) {
+                $str = '';
+                $link = Link::findOrFail($main->link_id);
+                // '$base_link_right = GlobalController::base_link_right($link, $role, false);' false нужно
+                $base_link_right = GlobalController::base_link_right($link, $role, false);
+                if ($base_link_right['is_hier_link_enable'] == true) {
+                    $str = self::form_parent_hier_coll_start($items, $main->parent_item_id, $level, $role);
+                    $alink_left = '';
+                    $alink_right = '';
+                    $alink_full = '';
+                    if ($base_link_right['is_list_base_calc'] == true) {
+                        $alink_left = '<a href="' . route('item.ext_show', ['item' => $main->parent_item_id, 'role' => $role]) . '" title="' .
+                            $main->parent_item->name() . '">';
+                        $alink_right = '</a>';
+                        $alink_full = $alink_left . '...' . $alink_right;
+                    }
+                    $img_doc = '';
+                    if ($link->parent_base->type_is_image()) {
+                        $img_doc = GlobalController::view_img($main->parent_item, "small", false, true, false, "");
+                    } elseif ($link->parent_base->type_is_document()) {
+                        $img_doc = GlobalController::view_doc($main->parent_item);
+                    }
+                    if ($str == '') {
+                        $result = $result . '<li>';
+                        if ($img_doc != '') {
+                            $result = $result . $main->link->parent_label() . ': ' . '<b>' . $img_doc . '</b>';
+                        } else {
+                            $result = $result . $alink_left . $main->link->parent_label() . ': ' . '<b>' . $main->parent_item->name() . '</b>' . $alink_right;
+                        }
+                        $result = $result . '</li>';
+                    } else {
+                        $kod = $main->parent_item_id;
+                        $result = $result . '<li><span id="collapse' . $kod . '" class="collapse in">' . $str . '</span>
+                                <a data-toggle="collapse" href="#collapse' . $kod . '">' . $main->link->parent_label() . ': ' . '<b>';
+                        if ($img_doc != '') {
+                            $result = $result . $img_doc . '</b>';
+                        } else {
+                            $result = $result . $main->parent_item->name() . '</b>' .
+                                $alink_full;
+                        }
+                        $result = $result . '</a></li>';
+                    }
+                }
+            }
+            if ($result != '') {
+                $result = '<ul type="circle">' . $result . '</ul>';
+                if ($level > 1) {
+                    $result = '<div class="card">' . $result . '</div>';
+                }
+            }
+        }
+        return $result;
+    }
+
+    static function form_child_deta_hier($item_id, $role)
+    {
+        $item = Item::find($item_id);
+        $items = array();
+        $result = self::form_child_hier_deta_start($items, $item_id, 0, $role);
+        if ($result != '') {
+            $result = trans('main.descendants') . ':<br>' . $result . '<hr>';
+        }
         return $result;
     }
 
 // $items нужно - чтобы не было бесконечного цикла
-//static function form_tree_start($items, $id, $level)   - можно использовать так
-//static function form_tree_start(&$items, $id, $level)  - и так - результаты разные
-    static function form_tree_start(&$items, $id, $level, $role)
+//static function form_child_hier_deta_start($items, $item_id, $level, $role)   - можно использовать так
+//static function form_child_hier_deta_start(&$items, $item_id, $level, $role)  - и так - результаты разные
+    static function form_child_hier_deta_start(&$items, $item_id, $level, $role)
     {
+        $result = '';
         $level = $level + 1;
-        $result = '<ul type="circle">';
-        //$result = '<ul>';
-//        $mains = Main::all()->where('child_item_id', $id)->sortBy(function ($row) {
-//            return $row->parent_item->name();
-//        });
-        $mains = Main::all()->where('child_item_id', $id)->sortBy(function ($row) {
-            return $row->link->parent_base_number;
-        });
-        if (count($mains) == 0) {
-            return '';
-        }
-        if (!(array_search($id, $items) === false)) {
-            return '';
-        }
-        $items[count($items)] = $id;
-        foreach ($mains as $main) {
-            $str = '';
-//            $result = $result . '<li>' . $main->link->id . ' ' . $main->link->parent_label() . ' (' . $main->link->parent_base->name() . ': ' . '<b>' . $main->parent_item->name() . '</b>)'
-//                . $str . '</li>';
-            $str = self::form_tree_start($items, $main->parent_item_id, $level, $role);
-//          $result = $result . '<li>' . $main->link->parent_base->name() . ': ' . '<b>' . $main->parent_item->name() . '</b>' . $str . '</li>';
-            $alink = '<a href="' . route('item.ext_show', ['item' => $main->parent_item_id, 'role' => $role]) . '" title="' .
-                $main->parent_item->name() . '">...</a>';
-            if ($str == '') {
-                $result = $result . '<li>' . $main->link->parent_label() . ': ' . '<b>' . $main->parent_item->name() . '</b>' . $alink . '</li>';
-                //$result = $result . '<li>' . '<a href="' . route('item.ext_show', ['item' => $main->parent_item_id, 'role' => $role]) .
-                //    '">' . $main->link->parent_label() . ': ' . '<b>' . $main->parent_item->name() . '</b></a>' . '</li>';
-            } else {
-                $result = $result . '<li><details><summary>' . $main->link->parent_label() . ': ' . '<b>' . $main->parent_item->name() . '</b>' .
-                    $alink . '</summary>' . $str . '</details></li>';
+        $item = Item::findOrFail($item_id);
+        $base = Base::findOrFail($item->base_id);
+        $base_right = GlobalController::base_right($base, $role);
+        if ($base_right['is_hier_base_enable'] == true) {
+            $mains = Main::all()->where('parent_item_id', $item_id)->sortBy(function ($row) {
+                return $row->child_item->name();
+            });
+            if (count($mains) == 0) {
+                return '';
+            }
+            if (!(array_search($item_id, $items) === false)) {
+                return '';
+            }
+            $items[count($items)] = $item_id;
+            foreach ($mains as $main) {
+                $str = '';
+                $link = Link::findOrFail($main->link_id);
+                // '$base_link_right = GlobalController::base_link_right($link, $role, true);' true нужно
+                $base_link_right = GlobalController::base_link_right($link, $role, true);
+                if ($base_link_right['is_hier_link_enable'] == true) {
+                    $str = self::form_child_hier_deta_start($items, $main->child_item_id, $level, $role);
+                    $alink_left = '';
+                    $alink_right = '';
+                    $alink_full = '';
+                    if ($base_link_right['is_list_base_calc'] == true) {
+                        $alink_left = '<a href="' . route('item.ext_show', ['item' => $main->child_item_id, 'role' => $role]) . '" title="' .
+                            $main->child_item->name() . '">';
+                        $alink_right = '</a>';
+                        $alink_full = $alink_left . '...' . $alink_right;
+                    }
+                    $img_doc = '';
+                    if ($link->child_base->type_is_image()) {
+                        $img_doc = GlobalController::view_img($main->child_item, "small", false, true, false, "");
+                    } elseif ($link->child_base->type_is_document()) {
+                        $img_doc = GlobalController::view_doc($main->child_item);
+                    }
+                    if ($str == '') {
+                        $result = $result . '<li>';
+                        if ($img_doc != '') {
+                            $result = $result . $main->link->child_label() . ': ' . '<b>' . $img_doc . '</b>';
+                        } else {
+                            $result = $result . $alink_left . $main->link->child_label() . ': ' . '<b>' . $main->child_item->name() . '</b>' . $alink_right;
+                        }
+                        $result = $result . '</li>';
+                    } else {
+                        $result = $result . '<li><details><summary>' . $main->link->child_label() . ': ' . '<b>';
+                        if ($img_doc != '') {
+                            $result = $result . $img_doc . '</b>';
+                        } else {
+                            $result = $result . $main->child_item->name() . '</b> ' . $alink_full;
+                        }
+                        $result = $result . '</summary>' . $str . '</details></li>';
+                    }
+                }
+            }
+            if ($result != '') {
+                $result = '<ul type="circle">' . $result . "</ul>";
             }
         }
-        $result = $result . "</ul>";
-        return $result;
-    }
-
-
-    static function form_child_tree($item_id, $role)
-    {
-        $item = Item::find($item_id);
-        $items = array();
-        $result = self::form_child_tree_start($items, $item_id, 0, $role);
-        //if ($result != '') {
-        //$result = '<ul type="circle"><li>' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b>' . $result . '</li></ul>';
-//            $result = '<details><summary>' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b></summary>' . $result . '</details>';
-//            $result = '' . $item->base->name() . ': ' . ' <b>' . $item->name() . '</b>' . $result . '';
-        //}
-        return $result;
-    }
-
-// $items нужно - чтобы не было бесконечного цикла
-//static function form_tree_start($items, $id, $level)   - можно использовать так
-//static function form_tree_start(&$items, $id, $level)  - и так - результаты разные
-    static function form_child_tree_start(&$items, $id, $level, $role)
-    {
-        $level = $level + 1;
-        $result = '<ul type="disc">';
-        //$result = '<ul>';
-
-//        $mains = Main::all()->where('child_item_id', $id)->sortBy(function ($row) {
-//            return $row->link->parent_base_number;
-//        });
-
-        $mains = Main::all()->where('parent_item_id', $id)->sortBy(function ($row) {
-            return $row->child_item->name();
-        });
-
-        if (count($mains) == 0) {
-            return '';
-        }
-        if (!(array_search($id, $items) === false)) {
-            return '';
-        }
-        $items[count($items)] = $id;
-        foreach ($mains as $main) {
-            $str = '';
-//            $result = $result . '<li>' . $main->link->id . ' ' . $main->link->child_label() . ' (' . $main->link->child_base->name() . ': ' . '<b>' . $main->child_item->name() . '</b>)'
-//                . $str . '</li>';
-            $str = self::form_child_tree_start($items, $main->child_item_id, $level, $role);
-//          $result = $result . '<li>' . $main->link->child_base->name() . ': ' . '<b>' . $main->child_item->name() . '</b>' . $str . '</li>';
-            $alink = '<a href="' . route('item.ext_show', ['item' => $main->child_item_id, 'role' => $role]) . '" title="' .
-                $main->child_item->name() . '">...</a>';
-            if ($str == '') {
-                $result = $result . '<li>' . $main->link->child_label() . ': ' . '<b>' . $main->child_item->name() . '</b>' . $alink . '</li>';
-            } else {
-                $result = $result . '<li><details><summary>' . $main->link->child_label() . ': ' . '<b>' . $main->child_item->name() . '</b> ' .
-                    $alink . '</summary>' . $str . '</details></li>';
-
-            }
-        }
-        $result = $result . "</ul>";
         return $result;
     }
 

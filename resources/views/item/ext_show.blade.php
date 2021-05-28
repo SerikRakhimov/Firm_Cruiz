@@ -8,6 +8,7 @@
     use App\Http\Controllers\GlobalController;
     use App\Http\Controllers\ItemController;
     use App\Http\Controllers\MainController;
+    use Illuminate\Support\Facades\Storage;
     $project = $item->project;
     $base = $item->base;
     $base_right = GlobalController::base_right($base, $role);
@@ -22,6 +23,8 @@
         <span class="text-label">-</span> <span class="text-title">{{$item->base->info()}}</span>
     </h3>
     <br>
+
+    <hr>
     <ul>
         <p class="text-label">Id: <span class="text-related">{{$item->id}}</span></p>
         @if($base_right['is_show_base_enable'] == true)
@@ -41,12 +44,12 @@
                     {{--                </a>--}}
                 </li>
             @elseif($base->type_is_document)
-                <li>
+                <li><b>
                     @include('view.doc',['item'=>$item])
                     {{--                <a href="{{Storage::url($item->filename())}}" target="_blank">--}}
                     {{--                    Открыть документ--}}
                     {{--                </a>--}}
-                </li>
+                    </b></li>
             @else
                 {{--                Если тип-вычисляемое поле и Показывать Основу с вычисляемым наименованием--}}
                 {{--                или если тип-не вычисляемое наименование--}}
@@ -54,7 +57,8 @@
                 @if(GlobalController::is_base_calcname_check($base, $base_right))
                     {{--                                            $numcat = true - вывод числовых полей с разрядом тысячи/миллионы/миллиарды--}}
                     <li>
-                        <p class="text-label">{{trans('main.name')}}: <span class="text-related">
+                        <p class="text-label">{{trans('main.name')}}:
+{{--                            <span class="text-related">--}}<b>
                     @if($base->type_is_text())
                                     <?php
                                     echo GlobalController::it_txnm_n2b($item);
@@ -62,7 +66,7 @@
                                 @else
                                     {{$item->name(false, true)}}
                                 @endif
-                </span>
+                        {{--                </span>--}}</b>
                         </p>
                     </li>
                 @endif
@@ -99,11 +103,11 @@
                     <li>
                         {{$link->parent_label()}}:
                         @if($link->parent_base->type_is_text())
-                            <span class="text-related">
+{{--                            <span class="text-related">--}}<b>
                             <?php
                                 echo GlobalController::it_txnm_n2b($item_find);
                                 ?>
-                        </span>
+                                {{--                        </span>--}}</b>
                         @elseif($link->parent_base->type_is_image())
                             <br>
                             @include('view.img',['item'=>$item_find, 'size'=>"medium", 'filenametrue'=>false, 'link'=>true, 'img_fluid'=>false, 'title'=>""])
@@ -112,13 +116,19 @@
                             {{--                                     alt="" title="{{$item_find->title_img()}}">--}}
                             {{--                            </a>--}}
                         @elseif($link->parent_base->type_is_document())
+                            <b>
                             @include('view.doc',['item'=>$item_find])
                             {{--                            <a href="{{Storage::url($item_find->filename())}}" target="_blank">--}}
                             {{--                                Открыть документ--}}
                             {{--                            </a>--}}
+                            </b>
                         @else
                             {{--                                            $numcat = true - вывод числовых полей с разрядом тысячи/миллионы/миллиарды--}}
-                            <span class="text-related">{{$item_find->name(false, true)}}</span>
+{{--                            <span class="text-related">--}}
+                        <b>
+                                {{$item_find->name(false, true)}}
+                        </b>
+{{--                            </span>--}}
                         @endif
                     </li>
                     {{--                    <br>--}}
@@ -127,15 +137,15 @@
                     @endforeach
                     </p>
     </ul>
+    <hr>
     <?php
-    if (1 == 2) {
-    //        Не удалять
-    $result = ItemController::form_tree($item->id, $role);
-    //    echo "<br>Предки:<br>";
-    echo $result;
-    $result = ItemController::form_child_tree($item->id, $role);
-    echo "Созданы объекты с моим участием:<br>";
-    echo $result;
+    if ($base_right['is_hier_base_enable'] == true) {
+        //$result = ItemController::form_parent_hier($item->id, $role);
+        //echo $result;
+        $result = ItemController::form_parent_coll_hier($item->id, $role);
+        echo $result;
+        $result = ItemController::form_child_deta_hier($item->id, $role);
+        echo $result;
     }
     ?>
     <i>
@@ -171,14 +181,14 @@
             {{--                                                            <a href="{{route('item.item_index', ['item'=>$item_find, 'role'=>$role,'par_link'=>$link])}}">--}}
             {{--                                                                @endif--}}
             {{--            Не удалять--}}
-                @if(1==2)
-                                    <button type="button" class="btn btn-dreamer mb-1 mb-sm-0"
-                                            onclick='document.location="{{route('item.item_index', ['item'=>$item, 'role'=>$role])}}"'
-                                            title="{{trans('main.space')}}">
-                                        <i class="fas fa-atlas"></i>
-                                        {{trans('main.space')}}
-                                    </button>
-                @endif
+            @if(1==2)
+                <button type="button" class="btn btn-dreamer mb-1 mb-sm-0"
+                        onclick='document.location="{{route('item.item_index', ['item'=>$item, 'role'=>$role])}}"'
+                        title="{{trans('main.space')}}">
+                    <i class="fas fa-atlas"></i>
+                    {{trans('main.space')}}
+                </button>
+            @endif
 
             {{--                                            С base_index.blade.php--}}
             {{--                                                            Не удалять: нужно для просмотра Пространства--}}

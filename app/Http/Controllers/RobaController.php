@@ -218,6 +218,8 @@ class RobaController extends Controller
         $roba->is_show_link_enable = isset($request->is_show_link_enable) ? true : false;
         $roba->is_edit_link_read = isset($request->is_edit_link_read) ? true : false;
         $roba->is_edit_link_update = isset($request->is_edit_link_update) ? true : false;
+        $roba->is_hier_base_enable = isset($request->is_hier_base_enable) ? true : false;
+        $roba->is_hier_link_enable = isset($request->is_hier_link_enable) ? true : false;
         $roba->is_edit_email_base_create = isset($request->is_edit_email_base_create) ? true : false;
         $roba->is_edit_email_question_base_create = isset($request->is_edit_email_question_base_create) ? true : false;
         $roba->is_edit_email_base_update = isset($request->is_edit_email_base_update) ? true : false;

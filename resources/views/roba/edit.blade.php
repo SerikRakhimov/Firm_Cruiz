@@ -490,6 +490,56 @@
             </div>
         </div>
 
+        <div class="form-group row" id="is_hier_base_enable_form_group">
+            <div class="col-sm-3 text-right">
+                <label class="form-label"
+                       for="is_hier_base_enable">{{trans('main.is_hier_base_enable')}}</label>
+            </div>
+            <div class="col-sm-7">
+                <input class="@error('is_hier_base_enable') is-invalid @enderror"
+                       type="checkbox"
+                       name="is_hier_base_enable"
+                       placeholder=""
+                       {{--                       "$roba->is_hier_base_enable ?? false" - "false" значение по умолчанию--}}
+                       @if ((old('is_hier_base_enable') ?? ($roba->is_hier_base_enable ?? false)) ==  true)
+                       checked
+                    @endif
+                >
+                @error('is_hier_base_enable')
+                <div class="invalid-feedback">
+                    {{$message}}
+                </div>
+                @enderror
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div>
+
+        <div class="form-group row" id="is_hier_link_enable_form_group">
+            <div class="col-sm-3 text-right">
+                <label class="form-label"
+                       for="is_hier_link_enable">{{trans('main.is_hier_link_enable')}}</label>
+            </div>
+            <div class="col-sm-7">
+                <input class="@error('is_hier_link_enable') is-invalid @enderror"
+                       type="checkbox"
+                       name="is_hier_link_enable"
+                       placeholder=""
+                       {{--                       "$roba->is_hier_link_enable ?? false" - "false" значение по умолчанию--}}
+                       @if ((old('is_hier_link_enable') ?? ($roba->is_hier_link_enable ?? false)) ==  true)
+                       checked
+                    @endif
+                >
+                @error('is_hier_link_enable')
+                <div class="invalid-feedback">
+                    {{$message}}
+                </div>
+                @enderror
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div>
+
         <div class="form-group row" id="is_edit_email_base_create_form_group">
             <div class="col-sm-3 text-right">
                 <label class="form-label"

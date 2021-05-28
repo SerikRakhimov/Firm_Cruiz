@@ -179,6 +179,7 @@ class RoliController extends Controller
         $roli->is_show_link_enable = isset($request->is_show_link_enable) ? true : false;
         $roli->is_edit_link_read = isset($request->is_edit_link_read) ? true : false;
         $roli->is_edit_link_update = isset($request->is_edit_link_update) ? true : false;
+        $roli->is_hier_link_enable = isset($request->is_hier_link_enable) ? true : false;
         $roli->save();
     }
 
