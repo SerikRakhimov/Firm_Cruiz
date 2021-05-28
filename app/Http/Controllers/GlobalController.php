@@ -720,7 +720,7 @@ class GlobalController extends Controller
 
     static function option_empty()
     {
-        return '-- ' . mb_strtolower(trans('main.empty')) . ' --';
+        return '- ' . mb_strtolower(trans('main.empty')) . ' -';
     }
 
     // Алгоритмы одинаковые в types.img.height.blade.php и GlobalController::types_img_height()

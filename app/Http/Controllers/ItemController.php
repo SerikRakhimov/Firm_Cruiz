@@ -3031,10 +3031,15 @@ class ItemController extends Controller
                         // "\~" - символ перевода каретки (используется также в Item.php: функции name() nmbr())
                         // "\~" - символ перевода каретки (используется также в ItemController.php: функция calc_value_func())
                         $sc = trim($item->base->sepa_calcname) . "\~";
+//                        $dop_sepa0 = $calc_lang_0 == "" ? "" : $sc . " ";
+//                        $dop_sepa1 = $calc_lang_1 == "" ? "" : $sc . " ";
+//                        $dop_sepa2 = $calc_lang_2 == "" ? "" : $sc . " ";
+//                        $dop_sepa3 = $calc_lang_3 == "" ? "" : $sc . " ";
                         $dop_sepa0 = $calc_lang_0 == "" ? "" : $sc . " ";
                         $dop_sepa1 = $calc_lang_1 == "" ? "" : $sc . " ";
                         $dop_sepa2 = $calc_lang_2 == "" ? "" : $sc . " ";
                         $dop_sepa3 = $calc_lang_3 == "" ? "" : $sc . " ";
+
 //Лучше без пробела ("Цена = 15000" на одной строке может быть "Цена =", на второй "15000"; а если "Цена=15000" всегда выходит на одной строке, т.к. это одно слово)
 //                        $left_str0 = $link->parent_is_left_calcname == true ? $link->parent_calcname_prefix_lang_0 . " " : "";
 //                        $left_str1 = $link->parent_is_left_calcname == true ? $link->parent_calcname_prefix_lang_1 . " " : "";
