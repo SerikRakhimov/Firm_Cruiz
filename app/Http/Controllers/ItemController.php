@@ -2824,7 +2824,7 @@ class ItemController extends Controller
                         if ($img_doc != '') {
                             $result = $result . $main->link->parent_label() . ': ' . '<b>' . $img_doc . '</b>';
                         } else {
-                            $result = $result . $alink_left . $main->link->parent_label() . ': ' . '<b>' . $main->parent_item->name() . '</b>' . $alink_right;
+                            $result = $result . $main->link->parent_label() . ': ' . '<b>' . $main->parent_item->name() . '</b>' . $alink_full;
                         }
                         $result = $result . '</li>';
                     } else {
@@ -2910,7 +2910,7 @@ class ItemController extends Controller
                         if ($img_doc != '') {
                             $result = $result . $main->link->child_label() . ': ' . '<b>' . $img_doc . '</b>';
                         } else {
-                            $result = $result . $alink_left . $main->link->child_label() . ': ' . '<b>' . $main->child_item->name() . '</b>' . $alink_right;
+                            $result = $result  . $main->link->child_label() . ': ' . '<b>' . $main->child_item->name() . '</b>' . $alink_full;
                         }
                         $result = $result . '</li>';
                     } else {
