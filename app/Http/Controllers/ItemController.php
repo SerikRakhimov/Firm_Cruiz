@@ -3080,7 +3080,7 @@ class ItemController extends Controller
             'calc_lang_0' => $calc_lang_0, 'calc_lang_1' => $calc_lang_1, 'calc_lang_2' => $calc_lang_2, 'calc_lang_3' => $calc_lang_3];
     }
 
-    function calculate_name(Base $base, Project $project)
+    function calculate_names(Base $base, Project $project)
     {
         $items = Item::where('base_id', $base->id)->where('project_id', $project->id)->get();
         $rs = false;

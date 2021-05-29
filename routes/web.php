@@ -755,8 +755,8 @@ Route::get('/item/browser/{base_id}/{project_id?}/{role_id?}/{sort_by_code?}/{sa
     ->name('item.browser')
     ->middleware('auth');
 
-Route::get('/item/calculate_name/{base}/{project}', 'ItemController@calculate_name')
-    ->name('item.calculate_name')
+Route::get('/item/calculate_names/{base}/{project}', 'ItemController@calculate_names')
+    ->name('item.calculate_names')
     ->middleware('auth');
 
 Route::get('/item/recalculation_codes/{base}/{project}', 'ItemController@recalculation_codes')

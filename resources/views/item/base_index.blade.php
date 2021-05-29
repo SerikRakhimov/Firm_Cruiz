@@ -31,10 +31,10 @@
                 @if ($role->is_author())
                     @if ($base->is_calcname_lst == true)
                         <div class="col-12 text-right">
-                            <a href="{{route('item.calculate_name', ['base'=>$base, 'project'=>$project])}}"
-                               title="{{trans('main.calculate_name')}}">
-                                <img src="{{Storage::url('calculate_name.png')}}" width="15" height="15"
-                                     alt="{{trans('main.calculate_name')}}">
+                            <a href="{{route('item.calculate_names', ['base'=>$base, 'project'=>$project])}}"
+                               title="{{trans('main.calculate_names')}}">
+                                <img src="{{Storage::url('calculate_names.png')}}" width="15" height="15"
+                                     alt="{{trans('main.calculate_names')}}">
                             </a>
                         </div>
                     @endif

@@ -149,7 +149,7 @@ return [
     'sepa_same_left_calcname' => 'Left delimiter symbol for a computed denomination with homogeneous (same Bases) dependencies',
     'sepa_same_right_calcname' => 'Right delimiter character for a computed denomination with homogeneous (same Bases) dependencies',
     'calculate' => 'Calculate',
-    'calculate_name' => 'Calculate name',
+    'calculate_names' => 'Calculate names',
     'parent_is_calcname' => 'For a computed name',
     'parent_is_small_calcname' => 'It is included in the short form of the calculated name with homogeneous (identical Bases) dependencies',
     'parent_is_left_calcname' => 'Computed name on the left (otherwise on the right)',
