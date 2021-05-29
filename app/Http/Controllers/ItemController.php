@@ -2804,14 +2804,10 @@ class ItemController extends Controller
                 $base_link_right = GlobalController::base_link_right($link, $role, false);
                 if ($base_link_right['is_hier_link_enable'] == true) {
                     $str = self::form_parent_hier_coll_start($items, $main->parent_item_id, $level, $role);
-                    $alink_left = '';
-                    $alink_right = '';
-                    $alink_full = '';
+                    $alink = '';
                     if ($base_link_right['is_list_base_calc'] == true) {
-                        $alink_left = '<a href="' . route('item.ext_show', ['item' => $main->parent_item_id, 'role' => $role]) . '" title="' .
-                            $main->parent_item->name() . '">';
-                        $alink_right = '</a>';
-                        $alink_full = $alink_left . '...' . $alink_right;
+                        $alink = '<a href="' . route('item.ext_show', ['item' => $main->parent_item_id, 'role' => $role]) . '" title="' .
+                            $main->parent_item->name() . '">...</a>';
                     }
                     $img_doc = '';
                     if ($link->parent_base->type_is_image()) {
@@ -2824,7 +2820,7 @@ class ItemController extends Controller
                         if ($img_doc != '') {
                             $result = $result . $main->link->parent_label() . ': ' . '<b>' . $img_doc . '</b>';
                         } else {
-                            $result = $result . $main->link->parent_label() . ': ' . '<b>' . $main->parent_item->name() . '</b>' . $alink_full;
+                            $result = $result . $main->link->parent_label() . ': ' . '<b>' . $main->parent_item->name() . '</b>' . $alink;
                         }
                         $result = $result . '</li>';
                     } else {
@@ -2834,8 +2830,7 @@ class ItemController extends Controller
                         if ($img_doc != '') {
                             $result = $result . $img_doc . '</b>';
                         } else {
-                            $result = $result . $main->parent_item->name() . '</b>' .
-                                $alink_full;
+                            $result = $result . $main->parent_item->name() . '</b>' . $alink;
                         }
                         $result = $result . '</a></li>';
                     }
@@ -2890,14 +2885,10 @@ class ItemController extends Controller
                 $base_link_right = GlobalController::base_link_right($link, $role, true);
                 if ($base_link_right['is_hier_link_enable'] == true) {
                     $str = self::form_child_hier_deta_start($items, $main->child_item_id, $level, $role);
-                    $alink_left = '';
-                    $alink_right = '';
-                    $alink_full = '';
+                    $alink = '';
                     if ($base_link_right['is_list_base_calc'] == true) {
-                        $alink_left = '<a href="' . route('item.ext_show', ['item' => $main->child_item_id, 'role' => $role]) . '" title="' .
-                            $main->child_item->name() . '">';
-                        $alink_right = '</a>';
-                        $alink_full = $alink_left . '...' . $alink_right;
+                        $alink = '<a href="' . route('item.ext_show', ['item' => $main->child_item_id, 'role' => $role]) . '" title="' .
+                            $main->child_item->name() . '">...</a>';
                     }
                     $img_doc = '';
                     if ($link->child_base->type_is_image()) {
@@ -2910,7 +2901,7 @@ class ItemController extends Controller
                         if ($img_doc != '') {
                             $result = $result . $main->link->child_label() . ': ' . '<b>' . $img_doc . '</b>';
                         } else {
-                            $result = $result  . $main->link->child_label() . ': ' . '<b>' . $main->child_item->name() . '</b>' . $alink_full;
+                            $result = $result . $main->link->child_label() . ': ' . '<b>' . $main->child_item->name() . '</b>' . $alink;
                         }
                         $result = $result . '</li>';
                     } else {
@@ -2918,7 +2909,7 @@ class ItemController extends Controller
                         if ($img_doc != '') {
                             $result = $result . $img_doc . '</b>';
                         } else {
-                            $result = $result . $main->child_item->name() . '</b> ' . $alink_full;
+                            $result = $result . $main->child_item->name() . '</b> ' . $alink;
                         }
                         $result = $result . '</summary>' . $str . '</details></li>';
                     }
@@ -3219,14 +3210,15 @@ class ItemController extends Controller
         foreach ($links as $link) {
             $base_link_right = GlobalController::base_link_right($link, $role);
             if ($base_link_right['is_list_link_enable'] == true) {
+                $is_list_base_calc = $base_link_right['is_list_base_calc'];
                 $link_id_array[] = $link->id;
                 // 0-ая строка с link->id
-                $matrix[0][$k] = ['parent_level_id' => null, 'link_id' => $link->id, 'work_field' => null, 'work_link' => null, 'view_field' => null, 'view_name' => '', 'colspan' => 0, 'rowspan' => 0];
+                $matrix[0][$k] = ['parent_level_id' => null, 'link_id' => $link->id, 'work_field' => null, 'work_link' => null, 'is_list_base_calc' => $is_list_base_calc, 'fin_link' => null, 'view_field' => null, 'view_name' => '', 'colspan' => 0, 'rowspan' => 0];
                 // строки с уровнями
-                $matrix[1][$k] = ['parent_level_id' => $link->parent_level_id_0, 'link_id' => $link->id, 'work_field' => null, 'work_link' => null, 'view_field' => null, 'view_name' => '', 'colspan' => 0, 'rowspan' => 0];
-                $matrix[2][$k] = ['parent_level_id' => $link->parent_level_id_1, 'link_id' => $link->id, 'work_field' => null, 'work_link' => null, 'view_field' => null, 'view_name' => '', 'colspan' => 0, 'rowspan' => 0];
-                $matrix[3][$k] = ['parent_level_id' => $link->parent_level_id_2, 'link_id' => $link->id, 'work_field' => null, 'work_link' => null, 'view_field' => null, 'view_name' => '', 'colspan' => 0, 'rowspan' => 0];
-                $matrix[4][$k] = ['parent_level_id' => $link->parent_level_id_3, 'link_id' => $link->id, 'work_field' => null, 'work_link' => null, 'view_field' => null, 'view_name' => '', 'colspan' => 0, 'rowspan' => 0];
+                $matrix[1][$k] = ['parent_level_id' => $link->parent_level_id_0, 'link_id' => $link->id, 'work_field' => null, 'work_link' => null, 'is_list_base_calc' => $is_list_base_calc, 'fin_link' => null, 'view_field' => null, 'view_name' => '', 'colspan' => 0, 'rowspan' => 0];
+                $matrix[2][$k] = ['parent_level_id' => $link->parent_level_id_1, 'link_id' => $link->id, 'work_field' => null, 'work_link' => null, 'is_list_base_calc' => $is_list_base_calc, 'fin_link' => null, 'view_field' => null, 'view_name' => '', 'colspan' => 0, 'rowspan' => 0];
+                $matrix[3][$k] = ['parent_level_id' => $link->parent_level_id_2, 'link_id' => $link->id, 'work_field' => null, 'work_link' => null, 'is_list_base_calc' => $is_list_base_calc, 'fin_link' => null, 'view_field' => null, 'view_name' => '', 'colspan' => 0, 'rowspan' => 0];
+                $matrix[4][$k] = ['parent_level_id' => $link->parent_level_id_3, 'link_id' => $link->id, 'work_field' => null, 'work_link' => null, 'is_list_base_calc' => $is_list_base_calc, 'fin_link' => null, 'view_field' => null, 'view_name' => '', 'colspan' => 0, 'rowspan' => 0];
                 $k = $k + 1;
             }
         }
@@ -3321,10 +3313,16 @@ class ItemController extends Controller
                             $link_id = $matrix[$i][$j]['link_id'];
                             $link = Link::findOrFail($link_id);
                             $matrix[$i][$j]['view_name'] = $link->parent_label();
+                            // '$matrix[$i][$j]['fin_link']' = true, если есть право показывать ссылку на таблицу с заданным base
+                            // Проверка на '$matrix[$i][$j]['fin_link']' используется  в base_index.php
+                            $matrix[$i][$j]['fin_link'] = $matrix[$i][$j]['is_list_base_calc'];
                         } else {
                             $level_id = $matrix[$i][$j]['parent_level_id'];
                             $level = Level::findOrFail($level_id);
                             $matrix[$i][$j]['view_name'] = $level->name();
+                            // Присвоить '$matrix[$i][$j]['fin_link']' = false, т.к. $matrix[$i][$j]['work_link'] == false
+                            // Проверка на '$matrix[$i][$j]['fin_link']' используется  в base_index.php
+                            $matrix[$i][$j]['fin_link'] = false;
                         }
                     }
                 }

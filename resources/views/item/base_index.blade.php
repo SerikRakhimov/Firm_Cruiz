@@ -51,7 +51,7 @@
                 @if (Auth::user()->isAdmin())
                     <div class="col-12 text-right">
                         <a href="{{route('item.verify_table_texts')}}" title="{{trans('main.verify_table_texts')}}">
-                            {{trans('main.verify_table_texts')}}"
+                            {{trans('main.verify_table_texts')}}
                         </a>
                     </div>
                 @endif
@@ -231,7 +231,7 @@
                                     <th rowspan="{{$matrix[$x][$y]["rowspan"]}}"
                                         colspan="{{$matrix[$x][$y]["colspan"]}}"
                                         class="text-center align-top">
-                                        @if($matrix[$x][$y]["work_link"] == true)
+                                        @if($matrix[$x][$y]["fin_link"] == true)
                                             <?php
                                             $link = Link::findOrFail($matrix[$x][$y]["link_id"]);
                                             ?>
