@@ -2846,6 +2846,88 @@ class ItemController extends Controller
         return $result;
     }
 
+    static function form_parent_deta_hier($item_id, $role)
+    {
+        $item = Item::find($item_id);
+        $items = array();
+        $result = self::form_parent_hier_deta_start($items, $item_id, 0, $role);
+        if ($result != '') {
+            $kod = 0;
+            $result = '<a data-toggle="collapse" href="#collapse' . $kod . '">' . trans('main.ancestors') . '</br>' .
+                '' . '</a>' .
+                '<span id="collapse' . $kod . '" class="collapse in">' . $result . '</span>' .
+                '<hr>';
+            //$result = trans('main.ancestors') . ':<br>' . $result . '<hr>';
+        }
+        return $result;
+    }
+
+// $items нужно - чтобы не было бесконечного цикла
+//static function form_parent_hier_deta_start($items, $item_id, $level, $role)   - можно использовать так
+//static function form_parent_hier_deta_start(&$items, $item_id, $level, $role)  - и так - результаты разные
+    static function form_parent_hier_deta_start(&$items, $item_id, $level, $role)
+    {
+        $result = '';
+        $level = $level + 1;
+        $item = Item::findOrFail($item_id);
+        $base = Base::findOrFail($item->base_id);
+        $base_right = GlobalController::base_right($base, $role);
+        if ($base_right['is_hier_base_enable'] == true) {
+            $mains = Main::all()->where('child_item_id', $item_id)->sortBy(function ($row) {
+                return $row->link->parent_base_number;
+            });
+            if (count($mains) == 0) {
+                return '';
+            }
+            if (!(array_search($item_id, $items) === false)) {
+                return '';
+            }
+            $items[count($items)] = $item_id;
+            foreach ($mains as $main) {
+                $str = '';
+                $link = Link::findOrFail($main->link_id);
+                // '$base_link_right = GlobalController::base_link_right($link, $role, false);' true нужно
+                $base_link_right = GlobalController::base_link_right($link, $role, false);
+                if ($base_link_right['is_hier_link_enable'] == true) {
+                    $str = self::form_parent_hier_deta_start($items, $main->parent_item_id, $level, $role);
+                    $alink = '';
+                    if ($base_link_right['is_list_base_calc'] == true) {
+                        $alink = '<a href="' . route('item.ext_show', ['item' => $main->parent_item_id, 'role' => $role]) . '" title="' .
+                            $main->parent_item->name() . '">...</a>';
+                    }
+                    $img_doc = '';
+                    if ($link->parent_base->type_is_image()) {
+                        $img_doc = GlobalController::view_img($main->parent_item, "small", false, true, false, "");
+                    } elseif ($link->parent_base->type_is_document()) {
+                        $img_doc = GlobalController::view_doc($main->parent_item);
+                    }
+                    if ($str == '') {
+                        $result = $result . '<li>';
+                        if ($img_doc != '') {
+                            $result = $result . $main->link->parent_label() . ': ' . '<b>' . $img_doc . '</b>';
+                        } else {
+                            $result = $result . $main->link->parent_label() . ': ' . '<b>' . $main->parent_item->name() . '</b>' . $alink;
+                        }
+                        $result = $result . '</li>';
+                    } else {
+                        $result = $result . '<li><details><summary>' . $main->link->parent_label() . ': ' . '<b>';
+                        if ($img_doc != '') {
+                            $result = $result . $img_doc . '</b>';
+                        } else {
+                            $result = $result . $main->parent_item->name() . '</b> ' . $alink;
+                        }
+                        $result = $result . '</summary>' . $str . '</details></li>';
+                    }
+                }
+            }
+            if ($result != '') {
+                $result = '<ul type="circle">' . $result . "</ul>";
+            }
+        }
+        return $result;
+    }
+
+
     static function form_child_deta_hier($item_id, $role)
     {
         $item = Item::find($item_id);
