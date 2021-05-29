@@ -2857,7 +2857,6 @@ class ItemController extends Controller
                 '' . '</a>' .
                 '<span id="collapse' . $kod . '" class="collapse in">' . $result . '</span>' .
                 '<hr>';
-            //$result = trans('main.ancestors') . ':<br>' . $result . '<hr>';
         }
         return $result;
     }
