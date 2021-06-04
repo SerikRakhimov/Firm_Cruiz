@@ -834,7 +834,6 @@ class ItemController extends Controller
             $item->name_lang_1 = $item->name_lang_0;
             $item->name_lang_2 = $item->name_lang_0;
             $item->name_lang_3 = $item->name_lang_0;
-
         }
 
         // при создании записи "$item->created_user_id" заполняется
@@ -1605,7 +1604,8 @@ class ItemController extends Controller
                         $item->name_lang_1 = "0";
                     }
                 } else {
-                    $item->name_lang_1 = "";
+                    // В $item->name_lang_1 хранится наименование документа
+                    //$item->name_lang_1 = "";
                 }
                 $item->name_lang_2 = "";
                 $item->name_lang_3 = "";
@@ -2846,25 +2846,30 @@ class ItemController extends Controller
         return $result;
     }
 
-    static function form_parent_deta_hier($item_id, $role)
+    // $level_one = true, т.е. получить простые родительские поля один первый уровень
+    // $level_one = false, т.е. получить связанные родительские поля один первый уровень, на остальных уровнях показать простые и связанные поля
+    static function form_parent_deta_hier($item_id, $role, $level_one)
     {
         $item = Item::find($item_id);
         $items = array();
-        $result = self::form_parent_hier_deta_start($items, $item_id, 0, $role);
+        $result = self::form_parent_hier_deta_start($items, $item_id, 0, $role, $level_one);
         if ($result != '') {
-            $kod = 0;
-            $result = '<a data-toggle="collapse" href="#collapse' . $kod . '">' . trans('main.ancestors') . '</br>' .
-                '' . '</a>' .
-                '<span id="collapse' . $kod . '" class="collapse in">' . $result . '</span>' .
-                '<hr>';
+            //$kod = 0 . $level_one;
+            if ($level_one == false) {
+//                $result = '<a data-toggle="collapse" href="#collapse' . $kod . '">' . trans('main.ancestors') . '</br>' .
+//                    '' . '</a>' .
+//                    '<span id="collapse' . $kod . '" class="collapse in">' . $result . '</span>' .
+//                    '<hr>';
+                $result = trans('main.ancestors') . ':<br>' . $result . '<hr>';
+            }
         }
         return $result;
     }
 
 // $items нужно - чтобы не было бесконечного цикла
-//static function form_parent_hier_deta_start($items, $item_id, $level, $role)   - можно использовать так
-//static function form_parent_hier_deta_start(&$items, $item_id, $level, $role)  - и так - результаты разные
-    static function form_parent_hier_deta_start(&$items, $item_id, $level, $role)
+//static function form_parent_hier_deta_start($items, $item_id, $level, $role, $level_one)   - можно использовать так
+//static function form_parent_hier_deta_start(&$items, $item_id, $level, $role, $level_one)  - и так - результаты разные
+    static function form_parent_hier_deta_start(&$items, $item_id, $level, $role, $level_one)
     {
         $result = '';
         $level = $level + 1;
@@ -2881,6 +2886,9 @@ class ItemController extends Controller
             if (!(array_search($item_id, $items) === false)) {
                 return '';
             }
+            if ($level_one == true && ($level > 1)) {
+                return '';
+            }
             $items[count($items)] = $item_id;
             foreach ($mains as $main) {
                 $str = '';
@@ -2888,7 +2896,7 @@ class ItemController extends Controller
                 // '$base_link_right = GlobalController::base_link_right($link, $role, false);' true нужно
                 $base_link_right = GlobalController::base_link_right($link, $role, false);
                 if ($base_link_right['is_hier_link_enable'] == true) {
-                    $str = self::form_parent_hier_deta_start($items, $main->parent_item_id, $level, $role);
+                    $str = self::form_parent_hier_deta_start($items, $main->parent_item_id, $level, $role, $level_one);
                     $alink = '';
                     if ($base_link_right['is_list_base_calc'] == true) {
                         $alink = '<a href="' . route('item.ext_show', ['item' => $main->parent_item_id, 'role' => $role]) . '" title="' .
@@ -2900,22 +2908,35 @@ class ItemController extends Controller
                     } elseif ($link->parent_base->type_is_document()) {
                         $img_doc = GlobalController::view_doc($main->parent_item);
                     }
-                    if ($str == '') {
-                        $result = $result . '<li>';
-                        if ($img_doc != '') {
-                            $result = $result . $main->link->parent_label() . ': ' . '<b>' . $img_doc . '</b>';
+
+                    // $link_exists = false, поле $main->parent_item->base_id простое
+                    // $link_exists = true, поле $main->parent_item->base_id связанное
+                    // Например у Человека/Инструкции простые поля: Фамилия, Имя, Отчество, Дата рождения, Пол, Национальность, Наименование, Документ
+                    // сложные поля: Родители, Папка
+                    $link_exists = Link::where('child_base_id', $main->parent_item->base_id)->exists();
+
+//                  if (!($level_one == true && ($link_exists))) {
+                    if ($level_one == false || !$link_exists) {
+                        if ($str == '') {
+                            //if (!($level_one == false && $level == 1)) {
+                            if ($level_one == true || $level > 1) {
+                                $result = $result . '<li>';
+                                if ($img_doc != '') {
+                                    $result = $result . $main->link->parent_label() . ': ' . '<b>' . $img_doc . '</b>';
+                                } else {
+                                    $result = $result . $main->link->parent_label() . ': ' . '<b>' . $main->parent_item->name() . '</b>' . $alink;
+                                }
+                                $result = $result . '</li>';
+                            }
                         } else {
-                            $result = $result . $main->link->parent_label() . ': ' . '<b>' . $main->parent_item->name() . '</b>' . $alink;
+                            $result = $result . '<li><details><summary>' . $main->link->parent_label() . ': ' . '<b>';
+                            if ($img_doc != '') {
+                                $result = $result . $img_doc . '</b>';
+                            } else {
+                                $result = $result . $main->parent_item->name() . '</b> ' . $alink;
+                            }
+                            $result = $result . '</summary>' . $str . '</details></li>';
                         }
-                        $result = $result . '</li>';
-                    } else {
-                        $result = $result . '<li><details><summary>' . $main->link->parent_label() . ': ' . '<b>';
-                        if ($img_doc != '') {
-                            $result = $result . $img_doc . '</b>';
-                        } else {
-                            $result = $result . $main->parent_item->name() . '</b> ' . $alink;
-                        }
-                        $result = $result . '</summary>' . $str . '</details></li>';
                     }
                 }
             }
@@ -2925,7 +2946,6 @@ class ItemController extends Controller
         }
         return $result;
     }
-
 
     static function form_child_deta_hier($item_id, $role)
     {
@@ -2941,6 +2961,7 @@ class ItemController extends Controller
 // $items нужно - чтобы не было бесконечного цикла
 //static function form_child_hier_deta_start($items, $item_id, $level, $role)   - можно использовать так
 //static function form_child_hier_deta_start(&$items, $item_id, $level, $role)  - и так - результаты разные
+// '$items' и '$items_dop' использовать для того, чтобы записи, отображаемые на экране, были уникальными (см.ниже)
     static function form_child_hier_deta_start(&$items, $item_id, $level, $role)
     {
         $result = '';
@@ -2959,6 +2980,7 @@ class ItemController extends Controller
                 return '';
             }
             $items[count($items)] = $item_id;
+
             foreach ($mains as $main) {
                 $str = '';
                 $link = Link::findOrFail($main->link_id);
@@ -2977,6 +2999,20 @@ class ItemController extends Controller
                     } elseif ($link->child_base->type_is_document()) {
                         $img_doc = GlobalController::view_doc($main->child_item);
                     }
+                    $items_dop = array();
+                    // '$items' и '$items_dop' использовать для того, чтобы записи, отображаемые на экране, были уникальными
+                    if ($str == '') {
+                        // '$items' использовать
+                        // 'level_one = true' используется
+                        // получить простые родительские поля один первый уровень
+                        $str = self::form_parent_hier_deta_start($items, $main->child_item_id, 0, $role, true);
+                    } else {
+                        // '$items_dop' использовать
+                        // 'level_one = true' используется
+                        // получить простые родительские поля один первый уровень
+                        // '. $str' используется
+                        $str = self::form_parent_hier_deta_start($items_dop, $main->child_item_id, 0, $role, true) . $str;
+                    }
                     if ($str == '') {
                         $result = $result . '<li>';
                         if ($img_doc != '') {
@@ -2992,7 +3028,7 @@ class ItemController extends Controller
                         } else {
                             $result = $result . $main->child_item->name() . '</b> ' . $alink;
                         }
-                        $result = $result . '</summary>' . $str . '</details></li>';
+                        $result = $result . '</summary>' . $str . '</details>' . '</li>';
                     }
                 }
             }

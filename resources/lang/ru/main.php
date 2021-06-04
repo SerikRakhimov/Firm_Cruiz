@@ -286,4 +286,5 @@ return [
     'levels_row_is_not_populated_in_settings'=>'Строка уровней не заполнена в настройках',
     'ancestors'=>'Предки',
     'descendants'=>'Потомки',
+    'docnm' => 'Наименование документа',
 ];

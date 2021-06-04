@@ -286,4 +286,5 @@ return [
     'levels_row_is_not_populated_in_settings'=>'Levels row is not populated in settings',
     'ancestors'=>'Ancestors',
     'descendants'=>'Descendants',
+    'docnm' => 'Document name',
 ];

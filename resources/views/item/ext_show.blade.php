@@ -140,8 +140,10 @@
     <hr>
     <?php
     if ($base_right['is_hier_base_enable'] == true) {
-        $result = ItemController::form_parent_deta_hier($item->id, $role);
+        $result = ItemController::form_parent_deta_hier($item->id, $role, false);
         echo $result;
+ //         $result = ItemController::form_parent_deta_hier($item->id, $role, true);
+ //       echo $result;
 //        $result = ItemController::form_parent_coll_hier($item->id, $role);
 //        echo $result;
         $result = ItemController::form_child_deta_hier($item->id, $role);

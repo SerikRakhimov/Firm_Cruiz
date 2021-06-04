@@ -286,4 +286,5 @@ return [
     'levels_row_is_not_populated_in_settings'=>'Деңгейлер жолы теңшелімдерде толтырылмаған',
     'ancestors'=>'Ата-бабалар',
     'descendants'=>'Ұрпақтар',
+    'docnm' => 'Құжаттың атауы',
 ];
