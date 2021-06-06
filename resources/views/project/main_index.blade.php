@@ -73,7 +73,8 @@
                         </button>
                         @if ($all_projects == true)
                             <p class="card-text mt-3">
-                                <small class="text-muted">https://{{$_SERVER['SERVER_NAME']}}/project/start/{{$project->id}}
+{{--                                "isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) ? 'https' : 'http'" отсюда "https://www.php.net/reserved.variables.server"--}}
+                                <small class="text-muted">{{isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) ? 'https' : 'http'}}://{{$_SERVER['SERVER_NAME']}}/project/start/{{$project->id}}
                                     - {{mb_strtolower(trans('main.project_link'))}}</small></p>
                         @endif
                     </div>
