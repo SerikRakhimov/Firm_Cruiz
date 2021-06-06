@@ -2847,7 +2847,7 @@ class ItemController extends Controller
     }
 
     // $level_one = true, т.е. получить простые родительские поля один первый уровень
-    // $level_one = false, т.е. получить связанные родительские поля один первый уровень, на остальных уровнях показать простые и связанные поля
+    // $level_one = false, т.е. получить связанные(со вложенными значениями) родительские поля один первый уровень, на остальных уровнях показать простые и связанные поля
     static function form_parent_deta_hier($item_id, $role, $level_one)
     {
         $item = Item::find($item_id);
@@ -2896,6 +2896,7 @@ class ItemController extends Controller
                 // '$base_link_right = GlobalController::base_link_right($link, $role, false);' true нужно
                 $base_link_right = GlobalController::base_link_right($link, $role, false);
                 if ($base_link_right['is_hier_link_enable'] == true) {
+                    // Получить $str - вложенные родительские значения
                     $str = self::form_parent_hier_deta_start($items, $main->parent_item_id, $level, $role, $level_one);
                     $alink = '';
                     if ($base_link_right['is_list_base_calc'] == true) {
@@ -2912,7 +2913,7 @@ class ItemController extends Controller
                     // $link_exists = false, поле $main->parent_item->base_id простое
                     // $link_exists = true, поле $main->parent_item->base_id связанное
                     // Например у Человека/Инструкции простые поля: Фамилия, Имя, Отчество, Дата рождения, Пол, Национальность, Наименование, Документ
-                    // сложные поля: Родители, Папка
+                    // связанные поля: Родители, Папка
                     $link_exists = Link::where('child_base_id', $main->parent_item->base_id)->exists();
 
 //                  if (!($level_one == true && ($link_exists))) {
@@ -2987,6 +2988,7 @@ class ItemController extends Controller
                 // '$base_link_right = GlobalController::base_link_right($link, $role, true);' true нужно
                 $base_link_right = GlobalController::base_link_right($link, $role, true);
                 if ($base_link_right['is_hier_link_enable'] == true) {
+                    // Получить $str - вложенные детские значения
                     $str = self::form_child_hier_deta_start($items, $main->child_item_id, $level, $role);
                     $alink = '';
                     if ($base_link_right['is_list_base_calc'] == true) {

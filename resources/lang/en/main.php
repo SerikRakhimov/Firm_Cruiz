@@ -287,4 +287,5 @@ return [
     'ancestors'=>'Ancestors',
     'descendants'=>'Descendants',
     'docnm' => 'Document name',
+    'instructions' => 'Instructions',
 ];

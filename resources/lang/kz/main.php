@@ -287,4 +287,5 @@ return [
     'ancestors'=>'Ата-бабалар',
     'descendants'=>'Ұрпақтар',
     'docnm' => 'Құжаттың атауы',
+    'instructions' => 'Нұсқаулықтар',
 ];

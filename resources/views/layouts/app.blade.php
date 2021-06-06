@@ -130,6 +130,13 @@ use App\Models\Project;
                             {{trans('main.templates')}}
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link"
+                           href="{{route('template.main_index')}}"
+                           title="{{trans('main.instructions')}}">
+                            {{trans('main.instructions')}}-{{env('REDIS_HOST')}}-
+                        </a>
+                    </li>
                 </ul>
                 <!-- Right Side Of Navbar -->
                 <ul class="navbar-nav ml-auto">
