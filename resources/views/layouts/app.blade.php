@@ -130,13 +130,18 @@ use App\Models\Project;
                             {{trans('main.templates')}}
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link"
-                           href="{{route('template.main_index')}}"
-                           title="{{trans('main.instructions')}}">
-                            {{trans('main.instructions')}}-{{env('REDIS_HOST')}}-{{env('INSTRUCTIONS_LINK')}}-
-                        </a>
-                    </li>
+                    <?php
+                    // Ссылка на проект Инструкции Abakusonline
+                    $instr_link = env('INSTRUCTIONS_LINK');
+                    ?>
+                    @if($instr_link !='')
+                        <li class="nav-item"><a class="nav-link"
+                                                href="{{$instr_link}}"
+                                                title="{{trans('main.instructions')}}">
+                                {{trans('main.instructions')}}
+                            </a>
+                        </li>
+                    @endif
                 </ul>
                 <!-- Right Side Of Navbar -->
                 <ul class="navbar-nav ml-auto">
@@ -211,7 +216,7 @@ use App\Models\Project;
     </nav>
     <main class="py-4 w-75 mw-75 mx-auto">
         @guest
-{{--            Похожие строки layouts\app.blade.php и message.blade.php--}}
+            {{--            Похожие строки layouts\app.blade.php и message.blade.php--}}
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <p>
                 <h5 class="display-5 text-danger text-center">{{trans('main.please_login_or_register')}}</h5>

@@ -22,7 +22,6 @@ class ProjectController extends Controller
         ];
     }
 
-
     function all_index()
     {
         $projects = Project::whereHas('template.roles', function ($query) {
