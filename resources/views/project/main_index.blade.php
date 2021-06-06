@@ -73,7 +73,7 @@
                         </button>
                         @if ($all_projects == true)
                             <p class="card-text mt-3">
-                                <small class="text-muted">{{$_SERVER['SERVER_NAME']}}/project/start/{{$project->id}}
+                                <small class="text-muted">https://{{$_SERVER['SERVER_NAME']}}/project/start/{{$project->id}}
                                     - {{mb_strtolower(trans('main.project_link'))}}</small></p>
                         @endif
                     </div>

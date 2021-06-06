@@ -112,7 +112,6 @@ class ProjectController extends Controller
         return view('project/show', ['type_form' => 'show', 'user' => $user, 'project' => $project]);
     }
 
-
     function start(Project $project, Role $role = null)
     {
         if (!$role) {
