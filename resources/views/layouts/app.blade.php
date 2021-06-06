@@ -134,7 +134,7 @@ use App\Models\Project;
                         <a class="nav-link"
                            href="{{route('template.main_index')}}"
                            title="{{trans('main.instructions')}}">
-                            {{trans('main.instructions')}}-{{env('REDIS_HOST')}}-
+                            {{trans('main.instructions')}}-{{env('REDIS_HOST')}}-{{env('INSTRUCTIONS_LINK')}}-
                         </a>
                     </li>
                 </ul>
