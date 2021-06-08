@@ -40,8 +40,13 @@
                 <?php
                 $i++;
                 $message = GlobalController::base_maxcount_message($base);
-                if (($message != '') && ($base_right['is_list_base_create'] == true)) {
-                    $message = ' (' . $message . ')';
+                if ($message != '') {
+                    // Такая же проверка в GlobalController::item_right() и start.php
+                    if ($base_right['is_list_base_create'] == true) {
+                        $message = ' (' . $message . ')';
+                    } else {
+                        $message = '';
+                    }
                 }
                 ?>
                 <tr>

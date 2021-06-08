@@ -443,6 +443,7 @@ class GlobalController extends Controller
         if ($items != null) {
             $itget = $items->get();
             $view_count = count($itget);
+            // Такая же проверка в GlobalController::item_right() и start.php
             if ($base_right['is_list_base_create'] == true) {
                 $view_count = $view_count . self::base_max_count_for_start($base);
             }
