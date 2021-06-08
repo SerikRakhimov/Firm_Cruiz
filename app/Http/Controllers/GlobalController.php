@@ -442,7 +442,7 @@ class GlobalController extends Controller
         $itget = null;
         if ($items != null) {
             $itget = $items->get();
-            $view_count = count($itget);
+            $view_count = count($itget) . self::base_max_count_for_start($base);
         } else {
             $itget = null;
             $view_count = mb_strtolower(trans('main.no_access'));
@@ -791,6 +791,58 @@ class GlobalController extends Controller
                 $result = '<a href = "' . Storage::url($item->filename()) . '" target = "_blank"  alt = "" title = "' . $item->title_img() . '" >' . trans('main.open_document') . '</a>';
             } else {
                 $result = '<div class="text-danger">' . GlobalController::empty_html() . '</div>';
+            }
+        }
+        return $result;
+    }
+
+    // Сообщение "максимальное количество записей" для start.php
+    static function base_max_count_for_start(Base $base)
+    {
+        $result = '';
+        if ($base->maxcount_lst > 0) {
+            if ($base->type_is_list() || $base->type_is_image() || $base->type_is_document()) {
+                $result = '/' . $base->maxcount_lst;
+            }
+        }
+        return $result;
+    }
+
+    // Сообщение "максимальное количество записей"
+    static function base_maxcount_message(Base $base)
+    {
+        $result = '';
+        if ($base->maxcount_lst > 0) {
+            if ($base->type_is_list() || $base->type_is_image() || $base->type_is_document()) {
+                $result = trans('main.max_count_message_first') . ' ' . $base->maxcount_lst;
+            }
+        }
+        return $result;
+    }
+
+// Проверка на максимальное количество записей
+// $added - true, проверка при добавлении; - false, общая проверка
+    static function base_maxcount_validate(Project $project, Base $base, bool $added)
+    {
+        $result = '';
+        $error = false;
+        $maxcount = $base->maxcount_lst;
+        if ($maxcount > 0) {
+            if ($base->type_is_list() || $base->type_is_image() || $base->type_is_document()) {
+                $items_count = Item::where('project_id', $project->id)->where('base_id', $base->id)->count();
+                $error = false;
+                if ($added == true) {
+                    if ($items_count >= $maxcount) {
+                        $error = true;
+                    }
+                } else {
+                    if ($items_count > $maxcount) {
+                        $error = true;
+                    }
+                }
+                if ($error == true) {
+                    $result = trans('main.max_count_message_second') . $base->names() . trans('main.max_count_message_third') . '. ' . self::base_maxcount_message($base) . '!';
+                }
             }
         }
         return $result;

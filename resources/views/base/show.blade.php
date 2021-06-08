@@ -27,6 +27,7 @@
     @endforeach
 
     <p>{{trans('main.type')}}: <b>{{$base->type_name()}}</b></p>
+    <p>{{trans('main.maxcount_lst')}}: <b>{{$base->maxcount_lst}}</b></p>
     <p>{{trans('main.is_code_needed')}}: <b>{{$base->is_code_needed}}</b></p>
     <p>{{trans('main.is_to_moderate_image')}}: <b>{{$base->is_to_moderate_image}}</b></p>
     <p>{{trans('main.is_code_number')}}: <b>{{$base->is_code_number}}</b></p>

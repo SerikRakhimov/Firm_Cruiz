@@ -401,6 +401,18 @@ class ItemController extends Controller
 //        }else{
         $request->validate($this->code_rules($request, $project->id, $base->id));
 //        }
+
+        // Проверка на $base->maxcount_lst
+        // Проверка осуществляется только при добавлении записи
+        $message = GlobalController::base_maxcount_validate($project, $base, true);
+        if ($message != '') {
+            $array_mess['name_lang_0'] = $message;
+            // повторный вызов формы
+            return redirect()->back()
+                ->withInput()
+                ->withErrors($array_mess);
+        }
+
         // Проверка на обязательность ввода наименования
         if ($base->is_required_lst_num_str_txt_img_doc == true && $base->is_calcname_lst == false) {
             // Тип - список, строка или текст
@@ -1969,6 +1981,7 @@ class ItemController extends Controller
         }
 
         $array_mess = array();
+
         foreach ($string_langs as $link) {
             if ($link->parent_is_parent_related == false) {
                 // Тип - изображение

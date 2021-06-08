@@ -9,6 +9,7 @@
     use \App\Http\Controllers\GlobalController;
     use \App\Http\Controllers\ItemController;
     use \App\Http\Controllers\MainController;
+    $message = GlobalController::base_maxcount_validate($project, $base, true);
     ?>
     @include('layouts.show_project_role',['project'=>$project, 'role'=>$role])
     <div class="container-fluid">
@@ -19,10 +20,14 @@
         </div>
         @if($base_right['is_list_base_create'] == true)
             <div class="col-12 text-right">
-                <button type="button" class="btn btn-dreamer" title="{{trans('main.add')}}"
-                        onclick="document.location='{{route('item.ext_create', ['base'=>$base, 'project'=>$project, 'role'=>$role])}}'">
-                    <i class="fas fa-plus d-inline"></i>&nbsp;{{trans('main.add')}}
-                </button>
+                @if($message == "")
+                    <button type="button" class="btn btn-dreamer" title="{{trans('main.add')}}"
+                            onclick="document.location='{{route('item.ext_create', ['base'=>$base, 'project'=>$project, 'role'=>$role])}}'">
+                        <i class="fas fa-plus d-inline"></i>&nbsp;{{trans('main.add')}}
+                    </button>
+                @else
+                    {{GlobalController::base_maxcount_message($base)}}
+                @endif
             </div>
         @endif
         {{--        Не удалять--}}

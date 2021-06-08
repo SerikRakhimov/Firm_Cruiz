@@ -39,6 +39,10 @@
             @if($base_right['is_list_base_calc'] == true)
                 <?php
                 $i++;
+                $message = GlobalController::base_maxcount_message($base);
+                if ($message != '') {
+                    $message = ' (' . $message . ')';
+                }
                 ?>
                 <tr>
                     {{--                                    <th scope="row">{{$i}}</th>--}}
@@ -52,11 +56,12 @@
                         <h5>
                             <a
                                 href="{{route('item.base_index',['base'=>$base, 'project' => $project, 'role' => $role])}}"
-                                title="{{$base->names()}}">
+                                title="{{$base->names() . $message}}">
                                 {{$base->names()}}
                                 {{--                            @auth--}}
                                 <span
-                                    class="text-muted text-related">{{GlobalController::items_right($base, $project, $role)['view_count']}}
+                                    class="text-muted text-related">
+                                    {{GlobalController::items_right($base, $project, $role)['view_count']}}
                                 </span>
                                 {{--                            @endauth--}}
                             </a>
@@ -150,8 +155,6 @@
         </div>
         {{$bases->links()}}
     @endif
-
-
 
     <blockquote class="text-title pt-1 pl-5 pr-5"><?php echo nl2br($project->dc_ext()); ?></blockquote>
     {{--    <blockquote class="text-title pt-1 pl-5 pr-5"><?php echo nl2br($project->dc_int()); ?></blockquote>--}}

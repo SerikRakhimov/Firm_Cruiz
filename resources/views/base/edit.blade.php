@@ -102,6 +102,28 @@
             </div>
         </div>
 
+        <div class="form-group row" id="maxcount_lst_form_group">
+            <div class="col-sm-3 text-right">
+                <label for="maxcount_lst">{{trans('main.maxcount_lst')}}<span
+                        class="text-danger">*</span></label>
+            </div>
+            <div class="col-sm-2">
+                <input type="number"
+                       name="maxcount_lst"
+                       id="maxcount_lst"
+                       class="form-control @error('maxcount_lst') is-invalid @enderror"
+                       placeholder=""
+                       value="{{ old('maxcount_lst') ?? ($base['maxcount_lst'] ?? '0') }}">
+                @error('maxcount_lst')
+                <div class="text-danger">
+                    {{$message}}
+                </div>
+                @enderror
+            </div>
+            <div class="col-sm-7">
+            </div>
+        </div>
+
         <div class="form-group row" id="digits_num_form_group">
             <div class="col-sm-3 text-right">
                 <label for="digits_num">{{trans('main.digits_num')}}<span
@@ -590,6 +612,7 @@
     <script>
         //var vartype = form.vartype;  // так не работает
         var vartype = document.getElementById('vartype');
+        var maxcount = document.getElementById('maxcount_lst_form_group');
         var digits_num = document.getElementById('digits_num_form_group');
         var is_code_needed = document.getElementById('is_code_needed_form_group');
         var is_code_number = document.getElementById('is_code_number_form_group');
@@ -637,6 +660,7 @@
             //         val_onevalue_str = "block";
             //         break;
             // }
+            val_maxcount = "hidden";
             val_code_needed = "hidden";
             val_limit_sign_code = "hidden";
             val_code_number = "hidden";
@@ -660,6 +684,7 @@
             switch (vartype.options[vartype.selectedIndex].value) {
                 // Список
                 case "0":
+                    val_maxcount = "visible";
                     val_code_needed = "visible";
                     val_limit_sign_code = "visible";
                     val_code_number = "visible";
@@ -708,6 +733,7 @@
             // digits_num.style.display = val_digits_num;
             // is_required_lst_num_str_txt_img_doc.style.display = val_required_num_str;
             // is_onevalue_str.style.display = val_onevalue_str;
+            maxcount.style.visibility = val_maxcount;
             is_code_needed.style.visibility = val_code_needed;
             is_limit_sign_code.style.visibility = val_limit_sign_code;
             is_code_number.style.visibility = val_code_number;
