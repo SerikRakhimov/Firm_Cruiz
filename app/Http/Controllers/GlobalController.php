@@ -442,7 +442,10 @@ class GlobalController extends Controller
         $itget = null;
         if ($items != null) {
             $itget = $items->get();
-            $view_count = count($itget) . self::base_max_count_for_start($base);
+            $view_count = count($itget);
+            if ($base_right['is_list_base_create'] == true) {
+                $view_count = $view_count . self::base_max_count_for_start($base);
+            }
         } else {
             $itget = null;
             $view_count = mb_strtolower(trans('main.no_access'));
