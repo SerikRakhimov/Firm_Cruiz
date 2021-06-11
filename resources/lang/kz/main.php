@@ -292,4 +292,11 @@ return [
     'max_count_message_first' => 'Жазбалардың ең көп саны',
     'max_count_message_second' => '"',
     'max_count_message_third' => '" жазба қосылмады',
+    'is_calculated_lst' => 'Есептелетін',
+    'is_setup_lst' => 'Теңшеу',
+    'calculate_bases' => 'Есептелетін негіздерді есептеу',
+    'calculation' => 'Есеп айырысу',
+    'deleted' => 'Жойылған',
+    'records' => 'Жазбалар',
+    'processed' => 'Өңделген',
 ];

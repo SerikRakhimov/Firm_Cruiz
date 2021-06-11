@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateBasesTableTypeIsText extends Migration
+class UpdateBasesTableIsCalc extends Migration
 {
     /**
      * Run the migrations.
@@ -14,10 +14,10 @@ class UpdateBasesTableTypeIsText extends Migration
     public function up()
     {
         Schema::table('bases', function (Blueprint $table) {
-            $table->boolean('type_is_text')->default(false);
+            $table->boolean('is_calculated_lst')->default(false);
+            $table->boolean('is_setup_lst')->default(false);
         });
     }
-
     /**
      * Reverse the migrations.
      *

@@ -102,6 +102,81 @@
             </div>
         </div>
 
+        <div class="form-group row" id="is_calculated_lst_form_group">
+            <div class="col-sm-3 text-right">
+                <label class="form-label"
+                       for="is_calculated_lst">{{trans('main.is_calculated_lst')}}</label>
+            </div>
+            <div class="col-sm-7">
+                <input class="@error($key) is-invalid @enderror"
+                       type="checkbox"
+                       name="is_calculated_lst"
+                       id="linkis_calculated_lst"
+                       placeholder=""
+                       @if ((old('is_calculated_lst') ?? ($base->is_calculated_lst ?? false)) ==  true)
+                       checked
+                    @endif
+                >
+                @error('is_calculated_lst')
+                <div class="invalid-feedback">
+                    {{$message}}
+                </div>
+                @enderror
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div>
+
+        <div class="form-group row" id="is_setup_lst_form_group">
+            <div class="col-sm-3 text-right">
+                <label class="form-label"
+                       for="is_setup_lst">{{trans('main.is_setup_lst')}}</label>
+            </div>
+            <div class="col-sm-7">
+                <input class="@error($key) is-invalid @enderror"
+                       type="checkbox"
+                       name="is_setup_lst"
+                       id="linkis_setup_lst"
+                       placeholder=""
+                       @if ((old('is_setup_lst') ?? ($base->is_setup_lst ?? false)) ==  true)
+                       checked
+                    @endif
+                >
+                @error('is_setup_lst')
+                <div class="invalid-feedback">
+                    {{$message}}
+                </div>
+                @enderror
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div>
+
+        <div class="form-group row" id="is_required_lst_num_str_txt_img_doc_form_group">
+            <div class="col-sm-3 text-right">
+                <label class="form-label"
+                       for="is_required_lst_num_str_txt_img_doc">{{trans('main.is_required_lst_num_str_txt_img_doc')}}</label>
+            </div>
+            <div class="col-sm-7">
+                <input class="@error($key) is-invalid @enderror"
+                       type="checkbox"
+                       name="is_required_lst_num_str_txt_img_doc"
+                       id="linkis_required_lst_num_str_txt_img_doc"
+                       placeholder=""
+                       @if ((old('is_required_lst_num_str_txt_img_doc') ?? ($base->is_required_lst_num_str_txt_img_doc ?? false)) ==  true)
+                       checked
+                    @endif
+                >
+                @error('is_required_lst_num_str_txt_img_doc')
+                <div class="invalid-feedback">
+                    {{$message}}
+                </div>
+                @enderror
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div>
+
         <div class="form-group row" id="maxcount_lst_form_group">
             <div class="col-sm-3 text-right">
                 <label for="maxcount_lst">{{trans('main.maxcount_lst')}}<span
@@ -143,31 +218,6 @@
                 @enderror
             </div>
             <div class="col-sm-7">
-            </div>
-        </div>
-
-        <div class="form-group row" id="is_required_lst_num_str_txt_img_doc_form_group">
-            <div class="col-sm-3 text-right">
-                <label class="form-label"
-                       for="is_required_lst_num_str_txt_img_doc">{{trans('main.is_required_lst_num_str_txt_img_doc')}}</label>
-            </div>
-            <div class="col-sm-7">
-                <input class="@error($key) is-invalid @enderror"
-                       type="checkbox"
-                       name="is_required_lst_num_str_txt_img_doc"
-                       id="linkis_required_lst_num_str_txt_img_doc"
-                       placeholder=""
-                       @if ((old('is_required_lst_num_str_txt_img_doc') ?? ($base->is_required_lst_num_str_txt_img_doc ?? false)) ==  true)
-                       checked
-                    @endif
-                >
-                @error('is_required_lst_num_str_txt_img_doc')
-                <div class="invalid-feedback">
-                    {{$message}}
-                </div>
-                @enderror
-            </div>
-            <div class="col-sm-2">
             </div>
         </div>
 
@@ -613,6 +663,8 @@
         //var vartype = form.vartype;  // так не работает
         var vartype = document.getElementById('vartype');
         var maxcount = document.getElementById('maxcount_lst_form_group');
+        var is_calc = document.getElementById('is_calculated_lst_form_group');
+        var is_setup = document.getElementById('is_setup_lst_form_group');
         var digits_num = document.getElementById('digits_num_form_group');
         var is_code_needed = document.getElementById('is_code_needed_form_group');
         var is_code_number = document.getElementById('is_code_number_form_group');
@@ -661,6 +713,8 @@
             //         break;
             // }
             val_maxcount = "hidden";
+            val_calc = "hidden";
+            val_setup = "hidden";
             val_code_needed = "hidden";
             val_limit_sign_code = "hidden";
             val_code_number = "hidden";
@@ -685,6 +739,8 @@
                 // Список
                 case "0":
                     val_maxcount = "visible";
+                    val_calc = "visible";
+                    val_setup = "visible";
                     val_code_needed = "visible";
                     val_limit_sign_code = "visible";
                     val_code_number = "visible";
@@ -734,6 +790,8 @@
             // is_required_lst_num_str_txt_img_doc.style.display = val_required_num_str;
             // is_onevalue_str.style.display = val_onevalue_str;
             maxcount.style.visibility = val_maxcount;
+            is_calc.style.visibility = val_calc;
+            is_setup.style.visibility = val_setup;
             is_code_needed.style.visibility = val_code_needed;
             is_limit_sign_code.style.visibility = val_limit_sign_code;
             is_code_number.style.visibility = val_code_number;

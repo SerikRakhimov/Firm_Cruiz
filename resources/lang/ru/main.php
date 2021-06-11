@@ -292,4 +292,11 @@ return [
     'max_count_message_first' => 'Максимальное количество записей должно быть не более',
     'max_count_message_second' => 'Запись в "',
     'max_count_message_third' => '" не добавлена',
+    'is_calculated_lst' => 'Вычисляемое',
+    'is_setup_lst' => 'Настройка',
+    'calculate_bases' => 'Расчет вычисляемых основ',
+    'calculation' => 'Расчет',
+    'deleted' => 'Удалено',
+    'records' => 'Записей',
+    'processed' => 'Обработано',
 ];

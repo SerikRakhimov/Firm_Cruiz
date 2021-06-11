@@ -66,4 +66,10 @@ class Project extends Model
         return $this->name() . " (Id = " . strval($this->id) . ")";
     }
 
+    function is_calculated_base_exist()
+    {
+        $result = Base::where('template_id', $this->template_id)->where('is_calculated_lst', true)->exists();
+        return $result;
+    }
+
 }

@@ -436,6 +436,10 @@ Route::delete('/project/delete/{project}', 'ProjectController@delete')
     ->name('project.delete')
     ->middleware('auth');
 
+Route::get('/project/calculate_bases/{project}/{role}', 'ProjectController@calculate_bases')
+    ->name('project.calculate_bases')
+    ->middleware('auth');
+
 // Accesses
 Route::get('/access/index_project/{project}', 'AccessController@index_project')
     ->name('access.index_project')

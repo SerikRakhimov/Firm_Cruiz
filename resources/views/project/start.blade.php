@@ -8,6 +8,18 @@
     //phpinfo(); - для поиска php.ini
     ?>
     @include('layouts.show_project_role',['project'=>$project, 'role'=>$role])
+    @auth
+        @if ($role->is_author())
+            @if ($project->is_calculated_base_exist() == true)
+                <div class="col-12 text-right">
+                    <a href="{{route('project.calculate_bases', ['project'=>$project, 'role'=>$role])}}"
+                       title="{{trans('main.calculate_bases')}}">
+                        {{trans('main.calculate_bases')}}
+                    </a>
+                </div>
+            @endif
+        @endif
+    @endauth
     <div class="container-fluid">
         <div class="row">
             <div class="col-5 text-center">
@@ -68,6 +80,7 @@
                                     class="text-muted text-related">
                                     {{GlobalController::items_right($base, $project, $role)['view_count']}}
                                 </span>
+                                <span class="badge badge-related">{{$base->menu_type_name()}}</span>
                                 {{--                            @endauth--}}
                             </a>
                         </h5>

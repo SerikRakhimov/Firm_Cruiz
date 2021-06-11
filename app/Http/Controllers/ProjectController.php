@@ -6,12 +6,18 @@ use App\Models\Access;
 use App\Models\Base;
 use App\Models\Item;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\DB;
 use App\User;
 use App\Models\Project;
 use App\Models\Template;
 use App\Models\Role;
+use App\Models\Set;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Artisan;
+use phpDocumentor\Reflection\Types\Boolean;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Storage;
 
 class ProjectController extends Controller
 {
@@ -124,7 +130,8 @@ class ProjectController extends Controller
             return view('message', ['message' => trans('main.info_user_changed')]);
         }
         $template = $project->template;
-        $bases = Base::where('template_id', $template->id);
+        // Порядок сортировки; обычные bases, вычисляемые bases, настройки - bases
+        $bases = Base::where('template_id', $template->id)->orderBy('is_setup_lst')->orderBy('is_calculated_lst');
         $index = array_search(App::getLocale(), config('app.locales'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
             switch ($index) {
@@ -363,6 +370,98 @@ class ProjectController extends Controller
         } else {
             return redirect()->back();
         }
+    }
+
+    function calculate_bases(Project $project, Role $role)
+    {
+        if (!(($project->template_id == $role->template_id) && ($role->is_author()))) {
+            return;
+        }
+
+        echo nl2br(trans('main.calculation') . ": " . PHP_EOL);
+
+        try {
+            // начало транзакции
+            DB::transaction(function ($r) use ($project) {
+
+                $bases_to = Set::select(DB::Raw('links.child_base_id as base_id'))
+                    ->join('links', 'sets.link_to_id', '=', 'links.id')
+                    ->join('bases', 'links.child_base_id', '=', 'bases.id')
+                    ->where('bases.template_id', $project->template_id)
+                    ->distinct()
+                    ->orderBy('links.child_base_id')
+                    ->get();
+
+//                $bases_from = Set::select(DB::Raw('links.child_base_id as base_id'))
+//                    ->join('links', 'sets.link_from_id', '=', 'links.id')
+//                    ->join('bases', 'links.child_base_id', '=', 'bases.id')
+//                    ->where('bases.template_id', $project->template_id)
+//                    ->distinct()
+//                    ->orderBy('links.child_base_id')
+//                    ->get();
+
+                // Это условие 'where('bf.is_calculated_lst', '=', false)->where('bt.is_calculated_lst', '=', true)' означает
+                // исключить sets, когда link_from->base и link_to->base являются вычисляемыми (base->is_calculated_lst=true)
+                $bases_from = Set::select(DB::Raw('lf.child_base_id as base_id'))
+                    ->join('links as lf', 'sets.link_from_id', '=', 'lf.id')
+                    ->join('links as lt', 'sets.link_to_id', '=', 'lt.id')
+                    ->join('bases as bf', 'lf.child_base_id', '=', 'bf.id')
+                    ->join('bases as bt', 'lt.child_base_id', '=', 'bt.id')
+                    ->where('bf.template_id', $project->template_id)
+                    ->where('bf.is_calculated_lst', '=', false)
+                    ->where('bt.is_calculated_lst', '=', true)
+                    ->distinct()
+                    ->orderBy('lf.child_base_id')
+                    ->get();
+
+                $str_records = mb_strtolower(trans('main.records'));
+
+                foreach ($bases_to as $base_to_id) {
+                    $base = Base::findOrFail($base_to_id['base_id']);
+                    echo nl2br(trans('main.base') . ": " . $base->name() . " - ");
+                    $items = Item::where('project_id', $project->id)->where('base_id', $base->id);
+                    $count = $items->count();
+                    $items->delete();
+                    echo nl2br(trans('main.deleted') . " " . $count . " " . $str_records . PHP_EOL);
+                }
+
+                foreach ($bases_from as $base_from_id) {
+                    $base = Base::findOrFail($base_from_id['base_id']);
+                    echo nl2br(trans('main.base') . ": " . $base->name() . " - ");
+                    $items = Item::where('project_id', $project->id)->where('base_id', $base->id)->get();
+                    $count = $items->count();
+                    foreach ($items as $item) {
+                        // $reverse = true - отнимать, false - прибавлять
+                        (new ItemController)->save_info_sets($item, false);
+                    }
+                    echo nl2br(trans('main.processed') . " " . $count . " " . $str_records . PHP_EOL);
+                }
+
+            }, 3);  // Повторить три раза, прежде чем признать неудачу
+            // окончание транзакции
+
+        } catch (Exception $exc) {
+            return trans('transaction_not_completed') . ": " . $exc->getMessage();
+        }
+
+//        $set_main = Set::select(DB::Raw('sets.*, lt.child_base_id as to_child_base_id, lt.parent_base_id as to_parent_base_id'))
+//            ->join('links as lt', 'sets.link_to_id', '=', 'lt.id')
+//            ->where('lf.child_base_id', '=', $item->base_id)
+//            ->orderBy('sets.serial_number')
+//            ->orderBy('sets.link_from_id')
+//            ->orderBy('sets.link_to_id')->get();
+
+        //$items = Item::joinSub($sets, 'sets', function ($join) {
+        //        $join->on('items.base_id', '=', 'sets.base_id');})->get();
+
+
+//        $users = DB::table('items')
+//            ->joinSub($bases, 'bases', function ($join) {
+//                $join->on('items.id', 1);
+//            })->get();
+
+        //dd($items);
+
     }
 
 }

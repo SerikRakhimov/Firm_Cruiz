@@ -43,8 +43,8 @@ class BaseController extends Controller
         Auth::user()->isAdmin()) {
             return redirect()->route('project.all_index');
         }
-
-        $bases = Base::where('template_id', $template->id);
+        // Порядок сортировки; обычные bases, вычисляемые bases, настройки - bases
+        $bases = Base::where('template_id', $template->id)->orderBy('is_setup_lst')->orderBy('is_calculated_lst');
         $index = array_search(App::getLocale(), config('app.locales'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
             switch ($index) {
@@ -139,6 +139,8 @@ class BaseController extends Controller
         $base->maxfilesize_title_img_doc = isset($request->maxfilesize_title_img_doc) ? $request->maxfilesize_title_img_doc : "";
 
         $base->maxcount_lst = $request->maxcount_lst >= 0 ? $request->maxcount_lst : 0;
+        $base->is_calculated_lst = isset($request->is_calculated_lst) ? "1" : "0";
+        $base->is_setup_lst = isset($request->is_setup_lst) ? "1" : "0";
 
         // Похожие строки в BaseController.php (functions: store(), edit())
         // и в Base.php (functions: get_types(), type(), type_name())
@@ -180,6 +182,8 @@ class BaseController extends Controller
                 $base->maxfilesize_img_doc = 0;
                 $base->maxfilesize_title_img_doc = "";
                 $base->maxcount_lst = 0;
+                $base->is_calculated_lst = "0";
+                $base->is_setup_lst = "0";
                 break;
             // Строка
             case 2:
@@ -202,6 +206,8 @@ class BaseController extends Controller
                 $base->maxfilesize_img_doc = 0;
                 $base->maxfilesize_title_img_doc = "";
                 $base->maxcount_lst = 0;
+                $base->is_calculated_lst = "0";
+                $base->is_setup_lst = "0";
                 break;
             // Дата
             case 3:
@@ -226,6 +232,8 @@ class BaseController extends Controller
                 $base->maxfilesize_img_doc = 0;
                 $base->maxfilesize_title_img_doc = "";
                 $base->maxcount_lst = 0;
+                $base->is_calculated_lst = "0";
+                $base->is_setup_lst = "0";
                 break;
             // Логический
             case 4:
@@ -250,6 +258,8 @@ class BaseController extends Controller
                 $base->maxfilesize_img_doc = 0;
                 $base->maxfilesize_title_img_doc = "";
                 $base->maxcount_lst = 0;
+                $base->is_calculated_lst = "0";
+                $base->is_setup_lst = "0";
                 break;
             // Текст
             case 5:
@@ -272,6 +282,8 @@ class BaseController extends Controller
                 $base->maxfilesize_img_doc = 0;
                 $base->maxfilesize_title_img_doc = "";
                 $base->maxcount_lst = 0;
+                $base->is_calculated_lst = "0";
+                $base->is_setup_lst = "0";
                 break;
             // Изображение
             case 6:
@@ -293,6 +305,8 @@ class BaseController extends Controller
                 $base->sepa_same_left_calcname = "";
                 $base->sepa_same_right_calcname = "";
                 $base->maxcount_lst = 0;
+                $base->is_calculated_lst = "0";
+                $base->is_setup_lst = "0";
                 break;
             // Документ
             case 7:
@@ -315,6 +329,8 @@ class BaseController extends Controller
                 $base->sepa_same_right_calcname = "";
                 $base->is_to_moderate_image = "0";
                 $base->maxcount_lst = 0;
+                $base->is_calculated_lst = "0";
+                $base->is_setup_lst = "0";
                 break;
         }
         if ($base->is_code_needed == "0") {
@@ -333,10 +349,21 @@ class BaseController extends Controller
         if ($base->significance_code == 0) {
             $base->is_limit_sign_code = "0";
         }
+        // Ограничить количество вводимых цифр
         // Нужно
         if ($base->is_limit_sign_code == "0") {
             $base->significance_code = 0;
             $base->is_code_zeros = 0;
+        };
+
+        // Нужно
+        if ($base->is_calculated_lst == "1") {
+            $base->is_setup_lst = "0";
+        };
+        if ($base->is_setup_lst == "1") {
+            $base->is_calculated_lst = "0";
+            $base->is_calcname_lst = "1";
+            $base->maxcount_lst = 1;
         };
 
         $base->save();
@@ -403,6 +430,8 @@ class BaseController extends Controller
         $base->maxfilesize_title_img_doc = isset($request->maxfilesize_title_img_doc) ? $request->maxfilesize_title_img_doc : "";
 
         $base->maxcount_lst = $request->maxcount_lst >= 0 ? $request->maxcount_lst : 0;
+        $base->is_calculated_lst = isset($request->is_calculated_lst) ? "1" : "0";
+        $base->is_setup_lst = isset($request->is_setup_lst) ? "1" : "0";
 
         // Похожие строки в BaseController.php (functions: store(), edit())
         // и в Base.php (functions: get_types(), type(), type_name())
@@ -444,6 +473,8 @@ class BaseController extends Controller
                 $base->maxfilesize_img_doc = 0;
                 $base->maxfilesize_title_img_doc = "";
                 $base->maxcount_lst = 0;
+                $base->is_calculated_lst = "0";
+                $base->is_setup_lst = "0";
                 break;
             // Строка
             case 2:
@@ -466,6 +497,8 @@ class BaseController extends Controller
                 $base->maxfilesize_img_doc = 0;
                 $base->maxfilesize_title_img_doc = "";
                 $base->maxcount_lst = 0;
+                $base->is_calculated_lst = "0";
+                $base->is_setup_lst = "0";
                 break;
             // Дата
             case 3:
@@ -490,6 +523,8 @@ class BaseController extends Controller
                 $base->maxfilesize_img_doc = 0;
                 $base->maxfilesize_title_img_doc = "";
                 $base->maxcount_lst = 0;
+                $base->is_calculated_lst = "0";
+                $base->is_setup_lst = "0";
                 break;
             // Логический
             case 4:
@@ -514,6 +549,8 @@ class BaseController extends Controller
                 $base->maxfilesize_img_doc = 0;
                 $base->maxfilesize_title_img_doc = "";
                 $base->maxcount_lst = 0;
+                $base->is_calculated_lst = "0";
+                $base->is_setup_lst = "0";
                 break;
             // Текст
             case 5:
@@ -536,6 +573,8 @@ class BaseController extends Controller
                 $base->maxfilesize_img_doc = 0;
                 $base->maxfilesize_title_img_doc = "";
                 $base->maxcount_lst = 0;
+                $base->is_calculated_lst = "0";
+                $base->is_setup_lst = "0";
                 break;
             // Изображение
             case 6:
@@ -557,6 +596,8 @@ class BaseController extends Controller
                 $base->sepa_same_left_calcname = "";
                 $base->sepa_same_right_calcname = "";
                 $base->maxcount_lst = 0;
+                $base->is_calculated_lst = "0";
+                $base->is_setup_lst = "0";
                 break;
             // Документ
             case 7:
@@ -579,6 +620,8 @@ class BaseController extends Controller
                 $base->sepa_same_right_calcname = "";
                 $base->is_to_moderate_image = "0";
                 $base->maxcount_lst = 0;
+                $base->is_calculated_lst = "0";
+                $base->is_setup_lst = "0";
                 break;
         }
 
@@ -604,6 +647,15 @@ class BaseController extends Controller
         if ($base->is_limit_sign_code == "0") {
             $base->significance_code = 0;
             $base->is_code_zeros = 0;
+        };
+        // Нужно
+        if ($base->is_calculated_lst == "1") {
+            $base->is_setup_lst = "0";
+        };
+        if ($base->is_setup_lst == "1") {
+            $base->is_calculated_lst = "0";
+            $base->is_calcname_lst = "1";
+            $base->maxcount_lst = 1;
         };
 
         $base->save();

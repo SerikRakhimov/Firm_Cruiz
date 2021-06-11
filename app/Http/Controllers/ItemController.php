@@ -991,7 +991,7 @@ class ItemController extends Controller
     }
     // save_info_sets() выполняет все присваивания для $item с отниманием/прибавлением значений
     // $reverse = true - отнимать, false - прибавлять
-    private
+    //private
     function save_info_sets(Item $item, bool $reverse)
     {
         $itpv = Item::findOrFail($item->id);
@@ -3053,7 +3053,6 @@ class ItemController extends Controller
         }
         return $result;
     }
-
 
 // Функция calc_value_func() вычисляет наименования для записи $item
     function calc_value_func(Item $item, $level = 0, $first_run = true)
