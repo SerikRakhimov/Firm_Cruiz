@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+    <?php
+    use App\Http\Controllers\GlobalController;
+    ?>
     <p>
     <div class="container-fluid">
         <div class="row">
@@ -26,6 +29,8 @@
         <tr>
             <th class="text-center">#</th>
             <th class="text-left">{{trans('main.name')}}</th>
+            <th class="text-left">{{trans('main.is_closed_default_value')}}</th>
+            <th class="text-left">{{trans('main.is_closed_default_value_fixed')}}</th>
             <th class="text-center">{{trans('main.projects')}}</th>
             <th class="text-center">{{trans('main.roles')}}</th>
             <th class="text-center">{{trans('main.levels')}}</th>
@@ -50,6 +55,16 @@
                 <td class="text-left">
                     <a href="{{route('template.show',$template)}}" title="{{trans('main.show')}}">
                         {{$template->name()}}
+                    </a>
+                </td>
+                <td class="text-center">
+                    <a href="{{route('project.index_template', $template)}}" title="{{trans('main.projects')}}">
+                        {{GlobalController::name_is_boolean($template->is_closed_default_value)}}
+                    </a>
+                </td>
+                <td class="text-center">
+                    <a href="{{route('project.index_template', $template)}}" title="{{trans('main.projects')}}">
+                        {{GlobalController::name_is_boolean($template->is_closed_default_value_fixed)}}
                     </a>
                 </td>
                 <td class="text-center">

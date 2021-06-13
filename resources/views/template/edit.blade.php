@@ -45,6 +45,56 @@
             @endforeach
         </div>
 
+        <div class="form-group row" id="is_closed_default_value_form_group">
+            <div class="col-sm-3 text-right">
+                <label class="form-label"
+                       for="is_closed_default_value">{{trans('main.is_closed_default_value')}}</label>
+            </div>
+            <div class="col-sm-7">
+                <input class="@error('is_closed_default_value') is-invalid @enderror"
+                       type="checkbox"
+                       name="is_closed_default_value"
+                       id="linkis_closed_default_value"
+                       placeholder=""
+                       @if ((old('is_closed_default_value') ?? ($template->is_closed_default_value ?? false)) ==  true)
+                       checked
+                    @endif
+                >
+                @error('is_closed_default_value')
+                <div class="invalid-feedback">
+                    {{$message}}
+                </div>
+                @enderror
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div>
+
+        <div class="form-group row" id="is_closed_default_value_fixed_form_group">
+            <div class="col-sm-3 text-right">
+                <label class="form-label"
+                       for="is_closed_default_value_fixed">{{trans('main.is_closed_default_value_fixed')}}</label>
+            </div>
+            <div class="col-sm-7">
+                <input class="@error('is_closed_default_value_fixed') is-invalid @enderror"
+                       type="checkbox"
+                       name="is_closed_default_value_fixed"
+                       id="linkis_closed_default_value_fixed"
+                       placeholder=""
+                       @if ((old('is_closed_default_value_fixed') ?? ($template->is_closed_default_value_fixed ?? false)) ==  true)
+                       checked
+                    @endif
+                >
+                @error('is_closed_default_value_fixed')
+                <div class="invalid-feedback">
+                    {{$message}}
+                </div>
+                @enderror
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div>
+
         <div class="form-group row">
             @foreach (config('app.locales') as $key=>$value)
                 <div class="col-3 text-right">

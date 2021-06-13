@@ -108,7 +108,7 @@
                        for="is_calculated_lst">{{trans('main.is_calculated_lst')}}</label>
             </div>
             <div class="col-sm-7">
-                <input class="@error($key) is-invalid @enderror"
+                <input class="@error('is_calculated_lst') is-invalid @enderror"
                        type="checkbox"
                        name="is_calculated_lst"
                        id="linkis_calculated_lst"
@@ -133,7 +133,7 @@
                        for="is_setup_lst">{{trans('main.is_setup_lst')}}</label>
             </div>
             <div class="col-sm-7">
-                <input class="@error($key) is-invalid @enderror"
+                <input class="@error('is_setup_lst') is-invalid @enderror"
                        type="checkbox"
                        name="is_setup_lst"
                        id="linkis_setup_lst"
@@ -158,7 +158,7 @@
                        for="is_required_lst_num_str_txt_img_doc">{{trans('main.is_required_lst_num_str_txt_img_doc')}}</label>
             </div>
             <div class="col-sm-7">
-                <input class="@error($key) is-invalid @enderror"
+                <input class="@error('is_required_lst_num_str_txt_img_doc') is-invalid @enderror"
                        type="checkbox"
                        name="is_required_lst_num_str_txt_img_doc"
                        id="linkis_required_lst_num_str_txt_img_doc"
@@ -227,7 +227,7 @@
                        for="is_to_moderate_image">{{trans('main.is_to_moderate_image')}}</label>
             </div>
             <div class="col-sm-7">
-                <input class="@error($key) is-invalid @enderror"
+                <input class="@error('is_to_moderate_image') is-invalid @enderror"
                        type="checkbox"
                        name="is_to_moderate_image"
                        id="linkis_to_moderate_image"
@@ -296,7 +296,7 @@
                        for="is_code_needed">{{trans('main.is_code_needed')}}</label>
             </div>
             <div class="col-sm-7">
-                <input class="@error($key) is-invalid @enderror"
+                <input class="@error('is_code_needed') is-invalid @enderror"
                        type="checkbox"
                        name="is_code_needed"
                        id="linkis_code_needed"
@@ -321,7 +321,7 @@
                        for="is_code_number">{{trans('main.is_code_number')}}</label>
             </div>
             <div class="col-sm-7">
-                <input class="@error($key) is-invalid @enderror"
+                <input class="@error('is_code_number') is-invalid @enderror"
                        type="checkbox"
                        name="is_code_number"
                        id="linkis_code_number"
@@ -346,7 +346,7 @@
                        for="is_limit_sign_code">{{trans('main.is_limit_sign_code')}}</label>
             </div>
             <div class="col-sm-7">
-                <input class="@error($key) is-invalid @enderror"
+                <input class="@error('is_limit_sign_code') is-invalid @enderror"
                        type="checkbox"
                        name="is_limit_sign_code"
                        id="linkis_limit_sign_code"
@@ -393,7 +393,7 @@
                        for="is_code_zeros">{{trans('main.is_code_zeros')}}</label>
             </div>
             <div class="col-sm-7">
-                <input class="@error($key) is-invalid @enderror"
+                <input class="@error('is_code_zeros') is-invalid @enderror"
                        type="checkbox"
                        name="is_code_zeros"
                        id="linkis_code_zeros"
@@ -418,7 +418,7 @@
                        for="is_suggest_code">{{trans('main.is_suggest_code')}}</label>
             </div>
             <div class="col-sm-7">
-                <input class="@error($key) is-invalid @enderror"
+                <input class="@error('is_suggest_code') is-invalid @enderror"
                        type="checkbox"
                        name="is_suggest_code"
                        id="linkis_suggest_code"
@@ -443,7 +443,7 @@
                        for="is_suggest_max_code">{{trans('main.is_suggest_max_code')}}</label>
             </div>
             <div class="col-sm-7">
-                <input class="@error($key) is-invalid @enderror"
+                <input class="@error('is_suggest_max_code') is-invalid @enderror"
                        type="checkbox"
                        name="is_suggest_max_code"
                        id="linkis_suggest_max_code"
@@ -468,7 +468,7 @@
                        for="is_recalc_code">{{trans('main.is_recalc_code')}}</label>
             </div>
             <div class="col-sm-7">
-                <input class="@error($key) is-invalid @enderror"
+                <input class="@error('is_recalc_code') is-invalid @enderror"
                        type="checkbox"
                        name="is_recalc_code"
                        id="linkis_recalc_code"
@@ -493,7 +493,7 @@
                        for="is_one_value_lst_str_txt">{{trans('main.is_one_value_lst_str_txt')}}</label>
             </div>
             <div class="col-sm-7">
-                <input class="@error($key) is-invalid @enderror"
+                <input class="@error('is_one_value_lst_str_txt') is-invalid @enderror"
                        type="checkbox"
                        name="is_one_value_lst_str_txt"
                        id="linkis_one_value_lst_str_txt"
@@ -518,7 +518,7 @@
                        for="is_calcname_lst">{{trans('main.is_calcname_lst')}}</label>
             </div>
             <div class="col-sm-7">
-                <input class="@error($key) is-invalid @enderror"
+                <input class="@error('is_calcname_lst') is-invalid @enderror"
                        type="checkbox"
                        name="is_calcname_lst"
                        id="linkis_calcname_lst"
@@ -565,7 +565,7 @@
                        for="is_same_small_calcname">{{trans('main.is_same_small_calcname')}}</label>
             </div>
             <div class="col-sm-7">
-                <input class="@error($key) is-invalid @enderror"
+                <input class="@error('is_same_small_calcname') is-invalid @enderror"
                        type="checkbox"
                        name="is_same_small_calcname"
                        id="linkis_same_small_calcname"

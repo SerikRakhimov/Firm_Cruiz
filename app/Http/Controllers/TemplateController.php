@@ -151,6 +151,9 @@ class TemplateController extends Controller
         $template->name_lang_2 = isset($request->name_lang_2) ? $request->name_lang_2 : "";
         $template->name_lang_3 = isset($request->name_lang_3) ? $request->name_lang_3 : "";
 
+        $template->is_closed_default_value = isset($request->is_closed_default_value) ? true : false;
+        $template->is_closed_default_value_fixed = isset($request->is_closed_default_value_fixed) ? true : false;
+
         $template->desc_lang_0 = isset($request->desc_lang_0) ? $request->desc_lang_0 : "";
         $template->desc_lang_1 = isset($request->desc_lang_1) ? $request->desc_lang_1 : "";
         $template->desc_lang_2 = isset($request->desc_lang_2) ? $request->desc_lang_2 : "";

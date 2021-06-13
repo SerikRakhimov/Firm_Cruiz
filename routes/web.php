@@ -436,6 +436,10 @@ Route::delete('/project/delete/{project}', 'ProjectController@delete')
     ->name('project.delete')
     ->middleware('auth');
 
+Route::get('/project/calculate_bases_start/{project}/{role}', 'ProjectController@calculate_bases_start')
+    ->name('project.calculate_bases_start')
+    ->middleware('auth');
+
 Route::get('/project/calculate_bases/{project}/{role}', 'ProjectController@calculate_bases')
     ->name('project.calculate_bases')
     ->middleware('auth');

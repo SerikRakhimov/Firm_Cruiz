@@ -12,7 +12,7 @@
         @if ($role->is_author())
             @if ($project->is_calculated_base_exist() == true)
                 <div class="col-12 text-right">
-                    <a href="{{route('project.calculate_bases', ['project'=>$project, 'role'=>$role])}}"
+                    <a href="{{route('project.calculate_bases_start', ['project'=>$project, 'role'=>$role])}}"
                        title="{{trans('main.calculate_bases')}}">
                         {{trans('main.calculate_bases')}}
                     </a>

@@ -4,6 +4,7 @@
 
     <?php
     use App\Http\Controllers\BaseController;
+    use App\Http\Controllers\GlobalController;
     use Illuminate\Support\Facades\Request;
     ?>
     <p>
@@ -15,6 +16,9 @@
     @foreach (config('app.locales') as $key=>$value)
         <p>{{trans('main.name')}} ({{trans('main.' . $value)}}): <b>{{$template['name_lang_' . $key]}}</b></p>
     @endforeach
+
+    <p>{{trans('main.is_closed_default_value')}}: <b>{{GlobalController::name_is_boolean($template->is_closed_default_value)}}</b></p>
+    <p>{{trans('main.is_closed_default_value_fixed')}}: <b>{{GlobalController::name_is_boolean($template->is_closed_default_value_fixed)}}</b></p>
 
     @foreach (config('app.locales') as $key=>$value)
         {{--        <p>{{trans('main.desc')}} ({{trans('main.' . $value)}}): <b>{{$template['desc_lang_' . $key]}}</b></p>--}}

@@ -299,4 +299,12 @@ return [
     'deleted' => 'Жойылған',
     'records' => 'Жазбалар',
     'processed' => 'Өңделген',
+    'is_closed' => 'Жабық',
+    'is_closed_default_value' => '"Жабық" әдепкі мәні',
+    'is_closed_default_value_fixed' => '"Жабық" әдепкі мәні тіркелген',
+    'is_closed_true_rule' => '"Жабық" - белгі қою керек',
+    'is_closed_false_rule' => '"Жабық" - белгіні алып тастау керек',
+    'parent_is_setup_project_logo_img' => '"Теңшеу" - жоба логотипі (суреттер үшін)',
+    'parent_is_setup_project_description_external_txt' => '"Теңшеу" - жобаның сыртқы сипаттамасы (мәтіндер үшін)',
+    'parent_is_setup_project_description_internal_txt' => '"Теңшеу" - жобаның ішкі сипаттамасы (мәтіндер үшін)',
 ];

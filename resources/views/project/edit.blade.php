@@ -5,6 +5,11 @@
     $update = isset($project);
     $is_template = isset($template);
     $is_user = isset($user);
+    $closed_default_value = false;
+    if ($is_template)
+        $closed_default_value = $template->is_closed_default_value;
+    else
+        {$closed_default_value = false;}
     ?>
     <p>
         @if($is_template)
@@ -83,6 +88,32 @@
                 <div class="col-sm-2">
                 </div>
             @endforeach
+        </div>
+
+        <div class="form-group row" id="is_closed_form_group">
+            <div class="col-sm-3 text-right">
+                <label class="form-label"
+                       for="is_closed">{{trans('main.is_closed')}}</label>
+            </div>
+            <div class="col-sm-7">
+                <input class="@error('is_closed') is-invalid @enderror"
+                       type="checkbox"
+                       name="is_closed"
+                       id="linkis_closed"
+                       placeholder=""
+{{--                       '$closed_default_value' - значение по умолчанию --}}
+                       @if ((old('is_closed') ?? ($project->is_closed ?? $closed_default_value)) ==  true)
+                       checked
+                    @endif
+                >
+                @error('is_closed')
+                <div class="invalid-feedback">
+                    {{$message}}
+                </div>
+                @enderror
+            </div>
+            <div class="col-sm-2">
+            </div>
         </div>
 
         <div class="form-group row">

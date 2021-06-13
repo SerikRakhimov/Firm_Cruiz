@@ -2,6 +2,7 @@
 
 @section('content')
     <?php
+    use App\Http\Controllers\GlobalController;
     $is_template = isset($template);
     $is_user = isset($user);
     $project_show = "";
@@ -13,12 +14,12 @@
     }
     ?>
     <p>
-    @if($is_template)
-        @include('layouts.template.show_name',['template'=>$template])
-    @endif
-    @if($is_user)
-        @include('layouts.user.show_name',['user'=>$user])
-    @endif
+        @if($is_template)
+            @include('layouts.template.show_name',['template'=>$template])
+        @endif
+        @if($is_user)
+            @include('layouts.user.show_name',['user'=>$user])
+        @endif
     </p>
     <div class="container-fluid">
         <div class="row">
@@ -51,14 +52,14 @@
         <tr>
             <th class="text-center">#</th>
             <th class="text-left">{{trans('main.name')}}</th>
+            <th class="text-left">{{trans('main.is_closed')}}</th>
             @if(!$is_template)
                 <th class="text-left">{{trans('main.template')}}</th>
             @endif
             @if(!$is_user)
                 <th class="text-left">{{trans('main.author')}}</th>
             @endif
-{{--            Не удалять--}}
-{{--            <th class="text-center">{{trans('main.accesses')}}</th>--}}
+            <th class="text-center">{{trans('main.accesses')}}</th>
         </tr>
         </thead>
         <tbody>
@@ -79,6 +80,11 @@
                         {{$project->name()}}
                     </a>
                 </td>
+                <td class="text-left">
+                    <a href="{{route($project_show, $project)}}" title="{{trans('main.show')}}">
+                        {{GlobalController::name_is_boolean($project->is_closed)}}
+                    </a>
+                </td>
                 @if(!$is_template)
                     <td class="text-left">
                         <a href="{{route($project_show, $project)}}" title="{{trans('main.show')}}">
@@ -93,12 +99,11 @@
                         </a>
                     </td>
                 @endif
-                {{--            Не удалять--}}
-{{--                <td class="text-center">--}}
-{{--                    <a href="{{route('access.index_project', $project)}}" title="{{trans('main.accesses')}}">--}}
-{{--                        <i class="fas fa-universal-access"></i>--}}
-{{--                    </a>--}}
-{{--                </td>--}}
+                <td class="text-center">
+                    <a href="{{route('access.index_project', $project)}}" title="{{trans('main.accesses')}}">
+                        <i class="fas fa-universal-access"></i>
+                    </a>
+                </td>
             </tr>
         @endforeach
         </tbody>

@@ -4,6 +4,7 @@
 
     <?php
     use App\Http\Controllers\BaseController;
+    use App\Http\Controllers\GlobalController;
     use Illuminate\Support\Facades\Request;
     use App\User;
     $is_template = isset($template);
@@ -31,6 +32,8 @@
     @if(!$is_template)
         <p>{{trans('main.template')}}: <b>{{$project->template->name()}}</b></p>
     @endif
+
+    <p>{{trans('main.is_closed')}}: <b>{{GlobalController::name_is_boolean($project->is_closed)}}</b></p>
 
     @foreach (config('app.locales') as $key=>$value)
         <p>{{trans('main.name')}} ({{trans('main.' . $value)}}): <b>{{$project['name_lang_' . $key]}}</b></p>

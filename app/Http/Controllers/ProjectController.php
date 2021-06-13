@@ -285,11 +285,26 @@ class ProjectController extends Controller
 
     function check(Request $request, &$array_mess)
     {
+        $template = Template::findOrFail($request->template_id);
+        // Без этой команды "$is_closed = isset($request->is_closed) ? true : false;"
+        // эта строка неправильно сравнивает "if ($request->is_closed != $template->is_closed_default_value)"
+        $is_closed = isset($request->is_closed) ? true : false;
+        if ($template->is_closed_default_value_fixed == true) {
+            if ($is_closed != $template->is_closed_default_value) {
+                if ($template->is_closed_default_value == true) {
+                    $array_mess['is_closed'] = trans('main.is_closed_true_rule') . '!';
+                } else {
+                    $array_mess['is_closed'] = trans('main.is_closed_false_rule') . '!';
+                }
+            }
+        }
+
         foreach (config('app.locales') as $lang_key => $lang_value) {
             $text_html_check = GlobalController::text_html_check($request['dc_ext_lang_' . $lang_key]);
             if ($text_html_check['result'] == true) {
                 $array_mess['dc_ext_lang_' . $lang_key] = $text_html_check['message'] . '!';
             }
+
             $text_html_check = GlobalController::text_html_check($request['dc_int_lang_' . $lang_key]);
             if ($text_html_check['result'] == true) {
                 $array_mess['dc_int_lang_' . $lang_key] = $text_html_check['message'] . '!';
@@ -306,6 +321,8 @@ class ProjectController extends Controller
         $project->name_lang_1 = isset($request->name_lang_1) ? $request->name_lang_1 : "";
         $project->name_lang_2 = isset($request->name_lang_2) ? $request->name_lang_2 : "";
         $project->name_lang_3 = isset($request->name_lang_3) ? $request->name_lang_3 : "";
+
+        $project->is_closed = isset($request->is_closed) ? true : false;
 
         $project->dc_ext_lang_0 = isset($request->dc_ext_lang_0) ? $request->dc_ext_lang_0 : "";
         $project->dc_ext_lang_1 = isset($request->dc_ext_lang_1) ? $request->dc_ext_lang_1 : "";
@@ -370,6 +387,14 @@ class ProjectController extends Controller
         } else {
             return redirect()->back();
         }
+    }
+
+    function calculate_bases_start(Project $project, Role $role)
+    {
+        if (!(($project->template_id == $role->template_id) && ($role->is_author()))) {
+            return;
+        }
+        return view('project/calculate_bases_start', ['project' => $project, 'role' => $role]);
     }
 
     function calculate_bases(Project $project, Role $role)
@@ -443,6 +468,11 @@ class ProjectController extends Controller
         } catch (Exception $exc) {
             return trans('transaction_not_completed') . ": " . $exc->getMessage();
         }
+
+        echo '<p class="text-center">
+            <a href=' . '"' . route('project.start', ['project' => $project->id, 'role' => $role]) . '" title="' . trans('main.bases') . '">' . $project->name()
+            . '</a>
+        </p>';
 
 //        $set_main = Set::select(DB::Raw('sets.*, lt.child_base_id as to_child_base_id, lt.parent_base_id as to_parent_base_id'))
 //            ->join('links as lt', 'sets.link_to_id', '=', 'lt.id')

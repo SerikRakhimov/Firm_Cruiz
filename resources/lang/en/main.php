@@ -299,4 +299,12 @@ return [
     'deleted' => 'Deleted',
     'records' => 'Records',
     'processed' => 'Processed',
+    'is_closed' => 'Closed',
+    'is_closed_default_value' => '"Closed" default value',
+    'is_closed_default_value_fixed' => 'The default value "Closed" is fixed',
+    'is_closed_true_rule' => '"Closed" - need to mark',
+    'is_closed_false_rule' => '"Closed" - you need to unmark',
+    'parent_is_setup_project_logo_img' => '"Setup" - project logo (for images)',
+    'parent_is_setup_project_description_external_txt' => '"Setup" - external project description (for texts)',
+    'parent_is_setup_project_description_internal_txt' => '"Setup" - internal project description (for texts)',
 ];
