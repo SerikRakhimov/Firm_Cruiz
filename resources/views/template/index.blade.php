@@ -58,12 +58,12 @@
                     </a>
                 </td>
                 <td class="text-center">
-                    <a href="{{route('project.index_template', $template)}}" title="{{trans('main.projects')}}">
+                    <a href="{{route('template.show',$template)}}" title="{{trans('main.show')}}">
                         {{GlobalController::name_is_boolean($template->is_closed_default_value)}}
                     </a>
                 </td>
                 <td class="text-center">
-                    <a href="{{route('project.index_template', $template)}}" title="{{trans('main.projects')}}">
+                    <a href="{{route('template.show',$template)}}" title="{{trans('main.show')}}">
                         {{GlobalController::name_is_boolean($template->is_closed_default_value_fixed)}}
                     </a>
                 </td>
