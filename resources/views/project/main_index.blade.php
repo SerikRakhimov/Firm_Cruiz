@@ -15,6 +15,7 @@
         @foreach($projects as $project)
             <?php
             $i++;
+            $role = null;
             $message = "";
             if ($all_projects == true) {
                 $role = Role::where('template_id', $project->template_id)->where('is_default_for_external', true)->first();
@@ -28,6 +29,7 @@
                     $message = trans('main.role_author_not_found');
                 }
             }
+            $get_items_setup = $project->get_items_setup();
             ?>
             {{--        <div class="card shadow">--}}
             {{--            <img class="card-img-top" src="{{Storage::url('background.png')}}" alt="Card image">--}}
@@ -56,6 +58,11 @@
                 <div class="card shadow">
                     {{--                <img class="card-img-top" src="{{Storage::url('background.png')}}" alt="Card image">--}}
                     <p class="card-header">Id = {{$project->id}}</p>
+                    @if($get_items_setup['logo'])
+                        <div class="card-block text-center">
+                            @include('view.img',['item'=>$get_items_setup['logo'], 'size'=>"medium", 'filenametrue'=>false, 'link'=>false, 'img_fluid'=>true, 'title'=>''])
+                        </div>
+                    @endif
                     <div class="card-block">
                         <p class="card-text ml-3"><small class="text-muted">{{$project->template->name()}}</small>
                         </p>
@@ -73,8 +80,10 @@
                         </button>
                         @if ($all_projects == true)
                             <p class="card-text mt-3">
-{{--                                "isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) ? 'https' : 'http'" отсюда "https://www.php.net/reserved.variables.server"--}}
-                                <small class="text-muted">{{isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) ? 'https' : 'http'}}://{{$_SERVER['SERVER_NAME']}}/project/start/{{$project->id}}
+                                {{--                                "isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) ? 'https' : 'http'" отсюда "https://www.php.net/reserved.variables.server"--}}
+                                <small
+                                    class="text-muted">{{isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) ? 'https' : 'http'}}
+                                    ://{{$_SERVER['SERVER_NAME']}}/project/start/{{$project->id}}
                                     - {{mb_strtolower(trans('main.project_link'))}}</small></p>
                         @endif
                     </div>

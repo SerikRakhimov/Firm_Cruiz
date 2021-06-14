@@ -425,31 +425,31 @@
             </div>
         </div>
 
-        <div class="form-group" id="parent_is_setup_project_description_external_txt_form_group">
+        <div class="form-group" id="parent_is_setup_project_external_description_txt_form_group">
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" name="parent_is_setup_project_description_external_txt"
-                       id="parent_is_setup_project_description_external_txt"
+                <input class="form-check-input" type="checkbox" name="parent_is_setup_project_external_description_txt"
+                       id="parent_is_setup_project_external_description_txt"
                        {{--            "false" - значение по умолчанию --}}
-                       @if ((old('parent_is_setup_project_description_external_txt') ?? ($link->parent_is_setup_project_description_external_txt ?? false)) ==  true)
+                       @if ((old('parent_is_setup_project_external_description_txt') ?? ($link->parent_is_setup_project_external_description_txt ?? false)) ==  true)
                        checked
                     @endif
                 >
                 <label class="form-check-label"
-                       for="parent_is_setup_project_description_external_txt">{{trans('main.parent_is_setup_project_description_external_txt')}}</label>
+                       for="parent_is_setup_project_external_description_txt">{{trans('main.parent_is_setup_project_external_description_txt')}}</label>
             </div>
         </div>
 
-        <div class="form-group" id="parent_is_setup_project_description_internal_txt_form_group">
+        <div class="form-group" id="parent_is_setup_project_internal_description_txt_form_group">
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" name="parent_is_setup_project_description_internal_txt"
-                       id="parent_is_setup_project_description_internal_txt"
+                <input class="form-check-input" type="checkbox" name="parent_is_setup_project_internal_description_txt"
+                       id="parent_is_setup_project_internal_description_txt"
                        {{--            "false" - значение по умолчанию --}}
-                       @if ((old('parent_is_setup_project_description_internal_txt') ?? ($link->parent_is_setup_project_description_internal_txt ?? false)) ==  true)
+                       @if ((old('parent_is_setup_project_internal_description_txt') ?? ($link->parent_is_setup_project_internal_description_txt ?? false)) ==  true)
                        checked
                     @endif
                 >
                 <label class="form-check-label"
-                       for="parent_is_setup_project_description_internal_txt">{{trans('main.parent_is_setup_project_description_internal_txt')}}</label>
+                       for="parent_is_setup_project_internal_description_txt">{{trans('main.parent_is_setup_project_internal_description_txt')}}</label>
             </div>
         </div>
 

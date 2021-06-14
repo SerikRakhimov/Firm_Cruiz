@@ -137,8 +137,8 @@ class LinkController extends Controller
         $link->parent_is_primary_image = isset($request->parent_is_primary_image) ? true : false;
         $link->parent_is_small_calcname = isset($request->parent_is_small_calcname) ? true : false;
         $link->parent_is_setup_project_logo_img = isset($request->parent_is_setup_project_logo_img) ? true : false;
-        $link->parent_is_setup_project_description_external_txt = isset($request->parent_is_setup_project_description_external_txt) ? true : false;
-        $link->parent_is_setup_project_description_internal_txt = isset($request->parent_is_setup_project_description_internal_txt) ? true : false;
+        $link->parent_is_setup_project_external_description_txt = isset($request->parent_is_setup_project_external_description_txt) ? true : false;
+        $link->parent_is_setup_project_internal_description_txt = isset($request->parent_is_setup_project_internal_description_txt) ? true : false;
 
         if ($link->parent_is_calcname == false) {
             $link->parent_is_small_calcname = false;
@@ -223,14 +223,14 @@ class LinkController extends Controller
                 $link->parent_is_setup_project_logo_img = false;
             }
         }
-        if ($link->parent_is_setup_project_description_external_txt == true) {
+        if ($link->parent_is_setup_project_external_description_txt == true) {
             if (!($link->child_base->is_setup_lst == true && $link->parent_base->type_is_text())) {
-                $link->parent_is_setup_project_description_external_txt = false;
+                $link->parent_is_setup_project_external_description_txt = false;
             }
         }
-        if ($link->parent_is_setup_project_description_internal_txt == true) {
+        if ($link->parent_is_setup_project_internal_description_txt == true) {
             if (!($link->child_base->is_setup_lst == true && $link->parent_base->type_is_text())) {
-                $link->parent_is_setup_project_description_internal_txt = false;
+                $link->parent_is_setup_project_internal_description_txt = false;
             }
         }
 
@@ -294,8 +294,8 @@ class LinkController extends Controller
         $link->parent_is_primary_image = isset($request->parent_is_primary_image) ? true : false;
         $link->parent_is_small_calcname = isset($request->parent_is_small_calcname) ? true : false;
         $link->parent_is_setup_project_logo_img = isset($request->parent_is_setup_project_logo_img) ? true : false;
-        $link->parent_is_setup_project_description_external_txt = isset($request->parent_is_setup_project_description_external_txt) ? true : false;
-        $link->parent_is_setup_project_description_internal_txt = isset($request->parent_is_setup_project_description_internal_txt) ? true : false;
+        $link->parent_is_setup_project_external_description_txt = isset($request->parent_is_setup_project_external_description_txt) ? true : false;
+        $link->parent_is_setup_project_internal_description_txt = isset($request->parent_is_setup_project_internal_description_txt) ? true : false;
 
         if ($link->parent_is_calcname == false) {
             $link->parent_is_small_calcname = false;
@@ -380,14 +380,14 @@ class LinkController extends Controller
                 $link->parent_is_setup_project_logo_img = false;
             }
         }
-        if ($link->parent_is_setup_project_description_external_txt == true) {
+        if ($link->parent_is_setup_project_external_description_txt == true) {
             if (!($link->child_base->is_setup_lst == true && $link->parent_base->type_is_text())) {
-                $link->parent_is_setup_project_description_external_txt = false;
+                $link->parent_is_setup_project_external_description_txt = false;
             }
         }
-        if ($link->parent_is_setup_project_description_internal_txt == true) {
+        if ($link->parent_is_setup_project_internal_description_txt == true) {
             if (!($link->child_base->is_setup_lst == true && $link->parent_base->type_is_text())) {
-                $link->parent_is_setup_project_description_internal_txt = false;
+                $link->parent_is_setup_project_internal_description_txt = false;
             }
         }
 

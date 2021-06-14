@@ -178,9 +178,6 @@
                             <a href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}"
                                title="{{$item->name()}}">
                                 @include('view.img',['item'=>$item_find, 'size'=>"medium", 'filenametrue'=>false, 'link'=>false, 'img_fluid'=>true, 'title'=>$item->name()])
-                                {{--                                                            @else--}}
-                                {{--                                                                <div class="text-danger">--}}
-                                {{--                                                                    {{GlobalController::empty_html()}}</div>--}}
                             </a>
                         </div>
                     @endif

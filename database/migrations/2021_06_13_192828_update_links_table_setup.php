@@ -15,8 +15,8 @@ class UpdateLinksTableSetup extends Migration
     {
         Schema::table('links', function (Blueprint $table) {
             $table->boolean('parent_is_setup_project_logo_img')->default(false);
-            $table->boolean('parent_is_setup_project_description_external_txt')->default(false);
-            $table->boolean('parent_is_setup_project_description_internal_txt')->default(false);
+            $table->boolean('parent_is_setup_project_external_description_txt')->default(false);
+            $table->boolean('parent_is_setup_project_internal_description_txt')->default(false);
         });
     }
 

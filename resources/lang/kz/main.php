@@ -305,6 +305,6 @@ return [
     'is_closed_true_rule' => '"Жабық" - белгі қою керек',
     'is_closed_false_rule' => '"Жабық" - белгіні алып тастау керек',
     'parent_is_setup_project_logo_img' => '"Теңшеу" - жоба логотипі (суреттер үшін)',
-    'parent_is_setup_project_description_external_txt' => '"Теңшеу" - жобаның сыртқы сипаттамасы (мәтіндер үшін)',
-    'parent_is_setup_project_description_internal_txt' => '"Теңшеу" - жобаның ішкі сипаттамасы (мәтіндер үшін)',
+    'parent_is_setup_project_external_description_txt' => '"Теңшеу" - жобаның сыртқы сипаттамасы (мәтіндер үшін)',
+    'parent_is_setup_project_internal_description_txt' => '"Теңшеу" - жобаның ішкі сипаттамасы (мәтіндер үшін)',
 ];

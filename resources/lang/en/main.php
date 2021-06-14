@@ -305,6 +305,6 @@ return [
     'is_closed_true_rule' => '"Closed" - need to mark',
     'is_closed_false_rule' => '"Closed" - you need to unmark',
     'parent_is_setup_project_logo_img' => '"Setup" - project logo (for images)',
-    'parent_is_setup_project_description_external_txt' => '"Setup" - external project description (for texts)',
-    'parent_is_setup_project_description_internal_txt' => '"Setup" - internal project description (for texts)',
+    'parent_is_setup_project_external_description_txt' => '"Setup" - external project description (for texts)',
+    'parent_is_setup_project_internal_description_txt' => '"Setup" - internal project description (for texts)',
 ];

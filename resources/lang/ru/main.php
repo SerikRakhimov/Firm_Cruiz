@@ -305,6 +305,6 @@ return [
     'is_closed_true_rule' => '"Закрытый" - нужно поставить пометку',
     'is_closed_false_rule' => '"Закрытый" - нужно убрать пометку',
     'parent_is_setup_project_logo_img' => '"Настройка" - логотип проекта (для изображений)',
-    'parent_is_setup_project_description_external_txt' => '"Настройка" - внешнее описание проекта (для текста)',
-    'parent_is_setup_project_description_internal_txt' => '"Настройка" - внутреннее описание проекта (для текста)',
+    'parent_is_setup_project_external_description_txt' => '"Настройка" - внешнее описание проекта (для текста)',
+    'parent_is_setup_project_internal_description_txt' => '"Настройка" - внутреннее описание проекта (для текста)',
 ];

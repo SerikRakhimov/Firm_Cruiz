@@ -212,7 +212,7 @@ class Base extends Model
 //        return $link;
 //    }
 
-    //Возвращает истину, если вид отображения информации - плитка, и если есть основное изображение в links
+    // Возвращает истину, если вид отображения информации - плитка, и если есть основное изображение в links
     function tile_view($base_right)
     {
         $result = false;
@@ -230,18 +230,46 @@ class Base extends Model
         return ['result' => $result, 'link' => $link];
     }
 
-    function link_primary_image()
+    // Возвращает $link  с признаком 'parent_is_setup_project_logo_img'
+    function get_link_project_logo()
     {
-        $link = null;
+        //$link = $this->child_links()->where('parent_is_setup_project_logo_img', true)->first();
         $links = $this->child_links();
-        $link = $links->where('parent_is_primary_image', true)->first();
+        $link = $links->where('parent_is_setup_project_logo_img', true)->first();
         if ($link) {
-            if ($link->parent_base->type_is_image()==false) {
+            if (!($link->parent_base->type_is_image())) {
                 $link = null;
             }
         }
         return $link;
     }
+
+
+    // Возвращает $link  с признаками 'parent_is_setup_project_external_description_txt' и 'parent_is_setup_project_internal_description_txt',
+    // признаки передаются как параметры функции
+    function get_link_project_description($name)
+    {
+        $link = $this->child_links()->where($name, true)->first();
+        if ($link) {
+            if (!($link->parent_base->type_is_text())) {
+                $link = null;
+            }
+        }
+        return $link;
+    }
+
+//    function link_primary_image()
+//    {
+//        $link = null;
+//        $links = $this->child_links();
+//        $link = $links->where('parent_is_primary_image', true)->first();
+//        if ($link) {
+//            if ($link->parent_base->type_is_image()==false) {
+//                $link = null;
+//            }
+//        }
+//        return $link;
+//    }
 
     function menu_type_name()
     {
