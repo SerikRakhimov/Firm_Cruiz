@@ -116,60 +116,6 @@
             </div>
         </div>
 
-        <div class="form-group row">
-            @foreach (config('app.locales') as $key=>$value)
-                <div class="col-3 text-right">
-                    <label for="dc_ext_lang_{{$key}}" class="col-form-label">{{trans('main.dc_ext')}}
-                        ({{trans('main.' . $value)}})<span
-                            class="text-danger">*</span></label>
-                </div>
-                <div class="col-7">
-                    <textarea
-                        name="dc_ext_lang_{{$key}}"
-                        id="dc_ext_lang_{{$key}}"
-                        rows="5"
-                        class="form-control @error('dc_ext_lang_' . $key) is-invalid @enderror"
-                        placeholder="">
-                        {{ old('dc_ext_lang_' . $key) ?? ($project['dc_ext_lang_' . $key] ?? '') }}
-                        </textarea>
-                    @error('dc_ext_lang_' . $key)
-                    <div class="text-danger">
-                        {{$message}}
-                    </div>
-                    @enderror
-                </div>
-                <div class="col-sm-2">
-                </div>
-            @endforeach
-        </div>
-
-        <div class="form-group row">
-            @foreach (config('app.locales') as $key=>$value)
-                <div class="col-3 text-right">
-                    <label for="dc_int_lang_{{$key}}" class="col-form-label">{{trans('main.dc_int')}}
-                        ({{trans('main.' . $value)}})<span
-                            class="text-danger">*</span></label>
-                </div>
-                <div class="col-7">
-                    <textarea
-                        name="dc_int_lang_{{$key}}"
-                        id="dc_int_lang_{{$key}}"
-                        rows="5"
-                        class="form-control @error('dc_int_lang_' . $key) is-invalid @enderror"
-                        placeholder="">
-                        {{ old('dc_int_lang_' . $key) ?? ($project['dc_int_lang_' . $key] ?? '') }}
-                        </textarea>
-                    @error('dc_int_lang_' . $key)
-                    <div class="text-danger">
-                        {{$message}}
-                    </div>
-                    @enderror
-                </div>
-                <div class="col-sm-2">
-                </div>
-            @endforeach
-        </div>
-
         @if($is_user)
             <input type="hidden" name="user_id" value="{{$user->id}}">
         @else

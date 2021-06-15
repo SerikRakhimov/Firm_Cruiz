@@ -39,15 +39,6 @@
         <p>{{trans('main.name')}} ({{trans('main.' . $value)}}): <b>{{$project['name_lang_' . $key]}}</b></p>
     @endforeach
 
-    @foreach (config('app.locales') as $key=>$value)
-        {{--        <p>{{trans('main.dc')}} ({{trans('main.' . $value)}}): <b>{{$project['dc_lang_' . $key]}}</b></p>--}}
-        <p>{{trans('main.dc_ext')}} ({{trans('main.' . $value)}}): <b><?php echo nl2br($project['dc_ext_lang_' . $key]); ?></b></p>
-    @endforeach
-
-    @foreach (config('app.locales') as $key=>$value)
-        <p>{{trans('main.dc_int')}} ({{trans('main.' . $value)}}): <b><?php echo nl2br($project['dc_int_lang_' . $key]); ?></b></p>
-    @endforeach
-
     @if(!$is_user)
         <p>{{trans('main.author')}}: <b>{{$project->user->name()}}</b></p>
     @endif

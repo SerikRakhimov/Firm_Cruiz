@@ -324,16 +324,6 @@ class ProjectController extends Controller
 
         $project->is_closed = isset($request->is_closed) ? true : false;
 
-        $project->dc_ext_lang_0 = isset($request->dc_ext_lang_0) ? $request->dc_ext_lang_0 : "";
-        $project->dc_ext_lang_1 = isset($request->dc_ext_lang_1) ? $request->dc_ext_lang_1 : "";
-        $project->dc_ext_lang_2 = isset($request->dc_ext_lang_2) ? $request->dc_ext_lang_2 : "";
-        $project->dc_ext_lang_3 = isset($request->dc_ext_lang_3) ? $request->dc_ext_lang_3 : "";
-
-        $project->dc_int_lang_0 = isset($request->dc_int_lang_0) ? $request->dc_int_lang_0 : "";
-        $project->dc_int_lang_1 = isset($request->dc_int_lang_1) ? $request->dc_int_lang_1 : "";
-        $project->dc_int_lang_2 = isset($request->dc_int_lang_2) ? $request->dc_int_lang_2 : "";
-        $project->dc_int_lang_3 = isset($request->dc_int_lang_3) ? $request->dc_int_lang_3 : "";
-
         $project->save();
     }
 
