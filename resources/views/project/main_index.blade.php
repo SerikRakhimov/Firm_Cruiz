@@ -60,7 +60,7 @@
                     <p class="card-header">Id = {{$project->id}}</p>
                     @if($get_items_setup['logo'])
                         <div class="card-block text-center">
-                            @include('view.img',['item'=>$get_items_setup['logo'], 'size'=>"medium", 'filenametrue'=>false, 'link'=>false, 'img_fluid'=>true, 'title'=>''])
+                            @include('view.img',['item'=>$get_items_setup['logo'], 'size'=>"medium", 'filenametrue'=>false, 'link'=>false, 'img_fluid'=>true, 'title'=>'empty'])
                         </div>
                     @endif
                     <div class="card-block">
