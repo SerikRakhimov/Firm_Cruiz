@@ -172,6 +172,7 @@
                             <p class="card-header text-center text-label">{{trans('main.code')}}: {{$item->code}}</p>
                         </a>
                     @endif
+                        <div class="card-body">
                     @if($item_find)
 {{--                            <div class="card-block text-center">--}}
                                 <div class="text-center">
@@ -182,7 +183,6 @@
                             </a>
                         </div>
                     @endif
-                    <div class="card-body">
                         {{--                    <div class="card-footer">--}}
                         <h5 class="card-title text-center"><a
                                 href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}"

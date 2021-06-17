@@ -89,6 +89,7 @@ use \App\Http\Controllers\MainController;
                        title="{{$item->name()}}">
                         <p class="card-header text-center text-label">{{trans('main.code')}}: {{$item->code}}</p>
                     </a>
+                    <div class="card-body">
                     @if($item_find)
 {{--                        <div class="card-block text-center">--}}
                             <div class="text-center">
@@ -103,7 +104,6 @@ use \App\Http\Controllers\MainController;
                             </a>
                         </div>
                     @endif
-                    <div class="card-body">
                         <h5 class="card-title text-center"><a href="#"
                                                             onclick="SelectFile('{{$item->id}}', '{{$item->code}}', '{{$item->name()}}')"
                                                             title="{{$item->name()}}">
