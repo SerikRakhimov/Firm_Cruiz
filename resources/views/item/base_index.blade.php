@@ -172,17 +172,17 @@
                             <p class="card-header text-center text-label">{{trans('main.code')}}: {{$item->code}}</p>
                         </a>
                     @endif
-                        <div class="card-body">
-                    @if($item_find)
-{{--                            <div class="card-block text-center">--}}
-                                <div class="text-center">
-                            {{-- https://askdev.ru/q/kak-vyzvat-funkciyu-javascript-iz-tega-href-v-html-276225/--}}
-                            <a href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}"
-                               title="{{$item->name()}}">
-                                @include('view.img',['item'=>$item_find, 'size'=>"medium", 'filenametrue'=>false, 'link'=>false, 'img_fluid'=>true, 'title'=>$item->name()])
-                            </a>
-                        </div>
-                    @endif
+                    <div class="card-body">
+                        @if($item_find)
+                            {{--                            <div class="card-block text-center">--}}
+                            <div class="text-center">
+                                {{-- https://askdev.ru/q/kak-vyzvat-funkciyu-javascript-iz-tega-href-v-html-276225/--}}
+                                <a href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}"
+                                   title="{{$item->name()}}">
+                                    @include('view.img',['item'=>$item_find, 'size'=>"medium", 'filenametrue'=>false, 'link'=>false, 'img_fluid'=>true, 'title'=>$item->name()])
+                                </a>
+                            </div>
+                        @endif
                         {{--                    <div class="card-footer">--}}
                         <h5 class="card-title text-center"><a
                                 href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}"
@@ -192,7 +192,9 @@
                             </a></h5>
                         {{--                    </div>--}}
                         <div class="card-footer">
-                            {{$item->created_at->Format(trans('main.format_date_time'))}}
+                            <small class="text-muted">
+                                {{$item->created_at->Format(trans('main.format_date_time'))}}
+                            </small>
                         </div>
                     </div>
                 </div>
