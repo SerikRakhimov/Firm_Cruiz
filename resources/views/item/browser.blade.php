@@ -90,26 +90,31 @@ use \App\Http\Controllers\MainController;
                         <p class="card-header text-center text-label">{{trans('main.code')}}: {{$item->code}}</p>
                     </a>
                     <div class="card-body">
-                    @if($item_find)
-{{--                        <div class="card-block text-center">--}}
+                        @if($item_find)
+                            {{--                        <div class="card-block text-center">--}}
                             <div class="text-center">
-                            {{--                                https://askdev.ru/q/kak-vyzvat-funkciyu-javascript-iz-tega-href-v-html-276225/--}}
-                            <a href="#"
-                               onclick="SelectFile('{{$item->id}}', '{{$item->code}}', '{{$item->name()}}')"
-                               title="{{$item->name()}}">
-                                @include('view.img',['item'=>$item_find, 'size'=>"medium", 'filenametrue'=>false, 'link'=>false, 'img_fluid'=>true, 'title'=>$item->name()])
-                                {{--                            @else--}}
-                                {{--                                <div class="text-danger">--}}
-                                {{--                                    {{GlobalController::empty_html()}}</div>--}}
-                            </a>
-                        </div>
-                    @endif
+                                {{--                                https://askdev.ru/q/kak-vyzvat-funkciyu-javascript-iz-tega-href-v-html-276225/--}}
+                                <a href="#"
+                                   onclick="SelectFile('{{$item->id}}', '{{$item->code}}', '{{$item->name()}}')"
+                                   title="{{$item->name()}}">
+                                    @include('view.img',['item'=>$item_find, 'size'=>"medium", 'filenametrue'=>false, 'link'=>false, 'img_fluid'=>true, 'title'=>$item->name()])
+                                    {{--                            @else--}}
+                                    {{--                                <div class="text-danger">--}}
+                                    {{--                                    {{GlobalController::empty_html()}}</div>--}}
+                                </a>
+                            </div>
+                        @endif
                         <h5 class="card-title text-center"><a href="#"
-                                                            onclick="SelectFile('{{$item->id}}', '{{$item->code}}', '{{$item->name()}}')"
-                                                            title="{{$item->name()}}">
+                                                              onclick="SelectFile('{{$item->id}}', '{{$item->code}}', '{{$item->name()}}')"
+                                                              title="{{$item->name()}}">
                                 {{--                            Где $item->name() выходит в cards выводить "<?php echo GlobalController::to_html();?>"--}}
                                 <?php echo $item->nmbr();?>
                             </a></h5>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">
+                            {{$item->created_at->Format(trans('main.format_date'))}}
+                        </small>
                     </div>
                 </div>
                 {{--                    </div>--}}

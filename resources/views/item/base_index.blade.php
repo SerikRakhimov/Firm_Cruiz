@@ -194,7 +194,7 @@
                     </div>
                     <div class="card-footer">
                         <small class="text-muted">
-                            {{$item->created_at->Format(trans('main.format_date_time'))}}
+                            {{$item->created_at->Format(trans('main.format_date'))}}
                         </small>
                     </div>
                 </div>
