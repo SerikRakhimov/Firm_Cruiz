@@ -192,7 +192,7 @@
                             </a></h5>
                         {{--                    </div>--}}
                         <div class="card-footer">
-                            {{$this->created_at->Format(trans('main.format_date_time'))}}
+                            {{$item->created_at->Format(trans('main.format_date_time'))}}
                         </div>
                     </div>
                 </div>
