@@ -191,11 +191,11 @@
                                 <?php echo $item->nmbr(false);?>
                             </a></h5>
                         {{--                    </div>--}}
-                        <div class="card-footer">
-                            <small class="text-muted">
-                                {{$item->created_at->Format(trans('main.format_date_time'))}}
-                            </small>
-                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">
+                            {{$item->created_at->Format(trans('main.format_date_time'))}}
+                        </small>
                     </div>
                 </div>
             @endforeach
