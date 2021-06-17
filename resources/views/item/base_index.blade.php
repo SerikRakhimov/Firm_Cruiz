@@ -173,7 +173,8 @@
                         </a>
                     @endif
                     @if($item_find)
-                        <div class="card-block text-center">
+{{--                            <div class="card-block text-center">--}}
+                                <div class="text-center">
                             {{-- https://askdev.ru/q/kak-vyzvat-funkciyu-javascript-iz-tega-href-v-html-276225/--}}
                             <a href="{{route('item.ext_show', ['item'=>$item, 'role'=>$role])}}"
                                title="{{$item->name()}}">

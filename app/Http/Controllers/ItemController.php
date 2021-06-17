@@ -413,6 +413,23 @@ class ItemController extends Controller
                 ->withErrors($array_mess);
         }
 
+        // Проверка полей с типом "текст" на длину текста
+        if ($base->type_is_text() && $base->length_txt > 0) {
+            $errors = false;
+            foreach (config('app.locales') as $lang_key => $lang_value) {
+                if (strlen($request['name_lang_' . $lang_key]) > $base->length_txt) {
+                    $array_mess['name_lang_' . $lang_key] = trans('main.length_txt_rule') . ' ' . $base->length_txt . '!';
+                    $errors = true;
+                }
+            }
+            if ($errors) {
+                // повторный вызов формы
+                return redirect()->back()
+                    ->withInput()
+                    ->withErrors($array_mess);
+            }
+        }
+
         // Проверка на обязательность ввода наименования
         if ($base->is_required_lst_num_str_txt_img_doc == true && $base->is_calcname_lst == false) {
             // Тип - список, строка или текст
@@ -728,6 +745,43 @@ class ItemController extends Controller
 
         $keys = array_keys($inputs);
         $values = array_values($inputs);
+
+        // Проверка полей с типом "текст" на длину текста
+        $errors = false;
+        foreach ($inputs as $key => $value) {
+            $link = Link::findOrFail($key);
+            $work_base = $link->parent_base;
+            if ($work_base->type_is_text() && $work_base->length_txt > 0) {
+                $errors = false;
+                $name_lang_value = null;
+                $name_lang_key = null;
+                $i = 0;
+                foreach (config('app.locales') as $lang_key => $lang_value) {
+                    if (($work_base->is_one_value_lst_str_txt == true && $lang_key == 0) || ($work_base->is_one_value_lst_str_txt == false)) {
+                        if ($i == 0) {
+                            $name_lang_key = $key;
+                            $name_lang_value = $value;
+                        }
+                        // начиная со второго(индекс==1) элемента массива языков учитывать
+                        if ($i > 0) {
+                            $name_lang_key = $key . '_' . $lang_key;
+                            $name_lang_value = $strings_inputs[$name_lang_key];
+                        }
+                        if (strlen($name_lang_value) > $work_base->length_txt) {
+                            $array_mess[$name_lang_key] = trans('main.length_txt_rule') . ' ' . $work_base->length_txt . '!';
+                            $errors = true;
+                        }
+                        $i = $i + 1;
+                    }
+                }
+                if ($errors) {
+                    // повторный вызов формы
+                    return redirect()->back()
+                        ->withInput()
+                        ->withErrors($array_mess);
+                }
+            }
+        }
 
         $errors = false;
         foreach ($inputs as $key => $value) {
@@ -1621,6 +1675,24 @@ class ItemController extends Controller
                 }
                 $item->name_lang_2 = "";
                 $item->name_lang_3 = "";
+            } else {
+                // Проверка существует ли переменная '$request->name_lang_0_img_doc_delete'
+//                if (isset($request->name_lang_0_img_doc_delete)) {
+//                    // $delete = true, если отметка поставлена, = false без отметки'
+//                    $delete = isset($request->name_lang_0_img_doc_delete) ? true : false;
+//                    if ($delete == true) {
+//                        if ($item->img_doc_exist()) {
+//                            // Удаление изображения или документа
+//                            Storage::delete($item->filename());
+//                            $item->name_lang_0 = "";
+//                            // Без модерации
+//                            $item->name_lang_1 = "";
+//                            $item->name_lang_2 = "";
+//                            $item->name_lang_3 = "";
+//                            $item->save();
+//                        }
+//                    }
+//                }
             }
         }
     }
@@ -1685,6 +1757,23 @@ class ItemController extends Controller
         }
         if (!($item->code == $request->code)) {
             $request->validate($this->code_rules($request, $item->project_id, $item->base_id));
+        }
+
+        // Проверка полей с типом "текст" на длину текста
+        if ($item->base->type_is_text() && $item->base->length_txt > 0) {
+            $errors = false;
+            foreach (config('app.locales') as $lang_key => $lang_value) {
+                if (strlen($request['name_lang_' . $lang_key]) > $item->base->length_txt) {
+                    $array_mess['name_lang_' . $lang_key] = trans('main.length_txt_rule') . ' ' . $item->base->length_txt . '!';
+                    $errors = true;
+                }
+            }
+            if ($errors) {
+                // повторный вызов формы
+                return redirect()->back()
+                    ->withInput()
+                    ->withErrors($array_mess);
+            }
         }
 
         // Проверка на обязательность ввода
@@ -1893,9 +1982,35 @@ class ItemController extends Controller
                 $code_names[] = 'code' . $link->id;
             }
         }
+        // при корректировке base (например, список основы Изображение) не используется - не нужно: можно выполнить удаление изображения
+        // Только при корректировке записи используется массив $del_names()
+        // Формируется массив $del_names - названия полей "Удалить изображение"/"Удалить документ"
+        // массив $del_links - список links для удаления
+        $del_names = array();
+        $del_links = array();
+        foreach ($string_langs as $key => $link) {
+            if ($link->parent_base->type_is_image() || $link->parent_base->type_is_document()) {
+                $i = 0;
+                // Проверка:
+                // 1) Поле 'link->id' существует в $request
+                // 2) Поле 'link->id' будет существовать в $request, если на форме выбран файл (изображение или документ)
+                $is_img_doc = isset($request[$link->id]);
+                // Две проверки:
+                // 1) на наличие вводимого поля
+                // 2) в введенном поле поставлена отметка
+                $is_del = isset($request[$link->id . '_img_doc_delete']);
+                if ($is_del) {
+                    $del_names[] = $link->id . '_img_doc_delete';
+                    if (!$is_img_doc) {
+                        $del_links[] = $link->id;
+                    }
+                }
+            }
+        }
 
-        // загрузить в $inputs все поля ввода, кроме $excepts, $string_names, $string_codes, array_merge() - функция суммирования двух и более массивов
-        $inputs = $request->except(array_merge($excepts, $string_names, $code_names));
+        // Только при корректировке записи используется массив $del_names()
+        // загрузить в $inputs все поля ввода, кроме $excepts, $string_names, $string_codes, $del_names, array_merge() - функция суммирования двух и более массивов
+        $inputs = $request->except(array_merge($excepts, $string_names, $code_names, $del_names));
 
         $it_texts = null;
         if ($item->base->type_is_text()) {
@@ -2025,6 +2140,43 @@ class ItemController extends Controller
         $keys = array_keys($inputs);
         $values = array_values($inputs);
 
+        // Проверка полей с типом "текст" на длину текста
+        $errors = false;
+        foreach ($inputs as $key => $value) {
+            $link = Link::findOrFail($key);
+            $work_base = $link->parent_base;
+            if ($work_base->type_is_text() && $work_base->length_txt > 0) {
+                $errors = false;
+                $name_lang_value = null;
+                $name_lang_key = null;
+                $i = 0;
+                foreach (config('app.locales') as $lang_key => $lang_value) {
+                    if (($work_base->is_one_value_lst_str_txt == true && $lang_key == 0) || ($work_base->is_one_value_lst_str_txt == false)) {
+                        if ($i == 0) {
+                            $name_lang_key = $key;
+                            $name_lang_value = $value;
+                        }
+                        // начиная со второго(индекс==1) элемента массива языков учитывать
+                        if ($i > 0) {
+                            $name_lang_key = $key . '_' . $lang_key;
+                            $name_lang_value = $strings_inputs[$name_lang_key];
+                        }
+                        if (strlen($name_lang_value) > $work_base->length_txt) {
+                            $array_mess[$name_lang_key] = trans('main.length_txt_rule') . ' ' . $work_base->length_txt . '!';
+                            $errors = true;
+                        }
+                        $i = $i + 1;
+                    }
+                }
+                if ($errors) {
+                    // повторный вызов формы
+                    return redirect()->back()
+                        ->withInput()
+                        ->withErrors($array_mess);
+                }
+            }
+        }
+
         $errors = false;
         foreach ($inputs as $key => $value) {
             $link = Link::findOrFail($key);
@@ -2144,11 +2296,11 @@ class ItemController extends Controller
         // сохранение предыдущих значений $array_plan
         // до начала выполнения транзакции
         $array_calc = $this->get_array_calc_edit($item)['array_calc'];
-
         try {
             // начало транзакции
             // $array_plan передается при корректировке
-            DB::transaction(function ($r) use ($item, $it_texts, $keys, $values, $strings_inputs) {
+            // $del_links ипользуется при корректировке item (функция ext_update()), при добавлении не используется (функция ext_store())
+            DB::transaction(function ($r) use ($item, $it_texts, $keys, $values, $strings_inputs, $del_links) {
 
                 //$item->save();
 
@@ -2176,6 +2328,14 @@ class ItemController extends Controller
                             }
                         }
                         $text->save();
+                    }
+                }
+                // Удаление изображений/документов с проставленной отметкой об удалении
+                foreach ($del_links as $key) {
+                    $main = Main::where('child_item_id', $item->id)->where('link_id', $key)->first();
+                    if ($main) {
+                        $main->parent_item->delete();
+                        $main->delete();
                     }
                 }
 
@@ -2211,6 +2371,7 @@ class ItemController extends Controller
                 // "$i = 0" использовать, т.к. индексы в массивах начинаются с 0
                 $i = 0;
                 $valits = $values;
+
                 foreach ($keys as $key) {
                     $main = Main::where('child_item_id', $item->id)->where('link_id', $key)->first();
                     if ($main == null) {

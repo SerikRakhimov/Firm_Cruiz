@@ -58,16 +58,17 @@
                 <div class="card shadow">
                     {{--                <img class="card-img-top" src="{{Storage::url('background.png')}}" alt="Card image">--}}
                     <p class="card-header">Id = {{$project->id}}</p>
-                    @if($get_items_setup['logo'])
-                        <div class="card-block text-center">
-                            @include('view.img',['item'=>$get_items_setup['logo'], 'size'=>"medium", 'filenametrue'=>false, 'link'=>false, 'img_fluid'=>true, 'title'=>'empty'])
-                        </div>
-                    @endif
                     <div class="card-block">
                         <p class="card-text ml-3"><small class="text-muted">{{$project->template->name()}}</small>
                         </p>
                     </div>
                     <div class="card-body">
+                        @if($get_items_setup['logo'])
+                            {{--                            <div class="card-block text-center">--}}
+                                <div class="card-block text-center">
+                                @include('view.img',['item'=>$get_items_setup['logo'], 'size'=>"medium", 'filenametrue'=>false, 'link'=>false, 'img_fluid'=>true, 'title'=>'empty'])
+                            </div>
+                        @endif
                         <h4 class="card-title mb-4">{{$project->name()}}</h4>
                         {{--                <p class="card-text">{{$project->desc()}}</p>--}}
                         <p class="card-text"><?php echo nl2br($project->dc_ext()); ?></p>

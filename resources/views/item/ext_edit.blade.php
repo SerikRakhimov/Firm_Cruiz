@@ -197,7 +197,7 @@
                                     rows="5"
                                     class="form-control @error('name_lang_' . $key) is-invalid @enderror"
                                     placeholder=""
-                                    maxlength="1000">
+                                    maxlength="10000">
                                        {{ old('name_lang_' . $key) ?? ($item->text['name_lang_' . $key] ?? '') }}"
                                 </textarea>
                                 {{--                            <div class="invalid-feedback">--}}
@@ -220,10 +220,10 @@
                     @endforeach
                 </div>
             @elseif($base->type_is_image())
-                @include('edit.img_base',['update'=>$update, 'base'=>$base,'item'=>$item ?? null, 'name'=>"name_lang_0",'id'=>"name_lang_0", 'size'=>"small"])
+                @include('edit.img_base',['update'=>$update, 'base'=>$base,'item'=>$item ?? null, 'title'=>$base->name(), 'name'=>"name_lang_0",'id'=>"name_lang_0", 'size'=>"small"])
                 {{--                            если тип корректировки поля - документ--}}
             @elseif($base->type_is_document())
-                @include('edit.doc_base',['update'=>$update, 'base'=>$base,'item'=>$item ?? null, 'name'=>"name_lang_0",'id'=>"name_lang_0"])
+                @include('edit.doc_base',['update'=>$update, 'base'=>$base,'item'=>$item ?? null, 'title'=>$base->name(), 'name'=>"name_lang_0",'id'=>"name_lang_0"])
                 {{--                            если тип корректировки поля - строка или список--}}
             @else
                 @if($base->is_calcname_lst == false)
@@ -667,7 +667,7 @@
                                                       rows="5"
                                                       class="form-control @error($input_name) is-invalid @enderror"
                                                       placeholder=""
-                                                      maxlength="1000">
+                                                      maxlength="10000">
                                                    {{(old($input_name)) ?? (($value != null) ? Item::find($value)->text['name_lang_'.$lang_key] : '')}}
                                             </textarea>
                                         @error($input_name)
@@ -692,12 +692,12 @@
                     {{--                            если тип корректировки поля - изображение--}}
                 @elseif($link->parent_base->type_is_image())
                     {{--                        @include('edit.img_link',['update'=>$update, 'base'=>$link->parent_base,'result'=>$result,'value'=>$value, 'name'=>$key,'id'=>"link".$key, 'size'=>"small"])--}}
-                    @include('edit.img_link',['update'=>$update, 'base'=>$link->parent_base,'value'=>$value, 'name'=>$key,'id'=>"link".$key, 'size'=>"small"])
+                    @include('edit.img_link',['update'=>$update, 'base'=>$link->parent_base,'value'=>$value, 'title'=>$result['result_parent_label'], 'name'=>$key,'id'=>"link".$key, 'size'=>"small"])
 
                     {{--                            если тип корректировки поля - документ--}}
                 @elseif($link->parent_base->type_is_document())
                     {{--                        @include('edit.doc_link',['update'=>$update, 'base'=>$link->parent_base,'result'=>$result,'value'=>$value, 'name'=>$key,'id'=>"link".$key])--}}
-                    @include('edit.doc_link',['update'=>$update, 'base'=>$link->parent_base,'value'=>$value, 'name'=>$key,'id'=>"link".$key])
+                    @include('edit.doc_link',['update'=>$update, 'base'=>$link->parent_base,'value'=>$value, 'title'=>$result['result_parent_label'], 'name'=>$key,'id'=>"link".$key])
 
                     {{--                         Такая же проверка ItemController::get_items_ext_edit_for_link(),--}}
                     {{--                         в ext_edit.php--}}

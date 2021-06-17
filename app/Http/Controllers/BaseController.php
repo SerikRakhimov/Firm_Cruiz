@@ -141,6 +141,7 @@ class BaseController extends Controller
         $base->maxcount_lst = $request->maxcount_lst >= 0 ? $request->maxcount_lst : 0;
         $base->is_calculated_lst = isset($request->is_calculated_lst) ? "1" : "0";
         $base->is_setup_lst = isset($request->is_setup_lst) ? "1" : "0";
+        $base->length_txt = $request->length_txt >= 0 ? $request->length_txt : 0;
 
         // Похожие строки в BaseController.php (functions: store(), edit())
         // и в Base.php (functions: get_types(), type(), type_name())
@@ -160,6 +161,7 @@ class BaseController extends Controller
                 $base->is_to_moderate_image = "0";
                 $base->maxfilesize_img_doc = 0;
                 $base->maxfilesize_title_img_doc = "";
+                $base->length_txt =0;
                 break;
             // Число
             case 1:
@@ -184,6 +186,7 @@ class BaseController extends Controller
                 $base->maxcount_lst = 0;
                 $base->is_calculated_lst = "0";
                 $base->is_setup_lst = "0";
+                $base->length_txt =0;
                 break;
             // Строка
             case 2:
@@ -208,6 +211,7 @@ class BaseController extends Controller
                 $base->maxcount_lst = 0;
                 $base->is_calculated_lst = "0";
                 $base->is_setup_lst = "0";
+                $base->length_txt =0;
                 break;
             // Дата
             case 3:
@@ -234,6 +238,7 @@ class BaseController extends Controller
                 $base->maxcount_lst = 0;
                 $base->is_calculated_lst = "0";
                 $base->is_setup_lst = "0";
+                $base->length_txt =0;
                 break;
             // Логический
             case 4:
@@ -260,6 +265,7 @@ class BaseController extends Controller
                 $base->maxcount_lst = 0;
                 $base->is_calculated_lst = "0";
                 $base->is_setup_lst = "0";
+                $base->length_txt =0;
                 break;
             // Текст
             case 5:
@@ -307,6 +313,7 @@ class BaseController extends Controller
                 $base->maxcount_lst = 0;
                 $base->is_calculated_lst = "0";
                 $base->is_setup_lst = "0";
+                $base->length_txt =0;
                 break;
             // Документ
             case 7:
@@ -331,6 +338,7 @@ class BaseController extends Controller
                 $base->maxcount_lst = 0;
                 $base->is_calculated_lst = "0";
                 $base->is_setup_lst = "0";
+                $base->length_txt =0;
                 break;
         }
         if ($base->is_code_needed == "0") {
@@ -432,6 +440,7 @@ class BaseController extends Controller
         $base->maxcount_lst = $request->maxcount_lst >= 0 ? $request->maxcount_lst : 0;
         $base->is_calculated_lst = isset($request->is_calculated_lst) ? "1" : "0";
         $base->is_setup_lst = isset($request->is_setup_lst) ? "1" : "0";
+        $base->length_txt = $request->length_txt >= 0 ? $request->length_txt : 0;
 
         // Похожие строки в BaseController.php (functions: store(), edit())
         // и в Base.php (functions: get_types(), type(), type_name())
@@ -451,6 +460,7 @@ class BaseController extends Controller
                 $base->is_to_moderate_image = "0";
                 $base->maxfilesize_img_doc = 0;
                 $base->maxfilesize_title_img_doc = "";
+                $base->length_txt =0;
                 break;
             // Число
             case 1:
@@ -475,6 +485,7 @@ class BaseController extends Controller
                 $base->maxcount_lst = 0;
                 $base->is_calculated_lst = "0";
                 $base->is_setup_lst = "0";
+                $base->length_txt =0;
                 break;
             // Строка
             case 2:
@@ -499,6 +510,7 @@ class BaseController extends Controller
                 $base->maxcount_lst = 0;
                 $base->is_calculated_lst = "0";
                 $base->is_setup_lst = "0";
+                $base->length_txt =0;
                 break;
             // Дата
             case 3:
@@ -525,6 +537,7 @@ class BaseController extends Controller
                 $base->maxcount_lst = 0;
                 $base->is_calculated_lst = "0";
                 $base->is_setup_lst = "0";
+                $base->length_txt =0;
                 break;
             // Логический
             case 4:
@@ -551,6 +564,7 @@ class BaseController extends Controller
                 $base->maxcount_lst = 0;
                 $base->is_calculated_lst = "0";
                 $base->is_setup_lst = "0";
+                $base->length_txt =0;
                 break;
             // Текст
             case 5:
@@ -598,6 +612,7 @@ class BaseController extends Controller
                 $base->maxcount_lst = 0;
                 $base->is_calculated_lst = "0";
                 $base->is_setup_lst = "0";
+                $base->length_txt =0;
                 break;
             // Документ
             case 7:
@@ -622,6 +637,7 @@ class BaseController extends Controller
                 $base->maxcount_lst = 0;
                 $base->is_calculated_lst = "0";
                 $base->is_setup_lst = "0";
+                $base->length_txt =0;
                 break;
         }
 

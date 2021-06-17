@@ -5,7 +5,7 @@ use App\Models\Item;
     <div class="form-group row">
         <div class="col-sm-3 text-right">
                 {{--Выберите файл - документ (.xls, .xlsx, .pdf, .doc, .docx, .rtf, .txt)--}}
-                <label for="{{$name}}">{{$base->name()}}(.xls, .xlsx, .pdf, .doc, .docx,.rtf, .txt)<span
+                <label for="{{$name}}">{{$title}} (.xls, .xlsx, .pdf, .doc, .docx,.rtf, .txt)<span
                         class="text-danger">*</span>
                 @if($update)
                     @if ($value != null)
@@ -15,7 +15,17 @@ use App\Models\Item;
                         @if ($item_doc != null)
                             ({{mb_strtolower(trans('main.now'))}}:<a href="{{Storage::url($item_doc->filename())}}" target="_blank">
                                     {{trans('main.open_document')}}
-                            </a>)
+                            </a>
+                                @if($base->is_required_lst_num_str_txt_img_doc == false)
+                                    <label for="{{$name}}_img_doc_delete">{{trans('main.delete_document')}}
+                                    </label>
+                                    <input type="checkbox"
+                                           name="{{$name}}_img_doc_delete"
+                                           placeholder=""
+                                           title="{{trans('main.delete_document')}}"
+                                    >
+                                @endif
+                                    )
                         @endif
                     @endif
                 @endif

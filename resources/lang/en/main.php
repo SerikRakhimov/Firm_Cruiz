@@ -307,4 +307,8 @@ return [
     'parent_is_setup_project_logo_img' => '"Setup" - project logo (for images)',
     'parent_is_setup_project_external_description_txt' => '"Setup" - external project description (for texts)',
     'parent_is_setup_project_internal_description_txt' => '"Setup" - internal project description (for texts)',
+    'length_txt' => 'Length in characters (0 - unlimited)',
+    'length_txt_rule' => 'Maximum number of characters must be no more than',
+    'delete_image'=>'Delete image',
+    'delete_document'=>'Delete document',
 ];

@@ -90,7 +90,8 @@ use \App\Http\Controllers\MainController;
                         <p class="card-header text-center text-label">{{trans('main.code')}}: {{$item->code}}</p>
                     </a>
                     @if($item_find)
-                        <div class="card-block text-center">
+{{--                        <div class="card-block text-center">--}}
+                            <div class="text-center">
                             {{--                                https://askdev.ru/q/kak-vyzvat-funkciyu-javascript-iz-tega-href-v-html-276225/--}}
                             <a href="#"
                                onclick="SelectFile('{{$item->id}}', '{{$item->code}}', '{{$item->name()}}')"

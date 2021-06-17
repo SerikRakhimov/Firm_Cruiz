@@ -307,4 +307,8 @@ return [
     'parent_is_setup_project_logo_img' => '"Настройка" - логотип проекта (для изображений)',
     'parent_is_setup_project_external_description_txt' => '"Настройка" - внешнее описание проекта (для текста)',
     'parent_is_setup_project_internal_description_txt' => '"Настройка" - внутреннее описание проекта (для текста)',
+    'length_txt' => 'Длина в символах (0 - без ограничений)',
+    'length_txt_rule' => 'Максимальное количество символов должно быть не более',
+    'delete_image'=>'Удалить изображение',
+    'delete_document'=>'Удалить документ',
 ];

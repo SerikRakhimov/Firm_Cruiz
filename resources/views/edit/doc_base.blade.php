@@ -2,7 +2,7 @@
     <div class="form-group row">
         <div class="col-sm-3 text-right">
             {{--Выберите файл - документ (.xls, .xlsx, .pdf, .doc, .docx, .rtf, .txt)--}}
-            <label for="{{$name}}">{{$base->name()}}(.xls, .xlsx, .pdf, .doc, .docx, .rtf, .txt)<span
+            <label for="{{$name}}">{{$title}} (.xls, .xlsx, .pdf, .doc, .docx, .rtf, .txt)<span
                     class="text-danger">*</span>
                 @if($update)
                     @if($item->img_doc_exist())

@@ -199,6 +199,30 @@
             </div>
         </div>
 
+        <div class="form-group row" id="length_txt_form_group">
+            <div class="col-sm-3 text-right">
+                <label for="length_txt">{{trans('main.length_txt')}}<span
+                        class="text-danger">*</span></label>
+            </div>
+            <div class="col-sm-2">
+                <input type="number"
+                       name="length_txt"
+                       id="length_txt"
+                       class="form-control @error('length_txt') is-invalid @enderror"
+                       placeholder=""
+                       value="{{ old('length_txt') ?? ($base['length_txt'] ?? '0') }}"
+                       min="0"
+                       max="10000">
+                @error('length_txt')
+                <div class="text-danger">
+                    {{$message}}
+                </div>
+                @enderror
+            </div>
+            <div class="col-sm-7">
+            </div>
+        </div>
+
         <div class="form-group row" id="digits_num_form_group">
             <div class="col-sm-3 text-right">
                 <label for="digits_num">{{trans('main.digits_num')}}<span
@@ -663,6 +687,7 @@
         //var vartype = form.vartype;  // так не работает
         var vartype = document.getElementById('vartype');
         var maxcount = document.getElementById('maxcount_lst_form_group');
+        var len_txt = document.getElementById('length_txt_form_group');
         var is_calc = document.getElementById('is_calculated_lst_form_group');
         var is_setup = document.getElementById('is_setup_lst_form_group');
         var digits_num = document.getElementById('digits_num_form_group');
@@ -713,6 +738,7 @@
             //         break;
             // }
             val_maxcount = "hidden";
+            val_len_txt = "hidden";
             val_calc = "hidden";
             val_setup = "hidden";
             val_code_needed = "hidden";
@@ -770,6 +796,7 @@
                 // Текст
                 case "5":
                     val_required_num_str = "visible";
+                    val_len_txt = "visible";
                     val_onevalue_str = "visible";
                     break;
                 // Изображение
@@ -790,6 +817,7 @@
             // is_required_lst_num_str_txt_img_doc.style.display = val_required_num_str;
             // is_onevalue_str.style.display = val_onevalue_str;
             maxcount.style.visibility = val_maxcount;
+            len_txt.style.visibility = val_len_txt;
             is_calc.style.visibility = val_calc;
             is_setup.style.visibility = val_setup;
             is_code_needed.style.visibility = val_code_needed;

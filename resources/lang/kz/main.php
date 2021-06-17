@@ -307,4 +307,8 @@ return [
     'parent_is_setup_project_logo_img' => '"Теңшеу" - жоба логотипі (суреттер үшін)',
     'parent_is_setup_project_external_description_txt' => '"Теңшеу" - жобаның сыртқы сипаттамасы (мәтіндер үшін)',
     'parent_is_setup_project_internal_description_txt' => '"Теңшеу" - жобаның ішкі сипаттамасы (мәтіндер үшін)',
+    'length_txt' => 'Таңбалардағы ұзындық (0 - шектеусіз)',
+    'length_txt_rule' => 'Таңбалардың ең көп саны',
+    'delete_image'=>'Суретті жою',
+    'delete_document'=>'Құжатты жою',
 ];
