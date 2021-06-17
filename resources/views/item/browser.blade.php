@@ -111,11 +111,11 @@ use \App\Http\Controllers\MainController;
                                 <?php echo $item->nmbr();?>
                             </a></h5>
                     </div>
-                    <div class="card-footer">
-                        <small class="text-muted">
-                            {{$item->created_at->Format(trans('main.format_date'))}}
-                        </small>
-                    </div>
+{{--                    <div class="card-footer">--}}
+{{--                        <small class="text-muted">--}}
+{{--                            {{$item->created_at->Format(trans('main.format_date'))}}--}}
+{{--                        </small>--}}
+{{--                    </div>--}}
                 </div>
                 {{--                    </div>--}}
 
