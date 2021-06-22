@@ -377,8 +377,17 @@ Route::delete('/roli/delete/{roli}', 'RoliController@delete')
 Route::get('/project/all_index', 'ProjectController@all_index')
     ->name('project.all_index');
 
+Route::get('/project/subs_index', 'ProjectController@subs_index')
+    ->name('project.subs_index')
+    ->middleware('auth');
+
 Route::get('/project/my_index', 'ProjectController@my_index')
-    ->name('project.my_index');
+    ->name('project.my_index')
+    ->middleware('auth');
+
+Route::get('/project/mysubs_index', 'ProjectController@mysubs_index')
+    ->name('project.mysubs_index')
+    ->middleware('auth');
 
 Route::get('/project/index_template/{template}', 'ProjectController@index_template')
     ->name('project.index_template')
@@ -399,6 +408,10 @@ Route::get('/project/show_user/{project}', 'ProjectController@show_user')
 // "->middleware('auth')" не использовать
 Route::get('/project/start/{project}/{role?}', 'ProjectController@start')
     ->name('project.start');
+
+// "->middleware('auth')" не использовать
+Route::get('/project/start_check', 'ProjectController@start_check')
+    ->name('project.start_check');
 
 Route::get('/project/create_template/{template}', 'ProjectController@create_template')
     ->name('project.create_template')

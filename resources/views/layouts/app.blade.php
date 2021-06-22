@@ -26,7 +26,7 @@ use App\Models\Project;
     @include('layouts.style_header')
 
 </head>
-<body>
+<body background="{{Storage::url('main_background.jpg')}}">
 <div id="app">
     <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
         <div class="container">
@@ -105,12 +105,23 @@ use App\Models\Project;
                     {{--                @endguest--}}
                     @auth
                         <li class="nav-item">
+                            <a class="nav-link" href="{{route('project.subs_index')}}"
+                               title="{{trans('main.subscriptions')}}">
+                                {{trans('main.subscriptions')}}
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="{{route('project.my_index')}}"
                                title="{{trans('main.my_projects')}}">
                                 {{trans('main.my_projects')}}
                             </a>
                         </li>
-
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{route('project.mysubs_index')}}"
+                               title="{{trans('main.my_subscriptions')}}">
+                                {{trans('main.my_subscriptions')}}
+                            </a>
+                        </li>
                         {{--                @if(Auth::user()->isAdmin())--}}
                         {{--                    <!-- Right Side Of Navbar -->--}}
                         {{--                        <ul class="navbar-nav ml-auto">--}}

@@ -22,6 +22,11 @@ class Project extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    function accesses()
+    {
+        return $this->hasMany(Access::class, 'project_id');
+    }
+
     function name()
     {
         $result = "";  // нужно, не удалять

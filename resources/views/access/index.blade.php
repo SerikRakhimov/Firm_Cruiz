@@ -2,6 +2,8 @@
 
 @section('content')
     <?php
+    use App\Http\Controllers\GlobalController;
+    use App\Http\Controllers\ProjectController;
     use App\User;
     $is_project = isset($project);
     $is_user = isset($user);
@@ -70,6 +72,9 @@
             @if(!$is_role)
                 <th class="text-left">{{trans('main.role')}}</th>
             @endif
+            <th class="text-center">{{trans('main.is_subscription_request')}}</th>
+            <th class="text-center">{{trans('main.is_access_allowed')}}</th>
+            <th class="text-center">{{trans('main.desc')}}</th>
         </tr>
         </thead>
         <tbody>
@@ -105,7 +110,26 @@
                             {{$access->role->name()}}
                         </a>
                     </td>
-            @endif
+                @endif
+                <td class="text-center">
+                    <a href="{{route($access_show, $access)}}" title="{{trans('main.show')}}">
+                        {{GlobalController::name_is_boolean($access->is_subscription_request)}}
+                    </a>
+                </td>
+                <td class="text-center">
+                    <a href="{{route($access_show, $access)}}" title="{{trans('main.show')}}">
+                        {{GlobalController::name_is_boolean($access->is_access_allowed)}}
+                    </a>
+                </td>
+                <td class="text-center">
+                    <a href="{{route($access_show, $access)}}" title="{{trans('main.show')}}">
+                            <span
+                                @if($access->is_subscription_request == true)
+                                class="text-danger"
+                                @endif
+                            >{{ProjectController::subs_desc($access)}}</span>
+                    </a>
+                </td>
             </tr>
         @endforeach
         </tbody>

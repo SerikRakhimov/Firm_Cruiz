@@ -26,11 +26,11 @@ class AccessController extends Controller
 
     function index_project(Project $project)
     {
-        if (!Auth::user()->isAdmin()) {
-            return redirect()->route('project.all_index');
-        }
-        $accesses = Access::where('project_id', $project->id);
-        $accesses = $accesses->orderBy('user_id')->orderBy('role_id');
+//        if (!Auth::user()->isAdmin()) {
+//            return redirect()->route('project.all_index');
+//        }
+        $accesses = Access::where('project_id', $project->id)
+            ->orderBy('is_subscription_request', 'desc')->orderBy('user_id')->orderBy('role_id');
         session(['accesses_previous_url' => request()->url()]);
         return view('access/index', ['project' => $project, 'accesses' => $accesses->paginate(60)]);
     }
@@ -40,8 +40,8 @@ class AccessController extends Controller
         if (!Auth::user()->isAdmin()) {
             return redirect()->route('project.all_index');
         }
-        $accesses = Access::where('user_id', $user->id);
-        $accesses = $accesses->orderBy('project_id')->orderBy('role_id');
+        $accesses = Access::where('user_id', $user->id)
+            ->orderBy('is_subscription_request', 'desc')->orderBy('project_id')->orderBy('role_id');
         session(['accesses_previous_url' => request()->url()]);
         return view('access/index', ['user' => $user, 'accesses' => $accesses->paginate(60)]);
     }
@@ -51,17 +51,17 @@ class AccessController extends Controller
         if (!Auth::user()->isAdmin()) {
             return redirect()->route('project.all_index');
         }
-        $accesses = Access::where('role_id', $role->id);
-        $accesses = $accesses->orderBy('project_id')->orderBy('user_id');
+        $accesses = Access::where('role_id', $role->id)
+            ->orderBy('is_subscription_request', 'desc')->orderBy('project_id')->orderBy('user_id');
         session(['accesses_previous_url' => request()->url()]);
         return view('access/index', ['role' => $role, 'accesses' => $accesses->paginate(60)]);
     }
 
     function show_project(Access $access)
     {
-        if (!Auth::user()->isAdmin()) {
-            return redirect()->route('project.all_index');
-        }
+//        if (!Auth::user()->isAdmin()) {
+//            return redirect()->route('project.all_index');
+//        }
         $project = Project::findOrFail($access->project_id);
         return view('access/show', ['type_form' => 'show', 'project' => $project, 'access' => $access]);
     }
@@ -86,9 +86,9 @@ class AccessController extends Controller
 
     function create_project(Project $project)
     {
-        if (!Auth::user()->isAdmin()) {
-            return redirect()->route('project.all_index');
-        }
+//        if (!Auth::user()->isAdmin()) {
+//            return redirect()->route('project.all_index');
+//        }
         $users = User::orderBy('name')->get();
         $roles = Role::where('template_id', $project->template_id)->orderBy('name_lang_0')->get();
         return view('access/edit', ['project' => $project, 'users' => $users, 'roles' => $roles]);
@@ -116,9 +116,9 @@ class AccessController extends Controller
 
     function store(Request $request)
     {
-        if (!Auth::user()->isAdmin()) {
-            return redirect()->route('project.all_index');
-        }
+//        if (!Auth::user()->isAdmin()) {
+//            return redirect()->route('project.all_index');
+//        }
 
         $request->validate($this->rules($request));
 
@@ -138,12 +138,12 @@ class AccessController extends Controller
 
     function update(Request $request, Access $access)
     {
-        if (!Auth::user()->isAdmin()) {
-            return redirect()->route('project.all_index');
-        }
-        if (!(Auth::user()->isAdmin() || ($access->role->is_default_for_external == true))) {
-            return null;
-        }
+//        if (!Auth::user()->isAdmin()) {
+//            return redirect()->route('project.all_index');
+//        }
+//        if (!(Auth::user()->isAdmin() || ($access->role->is_default_for_external == true))) {
+//            return null;
+//        }
         if (!(($access->template_id == $request->template_id) && ($access->user_id == $request->user_id) && ($access->role_id == $request->role_id))) {
             $request->validate($this->rules($request));
         }
@@ -167,14 +167,25 @@ class AccessController extends Controller
         $access->user_id = $request->user_id;
         $access->role_id = $request->role_id;
 
+        // Эта строка не нужна, т.к. в форме стоит <input ... disabled>,
+        // при disabled значение не передается
+        // $access->is_subscription_request = isset($request->is_subscription_request) ? true : false;
+        $access->is_access_allowed = isset($request->is_access_allowed) ? true : false;
+        // Снять пометку "Запрос на подписку" при разрешении доступа
+        if ($access->is_subscription_request == true && $access->is_access_allowed == true) {
+            {
+                $access->is_subscription_request = false;
+            }
+        }
+
         $access->save();
     }
 
     function edit_project(Access $access)
     {
-        if (!Auth::user()->isAdmin()) {
-            return redirect()->route('project.all_index');
-        }
+//        if (!Auth::user()->isAdmin()) {
+//            return redirect()->route('project.all_index');
+//        }
 
 //        if (!(Auth::user()->isAdmin() ||!($access->role->is_default_for_external == false))) {
 //            return null;
@@ -228,26 +239,27 @@ class AccessController extends Controller
 
     function delete_question(Access $access)
     {
-        if (!Auth::user()->isAdmin()) {
-            return redirect()->route('project.all_index');
-        }
+//        if (!Auth::user()->isAdmin()) {
+//            return redirect()->route('project.all_index');
+//        }
 
-        if (!(Auth::user()->isAdmin() || ($access->role->is_default_for_external == true))) {
-            return null;
-        }
+//        if (!(Auth::user()->isAdmin() || ($access->role->is_default_for_external == true))) {
+//            return null;
+//        }
         $project = Project::findOrFail($access->project_id);
         return view('access/show', ['type_form' => 'delete_question', 'project' => $project, 'access' => $access]);
     }
 
     function delete(Request $request, Access $access)
     {
-        if (!Auth::user()->isAdmin()) {
-            return redirect()->route('project.all_index');
-        }
+//        if (!Auth::user()->isAdmin()) {
+//            return redirect()->route('project.all_index');
+//        }
 
-        if (!(Auth::user()->isAdmin() || ($access->role->is_default_for_external == true))) {
-            return null;
-        }
+//        if (!(Auth::user()->isAdmin() || ($access->role->is_default_for_external == true))) {
+//            return null;
+//        }
+
         $access->delete();
 
         if ($request->session()->has('accesses_previous_url')) {

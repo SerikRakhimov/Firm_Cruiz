@@ -31,10 +31,10 @@
             <th class="text-center">#</th>
             <th class="text-left">{{trans('main.names')}}</th>
             <th class="text-center">{{trans('main.type')}}</th>
-            <th class="text-center">Id</th>
             <th class="text-center">{{trans('main.is_calculated_lst')}}</th>
             <th class="text-center">{{trans('main.is_setup_lst')}}</th>
             <th class="text-center">{{trans('main.is_required_lst_num_str_txt_img_doc')}}</th>
+            <th class="text-center">Id</th>
             @if (Auth::user()->isAdmin())
                 <th class="text-center"></th>
                 <th class="text-center"></th>
@@ -66,9 +66,6 @@
                         {{$base->type_name()}}
                     </td>
                     <td class="text-center">
-                        {{$base->id}}
-                    </td>
-                    <td class="text-center">
                         {{GlobalController::name_is_boolean($base->is_calculated_lst)}}
                     </td>
                     <td class="text-center">
@@ -76,6 +73,9 @@
                     </td>
                     <td class="text-center">
                         {{GlobalController::name_is_boolean($base->is_required_lst_num_str_txt_img_doc)}}
+                    </td>
+                    <td class="text-center">
+                        {{$base->id}}
                     </td>
                     @if (Auth::user()->isAdmin())
                         <td class="text-center">

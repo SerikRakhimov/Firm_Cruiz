@@ -15,6 +15,7 @@ use App\Models\Project;
 use App\Models\Role;
 use App\Models\Roba;
 use App\Models\Roli;
+use App\Models\Access;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
@@ -522,7 +523,33 @@ class GlobalController extends Controller
             } else {
                 if ($role->is_author == true) {
                     if (Auth::check()) {
-                        $result = $project->user_id == GlobalController::glo_user_id();
+//                        $result = $project->user_id == GlobalController::glo_user_id();
+                        // Проверка, если доступ у этого пользователя
+                        $access = Access::where('project_id', $project->id)
+                            ->where('user_id', GlobalController::glo_user_id())
+                            ->where('role_id', $role->id)
+                            ->where('is_access_allowed', true)->first();
+                        if ($access) {
+                            $result = true;
+                        } else {
+                            $result = false;
+                        }
+                    } else {
+                        $result = false;
+                    }
+                    // Обычная роль (не $role->is_default_for_external и не $role->is_author)
+                } else {
+                    if (Auth::check()) {
+                        // Проверка, если доступ у этого пользователя
+                        $access = Access::where('project_id', $project->id)
+                            ->where('user_id', GlobalController::glo_user_id())
+                            ->where('role_id', $role->id)
+                            ->where('is_access_allowed', true)->first();
+                        if ($access) {
+                            $result = true;
+                        } else {
+                            $result = false;
+                        }
                     } else {
                         $result = false;
                     }
@@ -728,7 +755,7 @@ class GlobalController extends Controller
         return '- ' . mb_strtolower(trans('main.empty')) . ' -';
     }
 
-    // Алгоритмы одинаковые в types.img.height.blade.php и GlobalController::types_img_height()
+// Алгоритмы одинаковые в types.img.height.blade.php и GlobalController::types_img_height()
     static function types_img_height($size)
     {
         $result = '';
@@ -742,7 +769,7 @@ class GlobalController extends Controller
         return $result;
     }
 
-    // Алгоритмы одинаковые в view.img.blade.php и GlobalController::view_img()
+// Алгоритмы одинаковые в view.img.blade.php и GlobalController::view_img()
     static function view_img(Item $item, $size, $filenametrue, $link, $img_fluid, $title)
     {
         $result = '';
@@ -787,7 +814,7 @@ class GlobalController extends Controller
         return $result;
     }
 
-    // Алгоритмы одинаковые в view.doc.blade.php и GlobalController::view_doc()
+// Алгоритмы одинаковые в view.doc.blade.php и GlobalController::view_doc()
     static function view_doc(Item $item)
     {
         $result = '';
@@ -801,7 +828,7 @@ class GlobalController extends Controller
         return $result;
     }
 
-    // Сообщение "максимальное количество записей" для start.php
+// Сообщение "максимальное количество записей" для start.php
     static function base_max_count_for_start(Base $base)
     {
         $result = '';
@@ -813,7 +840,7 @@ class GlobalController extends Controller
         return $result;
     }
 
-    // Сообщение "максимальное количество записей"
+// Сообщение "максимальное количество записей"
     static function base_maxcount_message(Base $base)
     {
         $result = '';

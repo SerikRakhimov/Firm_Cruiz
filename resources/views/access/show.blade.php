@@ -3,7 +3,9 @@
 @section('content')
 
     <?php
+    use App\Http\Controllers\GlobalController;
     use App\Http\Controllers\BaseController;
+    use App\Http\Controllers\ProjectController;
     use Illuminate\Support\Facades\Request;
     use App\User;
     $is_access = isset($access);
@@ -45,6 +47,17 @@
     @if(!$is_role)
         <p>{{trans('main.role')}}: <b>{{$access->role->name()}}</b></p>
     @endif
+
+    <p>{{trans('main.is_subscription_request')}}:
+        <b>{{GlobalController::name_is_boolean($access->is_subscription_request)}}</b></p>
+    <p>{{trans('main.is_access_allowed')}}: <b>{{GlobalController::name_is_boolean($access->is_access_allowed)}}</b></p>
+    <p>{{trans('main.desc')}}: <b>
+            <span
+                @if($access->is_subscription_request == true)
+                class="text-danger"
+                @endif
+            >{{ProjectController::subs_desc($access)}}</span>
+        </b></p>
 
     @if ($type_form == 'show')
         @if (Auth::user()->isAdmin() ||!(($is_user == true) && ($access->role->is_default_for_external == false)))

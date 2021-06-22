@@ -136,6 +136,58 @@
             </div>
         @endif
 
+        <div class="form-group row" id="is_subscription_request_form_group">
+            <div class="col-sm-3 text-right">
+                <label class="form-label"
+                       for="is_subscription_request">{{trans('main.is_subscription_request')}}</label>
+            </div>
+            <div class="col-sm-7">
+                <input class="@error('is_subscription_request') is-invalid @enderror"
+                       type="checkbox"
+                       name="is_subscription_request"
+                       id="linkis_subscription_request"
+                       placeholder=""
+                       {{--                       'false' - значение по умолчанию --}}
+                       @if ((old('is_subscription_request') ?? ($access->is_subscription_request ?? false)) ==  true)
+                       checked
+                    @endif
+                disabled>
+                @error('is_subscription_request')
+                <div class="invalid-feedback">
+                    {{$message}}
+                </div>
+                @enderror
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div>
+
+        <div class="form-group row" id="is_access_allowed_form_group">
+            <div class="col-sm-3 text-right">
+                <label class="form-label"
+                       for="is_access_allowed">{{trans('main.is_access_allowed')}}</label>
+            </div>
+            <div class="col-sm-7">
+                <input class="@error('is_access_allowed') is-invalid @enderror"
+                       type="checkbox"
+                       name="is_access_allowed"
+                       id="linkis_access_allowed"
+                       placeholder=""
+                       {{--                       'false' - значение по умолчанию --}}
+                       @if ((old('is_access_allowed') ?? ($access->is_access_allowed ?? false)) ==  true)
+                       checked
+                    @endif
+                >
+                @error('is_access_allowed')
+                <div class="invalid-feedback">
+                    {{$message}}
+                </div>
+                @enderror
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div>
+
         <br>
         <div class="container-fluid">
             <div class="row text-center">

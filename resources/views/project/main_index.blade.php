@@ -2,6 +2,7 @@
 
 @section('content')
     <?php
+    use App\Http\Controllers\ProjectController;
     Use App\Models\Role;
     ?>
     <p>
@@ -15,22 +16,26 @@
         @foreach($projects as $project)
             <?php
             $i++;
-            $role = null;
+            //            $role = null;
             $message = "";
-            if ($all_projects == true) {
-                $role = Role::where('template_id', $project->template_id)->where('is_default_for_external', true)->first();
-                if (!$role) {
-                    $message = trans('main.role_default_for_external_not_found');
-                }
-            }
-            if ($my_projects == true) {
-                $role = Role::where('template_id', $project->template_id)->where('is_author', true)->first();
-                if (!$role) {
-                    $message = trans('main.role_author_not_found');
-                }
-            }
+            //            if ($all_projects == true) {
+            //                $role = Role::where('template_id', $project->template_id)->where('is_default_for_external', true)->first();
+            //                if (!$role) {
+            //                    $message = trans('main.role_default_for_external_not_found');
+            //                }
+            //            }
+            //            if ($my_projects == true) {
+            //                $role = Role::where('template_id', $project->template_id)->where('is_author', true)->first();
+            //                if (!$role) {
+            //                    $message = trans('main.role_author_not_found');
+            //                }
+            //            }
             $get_items_setup = $project->get_items_setup();
+            $roles = ProjectController::get_roles($project, $all_projects, $subs_projects, $my_projects, $mysubs_projects);
             ?>
+            @if(count($roles) == 0)
+                @continue
+            @endif
             {{--        <div class="card shadow">--}}
             {{--            <img class="card-img-top" src="{{Storage::url('background.png')}}" alt="Card image">--}}
             {{--            <p class="card-header">{{$project->template->name()}}</p>--}}
@@ -54,47 +59,96 @@
             {{--                <small class="text-muted">{{$project->created_at}}</small>--}}
             {{--            </div>--}}
             {{--        </div>--}}
-            @if($role)
-                <div class="card shadow">
-                    {{--                <img class="card-img-top" src="{{Storage::url('background.png')}}" alt="Card image">--}}
-                    <p class="card-header">Id = {{$project->id}}</p>
-                    <div class="card-block">
-                        <p class="card-text ml-3"><small class="text-muted">{{$project->template->name()}}</small>
-                        </p>
-                    </div>
-                    <div class="card-body">
-                        @if($get_items_setup['logo'])
-                            {{--                            <div class="card-block text-center">--}}
-                                <div class="card-block text-center">
-                                @include('view.img',['item'=>$get_items_setup['logo'], 'size'=>"medium", 'filenametrue'=>false, 'link'=>false, 'img_fluid'=>true, 'title'=>'empty'])
-                            </div>
-                        @endif
-                        <h4 class="card-title mb-4">{{$project->name()}}</h4>
-                        {{--                <p class="card-text">{{$project->desc()}}</p>--}}
-                        <p class="card-text"><?php echo nl2br($project->dc_ext()); ?></p>
-
-                        {{--                ($my_projects ? 1 : 0)--}}
-                        <button type="button" class="btn btn-dreamer" title="{{trans('main.start')}}"
-                                onclick="document.location='{{route('project.start', ['project'=>$project->id, 'role'=>$role])}}'">
-                            <i class="fas fa-play d-inline"></i>
-                            {{trans('main.start')}}
-                        </button>
-                        @if ($all_projects == true)
-                            <p class="card-text mt-3">
-                                {{--                                "isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) ? 'https' : 'http'" отсюда "https://www.php.net/reserved.variables.server"--}}
-                                <small
-                                    class="text-muted">{{isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) ? 'https' : 'http'}}
-                                    ://{{$_SERVER['SERVER_NAME']}}/project/start/{{$project->id}}
-                                    - {{mb_strtolower(trans('main.project_link'))}}</small></p>
-                        @endif
-                    </div>
-                    <div class="card-footer">
-                        <small class="text-muted">{{$project->user->name()}}</small>
+            {{--            @if($role)--}}
+            <div class="card shadow">
+                {{--                <img class="card-img-top" src="{{Storage::url('background.png')}}" alt="Card image">--}}
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-sm-6 text-left">
+                            Id = {{$project->id}}
+                        </div>
+                        <div class="col-sm-6 text-right">
+                            @if($project->is_closed == true)
+                                <i>({{trans('main.is_closed')}})</i>
+                            @endif
+                        </div>
                     </div>
                 </div>
-            @else
-                <p class="card-text text-danger">{{$message}}</p>
-            @endif
+                <div class="card-block">
+                    <p class="card-text ml-3"><small class="text-muted">{{$project->template->name()}}</small>
+                    </p>
+                </div>
+                <div class="card-body">
+                    @if($get_items_setup['logo'])
+                        {{--                            <div class="card-block text-center">--}}
+                        <div class="card-block text-center">
+                            @include('view.img',['item'=>$get_items_setup['logo'], 'size'=>"medium", 'filenametrue'=>false, 'link'=>false, 'img_fluid'=>true, 'title'=>'empty'])
+                        </div>
+                    @endif
+                    <p>
+                    <h4 class="card-title mb-2">{{$project->name()}}</h4>
+                    {{--                <p class="card-text">{{$project->desc()}}</p>--}}
+                    <span class="card-text"><?php echo nl2br($project->dc_ext()); ?></span></p>
+                    <br>
+                    <form action="{{route('project.start_check')}}" method=GET" enctype=multipart/form-data>
+                        @csrf
+                        <input type="hidden" name="project_id" value="{{$project->id}}">
+                        <div class="form-group row">
+                            <div class="col-sm-2 text-right">
+                                <label for="role_id" class="col-form-label">{{trans('main.role')}}</label>
+                            </div>
+                            <div class="col-sm-6 text-center pl-1">
+                                <select class="form-control"
+                                        name="role_id">
+                                    @foreach ($roles as $key=>$value)
+                                        <option value="{{$key}}"
+                                            {{--                                                    @if ($update)--}}
+                                            {{--                                                    --}}{{--            "(int) 0" нужно--}}
+                                            {{--                                                    @if ((old('role_id') ?? ($key ?? (int) 0)) ==  $base->type())--}}
+                                            {{--                                                    selected--}}
+                                            {{--                                                @endif--}}
+                                            {{--                                                @endif--}}
+                                        >{{$value}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-sm-4 text-left pl-2">
+                                <button type="submit" class="btn btn-dreamer" title="
+                                    @if($subs_projects == true)
+                                {{trans('main.subscription')}}
+                                @else
+                                {{trans('main.start')}}
+                                @endif
+                                    ">
+                                    @if($subs_projects == true)
+                                        <i class="fas fa-book-open d-inline"></i>
+                                        {{trans('main.subscription')}}
+                                    @else
+                                        <i class="fas fa-play d-inline"></i>
+                                        {{trans('main.start')}}
+                                    @endif
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    {{--                        Не удалять--}}
+                    @if ($all_projects == true)
+                        <p class="card-text mt-3">
+                            {{--                    "isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) ? 'https' : 'http'" отсюда "https://www.php.net/reserved.variables.server"--}}
+                            <small
+                                class="text-muted">
+                                {{isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) ? 'https' : 'http'}}
+                                ://{{$_SERVER['SERVER_NAME']}}/project/start/{{$project->id}}
+                                - {{mb_strtolower(trans('main.project_link'))}}</small></p>
+                    @endif
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted">{{$project->user->name()}}</small>
+                </div>
+            </div>
+            {{--            @else--}}
+            {{--                <p class="card-text text-danger">{{$message}}</p>--}}
+            {{--            @endif--}}
             <br>
 
         @endforeach

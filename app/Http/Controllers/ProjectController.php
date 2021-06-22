@@ -15,6 +15,7 @@ use App\Models\Set;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Mail;
 use phpDocumentor\Reflection\Types\Boolean;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
@@ -30,9 +31,47 @@ class ProjectController extends Controller
 
     function all_index()
     {
-        $projects = Project::whereHas('template.roles', function ($query) {
-            $query->where('is_default_for_external', true);
-        })->orderBy('user_id')->orderBy('template_id')->orderBy('created_at');
+        $projects = Project::where('is_closed', false)
+            ->whereHas('template.roles', function ($query) {
+                $query->where('is_default_for_external', true)
+                    ->where('is_author', false);
+            });
+
+        if (Auth::check()) {
+            // 'orwhereHas' правильно
+            $projects = $projects->orwhereHas('accesses', function ($query) {
+                $query->where('user_id', GlobalController::glo_user_id())
+                    ->where('is_access_allowed', true);
+            })->whereHas('template.roles', function ($query) {
+                $query->where('is_author', false);
+            });
+        }
+
+        $projects = $projects->orderBy('user_id')->orderBy('template_id')->orderBy('created_at');
+        $name = "";  // нужно, не удалять
+        $index = array_search(App::getLocale(), config('app.locales'));
+        if ($index !== false) {   // '!==' использовать, '!=' не использовать
+            $name = 'name_lang_' . $index;
+            $projects = $projects->orderBy($name);
+        }
+        //session(['projects_previous_url' => request()->url()]);
+        return view('project/main_index', ['projects' => $projects->paginate(60),
+            'all_projects' => true, 'subs_projects' => false, 'my_projects' => false, 'mysubs_projects' => false,
+            'title' => trans('main.all_projects')]);
+    }
+
+    function subs_index()
+    {
+//        $projects = Project::where('is_closed', true)
+//            ->whereHas('template.roles', function ($query) {
+//                $query->where('is_author', false)->where('is_default_for_external', false);
+//            })
+//            ->orderBy('user_id')->orderBy('template_id')->orderBy('created_at');
+        $projects = Project::where('is_closed', true)
+            ->whereHas('template.roles', function ($query) {
+                $query->where('is_author', false);
+            })
+            ->orderBy('user_id')->orderBy('template_id')->orderBy('created_at');
 
         $name = "";  // нужно, не удалять
         $index = array_search(App::getLocale(), config('app.locales'));
@@ -42,14 +81,27 @@ class ProjectController extends Controller
         }
         //session(['projects_previous_url' => request()->url()]);
         return view('project/main_index', ['projects' => $projects->paginate(60),
-            'all_projects' => true, 'my_projects' => false, 'title' => trans('main.all_projects')]);
+            'all_projects' => false, 'subs_projects' => true, 'my_projects' => false, 'mysubs_projects' => false,
+            'title' => trans('main.subscriptions')]);
     }
 
     function my_index()
     {
-        $projects = Project::where('user_id', GlobalController::glo_user_id())->whereHas('template.roles', function ($query) {
-            $query->where('is_author', true);
-        })->orderBy('user_id')->orderBy('template_id')->orderBy('created_at');
+//        $projects = Project::where('user_id', GlobalController::glo_user_id())
+//            ->whereHas('accesses', function ($query) {
+//                $query->where('user_id', GlobalController::glo_user_id())
+//                    ->where('is_access_allowed', true);
+//            })
+//            ->whereHas('template.roles', function ($query) {
+//                $query->where('is_author', true)
+//                    ->orwhere('is_default_for_external', true);
+//            })->orderBy('user_id')->orderBy('template_id')->orderBy('created_at');
+
+        $projects = Project::where('user_id', GlobalController::glo_user_id())
+            ->orwhereHas('template.roles', function ($query) {
+                $query->where('is_author', true);
+            })->orderBy('user_id')->orderBy('template_id')->orderBy('created_at');
+
         $name = "";  // нужно, не удалять
         $index = array_search(App::getLocale(), config('app.locales'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
@@ -58,7 +110,302 @@ class ProjectController extends Controller
         }
         //session(['projects_previous_url' => request()->url()]);
         return view('project/main_index', ['projects' => $projects->paginate(60),
-            'all_projects' => false, 'my_projects' => true, 'title' => trans('main.my_projects')]);
+            'all_projects' => false, 'subs_projects' => false, 'my_projects' => true, 'mysubs_projects' => false,
+            'title' => trans('main.my_projects')]);
+    }
+
+    function mysubs_index()
+    {
+//        $projects = Project::whereHas('accesses', function ($query) {
+//            $query->where('user_id', GlobalController::glo_user_id())
+//                ->where('is_access_allowed', true);
+//        })->whereHas('template.roles', function ($query) {
+//            $query->where('is_default_for_external', true)
+//                ->where('is_author', false);
+//        })
+//            ->orderBy('user_id')->orderBy('template_id')->orderBy('created_at');
+        $projects = Project::whereHas('accesses', function ($query) {
+            $query->where('user_id', GlobalController::glo_user_id());
+        })->whereHas('template.roles', function ($query) {
+            $query->where('is_author', false);
+        })
+            ->orderBy('user_id')->orderBy('template_id')->orderBy('created_at');
+
+        $name = "";  // нужно, не удалять
+        $index = array_search(App::getLocale(), config('app.locales'));
+        if ($index !== false) {   // '!==' использовать, '!=' не использовать
+            $name = 'name_lang_' . $index;
+            $projects = $projects->orderBy($name);
+        }
+        //session(['projects_previous_url' => request()->url()]);
+        return view('project/main_index', ['projects' => $projects->paginate(60),
+            'all_projects' => false, 'subs_projects' => false, 'my_projects' => false, 'mysubs_projects' => true,
+            'title' => trans('main.my_subscriptions')]);
+    }
+
+    static function get_roles(Project $project, bool $all_projects, bool $subs_projects, bool $my_projects, bool $mysubs_projects)
+    {
+        $result = array();
+        if ($all_projects == true) {
+            $roles = Role::where('template_id', $project->template->id)
+                ->where('is_default_for_external', true)
+                ->where('is_author', false)
+                ->whereHas('template', function ($query) use ($project) {
+                    $query->where('id', $project->template_id)
+                        ->whereHas('projects', function ($query) use ($project) {
+                            $query->where('id', $project->id)
+                                ->where('is_closed', false);
+                        });
+                })
+                ->orderBy('id')->get();
+            foreach ($roles as $role) {
+                $result[$role->id] = $role->name();
+            }
+            if (Auth::check()) {
+                $accesses = Access::where('project_id', $project->id)
+                    ->where('user_id', GlobalController::glo_user_id())
+                    ->whereHas('role', function ($query) {
+                        $query->where('is_author', false);
+                    })
+                    ->where('is_access_allowed', true)
+                    ->orderBy('role_id')->get();
+                foreach ($accesses as $access) {
+                    $role = $access->role;
+                    $result[$role->id] = $role->name();
+                }
+            }
+
+
+        } elseif ($subs_projects == true) {
+
+            $roles = Role::where('is_author', false)
+                ->whereHas('template', function ($query) use ($project) {
+                    $query->where('id', $project->template_id)
+                        ->whereHas('projects', function ($query) use ($project) {
+                            $query->where('id', $project->id)
+                                ->where('is_closed', true);
+                        });
+                })
+                ->whereDoesntHave('accesses', function ($query) use ($project) {
+                    $query->where('user_id', GlobalController::glo_user_id())
+                        ->where('project_id', $project->id);
+                })->get();
+
+            foreach ($roles as $role) {
+                $result[$role->id] = $role->name();
+            }
+
+        } elseif ($my_projects == true) {
+//            $roles = Role::where('is_author', true)
+//                ->whereHas('template', function ($query) use ($project) {
+//                    $query->where('id', $project->template_id)
+//                        ->whereHas('projects', function ($query) use ($project) {
+//                            $query->where('id', $project->id)
+//                                ->where('user_id', GlobalController::glo_user_id());
+//                        });
+//                })
+//                ->orwhere('is_default_for_external', true)
+//                ->whereHas('template', function ($query) use ($project) {
+//                    $query->where('id', $project->template_id)
+//                        ->whereHas('projects', function ($query) use ($project) {
+//                            $query->where('id', $project->id)
+//                                ->where('user_id', GlobalController::glo_user_id());
+//                        });
+//                })->get();
+//
+//            foreach ($roles as $role) {
+//                $result[$role->id] = $role->name();
+//            }
+
+//            $accesses = Access::where('project_id', $project->id)
+//                ->where('user_id', GlobalController::glo_user_id())
+//                ->whereHas('role', function ($query) {
+//                    $query->where('is_author', true)
+//                        ->orwhere('is_default_for_external', true);
+//                })
+//                ->orderBy('role_id')->get();
+//            foreach ($accesses as $access) {
+//                $role = $access->role;
+//                $result[$role->id] = $role->name();
+//            }
+            // Все подписки и роли пользователя
+            $accesses = Access::where('project_id', $project->id)
+                ->where('user_id', GlobalController::glo_user_id())
+                ->whereHas('role', function ($query) {
+                    $query->where('is_author', true);
+                })
+                ->orderBy('role_id')->get();
+            foreach ($accesses as $access) {
+                $role = $access->role;
+                $result[$role->id] = $role->name();
+            }
+            // Все запросы на подписку и роли пользователя
+            $accesses = Access::where('project_id', $project->id)
+                ->where('user_id', GlobalController::glo_user_id())
+                ->whereHas('role', function ($query) {
+                    $query->where('is_author', true);
+                })
+                ->where('is_subscription_request', true)
+                ->where('is_access_allowed', false)
+                ->orderBy('role_id')->get();
+            foreach ($accesses as $access) {
+                $role = $access->role;
+                $result[$role->id] = $result[$role->id] . " (" . trans('main.subscription_request') . ")";
+            }
+
+            // Все закрытые доступы и роли пользователя
+            $accesses = Access::where('project_id', $project->id)
+                ->where('user_id', GlobalController::glo_user_id())
+                ->whereHas('role', function ($query) {
+                    $query->where('is_author', true);
+                })
+                ->where('is_subscription_request', false)
+                ->where('is_access_allowed', false)
+                ->orderBy('role_id')->get();
+            foreach ($accesses as $access) {
+                $role = $access->role;
+                $result[$role->id] = $result[$role->id] . " (" . trans('main.access_denied') . ")";
+            }
+
+        } elseif ($mysubs_projects == true) {
+            if (Auth::check()) {
+                // Все подписки и роли пользователя
+                $accesses = Access::where('project_id', $project->id)
+                    ->where('user_id', GlobalController::glo_user_id())
+                    ->whereHas('role', function ($query) {
+                        $query->where('is_author', false);
+                    })
+                    ->orderBy('role_id')->get();
+                foreach ($accesses as $access) {
+                    $role = $access->role;
+                    $result[$role->id] = $role->name();
+                }
+
+                // Все запросы на подписку и роли пользователя
+                $accesses = Access::where('project_id', $project->id)
+                    ->where('user_id', GlobalController::glo_user_id())
+                    ->whereHas('role', function ($query) {
+                        $query->where('is_author', false);
+                    })
+                    ->where('is_subscription_request', true)
+                    ->where('is_access_allowed', false)
+                    ->orderBy('role_id')->get();
+                foreach ($accesses as $access) {
+                    $role = $access->role;
+                    $result[$role->id] = $result[$role->id] . " (" . trans('main.subscription_request') . ")";
+                }
+
+                // Все закрытые доступы и роли пользователя
+                $accesses = Access::where('project_id', $project->id)
+                    ->where('user_id', GlobalController::glo_user_id())
+                    ->whereHas('role', function ($query) {
+                        $query->where('is_author', false);
+                    })
+                    ->where('is_subscription_request', false)
+                    ->where('is_access_allowed', false)
+                    ->orderBy('role_id')->get();
+                foreach ($accesses as $access) {
+                    $role = $access->role;
+                    $result[$role->id] = $result[$role->id] . " (" . trans('main.access_denied') . ")";
+                }
+
+            }
+        }
+
+        return $result;
+    }
+
+    static function subs_desc(Access $access){
+        $result = '';
+        if ($access->is_subscription_request == false && $access->is_access_allowed == false) {
+            // Доступ запрещен
+            // " . '!'" нужно для удобства,
+            // чтобы лучше видно было в списке "Доступ запрещен!" по сравнению с похожим по количеству букв "Доступ разрешен"
+            $result = trans('main.access_denied') . '!';
+
+        } elseif ($access->is_subscription_request == false && $access->is_access_allowed == true) {
+            // Доступ разрешен
+            $result = trans('main.is_access_allowed');
+
+        } elseif ($access->is_subscription_request == true && $access->is_access_allowed == false) {
+            // Запрос на подписку
+            $result = trans('main.subscription_request');
+
+        } elseif ($access->is_subscription_request == true && $access->is_access_allowed == true) {
+            // Такая комбинация недопустима
+            $result = trans('main.subscription_request');
+
+        }
+        return $result;
+
+}
+
+    function start_check(Request $request)
+    {
+        $project = Project::findOrFail($request->project_id);
+        $role = Role::findOrFail($request->role_id);
+        $user = GlobalController::glo_user();
+        // Проект открыт и роль = is_default_for_external
+        $open_default = ($project->is_closed == false) && ($role->is_default_for_external == true);
+        if (!@$open_default) {
+            $access = Access::where('project_id', $project->id)
+                ->where('role_id', $role->id)
+                ->where('user_id', $user->id)->first();
+            if ($access) {
+                if ($access->is_subscription_request == false && $access->is_access_allowed == false) {
+                    // Доступ запрещен, страница отмены подписки
+                    return view('message', ['message' => trans('main.access_denied') . "!"]);
+
+                } elseif ($access->is_subscription_request == false && $access->is_access_allowed == true) {
+                    // Доступ разрешен, далее запуск проекта
+
+                } elseif ($access->is_subscription_request == true && $access->is_access_allowed == false) {
+                    // Запрос на подписку, страница отмены запроса на подписку
+                    return view('message', ['message' => trans('main.subscription_request') . "."]);
+
+                } elseif ($access->is_subscription_request == true && $access->is_access_allowed == true) {
+                    // Такая комбинация недопустима
+                    return view('message', ['message' => trans('main.invalid_parameter_combination') . "!"]);
+                }
+            } else {
+                // создать новую запись
+                $new_access = new Access();
+                $new_access->project_id = $project->id;
+                $new_access->role_id = $role->id;
+                $new_access->user_id = $user->id;
+                // Подписка проходит автоматически, далее запуск проекта
+                if ($open_default) {
+                    $new_access->is_subscription_request = false;
+                    $new_access->is_access_allowed = true;
+                } // Отправить запрос на подписку
+                else {
+                    $new_access->is_subscription_request = true;
+                    $new_access->is_access_allowed = false;
+                }
+                $new_access->save();
+
+                if (!@$open_default) {
+//                if (env('MAIL_ENABLED') == 'yes') {
+//                    //$base_right = GlobalController::base_right($item->base, $role);
+//                    //if ($base_right['is_edit_email_base_create'] == true) {
+//                        $email_to = $project->user->email;
+//                        $appname = config('app.name', 'Abakus');
+//                        Mail::send(['html' => 'mail/item_create'], ['item' => $item],
+//                            function ($message) use ($email_to, $appname, $item) {
+//                                $message->to($email_to, '')->subject(trans('main.new_record') . ' - ' . $item->base->name());
+//                                $message->from(env('MAIL_FROM_ADDRESS', ''), $appname);
+//                            });
+//                    //}
+//                }
+                    // Запрос на подписку отправлен
+                    return view('message', ['message' => trans('main.subscription_request_sent') . "."]);
+                }
+            }
+        }
+            // Запуск проекта
+            return redirect()->route('project.start',
+                ['project' => $project->id, 'role' => $role->id]);
+
     }
 
     function index_template(Template $template)
@@ -120,6 +467,7 @@ class ProjectController extends Controller
 
     function start(Project $project, Role $role = null)
     {
+        // Если $role не передана, $role = null - идет поиск роли 'where('is_default_for_external', true)'
         if (!$role) {
             $role = Role::where('template_id', $project->template_id)->where('is_default_for_external', true)->first();
             if (!$role) {

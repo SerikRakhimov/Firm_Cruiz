@@ -27,6 +27,11 @@ class Role extends Model
         return $result;
     }
 
+    function accesses()
+    {
+        return $this->hasMany(Access::class, 'role_id');
+    }
+
     function desc()
     {
         $result = "";  // нужно, не удалять
