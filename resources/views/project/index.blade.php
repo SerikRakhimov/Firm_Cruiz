@@ -51,14 +51,15 @@
         <thead>
         <tr>
             <th class="text-center">#</th>
-            <th class="text-left">{{trans('main.name')}}</th>
-            <th class="text-left">{{trans('main.is_closed')}}</th>
             @if(!$is_template)
                 <th class="text-left">{{trans('main.template')}}</th>
             @endif
             @if(!$is_user)
                 <th class="text-left">{{trans('main.author')}}</th>
             @endif
+            <th class="text-left">{{trans('main.name')}}</th>
+            <th class="text-left">{{trans('main.is_test')}}</th>
+            <th class="text-left">{{trans('main.is_closed')}}</th>
             <th class="text-center">Id</th>
             <th class="text-center">{{trans('main.accesses')}}</th>
         </tr>
@@ -77,16 +78,6 @@
                         {{$i}}
                     </a>
                 </td>
-                <td class="text-left">
-                    <a href="{{route($project_show, $project)}}" title="{{trans('main.show')}}">
-                        {{$project->name()}}
-                    </a>
-                </td>
-                <td class="text-left">
-                    <a href="{{route($project_show, $project)}}" title="{{trans('main.show')}}">
-                        {{GlobalController::name_is_boolean($project->is_closed)}}
-                    </a>
-                </td>
                 @if(!$is_template)
                     <td class="text-left">
                         <a href="{{route($project_show, $project)}}" title="{{trans('main.show')}}">
@@ -101,6 +92,21 @@
                         </a>
                     </td>
                 @endif
+                <td class="text-left">
+                    <a href="{{route($project_show, $project)}}" title="{{trans('main.show')}}">
+                        {{$project->name()}}
+                    </a>
+                </td>
+                <td class="text-left">
+                    <a href="{{route($project_show, $project)}}" title="{{trans('main.show')}}">
+                        {{GlobalController::name_is_boolean($project->is_test)}}
+                    </a>
+                </td>
+                <td class="text-left">
+                    <a href="{{route($project_show, $project)}}" title="{{trans('main.show')}}">
+                        {{GlobalController::name_is_boolean($project->is_closed)}}
+                    </a>
+                </td>
                 <td class="text-center">
                     <a href="{{route($project_show, $project)}}" title="{{trans('main.show')}}">
                         {{$project->id}}

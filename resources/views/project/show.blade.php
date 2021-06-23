@@ -33,6 +33,7 @@
         <p>{{trans('main.template')}}: <b>{{$project->template->name()}}</b></p>
     @endif
 
+    <p>{{trans('main.is_test')}}: <b>{{GlobalController::name_is_boolean($project->is_test)}}</b></p>
     <p>{{trans('main.is_closed')}}: <b>{{GlobalController::name_is_boolean($project->is_closed)}}</b></p>
 
     @foreach (config('app.locales') as $key=>$value)

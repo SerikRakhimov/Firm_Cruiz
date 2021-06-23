@@ -299,6 +299,7 @@ return [
     'deleted' => 'Удалено',
     'records' => 'Записей',
     'processed' => 'Обработано',
+    'is_test' => 'Тестовый',
     'is_closed' => 'Закрытый',
     'is_closed_default_value' => 'Значение по умолчанию "Закрытый"',
     'is_closed_default_value_fixed' => 'Значение по умолчанию "Закрытый" фиксировано',
@@ -318,4 +319,6 @@ return [
     'access_denied'=>'Доступ запрещен',
     'subscription_request_sent'=>'Запрос на подписку отправлен',
     'invalid_parameter_combination'=>'Недопустимая комбинация параметров',
+    'delete_subscription'=>'Удаление подписки',
+    'you_are_subscribed'=>'Вы подписаны',
 ];

@@ -2,7 +2,7 @@
 <div class="container-fluid">
         <p class="text-center">
             <a href="{{route('project.start', ['project' => $project->id, 'role' => $role])}}" title="{{trans('main.bases')}}">
-                <mark class="text-project">{{$project->name()}}</mark>
+                <mark class="text-project">{{$project->name()}}&nbsp;&nbsp;&nbsp;@include('layouts.project.show_icons',['project'=>$project])</mark>
             </a>
         </p>
     <div class="row">

@@ -4,6 +4,6 @@
     @elseif($type_form == 'delete_question')
         {{trans('main.delete_record_question')}}?
     @endif
-    <span class="text-info">-</span> <span class="text-success">{{$table_name}}</span>
+    <span class="text-label">-</span> <span class="text-title">{{$table_name}}</span>
 </h3>
 

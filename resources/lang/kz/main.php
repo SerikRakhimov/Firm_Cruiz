@@ -299,6 +299,7 @@ return [
     'deleted' => 'Жойылған',
     'records' => 'Жазбалар',
     'processed' => 'Өңделген',
+    'is_test' => 'Тестілік',
     'is_closed' => 'Жабық',
     'is_closed_default_value' => '"Жабық" әдепкі мәні',
     'is_closed_default_value_fixed' => '"Жабық" әдепкі мәні тіркелген',
@@ -318,4 +319,6 @@ return [
     'access_denied'=>'Рұқсат жоқ',
     'subscription_request_sent'=>'Жазылуға сұрау жіберілді',
     'invalid_parameter_combination'=>'Параметрлердің жарамсыз комбинациясы',
+    'delete_subscription'=>'Жазылымды жою',
+    'you_are_subscribed'=>'Сіз қол қойдыңыз',
 ];

@@ -17,6 +17,7 @@
         <p>{{trans('main.name')}} ({{trans('main.' . $value)}}): <b>{{$template['name_lang_' . $key]}}</b></p>
     @endforeach
 
+    <p>{{trans('main.is_test')}}: <b>{{GlobalController::name_is_boolean($template->is_test)}}</b></p>
     <p>{{trans('main.is_closed_default_value')}}: <b>{{GlobalController::name_is_boolean($template->is_closed_default_value)}}</b></p>
     <p>{{trans('main.is_closed_default_value_fixed')}}: <b>{{GlobalController::name_is_boolean($template->is_closed_default_value_fixed)}}</b></p>
 

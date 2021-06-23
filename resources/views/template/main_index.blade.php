@@ -22,7 +22,16 @@
             ?>
             <div class="card shadow">
                 {{--            <img class="card-img-top" src="{{Storage::url('background.png')}}" alt="Card image">--}}
-                <p class="card-header">Id = {{$template->id}}</p>
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-sm-6 text-left text-title">
+                            <small class="text-muted">Id = {{$template->id}}</small>
+                        </div>
+                        <div class="col-sm-6 text-right">
+                            @include('layouts.template.show_icons',['template'=>$template])
+                        </div>
+                    </div>
+                </div>
                 <div class="card-body">
                     <h4 class="card-title mb-4">{{$template->name()}}</h4>
                     <p class="card-text text-label">

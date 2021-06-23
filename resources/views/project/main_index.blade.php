@@ -64,13 +64,11 @@
                 {{--                <img class="card-img-top" src="{{Storage::url('background.png')}}" alt="Card image">--}}
                 <div class="card-header">
                     <div class="row">
-                        <div class="col-sm-6 text-left">
-                            Id = {{$project->id}}
+                        <div class="col-sm-6 text-left text-title">
+                            <small class="text-muted">Id = {{$project->id}}</small>
                         </div>
                         <div class="col-sm-6 text-right">
-                            @if($project->is_closed == true)
-                                <i>({{trans('main.is_closed')}})</i>
-                            @endif
+                            @include('layouts.project.show_icons',['project'=>$project])
                         </div>
                     </div>
                 </div>
@@ -262,9 +260,6 @@
     {{--            </div>--}}
     {{--        </div>--}}
     {{--    </div>--}}
-
-
-
 
 @endsection
 

@@ -299,6 +299,7 @@ return [
     'deleted' => 'Deleted',
     'records' => 'Records',
     'processed' => 'Processed',
+    'is_test' => 'Test',
     'is_closed' => 'Closed',
     'is_closed_default_value' => '"Closed" default value',
     'is_closed_default_value_fixed' => 'The default value "Closed" is fixed',
@@ -318,4 +319,6 @@ return [
     'access_denied'=>'Access denied',
     'subscription_request_sent'=>'Subscription request sent',
     'invalid_parameter_combination'=>'Invalid parameter combination',
+    'delete_subscription'=>'Delete subscription',
+    'you_are_subscribed'=>'You are subscribed',
 ];

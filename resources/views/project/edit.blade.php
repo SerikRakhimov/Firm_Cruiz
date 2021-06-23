@@ -90,6 +90,32 @@
             @endforeach
         </div>
 
+        <div class="form-group row" id="is_test_form_group">
+            <div class="col-sm-3 text-right">
+                <label class="form-label"
+                       for="is_test">{{trans('main.is_test')}}</label>
+            </div>
+            <div class="col-sm-7">
+                <input class="@error('is_test') is-invalid @enderror"
+                       type="checkbox"
+                       name="is_test"
+                       id="linkis_test"
+                       placeholder=""
+                       {{--                       'false' - значение по умолчанию --}}
+                       @if ((old('is_test') ?? ($project->is_test ?? false)) ==  true)
+                       checked
+                    @endif
+                >
+                @error('is_test')
+                <div class="invalid-feedback">
+                    {{$message}}
+                </div>
+                @enderror
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div>
+
         <div class="form-group row" id="is_closed_form_group">
             <div class="col-sm-3 text-right">
                 <label class="form-label"
@@ -101,7 +127,7 @@
                        name="is_closed"
                        id="linkis_closed"
                        placeholder=""
-{{--                       '$closed_default_value' - значение по умолчанию --}}
+                       {{--                       '$closed_default_value' - значение по умолчанию --}}
                        @if ((old('is_closed') ?? ($project->is_closed ?? $closed_default_value)) ==  true)
                        checked
                     @endif

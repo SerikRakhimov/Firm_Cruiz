@@ -14,7 +14,7 @@
         return $array;
     }
     ?>
-    @include('layouts.show_project_role',['project'=>$project, 'role'=>$role])
+    @include('layouts.project.show_project_role',['project'=>$project, 'role'=>$role])
     @if(count($links) !=0)
         <table class="table table-sm table-borderless">
             <thead>

@@ -489,7 +489,6 @@ class GlobalController extends Controller
 
     }
 
-
     static function empty_html()
     {
         return trans('main.empty');

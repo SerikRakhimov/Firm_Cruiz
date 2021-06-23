@@ -315,7 +315,8 @@ class ProjectController extends Controller
         return $result;
     }
 
-    static function subs_desc(Access $access){
+    static function subs_desc(Access $access)
+    {
         $result = '';
         if ($access->is_subscription_request == false && $access->is_access_allowed == false) {
             // Доступ запрещен
@@ -338,7 +339,90 @@ class ProjectController extends Controller
         }
         return $result;
 
-}
+    }
+
+    static function acc_check(Project $project, Role $role)
+    {
+        $is_subs = false;
+        $is_delete = false;
+        $is_ask = false;
+        $user = GlobalController::glo_user();
+        // Проект открыт и роль = is_default_for_external
+        $open_default = ($project->is_closed == false) && ($role->is_default_for_external == true);
+        $access = Access::where('project_id', $project->id)
+            ->where('role_id', $role->id)
+            ->where('user_id', $user->id)->first();
+        if (@$open_default) {
+            if ($access) {
+                // Доступ разрешен
+                if ($access->is_subscription_request == false && $access->is_access_allowed == true) {
+                    // Удаление подписки
+                    $is_delete = true;
+                }
+            } else {
+                // Подписка
+                $is_subs = true;
+            }
+        } else {
+            if ($access) {
+                // Доступ разрешен
+                if ($access->is_subscription_request == false && $access->is_access_allowed == true) {
+                    // Удаление подписки
+                    $is_delete = true;
+                    // Предварительный запрос Да/Нет
+                    $is_ask = true;
+                }
+            }
+        }
+        return ['is_subs' => $is_subs, 'is_delete' => $is_delete, 'is_ask' => $is_ask];
+    }
+
+    function subs_create(Project $project, Role $role)
+    {
+        // создать новую запись
+        $access = new Access();
+        $access->project_id = $project->id;
+        $access->role_id = $role->id;
+        $access->user_id = GlobalController::glo_user_id();
+
+        // Подписка с разрешением доступа проходит автоматически
+        $access->is_subscription_request = false;
+        $access->is_access_allowed = true;
+        $access->save();
+
+        // Запуск проекта
+        return redirect()->route('project.start',
+            ['project' => $project->id, 'role' => $role->id]);
+
+    }
+
+    function subs_delete(bool $is_ask, bool $is_all_projects, Project $project, Role $role)
+    {
+        if ($is_ask == true) {
+            return view('project/ask_subs', ['project' => $project, 'role' => $role,
+                'is_subs' => false, 'is_req_del' => false, 'is_sb_del' => true]);
+        }
+        // Находим подписку
+        $access = Access::where('project_id', $project->id)
+            ->where('user_id', GlobalController::glo_user_id())
+            ->where('role_id', $role->id)
+            ->first();
+
+        // Если найдено, то удаляем запись
+        if ($access) {
+            $access->delete();
+        }
+
+        if ($is_all_projects == true) {
+            // Все проекты
+            return redirect()->route('project.all_index');
+        } else {
+            // Запуск проекта
+            return redirect()->route('project.start',
+                ['project' => $project->id, 'role' => $role->id]);
+        }
+
+    }
 
     function start_check(Request $request)
     {
@@ -373,11 +457,11 @@ class ProjectController extends Controller
                 $new_access->project_id = $project->id;
                 $new_access->role_id = $role->id;
                 $new_access->user_id = $user->id;
-                // Подписка проходит автоматически, далее запуск проекта
+                //  Подписка с разрешением доступа проходит автоматически, далее запуск проекта
                 if ($open_default) {
                     $new_access->is_subscription_request = false;
                     $new_access->is_access_allowed = true;
-                } // Отправить запрос на подписку
+                } // Отправить запрос на подписку без разрешения доступа
                 else {
                     $new_access->is_subscription_request = true;
                     $new_access->is_access_allowed = false;
@@ -402,9 +486,9 @@ class ProjectController extends Controller
                 }
             }
         }
-            // Запуск проекта
-            return redirect()->route('project.start',
-                ['project' => $project->id, 'role' => $role->id]);
+        // Запуск проекта
+        return redirect()->route('project.start',
+            ['project' => $project->id, 'role' => $role->id]);
 
     }
 
@@ -413,7 +497,7 @@ class ProjectController extends Controller
         if (!Auth::user()->isAdmin()) {
             return redirect()->route('project.all_index');
         }
-        $projects = Project::where('template_id', $template->id);
+        $projects = Project::where('template_id', $template->id)->orderBy('user_id');
         $name = "";  // нужно, не удалять
         $index = array_search(App::getLocale(), config('app.locales'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
@@ -431,7 +515,7 @@ class ProjectController extends Controller
                 return redirect()->route('project.all_index');
             }
         }
-        $projects = Project::where('user_id', $user->id);
+        $projects = Project::where('user_id', $user->id)->orderBy('template_id');
         $name = "";  // нужно, не удалять
         $index = array_search(App::getLocale(), config('app.locales'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
@@ -670,6 +754,7 @@ class ProjectController extends Controller
         $project->name_lang_2 = isset($request->name_lang_2) ? $request->name_lang_2 : "";
         $project->name_lang_3 = isset($request->name_lang_3) ? $request->name_lang_3 : "";
 
+        $project->is_test = isset($request->is_test) ? true : false;
         $project->is_closed = isset($request->is_closed) ? true : false;
 
         $project->save();

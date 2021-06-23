@@ -29,6 +29,7 @@
         <tr>
             <th class="text-center">#</th>
             <th class="text-left">{{trans('main.name')}}</th>
+            <th class="text-left">{{trans('main.is_test')}}</th>
             <th class="text-left">{{trans('main.is_closed_default_value')}}</th>
             <th class="text-left">{{trans('main.is_closed_default_value_fixed')}}</th>
             <th class="text-center">{{trans('main.projects')}}</th>
@@ -55,6 +56,11 @@
                 <td class="text-left">
                     <a href="{{route('template.show',$template)}}" title="{{trans('main.show')}}">
                         {{$template->name()}}
+                    </a>
+                </td>
+                <td class="text-center">
+                    <a href="{{route('template.show',$template)}}" title="{{trans('main.show')}}">
+                        {{GlobalController::name_is_boolean($template->is_test)}}
                     </a>
                 </td>
                 <td class="text-center">

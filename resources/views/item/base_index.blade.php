@@ -11,7 +11,7 @@
     use \App\Http\Controllers\MainController;
     $message = GlobalController::base_maxcount_validate($project, $base, true);
     ?>
-    @include('layouts.show_project_role',['project'=>$project, 'role'=>$role])
+    @include('layouts.project.show_project_role',['project'=>$project, 'role'=>$role])
     <div class="container-fluid">
         <div class="row">
             <div class="col text-left align-top">

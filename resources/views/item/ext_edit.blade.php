@@ -30,7 +30,7 @@
         };
     </script>
 
-    @include('layouts.show_project_role',['project'=>$project, 'role'=>$role])
+    @include('layouts.project.show_project_role',['project'=>$project, 'role'=>$role])
     <h3 class="display-5 text-center">
         @if (!$update)
             {{trans('main.new_record')}}

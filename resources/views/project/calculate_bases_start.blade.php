@@ -6,7 +6,7 @@
     use App\Http\Controllers\BaseController;
     use Illuminate\Support\Facades\Request;
     ?>
-    @include('layouts.show_project_role',['project'=>$project, 'role'=>$role])
+    @include('layouts.project.show_project_role',['project'=>$project, 'role'=>$role])
     <h3>{{trans('main.calculate_bases')}}?</h3>
     <form action="{{route('project.calculate_bases', ['project'=>$project, 'role'=>$role])}}" method="POST">
         @csrf
