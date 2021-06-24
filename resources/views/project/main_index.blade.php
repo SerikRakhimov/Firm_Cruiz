@@ -46,10 +46,10 @@
             {{--                <p class="card-text"><?php echo nl2br($project->dc_ext()); ?></p>--}}
             {{--                @if($role)--}}
             {{--                    --}}{{--                ($my_projects ? 1 : 0)--}}
-            {{--                    <button type="button" class="btn btn-dreamer" title="{{trans('main.start')}}"--}}
+            {{--                    <button type="button" class="btn btn-dreamer" title="{{trans('main.run')}}"--}}
             {{--                            onclick="document.location='{{route('base.template_index', ['project'=>$project, 'role'=>$role])}}'">--}}
             {{--                        <i class="fas fa-play d-inline"></i>--}}
-            {{--                        {{trans('main.start')}}--}}
+            {{--                        {{trans('main.run')}}--}}
             {{--                    </button>--}}
             {{--                @else--}}
             {{--                    <p class="card-text text-danger">{{$message}}</p>--}}
@@ -110,34 +110,31 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-sm-4 text-left pl-2">
+                            <div class="col-sm-4 text-left p-0">
                                 <button type="submit" class="btn btn-dreamer" title="
                                     @if($subs_projects == true)
-                                {{trans('main.subscription')}}
+                                {{trans('main.subscribe')}}
                                 @else
-                                {{trans('main.start')}}
+                                {{trans('main.run')}}
                                 @endif
                                     ">
                                     @if($subs_projects == true)
                                         <i class="fas fa-book-open d-inline"></i>
-                                        {{trans('main.subscription')}}
+                                        {{trans('main.subscribe')}}
                                     @else
                                         <i class="fas fa-play d-inline"></i>
-                                        {{trans('main.start')}}
+                                        {{trans('main.run')}}
                                     @endif
                                 </button>
                             </div>
                         </div>
                     </form>
                     {{--                        Не удалять--}}
-                    @if ($all_projects == true)
+                    @if ($all_projects == true && $project->is_closed == false)
                         <p class="card-text mt-3">
-                            {{--                    "isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) ? 'https' : 'http'" отсюда "https://www.php.net/reserved.variables.server"--}}
                             <small
                                 class="text-muted">
-                                {{isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) ? 'https' : 'http'}}
-                                ://{{$_SERVER['SERVER_NAME']}}/project/start/{{$project->id}}
-                                - {{mb_strtolower(trans('main.project_link'))}}</small></p>
+                                {{$project->link_info()}}</small></p>
                     @endif
                 </div>
                 <div class="card-footer">

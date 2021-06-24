@@ -106,8 +106,8 @@ use App\Models\Project;
                     @auth
                         <li class="nav-item">
                             <a class="nav-link" href="{{route('project.subs_index')}}"
-                               title="{{trans('main.subscriptions')}}">
-                                {{trans('main.subscriptions')}}
+                               title="{{trans('main.subscribe')}}">
+                                {{trans('main.subscribe')}}
                             </a>
                         </li>
                         <li class="nav-item">

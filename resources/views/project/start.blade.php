@@ -140,17 +140,17 @@
     {{--    </div>--}}
 
     @if($is_subs == true)
-        <button type="button" class="btn btn-dreamer" title="{{trans('main.subscription')}}"
+        <button type="button" class="btn btn-dreamer" title="{{trans('main.subscribe')}}"
                 onclick="document.location='{{route('project.subs_create',
-                        ['project'=>$project, 'role'=>$role])}}'">
-            <i class="fas fa-book-open d-inline"></i>&nbsp;{{trans('main.subscription')}}
+                        ['is_request' => 0, 'is_ask' => $is_num_ask, 'is_cancel_all_projects' => 0, 'project'=>$project, 'role'=>$role])}}'">
+            <i class="fas fa-book-open d-inline"></i>&nbsp;{{trans('main.subscribe')}}
         </button>
     @endif
     @if($is_delete == true)
         <span class="text-title">{{trans('main.you_are_subscribed')}}</span>
         <button type="button" class="btn btn-dreamer" title="{{trans('main.delete_subscription')}}"
                 onclick="document.location='{{route('project.subs_delete',
-                        ['is_ask' => $is_num_ask, 'is_all_projects' => 0, 'project'=>$project, 'role'=>$role])}}'">
+                        ['is_ask' => $is_num_ask, 'is_cancel_all_projects' => 0, 'project'=>$project, 'role'=>$role])}}'">
             <i class="fas fa-trash"></i>&nbsp;{{trans('main.delete_subscription')}}
         </button>
     @endif

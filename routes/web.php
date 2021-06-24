@@ -413,11 +413,11 @@ Route::get('/project/start/{project}/{role?}', 'ProjectController@start')
 Route::get('/project/start_check', 'ProjectController@start_check')
     ->name('project.start_check');
 
-Route::get('/project/subs_create/{project}/{role}', 'ProjectController@subs_create')
+Route::get('/project/subs_create/{is_request}/{is_ask}/{is_cancel_all_projects}/{project}/{role}', 'ProjectController@subs_create')
     ->name('project.subs_create')
     ->middleware('auth');
 
-Route::get('/project/subs_delete/{is_ask}/{is_all_projects}/{project}/{role}', 'ProjectController@subs_delete')
+Route::get('/project/subs_delete/{is_ask}/{is_cancel_all_projects}/{project}/{role}', 'ProjectController@subs_delete')
     ->name('project.subs_delete')
     ->middleware('auth');
 
