@@ -115,7 +115,7 @@ class Project extends Model
 
     function link_info()
     {
-//        "isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) ? 'https' : 'http'" отсюда "https://www.php.net/reserved.variables.server"
+        // "isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) ? 'https' : 'http'" отсюда "https://www.php.net/reserved.variables.server"
         return isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) ? 'https' : 'http' . '://' . $_SERVER['SERVER_NAME']
             . '/project/start/' . $this->id . ' - ' . mb_strtolower(trans('main.project_link'));
     }

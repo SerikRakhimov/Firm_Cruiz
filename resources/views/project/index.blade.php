@@ -3,6 +3,7 @@
 @section('content')
     <?php
     use App\Http\Controllers\GlobalController;
+    use App\Http\Controllers\ProjectController;
     $is_template = isset($template);
     $is_user = isset($user);
     $project_show = "";
@@ -62,6 +63,7 @@
             <th class="text-left">{{trans('main.is_closed')}}</th>
             <th class="text-center">Id</th>
             <th class="text-center">{{trans('main.accesses')}}</th>
+            <th class="text-center">{{trans('main.subscription_requests')}}</th>
         </tr>
         </thead>
         <tbody>
@@ -115,6 +117,11 @@
                 <td class="text-center">
                     <a href="{{route('access.index_project', $project)}}" title="{{trans('main.accesses')}}">
                         <i class="fas fa-universal-access"></i>
+                    </a>
+                </td>
+                <td class="text-center">
+                    <a href="{{route('access.index_project', $project)}}" title="{{trans('main.accesses')}}">
+                        {{ProjectController::subs_req_count($project)}}
                     </a>
                 </td>
             </tr>

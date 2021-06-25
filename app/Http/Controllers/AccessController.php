@@ -10,6 +10,7 @@ use App\Models\Template;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 use App\Rules\IsUniqueAccess;
 
@@ -179,6 +180,22 @@ class AccessController extends Controller
         }
 
         $access->save();
+
+        $project = $access->project();
+        // Автору проекта не посылать
+        if ($project->user_id != $access->user_id) {
+            // Послать подписчику об изменении статуса подписки
+            if (env('MAIL_ENABLED') == 'yes') {
+                $email_to = $access->user->email;
+                $appname = config('app.name', 'Abakus');
+                Mail::send(['html' => 'mail/access_update'], ['access' => $access],
+                    function ($message) use ($email_to, $appname, $project) {
+                        $message->to($email_to, '')->subject($project->name() . ' - ' . trans('main.subscription_status_has_changed'));
+                        $message->from(env('MAIL_FROM_ADDRESS', ''), $appname);
+                    });
+            }
+        }
+
     }
 
     function edit_project(Access $access)
@@ -260,7 +277,31 @@ class AccessController extends Controller
 //            return null;
 //        }
 
-        $access->delete();
+        $project = $access->project();
+        $role = $access->role();
+
+        // Подписка автора проекта с авторской ролью не удаляется
+        if (!($project->user_id == $access->user_id && $role->is_author == true)) {
+
+            $access_copy = new Access($access);
+
+            $access->delete();
+
+
+            // Автору проекта не посылать
+            if ($project->user_id != $access->user_id) {
+                // Послать подписчику об изменении статуса подписки
+                if (env('MAIL_ENABLED') == 'yes') {
+                    $email_to = $access->user->email;
+                    $appname = config('app.name', 'Abakus');
+                    Mail::send(['html' => 'mail/access_delete'], ['access' => $access_copy],
+                        function ($message) use ($email_to, $appname, $project) {
+                            $message->to($email_to, '')->subject($project->name() . ' - ' . trans('main.subscription_removed'));
+                            $message->from(env('MAIL_FROM_ADDRESS', ''), $appname);
+                        });
+                }
+            }
+        }
 
         if ($request->session()->has('accesses_previous_url')) {
             return redirect(session('accesses_previous_url'));

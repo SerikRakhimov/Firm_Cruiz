@@ -24,4 +24,9 @@ class Access extends Model
         return $this->belongsTo(Role::class, 'role_id');
     }
 
+    function created_user_date_time()
+    {
+        return $this->created_user->name() . ", " . $this->created_at->Format(trans('main.format_date_time')) . ", " . $this->created_user->email;
+    }
+
 }
