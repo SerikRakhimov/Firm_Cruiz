@@ -334,4 +334,5 @@ return [
     'subscription_requests'=>'Запросы на подписку',
     'subscription_status_has_changed'=>'Изменился статус подписки',
     'subscription_removed'=>'Подписка удалена',
+    'additional_information'=>'Дополнительная информация',
 ];

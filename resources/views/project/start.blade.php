@@ -8,9 +8,11 @@
     // https://ru.coredump.biz/questions/41704091/laravel-file-uploads-failing-when-file-size-is-larger-than-2mb
     //phpinfo(); - для поиска php.ini
     $acc_check = ProjectController::acc_check($project, $role);
+    $is_request = $acc_check['is_request'];
+    $is_ask = $acc_check['is_ask'];
     $is_subs = $acc_check['is_subs'];
     $is_delete = $acc_check['is_delete'];
-    $is_ask = $acc_check['is_ask'];
+    $is_num_request = $is_request ? 1 : 0;
     $is_num_ask = $is_ask ? 1 : 0;
     ?>
     @include('layouts.project.show_project_role',['project'=>$project, 'role'=>$role])
@@ -139,21 +141,26 @@
 
     {{--    </div>--}}
 
+    @if(Auth::check())
+        <small>
+            {{trans('main.current_status')}}: <span
+                class="text-title">{{ProjectController::current_status($project, $role)}}</span>
+        </small>
         @if($is_subs == true)
-            <button type="button" class="btn btn-dreamer" title="{{trans('main.subscribe')}}"
+            <button type="button" class="btn btn-sm btn-dreamer" title="{{trans('main.subscribe')}}"
                     onclick="document.location='{{route('project.subs_create',
-                        ['is_request' => 0, 'is_ask' => $is_num_ask, 'is_cancel_all_projects' => 0, 'project'=>$project, 'role'=>$role])}}'">
+                        ['is_request' => $is_num_request, 'is_cancel_all_projects' => 0, 'project'=>$project, 'role'=>$role])}}'">
                 <i class="fas fa-book-open d-inline"></i>&nbsp;{{trans('main.subscribe')}}
             </button>
         @endif
         @if($is_delete == true)
-            <span class="text-title">{{trans('main.you_are_subscribed')}}</span>
-            <button type="button" class="btn btn-dreamer" title="{{trans('main.delete_subscription')}}"
+            <button type="button" class="btn btn-sm btn-dreamer" title="{{trans('main.delete_subscription')}}"
                     onclick="document.location='{{route('project.subs_delete',
-                        ['is_ask' => $is_num_ask, 'is_cancel_all_projects' => 0, 'project'=>$project, 'role'=>$role])}}'">
+                        ['is_cancel_all_projects' => 0, 'project'=>$project, 'role'=>$role])}}'">
                 <i class="fas fa-trash"></i>&nbsp;{{trans('main.delete_subscription')}}
             </button>
         @endif
+    @endif
 
     @if(1==2)
         <?php

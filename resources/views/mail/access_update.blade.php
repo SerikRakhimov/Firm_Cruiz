@@ -1,7 +1,7 @@
 <?php
 use App\Http\Controllers\MainController;
-$project = $access->project();
-$role = $access->role();
+$project = $access->project;
+$role = $access->role;
 $user= GlobalController::glo_user();
 ?>
 <h3 class="display-5 text-center">{{trans('main.subscription_status_has_changed')}}</h3>

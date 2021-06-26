@@ -334,4 +334,5 @@ return [
     'subscription_requests'=>'Subscription requests',
     'subscription_status_has_changed'=>'Subscription status has changed',
     'subscription_removed'=>'Subscription removed',
+    'additional_information'=>'Additional information',
 ];

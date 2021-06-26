@@ -334,4 +334,5 @@ return [
     'subscription_requests'=>'Жазылуға сұрау салу',
     'subscription_status_has_changed'=>'Жазылу мәртебесі өзгерді',
     'subscription_removed'=>'Жазылым жойылды',
+    'additional_information'=>'Қосымша ақпарат',
 ];

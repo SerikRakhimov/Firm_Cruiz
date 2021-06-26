@@ -55,6 +55,11 @@ class GlobalController extends Controller
         return self::glo_user()->name() . ", " . date(trans('main.format_date_time')) . ", " . self::glo_user()->email;
     }
 
+    static function num_is_boolean($value)
+    {
+        return $value == true ? 1 : 0;
+    }
+
     static function name_is_boolean($value)
     {
         return $value == true ? html_entity_decode('	&#9745;')

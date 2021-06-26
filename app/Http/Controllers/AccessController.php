@@ -176,12 +176,13 @@ class AccessController extends Controller
         if ($access->is_subscription_request == true && $access->is_access_allowed == true) {
             {
                 $access->is_subscription_request = false;
+                $access->additional_information = '';
             }
         }
 
         $access->save();
 
-        $project = $access->project();
+        $project = $access->project;
         // Автору проекта не посылать
         if ($project->user_id != $access->user_id) {
             // Послать подписчику об изменении статуса подписки
@@ -286,7 +287,6 @@ class AccessController extends Controller
             $access_copy = new Access($access);
 
             $access->delete();
-
 
             // Автору проекта не посылать
             if ($project->user_id != $access->user_id) {
