@@ -149,14 +149,14 @@
         @if($is_subs == true)
             <button type="button" class="btn btn-sm btn-dreamer" title="{{trans('main.subscribe')}}"
                     onclick="document.location='{{route('project.subs_create',
-                        ['is_request' => $is_num_request, 'is_cancel_all_projects' => 0, 'project'=>$project, 'role'=>$role])}}'">
+                        ['is_request' => $is_num_request, 'project'=>$project, 'role'=>$role])}}'">
                 <i class="fas fa-book-open d-inline"></i>&nbsp;{{trans('main.subscribe')}}
             </button>
         @endif
         @if($is_delete == true)
             <button type="button" class="btn btn-sm btn-dreamer" title="{{trans('main.delete_subscription')}}"
                     onclick="document.location='{{route('project.subs_delete',
-                        ['is_cancel_all_projects' => 0, 'project'=>$project, 'role'=>$role])}}'">
+                        [ 'project'=>$project, 'role'=>$role])}}'">
                 <i class="fas fa-trash"></i>&nbsp;{{trans('main.delete_subscription')}}
             </button>
         @endif

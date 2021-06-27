@@ -434,6 +434,10 @@ class ProjectController extends Controller
     {
         $project = Project::findOrFail($request->project_id);
         $role = Role::findOrFail($request->role_id);
+        $is_cancel_all_projects = isset($request->all_projects) ? true : false;
+        $is_cancel_subs_projects = isset($request->subs_projects) ? true : false;
+        $is_cancel_my_projects = isset($request->my_projects) ? true : false;
+        $is_cancel_mysubs_projects = isset($request->mysubs_projects) ? true : false;
         $is_request = $request->is_request;
         $is_subs = $request->is_subs;
         $is_delete = $request->is_delete;
@@ -510,99 +514,40 @@ class ProjectController extends Controller
             return redirect()->route('project.start',
                 ['project' => $project->id, 'role' => $role->id]);
         } else {
-            // Все проекты
-            return redirect()->route('project.all_index');
+            if ($is_cancel_all_projects == true) {
+                return redirect()->route('project.all_index');
+            } elseif ($is_cancel_subs_projects == true) {
+                return redirect()->route('project.subs_index');
+            } elseif ($is_cancel_my_projects == true) {
+                return redirect()->route('project.my_index');
+            } elseif ($is_cancel_mysubs_projects == true) {
+                return redirect()->route('main.my_subscriptions');
+            }
         }
     }
 
-    function subs_create(bool $is_request, bool $is_cancel_all_projects, Project $project, Role $role)
+    function subs_create(bool $is_request, Project $project, Role $role)
     {
-        //if ($is_ask == true) {
-//            return view('project/ask_subs', ['project' => $project, 'role' => $role,
-//                'is_subs' => true, 'is_req_del' => false, 'is_sb_del' => false, 'is_cancel_all_projects' => $is_cancel_all_projects]);
         return view('project/ask_subs_form', ['project' => $project, 'role' => $role,
             'is_subs' => true, 'is_delete' => false,
-            'is_request' => $is_request, 'is_cancel_all_projects' => $is_cancel_all_projects]);
-        //}
-        // создать новую запись
-//        $access = new Access();
-//        $access->project_id = $project->id;
-//        $access->role_id = $role->id;
-//        $access->user_id = GlobalController::glo_user_id();
-//        // Если запрос на подписку
-//        if ($is_request) {
-//            // Запрос на подписку
-//            $access->is_subscription_request = true;
-//            //$access->additional_information = $additional_information;
-//            $access->is_access_allowed = false;
-//        } else {
-//            // Подписка с разрешением доступа проходит автоматически
-//            $access->is_subscription_request = false;
-//            $access->additional_information = '';
-//            $access->is_access_allowed = true;
-//        }
-//        $access->save();
-//
-//        $project = $access->project;
-//        // Автору проекта не посылать
-//        if ($project->user_id != $access->user_id) {
-//            // Если запрос на подписку - послать по почте автору проекта
-//            if ($is_request) {
-//                if (env('MAIL_ENABLED') == 'yes') {
-//                    $email_to = $project->user->email;
-//                    $appname = config('app.name', 'Abakus');
-//                    Mail::send(['html' => 'mail/access_create'], ['access' => $access],
-//                        function ($message) use ($email_to, $appname, $project) {
-//                            $message->to($email_to, '')->subject($project->name() . ' - ' . trans('main.subscription_request_sent'));
-//                            $message->from(env('MAIL_FROM_ADDRESS', ''), $appname);
-//                        });
-//                }
-//            }
-//        }
-//
-//        $acc_check = self::acc_check($project, $role);
-//        if ($acc_check['is_access_allowed'] == true) {
-//            // Запуск проекта
-//            return redirect()->route('project.start',
-//                ['project' => $project->id, 'role' => $role->id]);
-//        } else {
-//            // Все проекты
-//            return redirect()->route('project.all_index');
-//        }
-
+            'is_request' => $is_request,
+            'is_cancel_all_projects' => false,
+            'is_cancel_subs_projects' => false,
+            'is_cancel_my_projects' => false,
+            'is_cancel_mysubs_projects' => false
+        ]);
     }
 
-    function subs_delete(bool $is_cancel_all_projects, Project $project, Role $role)
+    function subs_delete(Project $project, Role $role)
     {
-//        if ($is_ask == true) {
         return view('project/ask_subs_form', ['project' => $project, 'role' => $role,
             'is_subs' => false, 'is_delete' => true,
-            'is_request' => false, 'is_cancel_all_projects' => $is_cancel_all_projects]);
-//
-//        return view('project/ask_subs', ['project' => $project, 'role' => $role,
-//                'is_subs' => false, 'is_req_del' => false, 'is_sb_del' => true, 'is_cancel_all_projects' => $is_cancel_all_projects]);
-//        }
-//        // Находим подписку
-//        $access = Access::where('project_id', $project->id)
-//            ->where('user_id', GlobalController::glo_user_id())
-//            ->where('role_id', $role->id)
-//            ->first();
-//
-//        // Если найдено, то удаляем запись
-//        if ($access) {
-//            $access->delete();
-//        }
-//
-//        $acc_check = self::acc_check($project, $role);
-//        if ($acc_check['is_access_allowed'] == true) {
-//            // Запуск проекта
-//            return redirect()->route('project.start',
-//                ['project' => $project->id, 'role' => $role->id]);
-//        } else {
-//            // Все проекты
-//            return redirect()->route('project.all_index');
-//        }
-
+            'is_request' => false,
+            'is_cancel_all_projects' => false,
+            'is_cancel_subs_projects' => false,
+            'is_cancel_my_projects' => false,
+            'is_cancel_mysubs_projects' => false
+        ]);
     }
 
     static function current_status(Project $project, Role $role)
@@ -648,9 +593,12 @@ class ProjectController extends Controller
     {
         $project = Project::findOrFail($request->project_id);
         $role = Role::findOrFail($request->role_id);
+        $is_cancel_all_projects = $request->all_projects ? true : false;
+        $is_cancel_subs_projects = $request->subs_projects ? true : false;
+        $is_cancel_my_projects = $request->my_projects ? true : false;
+        $is_cancel_mysubs_projects = $request->mysubs_projects ? true : false;
         $acc_check = self::acc_check($project, $role);
-        $is_request = $acc_check['is_request'];
-        $is_num_request = $is_request ? 1 : 0;
+        $is_request = $request->is_request;
 
         // Проект открыт и роль = is_default_for_external
         $open_default = ($project->is_closed == false) && ($role->is_default_for_external == true);
@@ -674,11 +622,14 @@ class ProjectController extends Controller
             }
             if ($access->is_subscription_request == false && $access->is_access_allowed == false) {
                 // Доступ запрещен, далее страница отмены подписки
-//                return view('project/ask_subs', ['project' => $project, 'role' => $role,
-//                    'is_subs' => false, 'is_req_del' => false, 'is_sb_del' => true, 'is_cancel_all_projects' => true]);
                 return view('project/ask_subs_form', ['project' => $project, 'role' => $role,
                     'is_subs' => false, 'is_delete' => $is_delete,
-                    'is_request' => false, 'is_cancel_all_projects' => true]);
+                    'is_request' => false,
+                    'is_cancel_all_projects' => $is_cancel_all_projects,
+                    'is_cancel_subs_projects' => $is_cancel_subs_projects,
+                    'is_cancel_my_projects' => $is_cancel_my_projects,
+                    'is_cancel_mysubs_projects' => $is_cancel_mysubs_projects
+                ]);
 
             } elseif ($access->is_subscription_request == false && $access->is_access_allowed == true) {
                 // Доступ разрешен, далее запуск проекта
@@ -687,20 +638,25 @@ class ProjectController extends Controller
 
             } elseif ($access->is_subscription_request == true && $access->is_access_allowed == false) {
                 // Запрос на подписку, далее страница отмены запроса на подписку
-//                return view('project/ask_subs', ['project' => $project, 'role' => $role,
-//                    'is_subs' => false, 'is_req_del' => true, 'is_sb_del' => false, 'is_cancel_all_projects' => true]);
                 return view('project/ask_subs_form', ['project' => $project, 'role' => $role,
                     'is_subs' => false, 'is_delete' => $is_delete,
-                    'is_request' => true, 'is_cancel_all_projects' => true]);
-
+                    'is_request' => true,
+                    'is_cancel_all_projects' => $is_cancel_all_projects,
+                    'is_cancel_subs_projects' => $is_cancel_subs_projects,
+                    'is_cancel_my_projects' => $is_cancel_my_projects,
+                    'is_cancel_mysubs_projects' => $is_cancel_mysubs_projects
+                ]);
 
             } elseif ($access->is_subscription_request == true && $access->is_access_allowed == true) {
                 // Такая комбинация недопустима, далее страница отмены подписки
-//                return view('project/ask_subs', ['project' => $project, 'role' => $role,
-//                    'is_subs' => false, 'is_req_del' => false, 'is_sb_del' => true, 'is_cancel_all_projects' => true]);
                 return view('project/ask_subs_form', ['project' => $project, 'role' => $role,
                     'is_subs' => false, 'is_delete' => $is_delete,
-                    'is_request' => false, 'is_cancel_all_projects' => true]);
+                    'is_request' => false,
+                    'is_cancel_all_projects' => $is_cancel_all_projects,
+                    'is_cancel_subs_projects' => $is_cancel_subs_projects,
+                    'is_cancel_my_projects' => $is_cancel_my_projects,
+                    'is_cancel_mysubs_projects' => $is_cancel_mysubs_projects
+                ]);
             }
         } else {
             if ($open_default) {
@@ -708,15 +664,15 @@ class ProjectController extends Controller
                 return redirect()->route('project.start',
                     ['project' => $project->id, 'role' => $role->id]);
             } else {
-//                return view('project/ask_subs', ['project' => $project, 'role' => $role,
-//                    'is_subs' => true, 'is_req_del' => false, 'is_sb_del' => false, 'is_cancel_all_projects' => true]);
-//                return view('project/ask_subs_form', ['project' => $project, 'role' => $role,
-//                    'is_subs' => true, 'is_req_del' => false, 'is_sb_del' => false, 'is_cancel_all_projects' => true]);
                 // Запуск формы подписки
                 return view('project/ask_subs_form', ['project' => $project, 'role' => $role,
                     'is_subs' => true, 'is_delete' => false,
-                    'is_request' => $is_num_request, 'is_cancel_all_projects' => true]);
-
+                    'is_request' => $is_request,
+                    'is_cancel_all_projects' => $is_cancel_all_projects,
+                    'is_cancel_subs_projects' => $is_cancel_subs_projects,
+                    'is_cancel_my_projects' => $is_cancel_my_projects,
+                    'is_cancel_mysubs_projects' => $is_cancel_mysubs_projects
+                ]);
             }
         }
 

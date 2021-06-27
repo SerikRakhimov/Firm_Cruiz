@@ -52,6 +52,10 @@
         <input type="hidden" name="is_subs" value="{{GlobalController::num_is_boolean($is_subs)}}">
         <input type="hidden" name="is_delete" value="{{GlobalController::num_is_boolean($is_delete)}}">
         <input type="hidden" name="is_request" value="{{GlobalController::num_is_boolean($is_request)}}">
+        <input type="hidden" name="is_cancel_all_projects" value="{{GlobalController::num_is_boolean($is_cancel_all_projects)}}">
+        <input type="hidden" name="is_cancel_subs_projects" value="{{GlobalController::num_is_boolean($is_cancel_subs_projects)}}">
+        <input type="hidden" name="is_cancel_my_projects" value="{{GlobalController::num_is_boolean($is_cancel_my_projects)}}">
+        <input type="hidden" name="is_cancel_mysubs_projects" value="{{GlobalController::num_is_boolean($is_cancel_mysubs_projects)}}">
         @if($is_subs == true && $is_request == true)
             <div class="form-group">
                 <label for="additional_information">{{trans('main.additional_information')}}<span
@@ -75,6 +79,12 @@
                 onclick="document.location=
                 @if($is_cancel_all_projects == true)
                     '{{route('project.all_index')}}'
+                @elseif($is_cancel_subs_projects == true)
+                    '{{route('project.subs_index')}}'
+                @elseif($is_cancel_my_projects == true)
+                    '{{route('project.my_index')}}'
+                @elseif($is_cancel_mysubs_projects == true)
+                    '{{route('project.mysubs_index')}}'
                 @else
                     '{{route('project.start',
                 ['project' => $project->id, 'role' => $role->id])}}'
