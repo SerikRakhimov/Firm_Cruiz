@@ -26,7 +26,7 @@ class Access extends Model
 
     function created_date_time()
     {
-        return  $this->created_at->Format(trans('main.format_date_time')) . ", " . $this->created_user->email;
+        return  $this->created_at->Format(trans('main.format_date_time'));
     }
 
 }
