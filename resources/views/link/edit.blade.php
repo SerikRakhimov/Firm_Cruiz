@@ -514,22 +514,6 @@
             </div>
         </div>
 
-        <div class="form-group" id="parent_child_related_start_link_id_form_group">
-            <label for="parent_child_related_start_link_id">{{trans('main.parent_child_related_start_link_id')}}<span
-                    class="text-danger">*</span></label>
-            <select class="form-control"
-                    name="parent_child_related_start_link_id"
-                    id="parent_child_related_start_link_id"
-                    class="form-control @error('parent_child_related_start_link_id') is-invalid @enderror">
-                <option value="0">0</option>
-            </select>
-            @error('parent_child_related_start_link_id')
-            <div class="text-danger">
-                {{$message}}
-            </div>
-            @enderror
-        </div>
-
         <div class="form-group" id="parent_child_related_result_link_id_form_group">
             <label for="parent_child_related_result_link_id">{{trans('main.parent_child_related_result_link_id')}}
                 <span
@@ -541,6 +525,22 @@
                 <option value="0">0</option>
             </select>
             @error('parent_child_related_result_link_id')
+            <div class="text-danger">
+                {{$message}}
+            </div>
+            @enderror
+        </div>
+
+        <div class="form-group" id="parent_child_related_start_link_id_form_group">
+            <label for="parent_child_related_start_link_id">{{trans('main.parent_child_related_start_link_id')}}<span
+                    class="text-danger">*</span></label>
+            <select class="form-control"
+                    name="parent_child_related_start_link_id"
+                    id="parent_child_related_start_link_id"
+                    class="form-control @error('parent_child_related_start_link_id') is-invalid @enderror">
+                <option value="0">0</option>
+            </select>
+            @error('parent_child_related_start_link_id')
             <div class="text-danger">
                 {{$message}}
             </div>

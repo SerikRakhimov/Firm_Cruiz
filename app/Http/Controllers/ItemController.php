@@ -1198,7 +1198,7 @@ class ItemController extends Controller
                         $create_item_seek = true;
 
                         // Эта проверка сделана, чтобы зря не создавать $item_seek
-                        // Фильтры 111 - похоие строки ниже
+                        // Фильтры 111 - похожие строки ниже
                         foreach ($set_base_to as $key => $value) {
                             $nk = -1;
                             foreach ($keys as $k => $v) {
@@ -1241,7 +1241,7 @@ class ItemController extends Controller
                         $found = false;
                         $valnull = false;
 
-                        // Фильтры 111 - похоие строки выше
+                        // Фильтры 111 - похожие строки выше
                         foreach ($set_base_to as $key => $value) {
                             $nk = -1;
                             foreach ($keys as $k => $v) {
