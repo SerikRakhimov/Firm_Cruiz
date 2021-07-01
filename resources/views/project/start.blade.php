@@ -100,6 +100,9 @@
     </table>
     {{$bases->links()}}
 
+
+
+
     {{--    <h3 class="text-center">Справочники</h3><br>--}}
 
     {{--    <div class="card-deck">--}}

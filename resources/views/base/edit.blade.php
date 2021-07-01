@@ -21,6 +21,28 @@
         @endif
         <input type="hidden" name="template_id" value="{{$template->id}}">
 
+        <div class="form-group row" id="serial_number_form_group">
+            <div class="col-sm-3 text-right">
+                <label for="serial_number">{{trans('main.serial_number')}}<span
+                        class="text-danger">*</span></label>
+            </div>
+            <div class="col-sm-2">
+                <input type="number"
+                       name="serial_number"
+                       id="serial_number"
+                       class="form-control @error('serial_number') is-invalid @enderror"
+                       placeholder=""
+                       value="{{ old('serial_number') ?? ($base['serial_number'] ?? '0') }}">
+                @error('serial_number')
+                <div class="text-danger">
+                    {{$message}}
+                </div>
+                @enderror
+            </div>
+            <div class="col-sm-7">
+            </div>
+        </div>
+
         {{--    в единственном числе--}}
         <div class="form-group row">
             @foreach (config('app.locales') as $key=>$value)

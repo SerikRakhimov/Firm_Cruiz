@@ -278,13 +278,13 @@ class AccessController extends Controller
 //            return null;
 //        }
 
-        $project = $access->project();
-        $role = $access->role();
+        $project = $access->project;
+        $role = $access->role;
 
         // Подписка автора проекта с авторской ролью не удаляется
         if (!($project->user_id == $access->user_id && $role->is_author == true)) {
 
-            $access_copy = new Access($access);
+            $access_copy = $access;
 
             $access->delete();
 

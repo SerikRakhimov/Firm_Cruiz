@@ -136,6 +136,30 @@
             </div>
         @endif
 
+        <div class="form-group row">
+                <div class="col-3 text-right">
+                    <label for="additional_information" class="col-form-label">
+                        {{trans('main.additional_information')}}<span
+                            class="text-danger">*</span></label>
+                </div>
+                <div class="col-7">
+                    <input type="text"
+                           name="additional_information"
+                           id="additional_information"
+                           class="form-control @error('additional_information') is-invalid @enderror"
+                           placeholder=""
+                           value="{{ old('additional_information') ?? ($access->additional_information ?? '') }}"
+                           disabled>
+                    @error('additional_information')
+                    <div class="text-danger">
+                        {{$message}}
+                    </div>
+                    @enderror
+                </div>
+                <div class="col-sm-2">
+                </div>
+        </div>
+
         <div class="form-group row" id="is_subscription_request_form_group">
             <div class="col-sm-3 text-right">
                 <label class="form-label"

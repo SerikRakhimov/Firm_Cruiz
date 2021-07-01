@@ -43,8 +43,9 @@ class BaseController extends Controller
         Auth::user()->isAdmin()) {
             return redirect()->route('project.all_index');
         }
-        // Порядок сортировки; обычные bases, вычисляемые bases, настройки - bases
-        $bases = Base::where('template_id', $template->id)->orderBy('is_setup_lst')->orderBy('is_calculated_lst');
+        // Порядок сортировки; обычные bases, вычисляемые bases, настройки - bases, серийный номер
+        $bases = Base::where('template_id', $template->id)->orderBy('is_setup_lst')->orderBy('is_calculated_lst')
+            ->orderBy('serial_number');
         $index = array_search(App::getLocale(), config('app.locales'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
             switch ($index) {
@@ -142,6 +143,8 @@ class BaseController extends Controller
         $base->is_calculated_lst = isset($request->is_calculated_lst) ? "1" : "0";
         $base->is_setup_lst = isset($request->is_setup_lst) ? "1" : "0";
         $base->length_txt = $request->length_txt >= 0 ? $request->length_txt : 0;
+
+        $base->serial_number = $request->serial_number;
 
         // Похожие строки в BaseController.php (functions: store(), edit())
         // и в Base.php (functions: get_types(), type(), type_name())
@@ -441,6 +444,8 @@ class BaseController extends Controller
         $base->is_calculated_lst = isset($request->is_calculated_lst) ? "1" : "0";
         $base->is_setup_lst = isset($request->is_setup_lst) ? "1" : "0";
         $base->length_txt = $request->length_txt >= 0 ? $request->length_txt : 0;
+
+        $base->serial_number = $request->serial_number;
 
         // Похожие строки в BaseController.php (functions: store(), edit())
         // и в Base.php (functions: get_types(), type(), type_name())

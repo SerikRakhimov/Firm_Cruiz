@@ -48,6 +48,7 @@
         <p>{{trans('main.role')}}: <b>{{$access->role->name()}}</b></p>
     @endif
 
+    <p>{{trans('main.additional_information')}}: <b>{{$access->additional_information}}</b></p>
     <p>{{trans('main.is_subscription_request')}}:
         <b>{{GlobalController::name_is_boolean($access->is_subscription_request)}}</b></p>
     <p>{{trans('main.is_access_allowed')}}: <b>{{GlobalController::name_is_boolean($access->is_access_allowed)}}</b></p>

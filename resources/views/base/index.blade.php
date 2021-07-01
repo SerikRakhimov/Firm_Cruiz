@@ -29,6 +29,7 @@
         <thead>
         <tr>
             <th class="text-center">#</th>
+            <th class="text-center">{{trans('main.serial_number')}}</th>
             <th class="text-left">{{trans('main.names')}}</th>
             <th class="text-center">{{trans('main.type')}}</th>
             <th class="text-center">{{trans('main.is_calculated_lst')}}</th>
@@ -55,6 +56,7 @@
                 <tr>
                     {{--                <th scope="row">{{$i}}</th>--}}
                     <td class="text-center">{{$i}}</td>
+                    <td class="text-center">{{$base->serial_number}}</td>
                     <td class="text-left">
                         {{--                        <a href="{{route('item.base_index',$base)}}" title="{{$base->names()}}">--}}
                         {{$base->names()}}

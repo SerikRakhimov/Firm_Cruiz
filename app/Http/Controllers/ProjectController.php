@@ -434,10 +434,10 @@ class ProjectController extends Controller
     {
         $project = Project::findOrFail($request->project_id);
         $role = Role::findOrFail($request->role_id);
-        $is_cancel_all_projects = isset($request->all_projects) ? true : false;
-        $is_cancel_subs_projects = isset($request->subs_projects) ? true : false;
-        $is_cancel_my_projects = isset($request->my_projects) ? true : false;
-        $is_cancel_mysubs_projects = isset($request->mysubs_projects) ? true : false;
+        $is_cancel_all_projects = $request->is_cancel_all_projects ? true : false;
+        $is_cancel_subs_projects = $request->is_cancel_subs_projects ? true : false;
+        $is_cancel_my_projects = $request->is_cancel_my_projects ? true : false;
+        $is_cancel_mysubs_projects = $request->is_cancel_mysubs_projects ? true : false;
         $is_request = $request->is_request;
         $is_subs = $request->is_subs;
         $is_delete = $request->is_delete;
@@ -521,7 +521,7 @@ class ProjectController extends Controller
             } elseif ($is_cancel_my_projects == true) {
                 return redirect()->route('project.my_index');
             } elseif ($is_cancel_mysubs_projects == true) {
-                return redirect()->route('main.my_subscriptions');
+                return redirect()->route('project.mysubs_index');
             }
         }
     }
@@ -598,7 +598,7 @@ class ProjectController extends Controller
         $is_cancel_my_projects = $request->my_projects ? true : false;
         $is_cancel_mysubs_projects = $request->mysubs_projects ? true : false;
         $acc_check = self::acc_check($project, $role);
-        $is_request = $request->is_request;
+        $is_request = $acc_check['is_request'];
 
         // Проект открыт и роль = is_default_for_external
         $open_default = ($project->is_closed == false) && ($role->is_default_for_external == true);
@@ -772,8 +772,9 @@ class ProjectController extends Controller
             }
         }
         $template = $project->template;
-        // Порядок сортировки; обычные bases, вычисляемые bases, настройки - bases
-        $bases = Base::where('template_id', $template->id)->orderBy('is_setup_lst')->orderBy('is_calculated_lst');
+        // Порядок сортировки; обычные bases, вычисляемые bases, настройки - bases, серийный номер
+        $bases = Base::where('template_id', $template->id)->orderBy('is_setup_lst')->orderBy('is_calculated_lst')
+            ->orderBy('serial_number');
         $index = array_search(App::getLocale(), config('app.locales'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
             switch ($index) {

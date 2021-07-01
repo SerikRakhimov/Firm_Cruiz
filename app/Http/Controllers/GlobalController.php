@@ -114,6 +114,14 @@ class GlobalController extends Controller
 //            $is_list_base_update = false;
 //            $is_list_base_delete = false;
 //        }
+
+        // Для вычисляемых base
+        if ($base->is_calculated_lst == true) {
+            $is_list_base_create = false;
+            $is_list_base_read = true;
+            $is_list_base_update = false;
+            $is_list_base_delete = false;
+        }
         // "$is_enable &&" нужно
         $is_list_base_calc = $is_list_base_calc && ($is_list_base_create || $is_list_base_read || $is_list_base_update || $is_list_base_delete);
 
@@ -150,6 +158,14 @@ class GlobalController extends Controller
 //                $is_roba_list_base_update = false;
 //                $is_roba_list_base_delete = false;
 //            }
+
+            // Для вычисляемых base
+            if ($base->is_calculated_lst == true) {
+                $is_roba_list_base_create = false;
+                $is_roba_list_base_read = true;
+                $is_roba_list_base_update = false;
+                $is_roba_list_base_delete = false;
+            }
 
             $is_roba_list_base_calc = $is_roba_list_base_create || $is_roba_list_base_read || $is_roba_list_base_update || $is_roba_list_base_delete;
 //            $is_roba_edit_base_enable = $is_roba_edit_base_read || $is_roba_edit_base_update;

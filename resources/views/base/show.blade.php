@@ -19,6 +19,8 @@
 
     <p>Id: <b>{{$base->id}}</b></p>
 
+    <p>{{trans('main.serial_number')}}: <b>{{$base->serial_number}}</b></p>
+
     @foreach (config('app.locales') as $key=>$value)
         <p>{{trans('main.name')}} ({{trans('main.' . $value)}}): <b>{{$base['name_lang_' . $key]}}</b></p>
     @endforeach
