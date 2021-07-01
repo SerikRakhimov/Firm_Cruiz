@@ -593,10 +593,10 @@ class ProjectController extends Controller
     {
         $project = Project::findOrFail($request->project_id);
         $role = Role::findOrFail($request->role_id);
-        $is_cancel_all_projects = $request->all_projects ? true : false;
-        $is_cancel_subs_projects = $request->subs_projects ? true : false;
-        $is_cancel_my_projects = $request->my_projects ? true : false;
-        $is_cancel_mysubs_projects = $request->mysubs_projects ? true : false;
+        $is_cancel_all_projects = $request->is_cancel_all_projects ? true : false;
+        $is_cancel_subs_projects = $request->is_cancel_subs_projects ? true : false;
+        $is_cancel_my_projects = $request->is_cancel_my_projects ? true : false;
+        $is_cancel_mysubs_projects = $request->is_cancel_mysubs_projects ? true : false;
         $acc_check = self::acc_check($project, $role);
         $is_request = $acc_check['is_request'];
 

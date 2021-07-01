@@ -92,10 +92,10 @@
                     <form action="{{route('project.start_check')}}" method=GET" enctype=multipart/form-data>
                         @csrf
                         <input type="hidden" name="project_id" value="{{$project->id}}">
-                        <input type="hidden" name="all_projects" value="{{GlobalController::num_is_boolean($all_projects)}}">
-                        <input type="hidden" name="subs_projects" value="{{GlobalController::num_is_boolean($subs_projects)}}">
-                        <input type="hidden" name="my_projects" value="{{GlobalController::num_is_boolean($my_projects)}}">
-                        <input type="hidden" name="mysubs_projects" value="{{GlobalController::num_is_boolean($mysubs_projects)}}">
+                        <input type="hidden" name="is_cancel_all_projects" value="{{GlobalController::num_is_boolean($all_projects)}}">
+                        <input type="hidden" name="is_cancel_subs_projects" value="{{GlobalController::num_is_boolean($subs_projects)}}">
+                        <input type="hidden" name="is_cancel_my_projects" value="{{GlobalController::num_is_boolean($my_projects)}}">
+                        <input type="hidden" name="is_cancel_mysubs_projects" value="{{GlobalController::num_is_boolean($mysubs_projects)}}">
                         <div class="form-group row">
                             <div class="col-sm-2 text-right">
                                 <label for="role_id" class="col-form-label">{{trans('main.role')}}</label>
