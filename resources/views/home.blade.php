@@ -19,6 +19,20 @@
     </div>
     <div class="row">
         <div class="col-4 text-right">
+            <a class="nav-link" href="{{route('project.subs_index')}}"
+               title="{{trans('main.subscribe')}}">
+                <h5>{{trans('main.subscribe')}}</h5>
+            </a>
+        </div>
+        <div class="col-8 text-left">
+            <a class="nav-link" href="{{route('project.subs_index')}}"
+               title="{{trans('main.subscribe')}}">
+                {{trans('main.info_subscribe')}}
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4 text-right">
             <a class="nav-link" href="{{route('project.my_index')}}"
                title="{{trans('main.my_projects')}}">
                 <h5>{{trans('main.my_projects')}}</h5>
@@ -28,6 +42,20 @@
             <a class="nav-link" href="{{route('project.my_index')}}"
                title="{{trans('main.my_projects')}}">
                 {{trans('main.info_my_projects')}}
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4 text-right">
+            <a class="nav-link" href="{{route('project.mysubs_index')}}"
+               title="{{trans('main.my_subscriptions')}}">
+                <h5>{{trans('main.my_subscriptions')}}</h5>
+            </a>
+        </div>
+        <div class="col-8 text-left">
+            <a class="nav-link" href="{{route('project.mysubs_index')}}"
+               title="{{trans('main.my_subscriptions')}}">
+                {{trans('main.info_my_subscriptions')}}
             </a>
         </div>
     </div>
