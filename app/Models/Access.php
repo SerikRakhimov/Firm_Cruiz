@@ -14,19 +14,14 @@ class Access extends Model
         return $this->belongsTo(Project::class, 'project_id');
     }
 
-    function user()
-    {
-        return $this->belongsTo(User::class, 'user_id');
-    }
-
     function role()
     {
         return $this->belongsTo(Role::class, 'role_id');
     }
 
-    function created_user_date_time()
+    function created_date_time()
     {
-        return $this->created_user->name() . ", " . $this->created_at->Format(trans('main.format_date_time')) . ", " . $this->created_user->email;
+        return  $this->created_at->Format(trans('main.format_date_time')) . ", " . $this->created_user->email;
     }
 
 }

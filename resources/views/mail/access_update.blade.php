@@ -18,7 +18,7 @@ $user= GlobalController::glo_user();
 <p>{{trans('main.role')}}: <b>{{$role->name()}}</b></p>
 
 <p class="text-label">{{trans('main.created_user_date_time')}}:
-    <b>{{$access->created_user_date_time()}}</b><br>
+    <b>{{$access->created_date_time()}}</b><br>
 </p>
 <br>
 <hr>
