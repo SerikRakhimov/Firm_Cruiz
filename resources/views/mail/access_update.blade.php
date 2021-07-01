@@ -1,4 +1,5 @@
 <?php
+use App\Http\Controllers\GlobalController;
 use App\Http\Controllers\MainController;
 $project = $access->project;
 $role = $access->role;
