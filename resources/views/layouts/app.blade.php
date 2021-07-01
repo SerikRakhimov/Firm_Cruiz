@@ -27,7 +27,7 @@ use App\Models\Project;
 
 </head>
 {{--<body background="{{Storage::url('main_background.jpg')}}">--}}
-<body background="{{Storage::url('main_background.jpg')}}">
+<body>
 <div id="app">
     <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
         <div class="container">
@@ -138,7 +138,7 @@ use App\Models\Project;
                     <li class="nav-item">
                         <a class="nav-link"
                            href="{{route('template.main_index')}}"
-                           title="{{trans('main.templates')}}">
+                           title="{{trans('main.templates').' - '.trans('main.info_templates')}}">
                             {{trans('main.templates')}}
                         </a>
                     </li>
@@ -149,7 +149,7 @@ use App\Models\Project;
                     @if($instr_link !='')
                         <li class="nav-item"><a class="nav-link"
                                                 href="{{$instr_link}}"
-                                                title="{{trans('main.instructions')}}">
+                                                title="{{trans('main.instructions').' - '.trans('main.info_instructions')}}">
                                 {{trans('main.instructions')}}
                             </a>
                         </li>
