@@ -26,6 +26,7 @@ use App\Models\Project;
     @include('layouts.style_header')
 
 </head>
+{{--<body background="{{Storage::url('main_background.jpg')}}">--}}
 <body background="{{Storage::url('main_background.jpg')}}">
 <div id="app">
     <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
@@ -68,7 +69,7 @@ use App\Models\Project;
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('project.all_index')}}"
-                           title="{{trans('main.all_projects')}}">
+                           title="{{trans('main.all_projects').' - '.trans('main.info_all_projects')}}">
                             {{trans('main.all_projects')}}
                         </a>
                     </li>
@@ -106,19 +107,19 @@ use App\Models\Project;
                     @auth
                         <li class="nav-item">
                             <a class="nav-link" href="{{route('project.subs_index')}}"
-                               title="{{trans('main.subscribe')}}">
+                               title="{{trans('main.subscribe').' - '.trans('main.info_subscribe')}}">
                                 {{trans('main.subscribe')}}
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{route('project.my_index')}}"
-                               title="{{trans('main.my_projects')}}">
+                               title="{{trans('main.my_projects').' - '.trans('main.info_my_projects')}}">
                                 {{trans('main.my_projects')}}
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{route('project.mysubs_index')}}"
-                               title="{{trans('main.my_subscriptions')}}">
+                               title="{{trans('main.my_subscriptions').' - '.trans('main.info_my_subscriptions')}}">
                                 {{trans('main.my_subscriptions')}}
                             </a>
                         </li>
