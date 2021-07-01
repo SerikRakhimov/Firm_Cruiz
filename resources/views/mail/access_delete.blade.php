@@ -1,7 +1,7 @@
 <?php
 use App\Http\Controllers\GlobalController;
 use App\Http\Controllers\MainController;
-use App\Http\ControllersProjectController;
+use App\Http\Controllers\ProjectController;
 $project = $access->project;
 $role = $access->role;
 $user= GlobalController::glo_user();
