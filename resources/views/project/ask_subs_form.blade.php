@@ -6,14 +6,17 @@
     use App\Http\Controllers\GlobalController;
     use App\Http\Controllers\ProjectController;
     $button_submit_text = '';
+    $button_submit_icon = '';
     if ($is_subs == true) {
         if ($is_request == true) {
             $button_submit_text = trans('main.send');
         } else {
             $button_submit_text = trans('main.subscribe');
         }
+        $button_submit_icon = 'fas fa-book-open d-inline';
     } else {
         $button_submit_text = trans('main.delete');
+        $button_submit_icon = 'fas fa-trash';
     }
     ?>
     @include('layouts.project.show_project_role',['project'=>$project, 'role'=>$role])
@@ -52,10 +55,14 @@
         <input type="hidden" name="is_subs" value="{{GlobalController::num_is_boolean($is_subs)}}">
         <input type="hidden" name="is_delete" value="{{GlobalController::num_is_boolean($is_delete)}}">
         <input type="hidden" name="is_request" value="{{GlobalController::num_is_boolean($is_request)}}">
-        <input type="hidden" name="is_cancel_all_projects" value="{{GlobalController::num_is_boolean($is_cancel_all_projects)}}">
-        <input type="hidden" name="is_cancel_subs_projects" value="{{GlobalController::num_is_boolean($is_cancel_subs_projects)}}">
-        <input type="hidden" name="is_cancel_my_projects" value="{{GlobalController::num_is_boolean($is_cancel_my_projects)}}">
-        <input type="hidden" name="is_cancel_mysubs_projects" value="{{GlobalController::num_is_boolean($is_cancel_mysubs_projects)}}">
+        <input type="hidden" name="is_cancel_all_projects"
+               value="{{GlobalController::num_is_boolean($is_cancel_all_projects)}}">
+        <input type="hidden" name="is_cancel_subs_projects"
+               value="{{GlobalController::num_is_boolean($is_cancel_subs_projects)}}">
+        <input type="hidden" name="is_cancel_my_projects"
+               value="{{GlobalController::num_is_boolean($is_cancel_my_projects)}}">
+        <input type="hidden" name="is_cancel_mysubs_projects"
+               value="{{GlobalController::num_is_boolean($is_cancel_mysubs_projects)}}">
         @if($is_subs == true && $is_request == true)
             <div class="form-group">
                 <label for="additional_information">{{trans('main.additional_information')}}<span
@@ -70,7 +77,7 @@
         @endif
         @if ($is_subs == true || $is_delete == true)
             <button type="submit" class="btn btn-dreamer" title="{{$button_submit_text}}">
-                <i class="fas fa-book-open d-inline"></i>
+                <i class="{{$button_submit_icon}}"></i>
                 {{$button_submit_text}}
             </button>
         @endif
