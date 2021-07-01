@@ -69,7 +69,7 @@ use App\Models\Project;
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('project.all_index')}}"
-                           title="{{trans('main.all_projects').' - '.trans('main.info_all_projects')}}">
+                           title="{{trans('main.all_projects') . ' - ' . trans('main.info_all_projects')}}">
                             {{trans('main.all_projects')}}
                         </a>
                     </li>
@@ -107,19 +107,19 @@ use App\Models\Project;
                     @auth
                         <li class="nav-item">
                             <a class="nav-link" href="{{route('project.subs_index')}}"
-                               title="{{trans('main.subscribe').' - '.trans('main.info_subscribe')}}">
+                               title="{{trans('main.subscribe') . ' - ' . trans('main.info_subscribe')}}">
                                 {{trans('main.subscribe')}}
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{route('project.my_index')}}"
-                               title="{{trans('main.my_projects').' - '.trans('main.info_my_projects')}}">
+                               title="{{trans('main.my_projects') . ' - ' . trans('main.info_my_projects')}}">
                                 {{trans('main.my_projects')}}
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{route('project.mysubs_index')}}"
-                               title="{{trans('main.my_subscriptions').' - '.trans('main.info_my_subscriptions')}}">
+                               title="{{trans('main.my_subscriptions') . ' - ' . trans('main.info_my_subscriptions')}}">
                                 {{trans('main.my_subscriptions')}}
                             </a>
                         </li>
@@ -138,7 +138,7 @@ use App\Models\Project;
                     <li class="nav-item">
                         <a class="nav-link"
                            href="{{route('template.main_index')}}"
-                           title="{{trans('main.templates').' - '.trans('main.info_templates')}}">
+                           title="{{trans('main.templates') . ' - ' . trans('main.info_templates')}}">
                             {{trans('main.templates')}}
                         </a>
                     </li>
@@ -149,7 +149,7 @@ use App\Models\Project;
                     @if($instr_link !='')
                         <li class="nav-item"><a class="nav-link"
                                                 href="{{$instr_link}}"
-                                                title="{{trans('main.instructions').' - '.trans('main.info_instructions')}}">
+                                                title="{{trans('main.instructions')}}">
                                 {{trans('main.instructions')}}
                             </a>
                         </li>
