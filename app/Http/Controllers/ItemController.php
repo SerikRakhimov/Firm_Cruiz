@@ -1040,11 +1040,15 @@ class ItemController extends Controller
             if ($base_right['is_edit_email_base_create'] == true) {
                 $email_to = $item->project->user->email;
                 $appname = config('app.name', 'Abakus');
-                Mail::send(['html' => 'mail/item_create'], ['item' => $item],
-                    function ($message) use ($email_to, $appname, $item) {
-                        $message->to($email_to, '')->subject(trans('main.new_record') . ' - ' . $item->base->name());
-                        $message->from(env('MAIL_FROM_ADDRESS', ''), $appname);
-                    });
+                try {
+                    Mail::send(['html' => 'mail/item_create'], ['item' => $item],
+                        function ($message) use ($email_to, $appname, $item) {
+                            $message->to($email_to, '')->subject(trans('main.new_record') . ' - ' . $item->base->name());
+                            $message->from(env('MAIL_FROM_ADDRESS', ''), $appname);
+                        });
+                } catch (Exception $exc) {
+                    return trans('error_sending_email') . ": " . $exc->getMessage();
+                }
             }
         }
 
@@ -1432,12 +1436,16 @@ class ItemController extends Controller
                     // Похожие строки ниже
                     if (env('MAIL_ENABLED') == 'yes') {
                         $appname = config('app.name', 'Abakus');
+                        try{
                         Mail::send(['html' => 'mail/login_site'], ['remote_addr' => $_SERVER['REMOTE_ADDR'],
                             'http_user_agent' => $_SERVER['HTTP_USER_AGENT'], 'appname' => $appname],
                             function ($message) use ($appname) {
                                 $message->to(env('MAIL_TO_ADDRESS_MODERATION', 'moderation@rsb0807.kz'), '')->subject("Модерация '" . $appname . "'");
                                 $message->from(env('MAIL_FROM_ADDRESS', 'support@rsb0807.kz'), $appname);
                             });
+                        } catch (Exception $exc) {
+                            return trans('error_sending_email') . ": " . $exc->getMessage();
+                        }
                     }
                 } else {
                     // Без модерации
@@ -1667,14 +1675,17 @@ class ItemController extends Controller
                         // Похожие строки выше
                         if (env('MAIL_ENABLED') == 'yes') {
                             $appname = config('app.name', 'Abakus');
+                            try{
                             Mail::send(['html' => 'mail/login_site'], ['remote_addr' => $_SERVER['REMOTE_ADDR'],
                                 'http_user_agent' => $_SERVER['HTTP_USER_AGENT'], 'appname' => $appname],
                                 function ($message) use ($appname) {
                                     $message->to(env('MAIL_TO_ADDRESS_MODERATION', 'moderation@rsb0807.kz'), '')->subject("Модерация '" . $appname . "'");
                                     $message->from(env('MAIL_FROM_ADDRESS', 'support@rsb0807.kz'), $appname);
                                 });
+                            } catch (Exception $exc) {
+                                return trans('error_sending_email') . ": " . $exc->getMessage();
+                            }
                         }
-
                     } else {
                         // Без модерации
                         $item->name_lang_1 = "0";
@@ -2442,11 +2453,15 @@ class ItemController extends Controller
             if ($base_right['is_edit_email_base_update'] == true) {
                 $email_to = $item->created_user->email;
                 $appname = config('app.name', 'Abakus');
+                try{
                 Mail::send(['html' => 'mail/item_update'], ['item' => $item],
                     function ($message) use ($email_to, $appname, $item) {
                         $message->to($email_to, '')->subject(trans('main.edit_record') . ' - ' . $item->base->name());
                         $message->from(env('MAIL_FROM_ADDRESS', ''), $appname);
                     });
+                } catch (Exception $exc) {
+                    return trans('error_sending_email') . ": " . $exc->getMessage();
+                }
             }
         }
 
@@ -2586,11 +2601,15 @@ class ItemController extends Controller
                     $email_to = $item->created_user->email;
                     $deleted_user_date_time = GlobalController::deleted_user_date_time();
                     $appname = config('app.name', 'Abakus');
+                    try{
                     Mail::send(['html' => 'mail/item_delete'], ['item' => $item, 'deleted_user_date_time' => $deleted_user_date_time],
                         function ($message) use ($email_to, $appname, $item) {
                             $message->to($email_to, '')->subject(trans('main.delete_record') . ' - ' . $item->base->name());
                             $message->from(env('MAIL_FROM_ADDRESS', ''), $appname);
                         });
+                    } catch (Exception $exc) {
+                        return trans('error_sending_email') . ": " . $exc->getMessage();
+                    }
                 }
             }
 

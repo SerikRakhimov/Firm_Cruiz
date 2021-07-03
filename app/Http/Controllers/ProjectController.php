@@ -471,11 +471,15 @@ class ProjectController extends Controller
                     if (env('MAIL_ENABLED') == 'yes') {
                         $email_to = $project->user->email;
                         $appname = config('app.name', 'Abakus');
+                        try{
                         Mail::send(['html' => 'mail/access_create'], ['access' => $access],
                             function ($message) use ($email_to, $appname, $project) {
                                 $message->to($email_to, '')->subject($project->name() . ' - ' . trans('main.subscription_request_sent'));
                                 $message->from(env('MAIL_FROM_ADDRESS', ''), $appname);
                             });
+                        } catch (Exception $exc) {
+                            return trans('error_sending_email') . ": " . $exc->getMessage();
+                        }
                     }
                 }
             }
@@ -498,11 +502,15 @@ class ProjectController extends Controller
                     if (env('MAIL_ENABLED') == 'yes') {
                         $email_to = $access->user->email;
                         $appname = config('app.name', 'Abakus');
+                        try{
                         Mail::send(['html' => 'mail/access_update'], ['access' => $access],
                             function ($message) use ($email_to, $appname, $project) {
                                 $message->to($email_to, '')->subject($project->name() . ' - ' . trans('main.subscription_status_has_changed'));
                                 $message->from(env('MAIL_FROM_ADDRESS', ''), $appname);
                             });
+                        } catch (Exception $exc) {
+                            return trans('error_sending_email') . ": " . $exc->getMessage();
+                        }
                     }
                 }
             }

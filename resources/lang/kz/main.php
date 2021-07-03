@@ -333,6 +333,7 @@ return [
     'delete_subscription_request'=>'Жазылу сұрауын жою',
     'delete_subscription'=>'Жазылымды жою',
     'project_access_denied'=>'Жобаға қатынасуға тыйым салынған',
+    'error_sending_email'=>'Электрондық пошта жіберу қатесі',
     'current_status'=>'Ағымдағы мәртебе',
     'send'=>'Жіберу',
     'subscribe'=>'Жазылу',

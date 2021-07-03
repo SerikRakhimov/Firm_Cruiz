@@ -69,12 +69,16 @@ Route::get('/', function () {
 
     if (env('MAIL_ENABLED') == 'yes'){
         $appname = config('app.name', 'Abakus');
+        try{
         Mail::send(['html' => 'mail/login_site'], ['remote_addr' => $_SERVER['REMOTE_ADDR'],
             'http_user_agent' => $_SERVER['HTTP_USER_AGENT'],'appname' => $appname],
             function ($message) use ($appname) {
                 $message->to(env('MAIL_TO_ADDRESS_LOG', 'log@rsb0807.kz'), '')->subject("Вход на сайт '" . $appname . "'");
                 $message->from(env('MAIL_FROM_ADDRESS', 'support@rsb0807.kz'), $appname);
             });
+        } catch (Exception $exc) {
+            return trans('error_sending_email') . ": " . $exc->getMessage();
+        }
     }
 
     if (Auth::check()) {

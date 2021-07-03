@@ -333,6 +333,7 @@ return [
     'delete_subscription_request'=>'Удалить запрос на подписку',
     'delete_subscription'=>'Удалить подписку',
     'project_access_denied'=>'Доступ к проекту запрещен',
+    'error_sending_email'=>'Ошибка при отправке электронной почты',
     'current_status'=>'Текущий статус',
     'send'=>'Отправить',
     'subscribe'=>'Подписаться',

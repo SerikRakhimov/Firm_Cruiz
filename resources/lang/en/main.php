@@ -333,6 +333,7 @@ return [
     'delete_subscription_request'=>'Delete subscription request',
     'delete_subscription'=>'Delete subscription',
     'project_access_denied'=>'Project access denied',
+    'error_sending_email'=>'Error sending email',
     'current_status'=>'Current status',
     'send'=>'Send',
     'subscribe'=>'Subscribe',
