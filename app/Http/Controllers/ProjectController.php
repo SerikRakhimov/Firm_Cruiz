@@ -143,14 +143,6 @@ class ProjectController extends Controller
             'title' => trans('main.my_subscriptions')]);
     }
 
-    // Вычисляет префикс для сортировки списка ролей
-    static function get_role_number_for_sort(Role $role)
-    {
-        // https://www.php.net/manual/ru/function.sprintf.php
-        // ' . $role->id' нужно
-        return $result = sprintf("%'.030d\n", $role->serial_number) . $role->id;
-    }
-
     static function get_roles(Project $project, bool $all_projects, bool $subs_projects, bool $my_projects, bool $mysubs_projects)
     {
         $result = array();
@@ -165,21 +157,22 @@ class ProjectController extends Controller
                                 ->where('is_closed', false);
                         });
                 })
-                ->orderBy('id')->get();
+                ->orderBy('serial_number')->get();
             foreach ($roles as $role) {
-                $result[self::get_role_number_for_sort($role)] = $role->name();
+                $result[$role->id] = $role->name();
             }
             if (Auth::check()) {
                 $accesses = Access::where('project_id', $project->id)
                     ->where('user_id', GlobalController::glo_user_id())
                     ->whereHas('role', function ($query) {
-                        $query->where('is_author', false);
+                        $query->where('is_author', false)
+                            ->orderBy('serial_number');
                     })
                     ->where('is_access_allowed', true)
-                    ->orderBy('role_id')->get();
+                    ->get();
                 foreach ($accesses as $access) {
                     $role = $access->role;
-                    $result[self::get_role_number_for_sort($role)] = $role->name();
+                    $result[$role->id] = $role->name();
                 }
             }
 
@@ -197,10 +190,10 @@ class ProjectController extends Controller
                 ->whereDoesntHave('accesses', function ($query) use ($project) {
                     $query->where('user_id', GlobalController::glo_user_id())
                         ->where('project_id', $project->id);
-                })->get();
+                })->orderBy('serial_number')->get();
 
             foreach ($roles as $role) {
-                $result[self::get_role_number_for_sort($role)] = $role->name();
+                $result[$role->id] = $role->name();
             }
 
         } elseif ($my_projects == true) {
@@ -222,7 +215,7 @@ class ProjectController extends Controller
 //                })->get();
 //
 //            foreach ($roles as $role) {
-//                $result[self::get_role_number_for_sort($role)] = $role->name();
+//                $result[$role->id] = $role->name();
 //            }
 
 //            $accesses = Access::where('project_id', $project->id)
@@ -234,7 +227,7 @@ class ProjectController extends Controller
 //                ->orderBy('role_id')->get();
 //            foreach ($accesses as $access) {
 //                $role = $access->role;
-//                $result[self::get_role_number_for_sort($role)] = $role->name();
+//                $result[$role->id] = $role->name();
 //            }
 
             $roles = Role::where('is_author', true)
@@ -248,48 +241,51 @@ class ProjectController extends Controller
                 ->whereDoesntHave('accesses', function ($query) use ($project) {
                     $query->where('user_id', GlobalController::glo_user_id())
                         ->where('project_id', $project->id);
-                })->get();
+                })->orderBy('serial_number')->get();
 
             foreach ($roles as $role) {
-                $result[self::get_role_number_for_sort($role)] = $role->name();
+                $result[$role->id] = $role->name();
             }
             // Все подписки и роли пользователя
             $accesses = Access::where('project_id', $project->id)
                 ->where('user_id', GlobalController::glo_user_id())
                 ->whereHas('role', function ($query) {
-                    $query->where('is_author', true);
+                    $query->where('is_author', true)
+                        ->orderBy('serial_number');
                 })
-                ->orderBy('role_id')->get();
+                ->get();
             foreach ($accesses as $access) {
                 $role = $access->role;
-                $result[self::get_role_number_for_sort($role)] = $role->name();
+                $result[$role->id] = $role->name();
             }
             // Все запросы на подписку и роли пользователя
             $accesses = Access::where('project_id', $project->id)
                 ->where('user_id', GlobalController::glo_user_id())
                 ->whereHas('role', function ($query) {
-                    $query->where('is_author', true);
+                    $query->where('is_author', true)
+                    ->orderBy('serial_number');
                 })
                 ->where('is_subscription_request', true)
                 ->where('is_access_allowed', false)
-                ->orderBy('role_id')->get();
+                ->get();
             foreach ($accesses as $access) {
                 $role = $access->role;
-                $result[self::get_role_number_for_sort($role)] = $result[self::get_role_number_for_sort($role)] . " (" . trans('main.subscription_request_sent') . ")";
+                $result[$role->id] = $result[$role->id] . " (" . trans('main.subscription_request_sent') . ")";
             }
 
             // Все закрытые доступы и роли пользователя
             $accesses = Access::where('project_id', $project->id)
                 ->where('user_id', GlobalController::glo_user_id())
                 ->whereHas('role', function ($query) {
-                    $query->where('is_author', true);
+                    $query->where('is_author', true)
+                    ->orderBy('serial_number');
                 })
                 ->where('is_subscription_request', false)
                 ->where('is_access_allowed', false)
-                ->orderBy('role_id')->get();
+                ->get();
             foreach ($accesses as $access) {
                 $role = $access->role;
-                $result[self::get_role_number_for_sort($role)] = $result[self::get_role_number_for_sort($role)] . " (" . trans('main.access_denied') . ")";
+                $result[$role->id] = $result[$role->id] . " (" . trans('main.access_denied') . ")";
             }
 
 
@@ -299,60 +295,61 @@ class ProjectController extends Controller
                 $accesses = Access::where('project_id', $project->id)
                     ->where('user_id', GlobalController::glo_user_id())
                     ->whereHas('role', function ($query) {
-                        $query->where('is_author', false);
-                    })
-                    ->orderBy('role_id')->get();
+                        $query->where('is_author', false)
+                        ->orderBy('serial_number');
+                    })->get();
                 foreach ($accesses as $access) {
                     $role = $access->role;
-                    $result[self::get_role_number_for_sort($role)] = $role->name();
+                    $result[$role->id] = $role->name();
                 }
 
                 // Все запросы на подписку и роли пользователя
                 $accesses = Access::where('project_id', $project->id)
                     ->where('user_id', GlobalController::glo_user_id())
                     ->whereHas('role', function ($query) {
-                        $query->where('is_author', false);
+                        $query->where('is_author', false)
+                        ->orderBy('serial_number');
                     })
                     ->where('is_subscription_request', true)
                     ->where('is_access_allowed', false)
-                    ->orderBy('role_id')->get();
+                    ->get();
                 foreach ($accesses as $access) {
                     $role = $access->role;
-                    $result[self::get_role_number_for_sort($role)] = $result[self::get_role_number_for_sort($role)] . " (" . trans('main.subscription_request_sent') . ")";
+                    $result[$role->id] = $result[$role->id] . " (" . trans('main.subscription_request_sent') . ")";
                 }
 
                 // Все закрытые доступы и роли пользователя
                 $accesses = Access::where('project_id', $project->id)
                     ->where('user_id', GlobalController::glo_user_id())
                     ->whereHas('role', function ($query) {
-                        $query->where('is_author', false);
+                        $query->where('is_author', false)
+                        ->orderBy('serial_number');
                     })
                     ->where('is_subscription_request', false)
                     ->where('is_access_allowed', false)
-                    ->orderBy('role_id')->get();
+                    ->get();
                 foreach ($accesses as $access) {
                     $role = $access->role;
-                    $result[self::get_role_number_for_sort($role)] = $result[self::get_role_number_for_sort($role)] . " (" . trans('main.access_denied') . ")";
+                    $result[$role->id] = $result[$role->id] . " (" . trans('main.access_denied') . ")";
                 }
 
                 // Все недостимые комбинации  и роли пользователя
                 $accesses = Access::where('project_id', $project->id)
                     ->where('user_id', GlobalController::glo_user_id())
                     ->whereHas('role', function ($query) {
-                        $query->where('is_author', false);
+                        $query->where('is_author', false)
+                        ->orderBy('serial_number');
                     })
                     ->where('is_subscription_request', true)
                     ->where('is_access_allowed', true)
-                    ->orderBy('role_id')->get();
+                    ->get();
                 foreach ($accesses as $access) {
                     $role = $access->role;
-                    $result[self::get_role_number_for_sort($role)] = $result[self::get_role_number_for_sort($role)] . " (" . trans('main.invalid_parameter_combination') . ")";
+                    $result[$role->id] = $result[$role->id] . " (" . trans('main.invalid_parameter_combination') . ")";
                 }
 
             }
         }
-        // Сортировка по ключу - нужно
-        ksort($result);
         return $result;
     }
 
