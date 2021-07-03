@@ -24,7 +24,7 @@ class RoleController extends Controller
             return redirect()->route('project.all_index');
         }
 
-        $roles = Role::where('template_id', $template->id);
+        $roles = Role::where('template_id', $template->id)->orderBy('serial_number');
         $name = "";  // нужно, не удалять
         $index = array_search(App::getLocale(), config('app.locales'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
@@ -153,6 +153,7 @@ class RoleController extends Controller
     function set(Request $request, Role &$role)
     {
         $role->template_id = $request->template_id;
+        $role->serial_number = $request->serial_number;
 
         $role->name_lang_0 = $request->name_lang_0;
         $role->name_lang_1 = isset($request->name_lang_1) ? $request->name_lang_1 : "";

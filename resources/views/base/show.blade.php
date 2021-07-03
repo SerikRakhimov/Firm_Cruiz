@@ -18,7 +18,6 @@
     <br>
 
     <p>Id: <b>{{$base->id}}</b></p>
-
     <p>{{trans('main.serial_number')}}: <b>{{$base->serial_number}}</b></p>
 
     @foreach (config('app.locales') as $key=>$value)

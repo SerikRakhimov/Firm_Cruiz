@@ -146,23 +146,8 @@ class ProjectController extends Controller
     // Вычисляет префикс для сортировки списка ролей
     static function get_role_number_for_sort(Role $role)
     {
-        $result = '';
-        // Только роль по умолчанию
-        if ($role->is_default_for_external == true && $role->is_author == false) {
-            $result = '0';
-            // Обычная роль (не по умолчанию и не автор)
-        } elseif ($role->is_default_for_external == false && $role->is_author == false) {
-            $result = '1';
-            // Роль по умолчанию и автор
-        } elseif ($role->is_default_for_external == true && $role->is_author == true) {
-            $result = '2';
-            // Только автор
-        } elseif ($role->is_default_for_external == false && $role->is_author == true) {
-            $result = '3';
-        }
-        // Нужно "$result = $result . $role->id;"
-        $result = $result . $role->id;
-        return $result;
+        // https://www.php.net/manual/ru/function.sprintf.php
+        return $result = sprintf("%'.030d\n", $role->serial_number) . $role->id;
     }
 
     static function get_roles(Project $project, bool $all_projects, bool $subs_projects, bool $my_projects, bool $mysubs_projects)

@@ -32,7 +32,7 @@
                        id="serial_number"
                        class="form-control @error('serial_number') is-invalid @enderror"
                        placeholder=""
-                       value="{{ old('serial_number') ?? ($base['serial_number'] ?? '0') }}">
+                       value="{{ old('serial_number') ?? ($base->serial_number ?? '0') }}">
                 @error('serial_number')
                 <div class="text-danger">
                     {{$message}}

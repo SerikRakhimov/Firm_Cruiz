@@ -28,6 +28,7 @@
         <thead>
         <tr>
             <th class="text-center">#</th>
+            <th class="text-center">{{trans('main.serial_number')}}</th>
             <th class="text-left">{{trans('main.name')}}</th>
             <th class="text-left">{{trans('main.is_author')}}</th>
             <th class="text-left">{{trans('main.is_default_for_external')}}</th>
@@ -50,6 +51,11 @@
                     <a href="{{route('role.show',$role)}}" title="{{trans('main.show')}}">
                         {{$i}}
                     </a></td>
+                <td class="text-center">
+                    <a href="{{route('role.show',$role)}}" title="{{trans('main.show')}}">
+                        {{$role->serial_number}}
+                    </a>
+                </td>
                 <td class="text-left">
                     <a href="{{route('role.show',$role)}}" title="{{trans('main.show')}}">
                         {{$role->name()}}
