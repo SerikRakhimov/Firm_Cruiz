@@ -147,6 +147,7 @@ class ProjectController extends Controller
     static function get_role_number_for_sort(Role $role)
     {
         // https://www.php.net/manual/ru/function.sprintf.php
+        // ' . $role->id' нужно
         return $result = sprintf("%'.030d\n", $role->serial_number) . $role->id;
     }
 
