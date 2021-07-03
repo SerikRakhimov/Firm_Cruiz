@@ -163,6 +163,55 @@
             </div>
         </div>
 
+        <div class="form-group row" id="is_list_base_calculated_form_group">
+            <div class="col-sm-3 text-right">
+                <label class="form-label"
+                       for="is_list_base_calculated">{{trans('main.is_list_base_calculated')}}</label>
+            </div>
+            <div class="col-sm-7">
+                <input class="@error('is_list_base_calculated') is-invalid @enderror"
+                       type="checkbox"
+                       name="is_list_base_calculated"
+                       placeholder=""
+{{--                       true - значение по умолчанию--}}
+                       @if ((old('is_list_base_calculated') ?? ($role->is_list_base_calculated ?? true)) ==  true)
+                       checked
+                    @endif
+                >
+                @error('is_list_base_calculated')
+                <div class="invalid-feedback">
+                    {{$message}}
+                </div>
+                @enderror
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div>
+
+        <div class="form-group row" id="is_list_base_setup_form_group">
+            <div class="col-sm-3 text-right">
+                <label class="form-label"
+                       for="is_list_base_setup">{{trans('main.is_list_base_setup')}}</label>
+            </div>
+            <div class="col-sm-7">
+                <input class="@error('is_list_base_setup') is-invalid @enderror"
+                       type="checkbox"
+                       name="is_list_base_setup"
+                       placeholder=""
+                       @if ((old('is_list_base_setup') ?? ($role->is_list_base_setup ?? false)) ==  true)
+                       checked
+                    @endif
+                >
+                @error('is_list_base_setup')
+                <div class="invalid-feedback">
+                    {{$message}}
+                </div>
+                @enderror
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div>
+
         <div class="form-group row" id="is_all_base_calcname_enable_form_group">
             <div class="col-sm-3 text-right">
                 <label class="form-label"

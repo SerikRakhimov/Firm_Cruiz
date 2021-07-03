@@ -170,6 +170,19 @@ class SetController extends Controller
                 }
             }
         }
+        // Детские основы не должны быть одинаковыми
+        if ($link_from) {
+            if ($link_to) {
+                if ($link_from->child_base_id == $link_to->child_base_id) {
+                    $message = trans('main.child_bases_should_not_be_the_same')
+                        . ' ("' . $link_from->child_base->name() . '" ' . mb_strtolower(trans('main.and')) .
+                        ' "' . $link_to->child_base->name() . '")!';;
+                    $array_mess['link_from_id'] = $message;
+                    $array_mess['link_to_id'] = $message;
+                    return;
+                }
+            }
+        }
         // Родительские основы должны быть одинаковыми
         if ($link_from) {
             if ($link_to) {

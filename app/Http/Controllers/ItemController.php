@@ -467,6 +467,12 @@ class ItemController extends Controller
                 if ($name_lang_0_val === '0') {
                     $array_mess['name_lang_0'] = trans('main.is_required_lst_num_str_txt_img_doc') . '!';
                     $errors = true;
+                } else {
+                    $floatvalue = floatval($name_lang_0_val);
+                    if ($floatvalue == 0) {
+                        $array_mess['name_lang_0'] = trans('main.is_required_lst_num_str_txt_img_doc') . '!';
+                        $errors = true;
+                    }
                 }
                 if ($errors) {
                     // повторный вызов формы
@@ -477,7 +483,6 @@ class ItemController extends Controller
                 // Тип - изображение
             } elseif ($base->type_is_image()) {
                 $errors = false;
-
                 if (!$request->hasFile('name_lang_0')) {
                     $array_mess['name_lang_0'] = trans('main.is_required_lst_num_str_txt_img_doc') . '!';
                     $errors = true;
@@ -853,10 +858,15 @@ class ItemController extends Controller
                     if ($value == null) {
                         $array_mess[$key] = trans('main.no_data_on') . ' "' . $link->parent_base->name() . '"!';
                         $errors = true;
-                    }
-                    if ($value === '0') {
+                    } elseif ($value === '0') {
                         $array_mess[$key] = trans('main.no_data_on') . ' "' . $link->parent_base->name() . '"!';
                         $errors = true;
+                    } else {
+                        $floatvalue = floatval($value);
+                        if ($floatvalue == 0) {
+                            $array_mess[$key] = trans('main.no_data_on') . ' "' . $link->parent_base->name() . '"!';
+                            $errors = true;
+                        }
                     }
                 }
             }
@@ -1812,6 +1822,12 @@ class ItemController extends Controller
                 if ($name_lang_0_val === '0') {
                     $array_mess['name_lang_0'] = trans('main.is_required_lst_num_str_txt_img_doc') . '!';
                     $errors = true;
+                } else {
+                    $floatvalue = floatval($name_lang_0_val);
+                    if ($floatvalue == 0) {
+                        $array_mess['name_lang_0'] = trans('main.is_required_lst_num_str_txt_img_doc') . '!';
+                        $errors = true;
+                    }
                 }
                 if ($errors) {
                     // повторный вызов формы
@@ -1820,7 +1836,8 @@ class ItemController extends Controller
                         ->withErrors($array_mess);
                 }
                 // Тип - изображение
-            } elseif ($item->base->type_is_image()) {
+            } elseif
+            ($item->base->type_is_image()) {
                 $errors = false;
                 if (!$item->img_doc_exist()) {
                     if (!$request->hasFile('name_lang_0')) {
@@ -1835,7 +1852,8 @@ class ItemController extends Controller
                         ->withErrors($array_mess);
                 }
                 // Тип - документ
-            } elseif ($item->base->type_is_document()) {
+            } elseif
+            ($item->base->type_is_document()) {
                 $errors = false;
                 if (!$item->img_doc_exist()) {
                     if (!$request->hasFile('name_lang_0')) {
@@ -2245,10 +2263,15 @@ class ItemController extends Controller
                     if ($value == null) {
                         $array_mess[$key] = trans('main.no_data_on') . ' "' . $link->parent_base->name() . '"!';
                         $errors = true;
-                    }
-                    if ($value === '0') {
+                    } elseif ($value === '0') {
                         $array_mess[$key] = trans('main.no_data_on') . ' "' . $link->parent_base->name() . '"!';
                         $errors = true;
+                    } else {
+                        $floatvalue = floatval($value);
+                        if ($floatvalue == 0) {
+                            $array_mess[$key] = trans('main.no_data_on') . ' "' . $link->parent_base->name() . '"!';
+                            $errors = true;
+                        }
                     }
                 }
             }

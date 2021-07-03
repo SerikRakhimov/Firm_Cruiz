@@ -107,6 +107,16 @@ class GlobalController extends Controller
                     $is_list_base_calc = false;
                 }
             }
+            if ($role->is_list_base_calculated == false) {
+                if ($base->is_calculated_lst == true) {
+                    $is_list_base_calc = false;
+                }
+            }
+            if ($role->is_list_base_setup == false) {
+                if ($base->is_setup_lst == true) {
+                    $is_list_base_calc = false;
+                }
+            }
         }
 
 //        if ($is_list_base_read == true) {
