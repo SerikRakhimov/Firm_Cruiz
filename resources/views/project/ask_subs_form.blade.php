@@ -5,6 +5,7 @@
     <?php
     use App\Http\Controllers\GlobalController;
     use App\Http\Controllers\ProjectController;
+    $is_additional_information = isset($additional_information);
     $button_submit_text = '';
     $button_submit_icon = '';
     if ($is_subs == true) {
@@ -14,7 +15,7 @@
             $button_submit_text = trans('main.subscribe');
         }
         $button_submit_icon = 'fas fa-book-open d-inline';
-    } else {
+    } elseif ($is_delete == true) {
         $button_submit_text = trans('main.delete');
         $button_submit_icon = 'fas fa-trash';
     }
@@ -63,17 +64,23 @@
                value="{{GlobalController::num_is_boolean($is_cancel_my_projects)}}">
         <input type="hidden" name="is_cancel_mysubs_projects"
                value="{{GlobalController::num_is_boolean($is_cancel_mysubs_projects)}}">
-        @if($is_subs == true && $is_request == true)
-            <div class="form-group">
-                <label for="additional_information">{{trans('main.additional_information')}}<span
-                        class="text-danger">*</span></label>
-                <input type="text"
-                       name="additional_information"
-                       id="additional_information"
-                       class="form-control @error('additional_information') is-invalid @enderror"
-                       placeholder=""
-                       value="">
-            </div>
+        @if($is_request == true)
+            @if($is_subs == true || $is_delete == true)
+                <div class="form-group">
+                    <label for="additional_information">{{trans('main.additional_information')}}<span
+                            class="text-danger">*</span></label>
+                    <input type="text"
+                           name="additional_information"
+                           id="additional_information"
+                           class="form-control @error('additional_information') is-invalid @enderror"
+                           placeholder=""
+                           value="@if($is_additional_information){{$additional_information}}@endif"
+                           @if($is_delete == true)
+                           disabled
+                        @endif
+                    >
+                </div>
+            @endif
         @endif
         @if ($is_subs == true || $is_delete == true)
             <button type="submit" class="btn btn-dreamer" title="{{$button_submit_text}}">

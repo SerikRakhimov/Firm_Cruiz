@@ -143,6 +143,29 @@ class ProjectController extends Controller
             'title' => trans('main.my_subscriptions')]);
     }
 
+    // Вычисляет префикс для сортировки списка ролей
+    static function get_role_number_for_sort(Role $role)
+    {
+        $result = '';
+        // Только роль по умолчанию
+        if ($role->is_default_for_external == true && $role->is_author == false) {
+            $result = '0';
+            // Обычная роль (не по умолчанию и не автор)
+        } elseif ($role->is_default_for_external == false && $role->is_author == false) {
+            $result = '1';
+            // Роль по умолчанию и автор
+        } elseif ($role->is_default_for_external == true && $role->is_author == true) {
+            $result = '2';
+            // Только автор
+        } elseif ($role->is_default_for_external == false && $role->is_author == true) {
+            $result = '3';
+        }
+
+        // Нужно "$result = $result . $role->id;"
+        $result = $result . $role->id;
+        return $result;
+    }
+
     static function get_roles(Project $project, bool $all_projects, bool $subs_projects, bool $my_projects, bool $mysubs_projects)
     {
         $result = array();
@@ -159,7 +182,7 @@ class ProjectController extends Controller
                 })
                 ->orderBy('id')->get();
             foreach ($roles as $role) {
-                $result[$role->id] = $role->name();
+                $result[self::get_role_number_for_sort($role)] = $role->name();
             }
             if (Auth::check()) {
                 $accesses = Access::where('project_id', $project->id)
@@ -171,7 +194,7 @@ class ProjectController extends Controller
                     ->orderBy('role_id')->get();
                 foreach ($accesses as $access) {
                     $role = $access->role;
-                    $result[$role->id] = $role->name();
+                    $result[self::get_role_number_for_sort($role)] = $role->name();
                 }
             }
 
@@ -192,7 +215,7 @@ class ProjectController extends Controller
                 })->get();
 
             foreach ($roles as $role) {
-                $result[$role->id] = $role->name();
+                $result[self::get_role_number_for_sort($role)] = $role->name();
             }
 
         } elseif ($my_projects == true) {
@@ -214,7 +237,7 @@ class ProjectController extends Controller
 //                })->get();
 //
 //            foreach ($roles as $role) {
-//                $result[$role->id] = $role->name();
+//                $result[self::get_role_number_for_sort($role)] = $role->name();
 //            }
 
 //            $accesses = Access::where('project_id', $project->id)
@@ -226,7 +249,7 @@ class ProjectController extends Controller
 //                ->orderBy('role_id')->get();
 //            foreach ($accesses as $access) {
 //                $role = $access->role;
-//                $result[$role->id] = $role->name();
+//                $result[self::get_role_number_for_sort($role)] = $role->name();
 //            }
 
             $roles = Role::where('is_author', true)
@@ -243,7 +266,7 @@ class ProjectController extends Controller
                 })->get();
 
             foreach ($roles as $role) {
-                $result[$role->id] = $role->name();
+                $result[self::get_role_number_for_sort($role)] = $role->name();
             }
             // Все подписки и роли пользователя
             $accesses = Access::where('project_id', $project->id)
@@ -254,7 +277,7 @@ class ProjectController extends Controller
                 ->orderBy('role_id')->get();
             foreach ($accesses as $access) {
                 $role = $access->role;
-                $result[$role->id] = $role->name();
+                $result[self::get_role_number_for_sort($role)] = $role->name();
             }
             // Все запросы на подписку и роли пользователя
             $accesses = Access::where('project_id', $project->id)
@@ -267,7 +290,7 @@ class ProjectController extends Controller
                 ->orderBy('role_id')->get();
             foreach ($accesses as $access) {
                 $role = $access->role;
-                $result[$role->id] = $result[$role->id] . " (" . trans('main.subscription_request_sent') . ")";
+                $result[self::get_role_number_for_sort($role)] = $result[self::get_role_number_for_sort($role)] . " (" . trans('main.subscription_request_sent') . ")";
             }
 
             // Все закрытые доступы и роли пользователя
@@ -281,7 +304,7 @@ class ProjectController extends Controller
                 ->orderBy('role_id')->get();
             foreach ($accesses as $access) {
                 $role = $access->role;
-                $result[$role->id] = $result[$role->id] . " (" . trans('main.access_denied') . ")";
+                $result[self::get_role_number_for_sort($role)] = $result[self::get_role_number_for_sort($role)] . " (" . trans('main.access_denied') . ")";
             }
 
 
@@ -296,7 +319,7 @@ class ProjectController extends Controller
                     ->orderBy('role_id')->get();
                 foreach ($accesses as $access) {
                     $role = $access->role;
-                    $result[$role->id] = $role->name();
+                    $result[self::get_role_number_for_sort($role)] = $role->name();
                 }
 
                 // Все запросы на подписку и роли пользователя
@@ -310,7 +333,7 @@ class ProjectController extends Controller
                     ->orderBy('role_id')->get();
                 foreach ($accesses as $access) {
                     $role = $access->role;
-                    $result[$role->id] = $result[$role->id] . " (" . trans('main.subscription_request_sent') . ")";
+                    $result[self::get_role_number_for_sort($role)] = $result[self::get_role_number_for_sort($role)] . " (" . trans('main.subscription_request_sent') . ")";
                 }
 
                 // Все закрытые доступы и роли пользователя
@@ -324,7 +347,7 @@ class ProjectController extends Controller
                     ->orderBy('role_id')->get();
                 foreach ($accesses as $access) {
                     $role = $access->role;
-                    $result[$role->id] = $result[$role->id] . " (" . trans('main.access_denied') . ")";
+                    $result[self::get_role_number_for_sort($role)] = $result[self::get_role_number_for_sort($role)] . " (" . trans('main.access_denied') . ")";
                 }
 
                 // Все недостимые комбинации  и роли пользователя
@@ -338,12 +361,13 @@ class ProjectController extends Controller
                     ->orderBy('role_id')->get();
                 foreach ($accesses as $access) {
                     $role = $access->role;
-                    $result[$role->id] = $result[$role->id] . " (" . trans('main.invalid_parameter_combination') . ")";
+                    $result[self::get_role_number_for_sort($role)] = $result[self::get_role_number_for_sort($role)] . " (" . trans('main.invalid_parameter_combination') . ")";
                 }
 
             }
         }
-
+        // Сортировка по ключу - нужно
+        ksort($result);
         return $result;
     }
 
@@ -471,12 +495,12 @@ class ProjectController extends Controller
                     if (env('MAIL_ENABLED') == 'yes') {
                         $email_to = $project->user->email;
                         $appname = config('app.name', 'Abakus');
-                        try{
-                        Mail::send(['html' => 'mail/access_create'], ['access' => $access],
-                            function ($message) use ($email_to, $appname, $project) {
-                                $message->to($email_to, '')->subject($project->name() . ' - ' . trans('main.subscription_request_sent'));
-                                $message->from(env('MAIL_FROM_ADDRESS', ''), $appname);
-                            });
+                        try {
+                            Mail::send(['html' => 'mail/access_create'], ['access' => $access],
+                                function ($message) use ($email_to, $appname, $project) {
+                                    $message->to($email_to, '')->subject($project->name() . ' - ' . trans('main.subscription_request_sent'));
+                                    $message->from(env('MAIL_FROM_ADDRESS', ''), $appname);
+                                });
                         } catch (Exception $exc) {
                             return trans('error_sending_email') . ": " . $exc->getMessage();
                         }
@@ -502,12 +526,12 @@ class ProjectController extends Controller
                     if (env('MAIL_ENABLED') == 'yes') {
                         $email_to = $access->user->email;
                         $appname = config('app.name', 'Abakus');
-                        try{
-                        Mail::send(['html' => 'mail/access_update'], ['access' => $access],
-                            function ($message) use ($email_to, $appname, $project) {
-                                $message->to($email_to, '')->subject($project->name() . ' - ' . trans('main.subscription_status_has_changed'));
-                                $message->from(env('MAIL_FROM_ADDRESS', ''), $appname);
-                            });
+                        try {
+                            Mail::send(['html' => 'mail/access_update'], ['access' => $access],
+                                function ($message) use ($email_to, $appname, $project) {
+                                    $message->to($email_to, '')->subject($project->name() . ' - ' . trans('main.subscription_status_has_changed'));
+                                    $message->from(env('MAIL_FROM_ADDRESS', ''), $appname);
+                                });
                         } catch (Exception $exc) {
                             return trans('error_sending_email') . ": " . $exc->getMessage();
                         }
@@ -652,7 +676,8 @@ class ProjectController extends Controller
                     'is_cancel_all_projects' => $is_cancel_all_projects,
                     'is_cancel_subs_projects' => $is_cancel_subs_projects,
                     'is_cancel_my_projects' => $is_cancel_my_projects,
-                    'is_cancel_mysubs_projects' => $is_cancel_mysubs_projects
+                    'is_cancel_mysubs_projects' => $is_cancel_mysubs_projects,
+                    'additional_information' => $access->additional_information
                 ]);
 
             } elseif ($access->is_subscription_request == true && $access->is_access_allowed == true) {
