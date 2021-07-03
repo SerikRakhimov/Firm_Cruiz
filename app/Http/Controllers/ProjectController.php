@@ -160,7 +160,6 @@ class ProjectController extends Controller
         } elseif ($role->is_default_for_external == false && $role->is_author == true) {
             $result = '3';
         }
-
         // Нужно "$result = $result . $role->id;"
         $result = $result . $role->id;
         return $result;
