@@ -298,6 +298,9 @@ class ProjectController extends Controller
                         $query->where('is_author', false)
                         ->orderBy('serial_number');
                     })->get();
+                if($project->id == 24){
+                    dd($accesses);
+                }
                 foreach ($accesses as $access) {
                     $role = $access->role;
                     $result[$role->id] = $role->name();
@@ -333,7 +336,7 @@ class ProjectController extends Controller
                     $result[$role->id] = $result[$role->id] . " (" . trans('main.access_denied') . ")";
                 }
 
-                // Все недостимые комбинации  и роли пользователя
+                // Все недопустимые комбинации  и роли пользователя
                 $accesses = Access::where('project_id', $project->id)
                     ->where('user_id', GlobalController::glo_user_id())
                     ->whereHas('role', function ($query) {
