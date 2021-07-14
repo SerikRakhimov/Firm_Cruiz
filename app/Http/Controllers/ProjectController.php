@@ -298,9 +298,6 @@ class ProjectController extends Controller
                         $query->where('is_author', false)
                         ->orderBy('serial_number');
                     })->get();
-                if($project->id == 24){
-                    dd($accesses);
-                }
                 foreach ($accesses as $access) {
                     $role = $access->role;
                     $result[$role->id] = $role->name();
