@@ -252,13 +252,11 @@ class MainController extends Controller
             if ($link_find->parent_is_parent_related == true) {
                 $link_related_result = Link::find($link_find->parent_parent_related_result_link_id);
                 if ($link_related_result) {
-                    // Если $link_related_result->child_base - вычисляемое
-                    if ($link_related_result->child_base->is_calculated()) {
-                        $item = Item::find(11);
-                    } else {
-                        $item = ItemController::get_parent_item_from_calc_child_item($item_find, $link_find, true)['result_item'];
-                    }
+                    $item = ItemController::get_parent_item_from_calc_child_item($item_find, $link_find, true)['result_item'];
                 }
+            } elseif ($link_find->parent_is_output_calculated_table_field== true) {
+                //$item = Item::find(11);
+                $item = ItemController::get_item_from_parent_output_calculated_table($item_find, $link_find);
             } else {
                 $item = self::get_parent_item_from_main($child_item_id, $link_id);
             }

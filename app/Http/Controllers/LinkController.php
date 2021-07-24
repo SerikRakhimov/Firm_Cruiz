@@ -502,7 +502,6 @@ class LinkController extends Controller
     {
         $result_parent_output_calculated_table_set_id_options = '';
         if ($base != null) {
-
             $sets = Set::select(DB::Raw('sets.*, lt.child_base_id as to_child_base_id, lt.parent_base_id as to_parent_base_id'))
                 ->join('links as lf', 'sets.link_from_id', '=', 'lf.id')
                 ->join('links as lt', 'sets.link_to_id', '=', 'lt.id')
@@ -511,15 +510,11 @@ class LinkController extends Controller
                 ->orderBy('sets.serial_number')
                 ->orderBy('sets.link_from_id')
                 ->orderBy('sets.link_to_id')->get();
-
             foreach ($sets as $set) {
-                //$set_links = Link::all()->where('child_base_id', $set->link_to->child_base->id)->sortBy('parent_base_number');
-
                 $result_parent_output_calculated_table_set_id_options = $result_parent_output_calculated_table_set_id_options
                     . "<option value='" . $set->id . "'>" . $set->link_to->child_base->name()
                     . "." . $set->link_to->parent_base->name()
                     . " (id =  " . $set->id . ", " . trans('main.serial_number') . " = " . $set->serial_number . ") " . "</option>";
-
             }
         }
         return [
