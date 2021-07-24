@@ -341,4 +341,6 @@ return [
     'subscription_status_has_changed'=>'Изменился статус подписки',
     'subscription_removed'=>'Подписка удалена',
     'additional_information'=>'Дополнительная информация',
+    'parent_is_output_calculated_table_field'=>'Выводить поле вычисляемой таблицы',
+    'parent_output_calculated_table_set_id'=>'Выводить присваиваивание?',
 ];

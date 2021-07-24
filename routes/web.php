@@ -689,12 +689,20 @@ Route::get('/link/get_parent_child_related_start_link_id/{base}/{link_current?}'
     ->name('link.get_parent_child_related_start_link_id')
     ->middleware('auth');
 
+Route::get('/link/get_parent_output_calculated_table_set_id/{base}', 'LinkController@get_parent_output_calculated_table_set_id')
+    ->name('link.get_parent_output_calculated_table_set_id')
+    ->middleware('auth');
+
 Route::get('/link/get_tree_from_link_id/{link_start}', 'LinkController@get_tree_from_link_id')
     ->name('link.get_tree_from_link_id')
     ->middleware('auth');
 
 Route::get('/link/get_parent_base_id_from_link_id/{link}', 'LinkController@get_parent_base_id_from_link_id')
     ->name('link.get_parent_base_id_from_link_id')
+    ->middleware('auth');
+
+Route::get('/link/get_parent_base_id_from_set_id/{set}', 'LinkController@get_parent_base_id_from_set_id')
+    ->name('link.get_parent_base_id_from_set_id')
     ->middleware('auth');
 
 Route::get('/link/base_index/{base}', 'LinkController@base_index')

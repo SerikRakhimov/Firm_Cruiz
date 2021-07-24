@@ -167,6 +167,11 @@ class Base extends Model
         return $this->type_is_document == true;
     }
 
+    function is_calculated()
+    {
+        return $this->is_calculated_lst == true;
+    }
+
     function info()
     {
         return $this->name();

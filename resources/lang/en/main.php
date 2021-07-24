@@ -341,4 +341,6 @@ return [
     'subscription_status_has_changed'=>'Subscription status has changed',
     'subscription_removed'=>'Subscription removed',
     'additional_information'=>'Additional information',
+    'parent_is_output_calculated_table_field'=>'Output calculated table field',
+    'parent_output_calculated_table_set_id'=>'Do you want to display the set?',
 ];

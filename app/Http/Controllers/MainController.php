@@ -49,7 +49,6 @@ class MainController extends Controller
         })->get();
 
 
-
         $parent_mains = Main::where('parent_item_id', $item->id)->sortBy(function ($main) {
             return $main->link->child_base->name() . $main->child_item->name();
         })->get();
@@ -251,7 +250,15 @@ class MainController extends Controller
         $link_find = Link::find($link_id);
         if ($item_find && $link_find) {
             if ($link_find->parent_is_parent_related == true) {
-                $item = ItemController::get_parent_item_from_calc_child_item($item_find, $link_find, true)['result_item'];
+                $link_related_result = Link::find($link_find->parent_parent_related_result_link_id);
+                if ($link_related_result) {
+                    // Если $link_related_result->child_base - вычисляемое
+                    if ($link_related_result->child_base->is_calculated()) {
+                        $item = Item::find(11);
+                    } else {
+                        $item = ItemController::get_parent_item_from_calc_child_item($item_find, $link_find, true)['result_item'];
+                    }
+                }
             } else {
                 $item = self::get_parent_item_from_main($child_item_id, $link_id);
             }

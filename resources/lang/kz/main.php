@@ -341,4 +341,6 @@ return [
     'subscription_status_has_changed'=>'Жазылу мәртебесі өзгерді',
     'subscription_removed'=>'Жазылым жойылды',
     'additional_information'=>'Қосымша ақпарат',
+    'parent_is_output_calculated_table_field'=>'Есептелетін кесте өрісін көрсету',
+    'parent_output_calculated_table_set_id'=>'Тағайындауды көрсету керек пе?',
 ];

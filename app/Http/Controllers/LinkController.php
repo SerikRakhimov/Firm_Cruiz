@@ -6,8 +6,10 @@ use Illuminate\Support\Facades\App;
 use App\Models\Base;
 use App\Models\Link;
 use App\Models\Level;
+use App\Models\Set;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class LinkController extends Controller
 {
@@ -182,6 +184,7 @@ class LinkController extends Controller
             $link->parent_label_lang_3 = $link->parent_base->name_lang_3;
         }
 
+        // Выводить связанное поле
         $link->parent_is_parent_related = isset($request->parent_is_parent_related) ? true : false;
         if ($link->parent_is_parent_related) {
             $link->parent_parent_related_start_link_id = $request->parent_parent_related_start_link_id;
@@ -195,7 +198,18 @@ class LinkController extends Controller
             $link->parent_parent_related_start_link_id = 0;
             $link->parent_parent_related_result_link_id = 0;
         }
-
+        // Выводить поле вычисляемой таблицы
+        $link->parent_is_output_calculated_table_field = isset($request->parent_is_output_calculated_table_field) ? true : false;
+        if ($link->parent_is_output_calculated_table_field) {
+            $link->parent_output_calculated_table_set_id = $request->parent_output_calculated_table_set_id;
+        } else {
+            $link->parent_output_calculated_table_set_id = 0;
+        }
+        if ($link->parent_output_calculated_table_set_id == 0) {
+            $link->parent_is_output_calculated_table_field = false;
+            $link->parent_output_calculated_table_set_id = 0;
+        }
+        // Фильтровать поля
         $link->parent_is_child_related = isset($request->parent_is_child_related) ? true : false;
         if ($link->parent_is_child_related) {
             $link->parent_child_related_start_link_id = $request->parent_child_related_start_link_id;
@@ -339,6 +353,7 @@ class LinkController extends Controller
             $link->parent_label_lang_3 = $link->parent_base->name_lang_3;
         }
 
+        // Выводить связанное поле
         $link->parent_is_parent_related = isset($request->parent_is_parent_related) ? true : false;
         if ($link->parent_is_parent_related) {
             $link->parent_parent_related_start_link_id = $request->parent_parent_related_start_link_id;
@@ -352,7 +367,18 @@ class LinkController extends Controller
             $link->parent_parent_related_start_link_id = 0;
             $link->parent_parent_related_result_link_id = 0;
         }
-
+        // Выводить поле вычисляемой таблицы
+        $link->parent_is_output_calculated_table_field = isset($request->parent_is_output_calculated_table_field) ? true : false;
+        if ($link->parent_is_output_calculated_table_field) {
+            $link->parent_output_calculated_table_set_id = $request->parent_output_calculated_table_set_id;
+        } else {
+            $link->parent_output_calculated_table_set_id = 0;
+        }
+        if ($link->parent_output_calculated_table_set_id == 0) {
+            $link->parent_is_output_calculated_table_field = false;
+            $link->parent_output_calculated_table_set_id = 0;
+        }
+        // Фильтровать поля
         $link->parent_is_child_related = isset($request->parent_is_child_related) ? true : false;
         if ($link->parent_is_child_related) {
             $link->parent_child_related_start_link_id = $request->parent_child_related_start_link_id;
@@ -429,6 +455,7 @@ class LinkController extends Controller
         return redirect()->route('link.base_index', ['base' => $link->child_base, 'links' => Link::where('child_base_id', $link->child_base_id)->orderBy('parent_base_number')->get()]);
     }
 
+    // Возвращает список для выбора в parent_parent_related_start_link_id
     static function get_parent_parent_related_start_link_id(Base $base, Link $link_current = null)
     {
         $result_parent_parent_related_start_link_id_options = '';
@@ -447,6 +474,21 @@ class LinkController extends Controller
                 if (!$link->parent_base->child_links->IsEmpty()) {
                     $result_parent_parent_related_start_link_id_options = $result_parent_parent_related_start_link_id_options
                         . "<option value='" . $link->id . "'>" . $link->parent_label() . "</option>";
+
+//                    $sets = Set::where('link_from_id', '=', $link->id)
+//                        ->where('is_group', true)
+//                        ->orderBy('sets.serial_number')->get();
+//
+//                    foreach ($sets as $set) {
+//                        $set_links = Link::all()->where('child_base_id', $set->link_to->child_base->id)->sortBy('parent_base_number');
+//
+//                        $result_parent_parent_related_start_link_id_options = $result_parent_parent_related_start_link_id_options
+//                            . "<option value='" . $set->link_to->id . "'>" . $set->link_to->child_base->name()
+//                            . " (" . trans('main.is_calculated_lst') . ")"
+//                            . " link_id =  " . $set->link_to->id . " " . "</option>";
+//
+//                    }
+
                 }
             }
         }
@@ -454,6 +496,37 @@ class LinkController extends Controller
             'result_parent_parent_related_start_link_id_options' => $result_parent_parent_related_start_link_id_options,
         ];
     }
+
+    // Возвращает список для выбора
+    static function get_parent_output_calculated_table_set_id(Base $base)
+    {
+        $result_parent_output_calculated_table_set_id_options = '';
+        if ($base != null) {
+
+            $sets = Set::select(DB::Raw('sets.*, lt.child_base_id as to_child_base_id, lt.parent_base_id as to_parent_base_id'))
+                ->join('links as lf', 'sets.link_from_id', '=', 'lf.id')
+                ->join('links as lt', 'sets.link_to_id', '=', 'lt.id')
+                ->where('sets.is_update', true)
+                ->where('lf.child_base_id', '=', $base->id)
+                ->orderBy('sets.serial_number')
+                ->orderBy('sets.link_from_id')
+                ->orderBy('sets.link_to_id')->get();
+
+            foreach ($sets as $set) {
+                //$set_links = Link::all()->where('child_base_id', $set->link_to->child_base->id)->sortBy('parent_base_number');
+
+                $result_parent_output_calculated_table_set_id_options = $result_parent_output_calculated_table_set_id_options
+                    . "<option value='" . $set->id . "'>" . $set->link_to->child_base->name()
+                    . "." . $set->link_to->parent_base->name()
+                    . " (id =  " . $set->id . ", " . trans('main.serial_number') . " = " . $set->serial_number . ") " . "</option>";
+
+            }
+        }
+        return [
+            'result_parent_output_calculated_table_set_id_options' => $result_parent_output_calculated_table_set_id_options,
+        ];
+    }
+
 
 // функции get_parent_parent_related_start_link_id() и get_parent_child_related_start_link_id() похожи
 // разница в наличии команды "->where('parent_is_parent_related', false)" в get_parent_child_related_start_link_id
@@ -499,14 +572,23 @@ class LinkController extends Controller
     {
         $result_parent_parent_related_result_link_id_options = '';
         if ($link_start != null) {
-
+//            // Если $link_start->child_base - вычисляемое
+//            if ($link_start->child_base->is_calculated()) {
+//                // Передается $link_start->child_base_id как параметр
+//                $result_parent_parent_related_result_link_id_options = BaseController::get_array_bases_tree_options($link_start->child_base_id);
+//            } else {
             $result_parent_parent_related_result_link_id_options = BaseController::get_array_bases_tree_options($link_start->parent_base_id);
+            //}
         }
+//        $result_parent_parent_related_result_link_id_options = $result_parent_parent_related_result_link_id_options
+//            . '<option value="777">' . $link_start->id . ' - 777</option>';
         return [
             'result_parent_parent_related_result_link_id_options' => $result_parent_parent_related_result_link_id_options,
         ];
     }
 
+    // Выводить связанное поле
+    // Возвращает parent_base_id, parent_base_name
     static function get_parent_base_id_from_link_id(Link $link)
     {
         $parent_base_id = '';
@@ -514,6 +596,22 @@ class LinkController extends Controller
         if ($link != null) {
             $parent_base_id = $link->parent_base_id;
             $parent_base_name = $link->parent_base->name();
+        }
+        return [
+            'parent_base_id' => $parent_base_id,
+            'parent_base_name' => $parent_base_name,
+        ];
+    }
+
+    // Выводить поле вычисляемой таблицы
+    // Возвращает parent_base_id, parent_base_name
+    static function get_parent_base_id_from_set_id(Set $set)
+    {
+        $parent_base_id = '';
+        $parent_base_name = '';
+        if ($set != null) {
+            $parent_base_id = $set->link_to->parent_base_id;
+            $parent_base_name = $set->link_to->parent_base->name();
         }
         return [
             'parent_base_id' => $parent_base_id,

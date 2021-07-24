@@ -452,7 +452,7 @@
                        for="parent_is_setup_project_internal_description_txt">{{trans('main.parent_is_setup_project_internal_description_txt')}}</label>
             </div>
         </div>
-
+{{--       Выводить связанное поле--}}
         <div class="form-group" id="parent_is_parent_related_form_group">
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="checkbox" name="parent_is_parent_related"
@@ -499,7 +499,37 @@
             </div>
             @enderror
         </div>
+{{--        Выводить поле вычисляемой таблицы--}}
+        <div class="form-group" id="parent_is_output_calculated_table_field_form_group">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" name="parent_is_output_calculated_table_field"
+                       id="parent_is_output_calculated_table_field"
+                       {{--            "(int) 0" нужно--}}
+                       @if ((old('parent_is_output_calculated_table_field') ?? ($link->parent_is_output_calculated_table_field ?? false)) ==  true)
+                       checked
+                       @endif
+                       onclick="parent_calculated_table_show_or_hide(this)">
+                <label class="form-check-label"
+                       for="parent_is_output_calculated_table_field">{{trans('main.parent_is_output_calculated_table_field')}}</label>
+            </div>
+        </div>
 
+        <div class="form-group" id="parent_output_calculated_table_set_id_form_group">
+            <label for="parent_output_calculated_table_set_id">{{trans('main.parent_output_calculated_table_set_id')}}<span
+                    class="text-danger">*</span></label>
+            <select class="form-control"
+                    name="parent_output_calculated_table_set_id"
+                    id="parent_output_calculated_table_set_id"
+                    class="form-control @error('parent_output_calculated_table_set_id') is-invalid @enderror">
+                <option value="0">0</option>
+            </select>
+            @error('parent_output_calculated_table_set_id')
+            <div class="text-danger">
+                {{$message}}
+            </div>
+            @enderror
+        </div>
+{{--        Фильтровать поля--}}
         <div class="form-group" id="parent_is_child_related_form_group">
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="checkbox" name="parent_is_child_related"
@@ -563,6 +593,7 @@
         var child_base_id = form.child_base_id;
         var parent_base_id = form.parent_base_id;
 
+        // Выводить связанное поле
         var parent_is_parent_related = form.parent_is_parent_related;
         var parent_is_parent_related_form_group = document.getElementById('parent_is_parent_related_form_group');
         var parent_parent_related_start_link_id_form_group = document.getElementById('parent_parent_related_start_link_id_form_group');
@@ -570,6 +601,13 @@
         var parent_parent_related_result_link_id_form_group = document.getElementById('parent_parent_related_result_link_id_form_group');
         var parent_parent_related_result_link_id = form.parent_parent_related_result_link_id;
 
+        // Выводить поле вычисляемой таблицы
+        var parent_is_output_calculated_table_field = form.parent_is_output_calculated_table_field;
+        var parent_is_output_calculated_table_field_form_group = document.getElementById('parent_is_output_calculated_table_field_form_group');
+        var parent_output_calculated_table_set_id_form_group = document.getElementById('parent_output_calculated_table_set_id_form_group');
+        var parent_output_calculated_table_set_id = form.parent_output_calculated_table_set_id;
+
+        // Фильтровать поля
         var parent_is_child_related = form.parent_is_child_related;
         var parent_is_child_related_form_group = document.getElementById('parent_is_child_related_form_group');
         var parent_child_related_start_link_id_form_group = document.getElementById('parent_child_related_start_link_id_form_group');
@@ -578,6 +616,7 @@
         var parent_child_related_result_link_id = form.parent_child_related_result_link_id;
 
         function child_base_id_changeOption(first) {
+            // Выводить связанное поле
             axios.get('/link/get_parent_parent_related_start_link_id/'
                 + child_base_id.options[child_base_id.selectedIndex].value
                 + '{{$update ? '/'.$link->id:''}}'
@@ -628,6 +667,54 @@
                 parent_parent_show_or_hide(parent_is_parent_related);
                 parent_parent_related_start_link_id_changeOption(first);
             });
+            // Выводить поле вычисляемой таблицы
+            axios.get('/link/get_parent_output_calculated_table_set_id/'
+                + child_base_id.options[child_base_id.selectedIndex].value
+            ).then(function (res) {
+                // если запуск функции не при загрузке страницы
+                if (first != true) {
+                    // сохранить текущие значения
+                    var parent_output_calculated_table_set_id_value =
+                        parent_output_calculated_table_set_id.options[parent_output_calculated_table_set_id.selectedIndex].value;
+                }
+
+                if (res.data['result_parent_output_calculated_table_set_id_options'] == "") {
+                    parent_is_parent_related.disabled = true;
+                    parent_is_parent_related_form_group.style.display = "none";
+                    parent_output_calculated_table_set_id.innerHTML = '<option value = "0">{{trans('main.no_information_on')}} "' + child_base_id.options[child_base_id.selectedIndex].text + '"!</option>';
+                } else {
+                    parent_is_parent_related.disabled = false;
+                    parent_is_parent_related_form_group.style.display = "block";
+                    parent_output_calculated_table_set_id.innerHTML = res.data['result_parent_output_calculated_table_set_id_options'];
+                }
+                // только если запуск функции при загрузке страницы
+                if (first == true) {
+                    // нужно чтобы при первом вызове формы корректировки записи значения полей соответствовали значениям из базы данных
+                    @if ($update)  // при корректировке записи
+                    // child
+                    for (let i = 0; i < parent_output_calculated_table_set_id.length; i++) {
+                        // если элемент списка = текущему значению из базы данных
+                        if (parent_output_calculated_table_set_id[i].value == {{$link->parent_output_calculated_table_set_id}}) {
+                            // установить selected на true
+                            parent_output_calculated_table_set_id[i].selected = true;
+                        }
+                    }
+                    @endif
+                } else {
+                    // нужно чтобы после обновления списка сохранить текущий выбор если соответствующий(child/parent) base не поменялся (при добавлении/корректировке записи)
+                    // child
+                    for (let i = 0; i < parent_output_calculated_table_set_id.length; i++) {
+                        // если элемент списка = предыдущему(текущему) значению из базы данных
+                        if (parent_output_calculated_table_set_id[i].value == parent_output_calculated_table_set_id_value) {
+                            // установить selected на true
+                            parent_output_calculated_table_set_id[i].selected = true;
+                        }
+                    }
+                }
+                parent_calculated_table_show_or_hide(parent_is_output_calculated_table_field);
+                parent_output_calculated_table_set_id_changeOption(first);
+            });
+            // Фильтровать поля
             axios.get('/link/get_parent_child_related_start_link_id/'
                 + child_base_id.options[child_base_id.selectedIndex].value
                 + '{{$update ? '/'.$link->id:''}}'
@@ -797,6 +884,75 @@
             });
         }
 
+        function parent_calculated_table_show_or_hide(box) {
+            var vis = "";
+            var logval = false;
+            if (box.checked) {
+                vis = "block";
+                logval = true;
+            } else {
+                vis = "none";
+                logval = false;
+            }
+            parent_base_id.disabled = logval;
+            parent_output_calculated_table_set_id_form_group.style.display = vis;
+            parent_output_calculated_table_set_id.disabled = !logval;  // "!logval" используется
+            if (vis == "block") {
+                // "parent_output_calculated_table_set_id_changeOption(false)" нужно
+                parent_output_calculated_table_set_id_changeOption(false);
+            }
+        }
+
+        function parent_output_calculated_table_set_id_changeOption(first) {
+            axios.get('/link/get_parent_base_id_from_set_id/'
+                + parent_output_calculated_table_set_id.options[parent_output_calculated_table_set_id.selectedIndex].value
+            ).then(function (res) {
+                // если запуск функции не при загрузке страницы
+                if (first != true) {
+                    // сохранить текущие значения
+                    var parent_base_id_value =
+                        parent_base_id.options[parent_base_id.selectedIndex].value;
+                }
+                if (res.data['parent_base_id'] == "") {
+                    {{--parent_base_id.innerHTML = '<option value = "0">{{trans('main.no_information_on')}} "' + parent_output_calculated_table_set_id.options[parent_output_calculated_table_set_id.selectedIndex].text + '"!</option>';--}}
+                } else {
+                    //parent_base_id.innerHTML = '<option value = "' + res.data['parent_base_id'] + '">' + res.data['parent_base_name'] + '</option>';
+                    for (let i = 0; i < parent_base_id.length; i++) {
+                        // если элемент списка = предыдущему(текущему) значению из базы данных
+                        if (parent_base_id[i].value == res.data['parent_base_id']) {
+                            // установить selected на true
+                            parent_base_id[i].selected = true;
+                        }
+                    }
+
+                }
+                // только если запуск функции при загрузке страницы
+                if (first == true) {
+                    // нужно чтобы при первом вызове формы корректировки записи значения полей соответствовали значениям из базы данных
+                    @if ($update)  // при корректировке записи
+                    // child
+                    for (let i = 0; i < parent_base_id.length; i++) {
+                        // если элемент списка = текущему значению из базы данных
+                        if (parent_base_id[i].value == {{$link->parent_base_id}}) {
+                            // установить selected на true
+                            parent_base_id[i].selected = true;
+                        }
+                    }
+                    @endif
+                } else {
+                    // нужно чтобы после обновления списка сохранить текущий выбор если соответствующий(child/parent) base не поменялся (при добавлении/корректировке записи)
+                    // child
+                    // for (let i = 0; i < parent_base_id.length; i++) {
+                    //     // если элемент списка = предыдущему(текущему) значению из базы данных
+                    //     if (parent_base_id[i].value == parent_base_id_value) {
+                    //         // установить selected на true
+                    //         parent_base_id[i].selected = true;
+                    //     }
+                    // }
+                }
+            });
+        }
+
         function parent_child_show_or_hide(box) {
             var vis = "";
             var logval = false;
@@ -921,6 +1077,7 @@
         child_base_id.addEventListener("change", child_base_id_changeOption);
         parent_parent_related_start_link_id.addEventListener("change", parent_parent_related_start_link_id_changeOption);
         parent_parent_related_result_link_id.addEventListener("change", parent_parent_related_result_link_id_changeOption);
+        parent_output_calculated_table_set_id.addEventListener("change", parent_output_calculated_table_set_id_changeOption);
         parent_child_related_start_link_id.addEventListener("change", parent_child_related_start_link_id_changeOption);
         parent_child_related_result_link_id.addEventListener("change", parent_child_related_result_link_id_changeOption);
 
@@ -929,6 +1086,8 @@
             parent_parent_show_or_hide(parent_is_parent_related);
             parent_parent_related_start_link_id_changeOption(true);
             parent_parent_related_result_link_id_changeOption(true);
+            parent_calculated_table_show_or_hide(parent_is_output_calculated_table_field);
+            parent_output_calculated_table_set_id_changeOption(true);
             parent_child_show_or_hide(parent_is_child_related);
             parent_child_related_start_link_id_changeOption(true);
             parent_child_related_result_link_id_changeOption(true);
