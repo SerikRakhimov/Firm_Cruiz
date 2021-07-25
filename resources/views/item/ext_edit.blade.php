@@ -860,6 +860,14 @@
                 $link_parent = Link::find($link->parent_parent_related_start_link_id);
                 $prefix = '2_';
             }
+            //          проверка на вычисляемые поля
+            if ($link->parent_is_parent_related == true) {
+                $lres = LinkController::get_link_ids_from_calc_link($link);
+                $const_link_id_start = $lres['const_link_id_start'];
+                $const_link_start = $lres['const_link_start'];
+                $link_parent = Link::find($link->parent_parent_related_start_link_id);
+                $prefix = '2_';
+            }
         }
         ?>
         @if($link_start_child && $link_result_child)

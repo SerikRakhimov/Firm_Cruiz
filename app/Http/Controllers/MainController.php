@@ -255,7 +255,6 @@ class MainController extends Controller
                     $item = ItemController::get_parent_item_from_calc_child_item($item_find, $link_find, true)['result_item'];
                 }
             } elseif ($link_find->parent_is_output_calculated_table_field== true) {
-                //$item = Item::find(11);
                 $item = ItemController::get_item_from_parent_output_calculated_table($item_find, $link_find);
             } else {
                 $item = self::get_parent_item_from_main($child_item_id, $link_id);

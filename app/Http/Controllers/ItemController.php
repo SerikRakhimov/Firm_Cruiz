@@ -1386,98 +1386,37 @@ class ItemController extends Controller
         $result_item = null;
         $set = Set::find($link->parent_output_calculated_table_set_id);
         if ($set) {
-            //$items = Item::where('base_id', $set->link_to->child_base_id)->where('project_id', $item->project_id);
             // base_id вычисляемой таблицы
             $calc_table_base_id = $set->link_to->child_base_id;
 
-            $set_main = Set::select(DB::Raw('sets.*'))
+            $set_group_by_base_to = Set::select(DB::Raw('sets.*'))
                 ->join('links as lf', 'sets.link_from_id', '=', 'lf.id')
                 ->join('links as lt', 'sets.link_to_id', '=', 'lt.id')
                 ->where('lf.child_base_id', '=', $item->base_id)
+                ->where('is_group', true)
                 ->where('serial_number', '=', $set->serial_number)
                 ->orderBy('sets.serial_number')
                 ->orderBy('sets.link_from_id')
                 ->orderBy('sets.link_to_id')->get();
 
-
-//            $set_group_by_base_to = $set_main->where('is_group', true)->
-//            groupBy('to_child_base_id')->
-//            sortBy('to_child_base_id');
-
-            $set_group_by_base_to = $set_main->where('is_group', true);
-
             $items = Item::where('base_id', $calc_table_base_id)->where('project_id', $item->project_id);
-            //dd($set_group_by_base_to);
 
             // Цикл по записям, в каждой итерации цикла свой to_child_base_id в переменной $to_key
             foreach ($set_group_by_base_to as $to_key => $to_value) {
-
-//                    $set_base_to = $set_main->where('serial_number', '=', $sn_key)->
-//                    where('to_child_base_id', '=', $to_key)->
-//                    sortBy('to_parent_base_id');
-//
-//                    // Группировка данных
-//                    $set_is_group = $set_base_to->where('is_group', true);
-
-
-                $error = true;
-                $found = false;
-                $item_seek = null;
-//dd($to_value);
-                //$set_work = Set::find($to_key);
-                //dd($set_work);
                 $item_seek = MainController::get_parent_item_from_main($item->id, $to_value->link_from_id);
-//dd($item_seek);
                 $items = $items->whereHas('child_mains', function ($query) use ($to_value, $item_seek) {
                     $query->where('link_id', $to_value->link_to_id)->where('parent_item_id', $item_seek->id);
                 });
-                //dd($items->get());
-//                    // Поиск $item_seek в цикле
-//                    foreach ($set_is_group as $key => $value) {
-////                проверка, если link - вычисляемое поле
-//                        //if ($link->parent_is_parent_related == true || $link->parent_is_numcalc == true)
-//                        if ($value->link_from->parent_is_parent_related == true) {
-//
-//                        } else {
 
-                //$item_seek = MainController::view_info($item, $value['link_from_id']);
-//                            $nk = -1;
-//                            foreach ($keys as $k => $v) {
-//                                if ($v == $value['link_from_id']) {
-//                                    $nk = $k;
-//                                    break;
-//                                }
-//                            }
-
-//                            if ($nk != -1) {
-//                                $set_to = $set_is_group->where('link_from_id', $value['link_from_id'])->first();
-//                                if ($set_to) {
-//                                    $nt = $set_to->link_to_id;
-//                                    $nv = $values[$nk];
-//                                    $items = $items->whereHas('child_mains', function ($query) use ($nt, $nv) {
-//                                        $query->where('link_id', $nt)->where('parent_item_id', $nv);
-//                                    });
-//                                    // похожие строки чуть ниже
-//                                    $item_seek = $items->first();
-//                                    $error = false;
-//                                    if (!$item_seek) {
-//                                        $found = false;
-//                                        break;
-//                                    } else {
-//                                        $found = true;
-//                                    }
-//                                }
-//                            }
             }
-            //dd($items->first());
-            $item_first = $items->first();
-            //dd($item_first->id);
-            if ($item_first) {
-                $result_item = MainController::get_parent_item_from_main($item_first->id, $set->link_to_id);
-                //dd($link);
+            $count = $items->count();
+            if ($count == 1) {
+                $item_first = $items->first();
+                if ($item_first) {
+                    $result_item = MainController::get_parent_item_from_main($item_first->id, $set->link_to_id);
+                }
             }
         }
-
 
         return $result_item;
     }
