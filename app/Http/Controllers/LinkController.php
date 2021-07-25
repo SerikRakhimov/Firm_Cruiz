@@ -503,19 +503,21 @@ class LinkController extends Controller
         $result_parent_output_calculated_table_set_id_options = '';
         if ($base != null) {
             $sets = Set::select(DB::Raw('sets.*, lt.child_base_id as to_child_base_id, lt.parent_base_id as to_parent_base_id'))
-                ->join('links as lf', 'sets.link_from_id', '=', 'lf.id')
-                ->join('links as lt', 'sets.link_to_id', '=', 'lt.id')
+                ->join('links as lf', 'sets.link_from_id', 'lf.id')
+                ->join('links as lt', 'sets.link_to_id',  'lt.id')
                 ->where('sets.is_update', true)
-                ->where('lf.child_base_id', '=', $base->id)
+                ->where('lf.child_base_id', $base->id)
                 ->orderBy('sets.serial_number')
                 ->orderBy('sets.link_from_id')
                 ->orderBy('sets.link_to_id')->get();
+
             foreach ($sets as $set) {
                 $result_parent_output_calculated_table_set_id_options = $result_parent_output_calculated_table_set_id_options
                     . "<option value='" . $set->id . "'>" . $set->link_to->child_base->name()
                     . "." . $set->link_to->parent_base->name()
                     . " (id =  " . $set->id . ", " . trans('main.serial_number') . " = " . $set->serial_number . ") " . "</option>";
             }
+
         }
         return [
             'result_parent_output_calculated_table_set_id_options' => $result_parent_output_calculated_table_set_id_options,

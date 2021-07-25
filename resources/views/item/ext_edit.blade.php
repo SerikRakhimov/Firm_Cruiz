@@ -4,6 +4,7 @@
     <?php
     use App\Models\Link;
     use App\Models\Item;
+    use App\Models\Set;
     use \App\Http\Controllers\GlobalController;
     use \App\Http\Controllers\BaseController;
     use \App\Http\Controllers\ItemController;
@@ -320,6 +321,23 @@
                                   name="calc{{$key}}"
                                   id="link{{$key}}"></span>
                         @endif
+                    </div>
+                    <div class="col-sm-2">
+                    </div>
+                </div>
+                {{--                            проверка для вывода полей вычисляемой таблицы--}}
+            @elseif($link->parent_is_output_calculated_table_field == true)
+                <div class="form-group row"
+                >
+                    <div class="col-sm-3 text-right">
+                        <label for="calc{{$key}}" class="form-label">
+                            {{$result['result_parent_label']}}
+                        </label>
+                    </div>
+                    <div class="col-sm-7">
+                                    <span class="form-label text-related"
+                                          name="calc{{$key}}"
+                                          id="link{{$key}}"></span>
                     </div>
                     <div class="col-sm-2">
                     </div>
@@ -838,11 +856,14 @@
         $link_result_child = null;
         $link_parent = null;
         $lres = null;
+        $set = null;
+        $sets_group = null;
+        $link_calculated_table = null;
         //$link = Link::find($key);
         if ($link) {
             // эта проверка не нужна
             //if (!array_key_exists($key, $array_disabled)) {
-            //          проверка на фильтруемые поля
+            //          Проверка на фильтруемые поля
             if ($link->parent_is_child_related == true) {
                 $lres = LinkController::get_link_ids_from_calc_link($link);
                 $const_link_id_start = $lres['const_link_id_start'];
@@ -852,7 +873,7 @@
                 $prefix = '1_';
             }
             //}
-            //          проверка на вычисляемые поля
+            //          Проверка на вычисляемые поля
             if ($link->parent_is_parent_related == true) {
                 $lres = LinkController::get_link_ids_from_calc_link($link);
                 $const_link_id_start = $lres['const_link_id_start'];
@@ -860,13 +881,11 @@
                 $link_parent = Link::find($link->parent_parent_related_start_link_id);
                 $prefix = '2_';
             }
-            //          проверка на вычисляемые поля
-            if ($link->parent_is_parent_related == true) {
-                $lres = LinkController::get_link_ids_from_calc_link($link);
-                $const_link_id_start = $lres['const_link_id_start'];
-                $const_link_start = $lres['const_link_start'];
-                $link_parent = Link::find($link->parent_parent_related_start_link_id);
-                $prefix = '2_';
+            // Выводить поле вычисляемой таблицы
+            if ($link->parent_is_output_calculated_table_field == true) {
+                $sets_group = ItemController::get_sets_group($base, $link);
+                $link_calculated_table = true;
+                $prefix = '7_';
             }
         }
         ?>
@@ -1066,6 +1085,43 @@
                 @endif
             </script>
         @endif
+
+        @if($link_calculated_table)
+            <script>
+                    @foreach($sets_group as $to_key => $to_value)
+                var child_base_id{{$prefix}}{{$link->id}}_{{$to_value->id}} = document.getElementById('link{{$to_value->link_from_id}}');
+                    @endforeach
+
+                var parent_base_id{{$prefix}}{{$link->id}} = document.getElementById('link{{$link->id}}');
+
+                <?php
+                $functions[count($functions)] = "link_id_changeOption_" . $prefix . $link->id;
+                ?>
+                function link_id_changeOption_{{$prefix}}{{$link->id}}(first = false) {
+                    {{--if (child_base_id{{$prefix}}{{$link->id}}.options[child_base_id{{$prefix}}{{$link->id}}.selectedIndex].value == 0) {--}}
+                    {{--    parent_base_id{{$prefix}}{{$link->id}}.innerHTML = "{{trans('main.no_information') . '!'}}";--}}
+                    {{--} else {--}}
+                    axios.get('/item/get_parent_item_from_output_calculated_table'
+                        + '/{{$base->id}}'
+                        + '/{{$link->id}}'
+                        @foreach($sets_group as $to_key => $to_value)
+                        + '/' + child_base_id{{$prefix}}{{$link->id}}_{{$to_value->id}}.options[child_base_id{{$prefix}}{{$link->id}}_{{$to_value->id}}.selectedIndex].value
+                        @endforeach
+                        ).then(function (res) {
+                            parent_base_id{{$prefix}}{{$link->id}}.innerHTML = res.data;
+                            }
+                        );
+                    // }
+                }
+
+                @foreach($sets_group as $to_key => $to_value)
+                child_base_id{{$prefix}}{{$link->id}}_{{$to_value->id}}.addEventListener("change", link_id_changeOption_{{$prefix}}{{$link->id}});
+                @endforeach
+
+            </script>
+        @endif
+
+
         <?php
         $prefix = '3_';
         ?>

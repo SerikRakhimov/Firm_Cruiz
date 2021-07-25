@@ -1107,7 +1107,11 @@ class ItemController extends Controller
         return $result;
 
     }
-
+    //    Эти функции похожи:
+    //save_sets()
+    //get_item_from_parent_output_calculated_table()
+    //get_sets_group()
+    //get_parent_item_from_output_calculated_table()
     // Обрабатывает присваивания
     private
     function save_sets(Item $item, $keys, $values, $valits, bool $reverse)
@@ -1380,7 +1384,6 @@ class ItemController extends Controller
         }
     }
 
-
     static function get_item_from_parent_output_calculated_table(Item $item, Link $link)
     {
         $result_item = null;
@@ -1389,7 +1392,7 @@ class ItemController extends Controller
             // base_id вычисляемой таблицы
             $calc_table_base_id = $set->link_to->child_base_id;
 
-            $set_group_by_base_to = Set::select(DB::Raw('sets.*'))
+            $sets_group = Set::select(DB::Raw('sets.*'))
                 ->join('links as lf', 'sets.link_from_id', '=', 'lf.id')
                 ->join('links as lt', 'sets.link_to_id', '=', 'lt.id')
                 ->where('lf.child_base_id', '=', $item->base_id)
@@ -1402,7 +1405,7 @@ class ItemController extends Controller
             $items = Item::where('base_id', $calc_table_base_id)->where('project_id', $item->project_id);
 
             // Цикл по записям, в каждой итерации цикла свой to_child_base_id в переменной $to_key
-            foreach ($set_group_by_base_to as $to_key => $to_value) {
+            foreach ($sets_group as $to_key => $to_value) {
                 $item_seek = MainController::get_parent_item_from_main($item->id, $to_value->link_from_id);
                 $items = $items->whereHas('child_mains', function ($query) use ($to_value, $item_seek) {
                     $query->where('link_id', $to_value->link_to_id)->where('parent_item_id', $item_seek->id);
@@ -1420,6 +1423,92 @@ class ItemController extends Controller
 
         return $result_item;
     }
+
+    // "->where('bs.type_is_list', '=', true)" нужно, т.к. запрос функции идет с ext_edit.php
+    static function get_sets_group(Base $base, Link $link)
+    {
+        $set = Set::find($link->parent_output_calculated_table_set_id);
+        $sets_group = Set::select(DB::Raw('sets.*'))
+            ->join('links as lf', 'sets.link_from_id', '=', 'lf.id')
+            ->join('links as lt', 'sets.link_to_id', '=', 'lt.id')
+            ->join('bases as bs', 'lf.parent_base_id', '=', 'bs.id')
+            ->where('lf.child_base_id', '=', $base->id)
+            ->where('is_group', true)
+            ->where('bs.type_is_list', '=', true)
+            ->where('sets.serial_number', '=', $set->serial_number)
+            ->orderBy('sets.serial_number')
+            ->orderBy('sets.link_from_id')
+            ->orderBy('sets.link_to_id')->get();
+
+        return $sets_group;
+    }
+
+    static function get_parent_item_from_output_calculated_table(Base $base, Link $link, Item $item0, Item $item1 = null, Item $item2 = null, Item $item3 = null, Item $item4 = null)
+    {
+        $result = trans('main.no_information') . '!';
+        $set = Set::find($link->parent_output_calculated_table_set_id);
+        $sets_group = self::get_sets_group($base, $link);
+        if ($sets_group) {
+            // base_id вычисляемой таблицы
+            $calc_table_base_id = $set->link_to->child_base_id;
+
+            $items = Item::where('base_id', $calc_table_base_id)->where('project_id', $item0->project_id);
+
+            $i = 0;
+            // Цикл по записям, в каждой итерации цикла свой to_child_base_id в переменной $to_key
+            foreach ($sets_group as $to_key => $to_value) {
+                $item_seek = null;
+                switch ($i) {
+                    case 0:
+                        $item_seek = $item0;
+                        break;
+                    case 1:
+                        if (isset($item1)) {
+                            $item_seek = $item1;
+                        }
+                        break;
+                    case 2:
+                        if (isset($item2)) {
+                            $item_seek = $item2;
+                        }
+                        break;
+                    case 3:
+                        if (isset($item3)) {
+                            $item_seek = $item3;
+                        }
+                        break;
+                    case 4:
+                        if (isset($item4)) {
+                            $item_seek = $item4;
+                        }
+                        break;
+                }
+
+                if($item_seek == null){
+                    break;
+                }
+
+                $items = $items->whereHas('child_mains', function ($query) use ($to_value, $item_seek) {
+                    $query->where('link_id', $to_value->link_to_id)->where('parent_item_id', $item_seek->id);
+                });
+
+                $i = $i + 1;
+
+            }
+
+            $count = $items->count();
+            if ($count == 1) {
+                $item_first = $items->first();
+                if ($item_first) {
+                    $result = MainController::get_parent_item_from_main($item_first->id, $set->link_to_id)->name();
+                }
+            }
+        }
+
+        return $result;
+
+    }
+
 
     private
     function save_main(Main $main, $item, $keys, $values, &$valits, $index, $strings_inputs)
