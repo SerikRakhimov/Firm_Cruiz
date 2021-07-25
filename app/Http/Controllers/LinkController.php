@@ -514,7 +514,7 @@ class LinkController extends Controller
             foreach ($sets as $set) {
                 $result_parent_output_calculated_table_set_id_options = $result_parent_output_calculated_table_set_id_options
                     . "<option value='" . $set->id . "'>" . $set->link_to->child_base->name()
-                    . "." . $set->link_to->parent_base->name()
+                    . "." . $set->link_to->parent_label()
                     . " (id =  " . $set->id . ", " . trans('main.serial_number') . " = " . $set->serial_number . ") " . "</option>";
             }
 
