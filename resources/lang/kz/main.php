@@ -342,5 +342,8 @@ return [
     'subscription_removed'=>'Жазылым жойылды',
     'additional_information'=>'Қосымша ақпарат',
     'parent_is_output_calculated_table_field'=>'Есептелетін кесте өрісін көрсету',
-    'parent_output_calculated_table_set_id'=>'Тағайындауды көрсету керек пе?',
+    'parent_output_calculated_table_set_id'=>'Тағайындауды көрсету керек пе',
+    'parent_is_in_the_selection_list_use_the_calculated_table_field'=>'Таңдау тізімінде есептелетін кесте өрісін пайдалану',
+    'parent_selection_calculated_table_set_id'=>'Тағайындауды көрсету керек пе',
+    'parent_is_in_the_selection_list_use_the_related_field_of_the_calculated_table'=>'Таңдау тізімінде есептелетін кестенің байланған өрісін пайдалану',
 ];

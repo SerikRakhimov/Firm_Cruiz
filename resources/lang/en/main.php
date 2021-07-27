@@ -342,5 +342,8 @@ return [
     'subscription_removed'=>'Subscription removed',
     'additional_information'=>'Additional information',
     'parent_is_output_calculated_table_field'=>'Output calculated table field',
-    'parent_output_calculated_table_set_id'=>'Do you want to display the set?',
+    'parent_output_calculated_table_set_id'=>'Do you want to display the set',
+    'parent_is_in_the_selection_list_use_the_calculated_table_field'=>'In the selection list, use the calculated table field',
+    'parent_selection_calculated_table_set_id'=>'Do you want to display the set',
+    'parent_is_in_the_selection_list_use_the_related_field_of_the_calculated_table'=>'In the selection list, use the related field of the calculated table',
 ];

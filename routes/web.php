@@ -693,6 +693,10 @@ Route::get('/link/get_parent_output_calculated_table_set_id/{base}', 'LinkContro
     ->name('link.get_parent_output_calculated_table_set_id')
     ->middleware('auth');
 
+Route::get('/link/get_parent_selection_calculated_table_set_id/{base}', 'LinkController@get_parent_selection_calculated_table_set_id')
+    ->name('link.get_parent_selection_calculated_table_set_id')
+    ->middleware('auth');
+
 Route::get('/link/get_tree_from_link_id/{link_start}', 'LinkController@get_tree_from_link_id')
     ->name('link.get_tree_from_link_id')
     ->middleware('auth');

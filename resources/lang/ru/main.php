@@ -342,5 +342,8 @@ return [
     'subscription_removed'=>'Подписка удалена',
     'additional_information'=>'Дополнительная информация',
     'parent_is_output_calculated_table_field'=>'Выводить поле вычисляемой таблицы',
-    'parent_output_calculated_table_set_id'=>'Выводить присваивание?',
+    'parent_output_calculated_table_set_id'=>'Выводить присваивание',
+    'parent_is_in_the_selection_list_use_the_calculated_table_field'=>'В списке выбора использовать поле вычисляемой таблицы',
+    'parent_selection_calculated_table_set_id'=>'Выводить присваивание',
+    'parent_is_in_the_selection_list_use_the_related_field_of_the_calculated_table'=>'В списке выбора использовать связанное поле вычисляемой таблицы',
 ];

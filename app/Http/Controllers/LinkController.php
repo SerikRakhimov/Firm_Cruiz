@@ -183,7 +183,17 @@ class LinkController extends Controller
         if ($link->parent_label_lang_3 == "") {
             $link->parent_label_lang_3 = $link->parent_base->name_lang_3;
         }
-
+        // В списке выбора использовать поле вычисляемой таблицы
+        $link->parent_is_in_the_selection_list_use_the_calculated_table_field = isset($request->parent_is_in_the_selection_list_use_the_calculated_table_field) ? true : false;
+        if ($link->parent_is_in_the_selection_list_use_the_calculated_table_field) {
+            $link->parent_selection_calculated_table_set_id = $request->parent_selection_calculated_table_set_id;
+        } else {
+            $link->parent_selection_calculated_table_set_id = 0;
+        }
+        if ($link->parent_selection_calculated_table_set_id == 0) {
+            $link->parent_is_in_the_selection_list_use_the_calculated_table_field = false;
+            $link->parent_selection_calculated_table_set_id = 0;
+        }
         // Выводить связанное поле
         $link->parent_is_parent_related = isset($request->parent_is_parent_related) ? true : false;
         if ($link->parent_is_parent_related) {
@@ -199,14 +209,14 @@ class LinkController extends Controller
             $link->parent_parent_related_result_link_id = 0;
         }
         // Выводить поле вычисляемой таблицы
-        $link->parent_is_output_calculated_table_field = isset($request->parent_is_output_calculated_table_field) ? true : false;
-        if ($link->parent_is_output_calculated_table_field) {
+        $link->parent_is_in_the_selection_list_use_the_calculated_table_field = isset($request->parent_is_in_the_selection_list_use_the_calculated_table_field) ? true : false;
+        if ($link->parent_is_in_the_selection_list_use_the_calculated_table_field) {
             $link->parent_output_calculated_table_set_id = $request->parent_output_calculated_table_set_id;
         } else {
             $link->parent_output_calculated_table_set_id = 0;
         }
         if ($link->parent_output_calculated_table_set_id == 0) {
-            $link->parent_is_output_calculated_table_field = false;
+            $link->parent_is_in_the_selection_list_use_the_calculated_table_field = false;
             $link->parent_output_calculated_table_set_id = 0;
         }
         // Фильтровать поля
@@ -352,7 +362,17 @@ class LinkController extends Controller
         if ($link->parent_label_lang_3 == "") {
             $link->parent_label_lang_3 = $link->parent_base->name_lang_3;
         }
-
+        // В списке выбора использовать поле вычисляемой таблицы
+        $link->parent_is_in_the_selection_list_use_the_calculated_table_field = isset($request->parent_is_in_the_selection_list_use_the_calculated_table_field) ? true : false;
+        if ($link->parent_is_in_the_selection_list_use_the_calculated_table_field) {
+            $link->parent_selection_calculated_table_set_id = $request->parent_selection_calculated_table_set_id;
+        } else {
+            $link->parent_selection_calculated_table_set_id = 0;
+        }
+        if ($link->parent_selection_calculated_table_set_id == 0) {
+            $link->parent_is_in_the_selection_list_use_the_calculated_table_field = false;
+            $link->parent_selection_calculated_table_set_id = 0;
+        }
         // Выводить связанное поле
         $link->parent_is_parent_related = isset($request->parent_is_parent_related) ? true : false;
         if ($link->parent_is_parent_related) {
@@ -416,7 +436,6 @@ class LinkController extends Controller
                 $link->parent_is_setup_project_internal_description_txt = false;
             }
         }
-
         $link->save();
 
         return redirect()->route('link.base_index', ['base' => $link->child_base, 'links' => Link::where('child_base_id', $link->child_base_id)->orderBy('parent_base_number')->get()]);
@@ -497,6 +516,35 @@ class LinkController extends Controller
         ];
     }
 
+    // В списке выбора использовать поле вычисляемой таблицы
+    // Возвращает список для выбора
+    static function get_parent_selection_calculated_table_set_id(Base $base)
+    {
+        $result_parent_selection_calculated_table_set_id_options = '';
+        if ($base != null) {
+            $sets = Set::select(DB::Raw('sets.*, lt.child_base_id as to_child_base_id, lt.parent_base_id as to_parent_base_id'))
+                ->join('links as lf', 'sets.link_from_id', 'lf.id')
+                ->join('links as lt', 'sets.link_to_id',  'lt.id')
+                ->where('sets.is_group', true)
+                ->where('lf.child_base_id', $base->id)
+                ->orderBy('sets.serial_number')
+                ->orderBy('sets.link_from_id')
+                ->orderBy('sets.link_to_id')->get();
+
+            foreach ($sets as $set) {
+                $result_parent_selection_calculated_table_set_id_options = $result_parent_selection_calculated_table_set_id_options
+                    . "<option value='" . $set->id . "'>" . $set->link_to->child_base->name()
+                    . "." . $set->link_to->parent_label()
+                    . " (id =  " . $set->id . ", " . trans('main.serial_number') . " = " . $set->serial_number . ") " . "</option>";
+            }
+
+        }
+        return [
+            'result_parent_selection_calculated_table_set_id_options' => $result_parent_selection_calculated_table_set_id_options,
+        ];
+    }
+
+    // Выводить поле вычисляемой таблицы
     // Возвращает список для выбора
     static function get_parent_output_calculated_table_set_id(Base $base)
     {
@@ -565,6 +613,7 @@ class LinkController extends Controller
         ];
     }
 
+    // Заполняет поле "Маршрут" в link/edit.php
     static function get_tree_from_link_id(Link $link_start)
     {
         $result_parent_parent_related_result_link_id_options = '';

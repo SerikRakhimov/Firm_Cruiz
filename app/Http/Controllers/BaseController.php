@@ -808,6 +808,13 @@ class BaseController extends Controller
         $path_previous = $base->name();
         self::get_array_bases_tree_start($list, $result_index, $result_keys, $result_values, $base_id, $path_previous);
         $result = '';
+
+
+//        $result_keys[$result_index] = 186;
+//        $result_values[$result_index] = "Товары по остаткам";
+//        $result_index = $result_index + 1;
+
+
         foreach ($result_values as $key => $value) {
             $result = $result . '<option value="' . $result_keys[$key] . '">' . $value . '</option>';
         }
