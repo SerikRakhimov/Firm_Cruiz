@@ -2812,7 +2812,19 @@ class ItemController extends Controller
 
                 // список items по выбранному parent_base_id
                 $base_right = GlobalController::base_right($link->parent_base, $role);
-                $result_parent_base_items = Item::select(['id', 'base_id', 'name_lang_0', 'name_lang_1', 'name_lang_2', 'name_lang_3', 'created_user_id'])->where('base_id', $link->parent_base_id)->where('project_id', $project->id)->orderBy($name);
+                // В списке выбора использовать поле вычисляемой таблицы
+                if ($link->parent_is_in_the_selection_list_use_the_calculated_table_field == true){
+                    $set = Set::findOrFail($link->parent_selection_calculated_table_set_id);
+                    $set_link = $set->link_to;
+                    $result_parent_base_items = Item::select(DB::Raw('items.*'))
+                        ->join('mains', 'items.id', '=', 'mains.parent_item_id')
+                        ->where('items.project_id', $project->id)
+                        ->where('mains.link_id', '=', $set_link->id)
+                    ->orderBy('items.' . $name);
+                // Загрузить список $items
+                }else {
+                    $result_parent_base_items = Item::select(['id', 'base_id', 'name_lang_0', 'name_lang_1', 'name_lang_2', 'name_lang_3', 'created_user_id'])->where('base_id', $link->parent_base_id)->where('project_id', $project->id)->orderBy($name);
+                }
                 // Такая же проверка и в GlobalController (function items_right()),
                 // в ItemController (function browser(), get_items_for_link(), get_items_ext_edit_for_link())
                 if ($base_right['is_list_base_byuser'] == true) {
