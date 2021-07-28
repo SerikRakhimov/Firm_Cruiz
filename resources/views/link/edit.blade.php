@@ -482,6 +482,66 @@
             </div>
             @enderror
         </div>
+{{--        В списке выбора использовать дополнительное связанное поле вычисляемой таблицы--}}
+        <div class="form-group" id="parent_is_use_selection_calculated_table_link_id_0_form_group">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" name="parent_is_use_selection_calculated_table_link_id_0"
+                       id="parent_is_use_selection_calculated_table_link_id_0"
+                       {{--            "(int) 0" нужно--}}
+                       @if ((old('parent_is_use_selection_calculated_table_link_id_0') ?? ($link->parent_is_use_selection_calculated_table_link_id_0 ?? false)) ==  true)
+                       checked
+                       @endif
+                       onclick="parent_selection_calculated_table_link_id_0_show_or_hide(this)">
+                <label class="form-check-label"
+                       for="parent_is_use_selection_calculated_table_link_id_0">{{trans('main.parent_is_use_selection_calculated_table_link_id_0')}}</label>
+            </div>
+        </div>
+
+        <div class="form-group" id="parent_selection_calculated_table_link_id_0_form_group">
+            <label for="parent_selection_calculated_table_link_id_0">{{trans('main.parent_selection_calculated_table_link_id_0')}}<span
+                    class="text-danger">*</span></label>
+            <select class="form-control"
+                    name="parent_selection_calculated_table_link_id_0"
+                    id="parent_selection_calculated_table_link_id_0"
+                    class="form-control @error('parent_selection_calculated_table_link_id_0') is-invalid @enderror">
+                <option value="0">0</option>
+            </select>
+            @error('parent_selection_calculated_table_link_id_0')
+            <div class="text-danger">
+                {{$message}}
+            </div>
+            @enderror
+        </div>
+{{--        В списке выбора использовать два дополнительных связанных поля вычисляемой таблицы--}}
+        <div class="form-group" id="parent_is_use_selection_calculated_table_link_id_1_form_group">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" name="parent_is_use_selection_calculated_table_link_id_1"
+                       id="parent_is_use_selection_calculated_table_link_id_1"
+                       {{--            "(int) 0" нужно--}}
+                       @if ((old('parent_is_use_selection_calculated_table_link_id_1') ?? ($link->parent_is_use_selection_calculated_table_link_id_1 ?? false)) ==  true)
+                       checked
+                       @endif
+                       onclick="parent_selection_calculated_table_link_id_1_show_or_hide(this)">
+                <label class="form-check-label"
+                       for="parent_is_use_selection_calculated_table_link_id_1">{{trans('main.parent_is_use_selection_calculated_table_link_id_1')}}</label>
+            </div>
+        </div>
+
+        <div class="form-group" id="parent_selection_calculated_table_link_id_1_form_group">
+            <label for="parent_selection_calculated_table_link_id_1">{{trans('main.parent_selection_calculated_table_link_id_1')}}<span
+                    class="text-danger">*</span></label>
+            <select class="form-control"
+                    name="parent_selection_calculated_table_link_id_1"
+                    id="parent_selection_calculated_table_link_id_1"
+                    class="form-control @error('parent_selection_calculated_table_link_id_1') is-invalid @enderror">
+                <option value="0">0</option>
+            </select>
+            @error('parent_selection_calculated_table_link_id_1')
+            <div class="text-danger">
+                {{$message}}
+            </div>
+            @enderror
+        </div>
 {{--       Выводить связанное поле--}}
         <div class="form-group" id="parent_is_parent_related_form_group">
             <div class="form-check form-check-inline">
@@ -628,6 +688,18 @@
         var parent_is_in_the_selection_list_use_the_calculated_table_field_form_group = document.getElementById('parent_is_in_the_selection_list_use_the_calculated_table_field_form_group');
         var parent_selection_calculated_table_set_id_form_group = document.getElementById('parent_selection_calculated_table_set_id_form_group');
         var parent_selection_calculated_table_set_id = form.parent_selection_calculated_table_set_id;
+
+        // В списке выбора использовать дополнительное связанное поле вычисляемой таблицы
+        var parent_is_use_selection_calculated_table_link_id_0 = form.parent_is_use_selection_calculated_table_link_id_0;
+        var parent_is_use_selection_calculated_table_link_id_0_form_group = document.getElementById('parent_is_use_selection_calculated_table_link_id_0_form_group');
+        var parent_selection_calculated_table_link_id_0_form_group = document.getElementById('parent_selection_calculated_table_link_id_0_form_group');
+        var parent_selection_calculated_table_link_id_0 = form.parent_selection_calculated_table_link_id_0;
+
+        // В списке выбора использовать два дополнительных связанных поля вычисляемой таблицы
+        var parent_is_use_selection_calculated_table_link_id_1 = form.parent_is_use_selection_calculated_table_link_id_1;
+        var parent_is_use_selection_calculated_table_link_id_1_form_group = document.getElementById('parent_is_use_selection_calculated_table_link_id_1_form_group');
+        var parent_selection_calculated_table_link_id_1_form_group = document.getElementById('parent_selection_calculated_table_link_id_1_form_group');
+        var parent_selection_calculated_table_link_id_1 = form.parent_selection_calculated_table_link_id_1;
 
         // Выводить связанное поле
         var parent_is_parent_related = form.parent_is_parent_related;

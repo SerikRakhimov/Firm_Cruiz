@@ -346,4 +346,8 @@ return [
     'parent_is_in_the_selection_list_use_the_calculated_table_field'=>'In the selection list, use the calculated table field',
     'parent_selection_calculated_table_set_id'=>'Do you want to display the set',
     'parent_is_in_the_selection_list_use_the_related_field_of_the_calculated_table'=>'In the selection list, use the related field of the calculated table',
+    'parent_is_use_selection_calculated_table_link_id_0'=>'In the selection list, use the additional related field of the calculated table',
+    'parent_is_use_selection_calculated_table_link_id_1'=>'In the selection list, use two additional related fields of the calculated table',
+    'parent_selection_calculated_table_link_id_0'=>'Additional_related_calculated_table_field_0',
+    'parent_selection_calculated_table_link_id_1'=>'Additional_related_calculated_table_field_1',
 ];

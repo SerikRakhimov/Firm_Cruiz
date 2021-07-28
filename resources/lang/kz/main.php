@@ -346,4 +346,8 @@ return [
     'parent_is_in_the_selection_list_use_the_calculated_table_field'=>'Таңдау тізімінде есептелетін кесте өрісін пайдалану',
     'parent_selection_calculated_table_set_id'=>'Тағайындауды көрсету керек пе',
     'parent_is_in_the_selection_list_use_the_related_field_of_the_calculated_table'=>'Таңдау тізімінде есептелетін кестенің байланған өрісін пайдалану',
+    'parent_is_use_selection_calculated_table_link_id_0'=>'Таңдау тізімінде есептелетін кестенің қосымша байланған өрісін пайдалану',
+    'parent_is_use_selection_calculated_table_link_id_1'=>'Таңдау тізімінде есептелетін кестенің байланысты екі өрісін пайдалану',
+    'parent_selection_calculated_table_link_id_0'=>'Есептелетін кестенің қосымша байланған өрісі_0',
+    'parent_selection_calculated_table_link_id_1'=>'Есептелетін кестенің қосымша байланған өрісі_1',
 ];

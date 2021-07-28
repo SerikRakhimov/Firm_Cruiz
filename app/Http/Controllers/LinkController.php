@@ -194,6 +194,28 @@ class LinkController extends Controller
             $link->parent_is_in_the_selection_list_use_the_calculated_table_field = false;
             $link->parent_selection_calculated_table_set_id = 0;
         }
+        // В списке выбора использовать дополнительное связанное поле вычисляемой таблицы
+        $link->parent_is_use_selection_calculated_table_link_id_0 = isset($request->parent_is_use_selection_calculated_table_link_id_0) ? true : false;
+        if ($link->parent_is_use_selection_calculated_table_link_id_0) {
+            $link->parent_selection_calculated_table_link_id_0 = $request->parent_selection_calculated_table_link_id_0;
+        } else {
+            $link->parent_selection_calculated_table_link_id_0 = 0;
+        }
+        if ($link->parent_selection_calculated_table_link_id_0 == 0) {
+            $link->parent_is_use_selection_calculated_table_link_id_0 = false;
+            $link->parent_selection_calculated_table_link_id_0 = 0;
+        }
+        // В списке выбора использовать два дополнительных связанных поля вычисляемой таблицы
+        $link->parent_is_use_selection_calculated_table_link_id_1 = isset($request->parent_is_use_selection_calculated_table_link_id_1) ? true : false;
+        if ($link->parent_is_use_selection_calculated_table_link_id_1) {
+            $link->parent_selection_calculated_table_link_id_1 = $request->parent_selection_calculated_table_link_id_1;
+        } else {
+            $link->parent_selection_calculated_table_link_id_1 = 0;
+        }
+        if ($link->parent_selection_calculated_table_link_id_1 == 0) {
+            $link->parent_is_use_selection_calculated_table_link_id_1 = false;
+            $link->parent_selection_calculated_table_link_id_1 = 0;
+        }
         // Выводить связанное поле
         $link->parent_is_parent_related = isset($request->parent_is_parent_related) ? true : false;
         if ($link->parent_is_parent_related) {
@@ -372,6 +394,28 @@ class LinkController extends Controller
         if ($link->parent_selection_calculated_table_set_id == 0) {
             $link->parent_is_in_the_selection_list_use_the_calculated_table_field = false;
             $link->parent_selection_calculated_table_set_id = 0;
+        }
+        // В списке выбора использовать дополнительное связанное поле вычисляемой таблицы
+        $link->parent_is_use_selection_calculated_table_link_id_0 = isset($request->parent_is_use_selection_calculated_table_link_id_0) ? true : false;
+        if ($link->parent_is_use_selection_calculated_table_link_id_0) {
+            $link->parent_selection_calculated_table_link_id_0 = $request->parent_selection_calculated_table_link_id_0;
+        } else {
+            $link->parent_selection_calculated_table_link_id_0 = 0;
+        }
+        if ($link->parent_selection_calculated_table_link_id_0 == 0) {
+            $link->parent_is_use_selection_calculated_table_link_id_0 = false;
+            $link->parent_selection_calculated_table_link_id_0 = 0;
+        }
+        // В списке выбора использовать два дополнительных связанных поля вычисляемой таблицы
+        $link->parent_is_use_selection_calculated_table_link_id_1 = isset($request->parent_is_use_selection_calculated_table_link_id_1) ? true : false;
+        if ($link->parent_is_use_selection_calculated_table_link_id_1) {
+            $link->parent_selection_calculated_table_link_id_1 = $request->parent_selection_calculated_table_link_id_1;
+        } else {
+            $link->parent_selection_calculated_table_link_id_1 = 0;
+        }
+        if ($link->parent_selection_calculated_table_link_id_1 == 0) {
+            $link->parent_is_use_selection_calculated_table_link_id_1 = false;
+            $link->parent_selection_calculated_table_link_id_1 = 0;
         }
         // Выводить связанное поле
         $link->parent_is_parent_related = isset($request->parent_is_parent_related) ? true : false;

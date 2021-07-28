@@ -346,4 +346,8 @@ return [
     'parent_is_in_the_selection_list_use_the_calculated_table_field'=>'В списке выбора использовать поле вычисляемой таблицы',
     'parent_selection_calculated_table_set_id'=>'Выводить присваивание',
     'parent_is_in_the_selection_list_use_the_related_field_of_the_calculated_table'=>'В списке выбора использовать связанное поле вычисляемой таблицы',
+    'parent_is_use_selection_calculated_table_link_id_0'=>'В списке выбора использовать дополнительное связанное поле вычисляемой таблицы',
+    'parent_is_use_selection_calculated_table_link_id_1'=>'В списке выбора использовать два дополнительных связанных поля вычисляемой таблицы',
+    'parent_selection_calculated_table_link_id_0'=>'Дополнительное связанное поле вычисляемой таблицы_0',
+    'parent_selection_calculated_table_link_id_1'=>'Дополнительное связанное поле вычисляемой таблицы_1',
 ];
