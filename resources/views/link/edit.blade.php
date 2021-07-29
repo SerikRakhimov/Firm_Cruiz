@@ -452,7 +452,7 @@
                        for="parent_is_setup_project_internal_description_txt">{{trans('main.parent_is_setup_project_internal_description_txt')}}</label>
             </div>
         </div>
-        {{--        В списке выбора использовать поле вычисляемой таблицы--}}
+        {{--        1.0 В списке выбора использовать поле вычисляемой таблицы--}}
         <div class="form-group" id="parent_is_in_the_selection_list_use_the_calculated_table_field_form_group">
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="checkbox" name="parent_is_in_the_selection_list_use_the_calculated_table_field"
@@ -482,7 +482,7 @@
             </div>
             @enderror
         </div>
-{{--        В списке выбора использовать дополнительное связанное поле вычисляемой таблицы--}}
+{{--        1.1 В списке выбора использовать дополнительное связанное поле вычисляемой таблицы--}}
         <div class="form-group" id="parent_is_use_selection_calculated_table_link_id_0_form_group">
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="checkbox" name="parent_is_use_selection_calculated_table_link_id_0"
@@ -512,7 +512,7 @@
             </div>
             @enderror
         </div>
-{{--        В списке выбора использовать два дополнительных связанных поля вычисляемой таблицы--}}
+{{--        1.2 В списке выбора использовать два дополнительных связанных поля вычисляемой таблицы--}}
         <div class="form-group" id="parent_is_use_selection_calculated_table_link_id_1_form_group">
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="checkbox" name="parent_is_use_selection_calculated_table_link_id_1"
@@ -683,19 +683,19 @@
         var child_base_id = form.child_base_id;
         var parent_base_id = form.parent_base_id;
 
-        // В списке выбора использовать поле вычисляемой таблицы
+        // 1.0 В списке выбора использовать поле вычисляемой таблицы
         var parent_is_in_the_selection_list_use_the_calculated_table_field = form.parent_is_in_the_selection_list_use_the_calculated_table_field;
         var parent_is_in_the_selection_list_use_the_calculated_table_field_form_group = document.getElementById('parent_is_in_the_selection_list_use_the_calculated_table_field_form_group');
         var parent_selection_calculated_table_set_id_form_group = document.getElementById('parent_selection_calculated_table_set_id_form_group');
         var parent_selection_calculated_table_set_id = form.parent_selection_calculated_table_set_id;
 
-        // В списке выбора использовать дополнительное связанное поле вычисляемой таблицы
+        // 1.1 В списке выбора использовать дополнительное связанное поле вычисляемой таблицы
         var parent_is_use_selection_calculated_table_link_id_0 = form.parent_is_use_selection_calculated_table_link_id_0;
         var parent_is_use_selection_calculated_table_link_id_0_form_group = document.getElementById('parent_is_use_selection_calculated_table_link_id_0_form_group');
         var parent_selection_calculated_table_link_id_0_form_group = document.getElementById('parent_selection_calculated_table_link_id_0_form_group');
         var parent_selection_calculated_table_link_id_0 = form.parent_selection_calculated_table_link_id_0;
 
-        // В списке выбора использовать два дополнительных связанных поля вычисляемой таблицы
+        // 1.2 В списке выбора использовать два дополнительных связанных поля вычисляемой таблицы
         var parent_is_use_selection_calculated_table_link_id_1 = form.parent_is_use_selection_calculated_table_link_id_1;
         var parent_is_use_selection_calculated_table_link_id_1_form_group = document.getElementById('parent_is_use_selection_calculated_table_link_id_1_form_group');
         var parent_selection_calculated_table_link_id_1_form_group = document.getElementById('parent_selection_calculated_table_link_id_1_form_group');
@@ -722,7 +722,7 @@
         var parent_child_related_start_link_id = form.parent_child_related_start_link_id;
         var parent_child_related_result_link_id_form_group = document.getElementById('parent_child_related_result_link_id_form_group');
         var parent_child_related_result_link_id = form.parent_child_related_result_link_id;
-
+        // Изменение child_base_id
         function child_base_id_changeOption(first) {
             // В списке выбора использовать поле вычисляемой таблицы
             axios.get('/link/get_parent_selection_calculated_table_set_id/'
@@ -922,7 +922,7 @@
             });
         }
 
-
+        // 1.0 В списке выбора использовать поле вычисляемой таблицы
         function parent_selection_calculated_table_show_or_hide(box) {
             var vis = "";
             var logval = false;
@@ -991,7 +991,147 @@
                 }
             });
         }
+        // 1.1 В списке выбора использовать дополнительное связанное поле вычисляемой таблицы
+        function parent_selection_calculated_table_link_id_0_show_or_hide(box) {
+            var vis = "";
+            var logval = false;
+            if (box.checked) {
+                vis = "block";
+                logval = true;
+            } else {
+                vis = "none";
+                logval = false;
+            }
+            parent_base_id.disabled = logval;
+            parent_selection_calculated_table_link_id_0_form_group.style.display = vis;
+            parent_selection_calculated_table_link_id_0.disabled = !logval;  // "!logval" используется
+            if (vis == "block") {
+                // "parent_is_use_selection_calculated_table_link_id_0_changeOption(false)" нужно
+                parent_is_use_selection_calculated_table_link_id_0_changeOption(false);
+            }
+        }
 
+        function parent_is_use_selection_calculated_table_link_id_0_changeOption(first) {
+            axios.get('/link/get_parent_base_id_from_set_id/'
+                + parent_is_use_selection_calculated_table_link_id_0.options[parent_is_use_selection_calculated_table_link_id_0.selectedIndex].value
+            ).then(function (res) {
+                // если запуск функции не при загрузке страницы
+                if (first != true) {
+                    // сохранить текущие значения
+                    var parent_base_id_value =
+                        parent_base_id.options[parent_base_id.selectedIndex].value;
+                }
+                if (res.data['parent_base_id'] == "") {
+                    {{--parent_base_id.innerHTML = '<option value = "0">{{trans('main.no_information_on')}} "' + parent_output_calculated_table_set_id.options[parent_output_calculated_table_set_id.selectedIndex].text + '"!</option>';--}}
+                } else {
+                    //parent_base_id.innerHTML = '<option value = "' + res.data['parent_base_id'] + '">' + res.data['parent_base_name'] + '</option>';
+                    for (let i = 0; i < parent_base_id.length; i++) {
+                        // если элемент списка = предыдущему(текущему) значению из базы данных
+                        if (parent_base_id[i].value == res.data['parent_base_id']) {
+                            // установить selected на true
+                            parent_base_id[i].selected = true;
+                        }
+                    }
+
+                }
+                // только если запуск функции при загрузке страницы
+                if (first == true) {
+                    // нужно чтобы при первом вызове формы корректировки записи значения полей соответствовали значениям из базы данных
+                    @if ($update)  // при корректировке записи
+                    // child
+                    for (let i = 0; i < parent_base_id.length; i++) {
+                        // если элемент списка = текущему значению из базы данных
+                        if (parent_base_id[i].value == {{$link->parent_base_id}}) {
+                            // установить selected на true
+                            parent_base_id[i].selected = true;
+                        }
+                    }
+                    @endif
+                } else {
+                    // нужно чтобы после обновления списка сохранить текущий выбор если соответствующий(child/parent) base не поменялся (при добавлении/корректировке записи)
+                    // child
+                    // for (let i = 0; i < parent_base_id.length; i++) {
+                    //     // если элемент списка = предыдущему(текущему) значению из базы данных
+                    //     if (parent_base_id[i].value == parent_base_id_value) {
+                    //         // установить selected на true
+                    //         parent_base_id[i].selected = true;
+                    //     }
+                    // }
+                }
+            });
+        }
+
+        // 1.2 В списке выбора использовать дополнительное связанное поле вычисляемой таблицы
+               function parent_selection_calculated_table_link_id_1_show_or_hide(box) {
+            var vis = "";
+            var logval = false;
+            if (box.checked) {
+                vis = "block";
+                logval = true;
+            } else {
+                vis = "none";
+                logval = false;
+            }
+            parent_base_id.disabled = logval;
+            parent_selection_calculated_table_link_id_1_form_group.style.display = vis;
+            parent_selection_calculated_table_link_id_1.disabled = !logval;  // "!logval" используется
+            if (vis == "block") {
+                // "parent_is_use_selection_calculated_table_link_id_1_changeOption(false)" нужно
+                parent_is_use_selection_calculated_table_link_id_1_changeOption(false);
+            }
+        }
+
+        function parent_is_use_selection_calculated_table_link_id_1_changeOption(first) {
+            axios.get('/link/get_parent_base_id_from_set_id/'
+                + parent_is_use_selection_calculated_table_link_id_1.options[parent_is_use_selection_calculated_table_link_id_1.selectedIndex].value
+            ).then(function (res) {
+                // если запуск функции не при загрузке страницы
+                if (first != true) {
+                    // сохранить текущие значения
+                    var parent_base_id_value =
+                        parent_base_id.options[parent_base_id.selectedIndex].value;
+                }
+                if (res.data['parent_base_id'] == "") {
+                    {{--parent_base_id.innerHTML = '<option value = "0">{{trans('main.no_information_on')}} "' + parent_output_calculated_table_set_id.options[parent_output_calculated_table_set_id.selectedIndex].text + '"!</option>';--}}
+                } else {
+                    //parent_base_id.innerHTML = '<option value = "' + res.data['parent_base_id'] + '">' + res.data['parent_base_name'] + '</option>';
+                    for (let i = 0; i < parent_base_id.length; i++) {
+                        // если элемент списка = предыдущему(текущему) значению из базы данных
+                        if (parent_base_id[i].value == res.data['parent_base_id']) {
+                            // установить selected на true
+                            parent_base_id[i].selected = true;
+                        }
+                    }
+
+                }
+                // только если запуск функции при загрузке страницы
+                if (first == true) {
+                    // нужно чтобы при первом вызове формы корректировки записи значения полей соответствовали значениям из базы данных
+                    @if ($update)  // при корректировке записи
+                    // child
+                    for (let i = 0; i < parent_base_id.length; i++) {
+                        // если элемент списка = текущему значению из базы данных
+                        if (parent_base_id[i].value == {{$link->parent_base_id}}) {
+                            // установить selected на true
+                            parent_base_id[i].selected = true;
+                        }
+                    }
+                    @endif
+                } else {
+                    // нужно чтобы после обновления списка сохранить текущий выбор если соответствующий(child/parent) base не поменялся (при добавлении/корректировке записи)
+                    // child
+                    // for (let i = 0; i < parent_base_id.length; i++) {
+                    //     // если элемент списка = предыдущему(текущему) значению из базы данных
+                    //     if (parent_base_id[i].value == parent_base_id_value) {
+                    //         // установить selected на true
+                    //         parent_base_id[i].selected = true;
+                    //     }
+                    // }
+                }
+            });
+        }
+
+        // Выводить связанное поле
         function parent_parent_show_or_hide(box) {
             var vis = "";
             var logval = false;
@@ -1108,7 +1248,7 @@
                 }
             });
         }
-
+        // Выводить поле вычисляемой таблицы
         function parent_calculated_table_show_or_hide(box) {
             var vis = "";
             var logval = false;
@@ -1177,7 +1317,7 @@
                 }
             });
         }
-
+        // Фильтрация полей
         function parent_child_show_or_hide(box) {
             var vis = "";
             var logval = false;
@@ -1301,6 +1441,8 @@
 
         child_base_id.addEventListener("change", child_base_id_changeOption);
         parent_selection_calculated_table_set_id.addEventListener("change", parent_selection_calculated_table_set_id_changeOption);
+        parent_is_use_selection_calculated_table_link_id_0.addEventListener("change", parent_is_use_selection_calculated_table_link_id_0_changeOption);
+        parent_is_use_selection_calculated_table_link_id_1.addEventListener("change", parent_is_use_selection_calculated_table_link_id_1_changeOption);
         parent_parent_related_start_link_id.addEventListener("change", parent_parent_related_start_link_id_changeOption);
         parent_parent_related_result_link_id.addEventListener("change", parent_parent_related_result_link_id_changeOption);
         parent_output_calculated_table_set_id.addEventListener("change", parent_output_calculated_table_set_id_changeOption);

@@ -384,7 +384,7 @@ class LinkController extends Controller
         if ($link->parent_label_lang_3 == "") {
             $link->parent_label_lang_3 = $link->parent_base->name_lang_3;
         }
-        // В списке выбора использовать поле вычисляемой таблицы
+        // 1.0 В списке выбора использовать поле вычисляемой таблицы
         $link->parent_is_in_the_selection_list_use_the_calculated_table_field = isset($request->parent_is_in_the_selection_list_use_the_calculated_table_field) ? true : false;
         if ($link->parent_is_in_the_selection_list_use_the_calculated_table_field) {
             $link->parent_selection_calculated_table_set_id = $request->parent_selection_calculated_table_set_id;
@@ -395,7 +395,7 @@ class LinkController extends Controller
             $link->parent_is_in_the_selection_list_use_the_calculated_table_field = false;
             $link->parent_selection_calculated_table_set_id = 0;
         }
-        // В списке выбора использовать дополнительное связанное поле вычисляемой таблицы
+        // 1.1 В списке выбора использовать дополнительное связанное поле вычисляемой таблицы
         $link->parent_is_use_selection_calculated_table_link_id_0 = isset($request->parent_is_use_selection_calculated_table_link_id_0) ? true : false;
         if ($link->parent_is_use_selection_calculated_table_link_id_0) {
             $link->parent_selection_calculated_table_link_id_0 = $request->parent_selection_calculated_table_link_id_0;
@@ -406,7 +406,7 @@ class LinkController extends Controller
             $link->parent_is_use_selection_calculated_table_link_id_0 = false;
             $link->parent_selection_calculated_table_link_id_0 = 0;
         }
-        // В списке выбора использовать два дополнительных связанных поля вычисляемой таблицы
+        // 1.2 В списке выбора использовать два дополнительных связанных поля вычисляемой таблицы
         $link->parent_is_use_selection_calculated_table_link_id_1 = isset($request->parent_is_use_selection_calculated_table_link_id_1) ? true : false;
         if ($link->parent_is_use_selection_calculated_table_link_id_1) {
             $link->parent_selection_calculated_table_link_id_1 = $request->parent_selection_calculated_table_link_id_1;
