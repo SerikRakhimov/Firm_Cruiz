@@ -782,7 +782,8 @@
                 parent_selection_calculated_table_show_or_hide(parent_is_in_the_selection_list_use_the_calculated_table_field);
                 parent_selection_calculated_table_set_id_changeOption(first);
                 parent_selection_calculated_table_link_id_0_show_or_hide(parent_is_use_selection_calculated_table_link_id_0);
-                // parent_selection_calculated_table_link_id_1_show_or_hide(parent_is_use_selection_calculated_table_link_id_1);
+                //parent_is_use_selection_calculated_table_link_id_1_changeOption(first);
+                parent_selection_calculated_table_link_id_1_show_or_hide(parent_is_use_selection_calculated_table_link_id_1);
             });
             // Выводить связанное поле
             axios.get('/link/get_parent_parent_related_start_link_id/'
@@ -1031,26 +1032,15 @@
             parent_selection_calculated_table_link_id_0_form_group.style.display = vis;
             parent_selection_calculated_table_link_id_0.disabled = !logval;  // "!logval" используется
             if (vis == "block") {
-
-                if (parent_selection_calculated_table_set_id.options[parent_selection_calculated_table_set_id.selectedIndex].value != 0) {
+                if(parent_selection_calculated_table_set_id.options[parent_selection_calculated_table_set_id.selectedIndex].value != 0) {
                     axios.get('/link/get_links_from_set_id_link_from_parent_base/'
                         + parent_selection_calculated_table_set_id.options[parent_selection_calculated_table_set_id.selectedIndex].value
                     ).then(function (res) {
-                        //alert(res.data['links_options']);
                         // если запуск функции не при загрузке страницы
                         if (res.data['links_options'] == "") {
                             parent_selection_calculated_table_link_id_0.innerHTML = '<option value = "0">{{trans('main.no_information_on')}} "' + parent_selection_calculated_table_set_id.options[parent_selection_calculated_table_set_id.selectedIndex].text + '"!</option>';
                         } else {
-                            // //parent_base_id.innerHTML = '<option value = "' + res.data['parent_base_id'] + '">' + res.data['parent_base_name'] + '</option>';
                             parent_selection_calculated_table_link_id_0.innerHTML = res.data['links_options'];
-                            // for (let i = 0; i < parent_base_id.length; i++) {
-                            //     // если элемент списка = предыдущему(текущему) значению из базы данных
-                            //     if (parent_base_id[i].value == res.data['parent_base_id']) {
-                            //         // установить selected на true
-                            //         parent_base_id[i].selected = true;
-                            //     }
-                            // }
-
                         }
                         // только если запуск функции при загрузке страницы
                         // if (first == true) {
@@ -1080,9 +1070,11 @@
 
                         // "parent_is_use_selection_calculated_table_link_id_0_changeOption(false)" нужно
                         parent_is_use_selection_calculated_table_link_id_0_changeOption(false);
+                        parent_is_use_selection_calculated_table_link_id_1_changeOption(false);
+                        parent_selection_calculated_table_link_id_1_show_or_hide(parent_is_use_selection_calculated_table_link_id_1);
                     });
-
                 }
+
             }
         }
 
@@ -1136,7 +1128,11 @@
             });
         }
 
-        // 1.2 В списке выбора использовать дополнительное связанное поле вычисляемой таблицы
+        // 1.2 В списке выбора использовать два дополнительных связанных поля вычисляемой таблицы
+        function parent_selection_calculated_table_link_id_1_show_or_hide_change() {
+            parent_selection_calculated_table_link_id_1_show_or_hide(parent_is_use_selection_calculated_table_link_id_1);
+         }
+
         function parent_selection_calculated_table_link_id_1_show_or_hide(box) {
             var vis = "";
             var logval = false;
@@ -1151,8 +1147,47 @@
             parent_selection_calculated_table_link_id_1_form_group.style.display = vis;
             parent_selection_calculated_table_link_id_1.disabled = !logval;  // "!logval" используется
             if (vis == "block") {
-                // "parent_is_use_selection_calculated_table_link_id_1_changeOption(false)" нужно
-                parent_is_use_selection_calculated_table_link_id_1_changeOption(false);
+                if(parent_selection_calculated_table_link_id_0.options[parent_selection_calculated_table_link_id_0.selectedIndex].value != 0) {
+                    alert(parent_selection_calculated_table_link_id_0.options[parent_selection_calculated_table_link_id_0.selectedIndex].value);
+                    axios.get('/link/get_links_from_link_id_parent_base/'
+                        + parent_selection_calculated_table_link_id_0.options[parent_selection_calculated_table_link_id_0.selectedIndex].value
+                    ).then(function (res) {
+                        // если запуск функции не при загрузке страницы
+                        if (res.data['links_options'] == "") {
+                            parent_selection_calculated_table_link_id_1.innerHTML = '<option value = "0">{{trans('main.no_information_on')}} "' + parent_selection_calculated_table_link_id_0.options[parent_selection_calculated_table_link_id_0.selectedIndex].text + '"!</option>';
+                        } else {
+                            parent_selection_calculated_table_link_id_1.innerHTML = res.data['links_options'];
+                        }
+                        // только если запуск функции при загрузке страницы
+                        // if (first == true) {
+                        if (true == true) {
+                            // нужно чтобы при первом вызове формы корректировки записи значения полей соответствовали значениям из базы данных
+                            @if ($update)  // при корректировке записи
+                            // child
+                            for (let i = 0; i < parent_selection_calculated_table_link_id_1.length; i++) {
+                                // если элемент списка = текущему значению из базы данных
+                                if (parent_selection_calculated_table_link_id_1[i].value == {{$link->parent_selection_calculated_table_link_id_1}}) {
+                                    // установить selected на true
+                                    parent_selection_calculated_table_link_id_1[i].selected = true;
+                                }
+                            }
+                            @endif
+                        } else {
+                            // нужно чтобы после обновления списка сохранить текущий выбор если соответствующий(child/parent) base не поменялся (при добавлении/корректировке записи)
+                            // child
+                            // for (let i = 0; i < parent_selection_calculated_table_set_id.length; i++) {
+                            //     // если элемент списка = предыдущему(текущему) значению из базы данных
+                            //     if (parent_selection_calculated_table_set_id[i].value == parent_selection_calculated_table_set_id_value) {
+                            //         // установить selected на true
+                            //         parent_selection_calculated_table_set_id[i].selected = true;
+                            //     }
+                            // }
+                        }
+
+                        // "parent_is_use_selection_calculated_table_link_id_1_changeOption(false)" нужно
+                        parent_is_use_selection_calculated_table_link_id_1_changeOption(false);
+                    });
+                }
             }
         }
 
@@ -1519,6 +1554,8 @@
         child_base_id.addEventListener("change", child_base_id_changeOption);
         parent_selection_calculated_table_set_id.addEventListener("change", parent_selection_calculated_table_set_id_changeOption);
         parent_is_use_selection_calculated_table_link_id_0.addEventListener("change", parent_is_use_selection_calculated_table_link_id_0_changeOption);
+        //parent_selection_calculated_table_link_id_0.addEventListener("change", parent_selection_calculated_table_link_id_1_show_or_hide(parent_is_use_selection_calculated_table_link_id_1));
+        parent_selection_calculated_table_link_id_0.addEventListener("change", parent_selection_calculated_table_link_id_1_show_or_hide_change);
         parent_is_use_selection_calculated_table_link_id_1.addEventListener("change", parent_is_use_selection_calculated_table_link_id_1_changeOption);
         parent_parent_related_start_link_id.addEventListener("change", parent_parent_related_start_link_id_changeOption);
         parent_parent_related_result_link_id.addEventListener("change", parent_parent_related_result_link_id_changeOption);

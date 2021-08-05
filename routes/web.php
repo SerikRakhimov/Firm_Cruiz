@@ -713,6 +713,10 @@ Route::get('/link/get_links_from_set_id_link_from_parent_base/{set_id}', 'LinkCo
     ->name('link.get_links_from_set_id_link_from_parent_base')
     ->middleware('auth');
 
+Route::get('/link/get_links_from_link_id_parent_base/{link_id}', 'LinkController@get_links_from_link_id_parent_base')
+    ->name('link.get_links_from_link_id_parent_base')
+    ->middleware('auth');
+
 Route::get('/link/base_index/{base}', 'LinkController@base_index')
     ->name('link.base_index')
     ->middleware('auth');

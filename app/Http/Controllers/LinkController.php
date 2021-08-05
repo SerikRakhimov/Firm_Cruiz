@@ -726,20 +726,42 @@ class LinkController extends Controller
             // исключить вычисляемые и другие поля
             $links = Link::all()
                 ->where('parent_is_parent_related', false)
+                ->where('parent_is_in_the_selection_list_use_the_calculated_table_field', false)
+                ->where('parent_is_use_selection_calculated_table_link_id_0', false)
+                ->where('parent_is_use_selection_calculated_table_link_id_1', false)
+                ->where('parent_is_output_calculated_table_field', false)
                 ->where('child_base_id', $base->id)
                 ->sortBy('parent_base_number');
             //$links = $links->get();  // не ставить - ошибку дает
+            foreach ($links as $link) {
+                $links_options = $links_options
+                    . "<option value='" . $link->id . "'>" . $link->parent_label() . "</option>";
+            }
+        }
+        return [
+            'links_options' => $links_options,
+        ];
+    }
 
-            // исключим уже существующие поля для фильтрования
-            // у одного поля для фильтрования - один маршрут д.б.
-//            foreach ($links as $link) {
-//                if ($link->parent_is_child_related == true) {
-//                    if ($link != $link_current) {
-//                        $links = $links->where('id', '!=', $link->parent_child_related_start_link_id);
-//                    }
-//                }
-//            }
-
+    // 1.2 В списке выбора использовать два дополнительных связанных поля вычисляемой таблицы
+    // Возвращает links_options
+    static function get_links_from_link_id_parent_base($link_id)
+    {
+        $link = Link::find($link_id);
+        $links_options = '';
+        if ($link != null) {
+            $base = $link->parent_base;
+            // список links по выбранному base_id
+            // исключить вычисляемые и другие поля
+            $links = Link::all()
+                ->where('parent_is_parent_related', false)
+                ->where('parent_is_in_the_selection_list_use_the_calculated_table_field', false)
+                ->where('parent_is_use_selection_calculated_table_link_id_0', false)
+                ->where('parent_is_use_selection_calculated_table_link_id_1', false)
+                ->where('parent_is_output_calculated_table_field', false)
+                ->where('child_base_id', $base->id)
+                ->sortBy('parent_base_number');
+            //$links = $links->get();  // не ставить - ошибку дает
             foreach ($links as $link) {
                 $links_options = $links_options
                     . "<option value='" . $link->id . "'>" . $link->parent_label() . "</option>";

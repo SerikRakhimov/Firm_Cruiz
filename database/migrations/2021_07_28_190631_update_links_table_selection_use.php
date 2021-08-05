@@ -14,8 +14,8 @@ class UpdateLinksTableSelectionUse extends Migration
     public function up()
     {
         Schema::table('links', function (Blueprint $table) {
-            $table->unsignedBigInteger('parent_is_use_selection_calculated_table_link_id_0')->default(0);
-            $table->unsignedBigInteger('parent_is_use_selection_calculated_table_link_id_1')->default(0);
+            $table->boolean('parent_is_use_selection_calculated_table_link_id_0')->default(false);
+            $table->boolean('parent_is_use_selection_calculated_table_link_id_1')->default(false);
         });
     }
 
