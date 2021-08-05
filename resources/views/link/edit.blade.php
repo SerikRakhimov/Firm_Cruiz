@@ -455,7 +455,8 @@
         {{--        1.0 В списке выбора использовать поле вычисляемой таблицы--}}
         <div class="form-group" id="parent_is_in_the_selection_list_use_the_calculated_table_field_form_group">
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" name="parent_is_in_the_selection_list_use_the_calculated_table_field"
+                <input class="form-check-input" type="checkbox"
+                       name="parent_is_in_the_selection_list_use_the_calculated_table_field"
                        id="parent_is_in_the_selection_list_use_the_calculated_table_field"
                        {{--            "(int) 0" нужно--}}
                        @if ((old('parent_is_in_the_selection_list_use_the_calculated_table_field') ?? ($link->parent_is_in_the_selection_list_use_the_calculated_table_field ?? false)) ==  true)
@@ -468,7 +469,9 @@
         </div>
 
         <div class="form-group" id="parent_selection_calculated_table_set_id_form_group">
-            <label for="parent_selection_calculated_table_set_id">{{trans('main.parent_selection_calculated_table_set_id')}}<span
+            <label
+                for="parent_selection_calculated_table_set_id">{{trans('main.parent_selection_calculated_table_set_id')}}
+                <span
                     class="text-danger">*</span></label>
             <select class="form-control"
                     name="parent_selection_calculated_table_set_id"
@@ -482,10 +485,11 @@
             </div>
             @enderror
         </div>
-{{--        1.1 В списке выбора использовать дополнительное связанное поле вычисляемой таблицы--}}
+        {{--        1.1 В списке выбора использовать дополнительное связанное поле вычисляемой таблицы--}}
         <div class="form-group" id="parent_is_use_selection_calculated_table_link_id_0_form_group">
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" name="parent_is_use_selection_calculated_table_link_id_0"
+                <input class="form-check-input" type="checkbox"
+                       name="parent_is_use_selection_calculated_table_link_id_0"
                        id="parent_is_use_selection_calculated_table_link_id_0"
                        {{--            "(int) 0" нужно--}}
                        @if ((old('parent_is_use_selection_calculated_table_link_id_0') ?? ($link->parent_is_use_selection_calculated_table_link_id_0 ?? false)) ==  true)
@@ -498,7 +502,9 @@
         </div>
 
         <div class="form-group" id="parent_selection_calculated_table_link_id_0_form_group">
-            <label for="parent_selection_calculated_table_link_id_0">{{trans('main.parent_selection_calculated_table_link_id_0')}}<span
+            <label
+                for="parent_selection_calculated_table_link_id_0">{{trans('main.parent_selection_calculated_table_link_id_0')}}
+                <span
                     class="text-danger">*</span></label>
             <select class="form-control"
                     name="parent_selection_calculated_table_link_id_0"
@@ -512,10 +518,11 @@
             </div>
             @enderror
         </div>
-{{--        1.2 В списке выбора использовать два дополнительных связанных поля вычисляемой таблицы--}}
+        {{--        1.2 В списке выбора использовать два дополнительных связанных поля вычисляемой таблицы--}}
         <div class="form-group" id="parent_is_use_selection_calculated_table_link_id_1_form_group">
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" name="parent_is_use_selection_calculated_table_link_id_1"
+                <input class="form-check-input" type="checkbox"
+                       name="parent_is_use_selection_calculated_table_link_id_1"
                        id="parent_is_use_selection_calculated_table_link_id_1"
                        {{--            "(int) 0" нужно--}}
                        @if ((old('parent_is_use_selection_calculated_table_link_id_1') ?? ($link->parent_is_use_selection_calculated_table_link_id_1 ?? false)) ==  true)
@@ -528,7 +535,9 @@
         </div>
 
         <div class="form-group" id="parent_selection_calculated_table_link_id_1_form_group">
-            <label for="parent_selection_calculated_table_link_id_1">{{trans('main.parent_selection_calculated_table_link_id_1')}}<span
+            <label
+                for="parent_selection_calculated_table_link_id_1">{{trans('main.parent_selection_calculated_table_link_id_1')}}
+                <span
                     class="text-danger">*</span></label>
             <select class="form-control"
                     name="parent_selection_calculated_table_link_id_1"
@@ -542,7 +551,7 @@
             </div>
             @enderror
         </div>
-{{--       Выводить связанное поле--}}
+        {{--       Выводить связанное поле--}}
         <div class="form-group" id="parent_is_parent_related_form_group">
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="checkbox" name="parent_is_parent_related"
@@ -589,7 +598,7 @@
             </div>
             @enderror
         </div>
-{{--        Выводить поле вычисляемой таблицы--}}
+        {{--        Выводить поле вычисляемой таблицы--}}
         <div class="form-group" id="parent_is_output_calculated_table_field_form_group">
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="checkbox" name="parent_is_output_calculated_table_field"
@@ -605,7 +614,8 @@
         </div>
 
         <div class="form-group" id="parent_output_calculated_table_set_id_form_group">
-            <label for="parent_output_calculated_table_set_id">{{trans('main.parent_output_calculated_table_set_id')}}<span
+            <label for="parent_output_calculated_table_set_id">{{trans('main.parent_output_calculated_table_set_id')}}
+                <span
                     class="text-danger">*</span></label>
             <select class="form-control"
                     name="parent_output_calculated_table_set_id"
@@ -619,7 +629,7 @@
             </div>
             @enderror
         </div>
-{{--        Фильтровать поля--}}
+        {{--        Фильтровать поля--}}
         <div class="form-group" id="parent_is_child_related_form_group">
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="checkbox" name="parent_is_child_related"
@@ -722,6 +732,7 @@
         var parent_child_related_start_link_id = form.parent_child_related_start_link_id;
         var parent_child_related_result_link_id_form_group = document.getElementById('parent_child_related_result_link_id_form_group');
         var parent_child_related_result_link_id = form.parent_child_related_result_link_id;
+
         // Изменение child_base_id
         function child_base_id_changeOption(first) {
             // В списке выбора использовать поле вычисляемой таблицы
@@ -770,6 +781,8 @@
                 }
                 parent_selection_calculated_table_show_or_hide(parent_is_in_the_selection_list_use_the_calculated_table_field);
                 parent_selection_calculated_table_set_id_changeOption(first);
+                parent_selection_calculated_table_link_id_0_show_or_hide(parent_is_use_selection_calculated_table_link_id_0);
+                // parent_selection_calculated_table_link_id_1_show_or_hide(parent_is_use_selection_calculated_table_link_id_1);
             });
             // Выводить связанное поле
             axios.get('/link/get_parent_parent_related_start_link_id/'
@@ -936,6 +949,17 @@
             parent_base_id.disabled = logval;
             parent_selection_calculated_table_set_id_form_group.style.display = vis;
             parent_selection_calculated_table_set_id.disabled = !logval;  // "!logval" используется
+
+            parent_is_use_selection_calculated_table_link_id_0_form_group.style.display = vis;
+            parent_is_use_selection_calculated_table_link_id_0.disabled = !logval;  // "!logval" используется
+            parent_selection_calculated_table_link_id_0_form_group.style.display = vis;
+            parent_selection_calculated_table_link_id_0.disabled = !logval;  // "!logval" используется
+
+            parent_is_use_selection_calculated_table_link_id_1_form_group.style.display = vis;
+            parent_is_use_selection_calculated_table_link_id_1.disabled = !logval;  // "!logval" используется
+            parent_selection_calculated_table_link_id_1_form_group.style.display = vis;
+            parent_selection_calculated_table_link_id_1.disabled = !logval;  // "!logval" используется
+
             if (vis == "block") {
                 // "parent_selection_calculated_table_set_id_changeOption(false)" нужно
                 parent_selection_calculated_table_set_id_changeOption(false);
@@ -991,6 +1015,7 @@
                 }
             });
         }
+
         // 1.1 В списке выбора использовать дополнительное связанное поле вычисляемой таблицы
         function parent_selection_calculated_table_link_id_0_show_or_hide(box) {
             var vis = "";
@@ -1006,13 +1031,63 @@
             parent_selection_calculated_table_link_id_0_form_group.style.display = vis;
             parent_selection_calculated_table_link_id_0.disabled = !logval;  // "!logval" используется
             if (vis == "block") {
-                // "parent_is_use_selection_calculated_table_link_id_0_changeOption(false)" нужно
-                parent_is_use_selection_calculated_table_link_id_0_changeOption(false);
+
+                if (parent_selection_calculated_table_set_id.options[parent_selection_calculated_table_set_id.selectedIndex].value != 0) {
+                    axios.get('/link/get_links_from_set_id_link_from_parent_base/'
+                        + parent_selection_calculated_table_set_id.options[parent_selection_calculated_table_set_id.selectedIndex].value
+                    ).then(function (res) {
+                        //alert(res.data['links_options']);
+                        // если запуск функции не при загрузке страницы
+                        if (res.data['links_options'] == "") {
+                            parent_selection_calculated_table_link_id_0.innerHTML = '<option value = "0">{{trans('main.no_information_on')}} "' + parent_selection_calculated_table_set_id.options[parent_selection_calculated_table_set_id.selectedIndex].text + '"!</option>';
+                        } else {
+                            // //parent_base_id.innerHTML = '<option value = "' + res.data['parent_base_id'] + '">' + res.data['parent_base_name'] + '</option>';
+                            parent_selection_calculated_table_link_id_0.innerHTML = res.data['links_options'];
+                            // for (let i = 0; i < parent_base_id.length; i++) {
+                            //     // если элемент списка = предыдущему(текущему) значению из базы данных
+                            //     if (parent_base_id[i].value == res.data['parent_base_id']) {
+                            //         // установить selected на true
+                            //         parent_base_id[i].selected = true;
+                            //     }
+                            // }
+
+                        }
+                        // только если запуск функции при загрузке страницы
+                        // if (first == true) {
+                        if (true == true) {
+                            // нужно чтобы при первом вызове формы корректировки записи значения полей соответствовали значениям из базы данных
+                            @if ($update)  // при корректировке записи
+                            // child
+                            for (let i = 0; i < parent_selection_calculated_table_link_id_0.length; i++) {
+                                // если элемент списка = текущему значению из базы данных
+                                if (parent_selection_calculated_table_link_id_0[i].value == {{$link->parent_selection_calculated_table_link_id_0}}) {
+                                    // установить selected на true
+                                    parent_selection_calculated_table_link_id_0[i].selected = true;
+                                }
+                            }
+                            @endif
+                        } else {
+                            // нужно чтобы после обновления списка сохранить текущий выбор если соответствующий(child/parent) base не поменялся (при добавлении/корректировке записи)
+                            // child
+                            // for (let i = 0; i < parent_selection_calculated_table_set_id.length; i++) {
+                            //     // если элемент списка = предыдущему(текущему) значению из базы данных
+                            //     if (parent_selection_calculated_table_set_id[i].value == parent_selection_calculated_table_set_id_value) {
+                            //         // установить selected на true
+                            //         parent_selection_calculated_table_set_id[i].selected = true;
+                            //     }
+                            // }
+                        }
+
+                        // "parent_is_use_selection_calculated_table_link_id_0_changeOption(false)" нужно
+                        parent_is_use_selection_calculated_table_link_id_0_changeOption(false);
+                    });
+
+                }
             }
         }
 
         function parent_is_use_selection_calculated_table_link_id_0_changeOption(first) {
-            axios.get('/link/get_parent_base_id_from_set_id/'
+            axios.get('/link/get_parent_base_id_from_link_id/'
                 + parent_is_use_selection_calculated_table_link_id_0.options[parent_is_use_selection_calculated_table_link_id_0.selectedIndex].value
             ).then(function (res) {
                 // если запуск функции не при загрузке страницы
@@ -1062,7 +1137,7 @@
         }
 
         // 1.2 В списке выбора использовать дополнительное связанное поле вычисляемой таблицы
-               function parent_selection_calculated_table_link_id_1_show_or_hide(box) {
+        function parent_selection_calculated_table_link_id_1_show_or_hide(box) {
             var vis = "";
             var logval = false;
             if (box.checked) {
@@ -1082,7 +1157,7 @@
         }
 
         function parent_is_use_selection_calculated_table_link_id_1_changeOption(first) {
-            axios.get('/link/get_parent_base_id_from_set_id/'
+            axios.get('/link/get_parent_base_id_from_link_id/'
                 + parent_is_use_selection_calculated_table_link_id_1.options[parent_is_use_selection_calculated_table_link_id_1.selectedIndex].value
             ).then(function (res) {
                 // если запуск функции не при загрузке страницы
@@ -1248,6 +1323,7 @@
                 }
             });
         }
+
         // Выводить поле вычисляемой таблицы
         function parent_calculated_table_show_or_hide(box) {
             var vis = "";
@@ -1317,6 +1393,7 @@
                 }
             });
         }
+
         // Фильтрация полей
         function parent_child_show_or_hide(box) {
             var vis = "";
@@ -1452,6 +1529,8 @@
         window.onload = function () {
             child_base_id_changeOption(true);
             parent_selection_calculated_table_show_or_hide(parent_is_in_the_selection_list_use_the_calculated_table_field);
+            parent_selection_calculated_table_link_id_0_show_or_hide(parent_is_use_selection_calculated_table_link_id_0);
+            parent_selection_calculated_table_link_id_1_show_or_hide(parent_is_use_selection_calculated_table_link_id_1);
             parent_parent_show_or_hide(parent_is_parent_related);
             parent_parent_related_start_link_id_changeOption(true);
             parent_parent_related_result_link_id_changeOption(true);

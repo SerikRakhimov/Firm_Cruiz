@@ -183,19 +183,22 @@ class LinkController extends Controller
         if ($link->parent_label_lang_3 == "") {
             $link->parent_label_lang_3 = $link->parent_base->name_lang_3;
         }
-        // В списке выбора использовать поле вычисляемой таблицы
+        // 1.0 В списке выбора использовать поле вычисляемой таблицы
         $link->parent_is_in_the_selection_list_use_the_calculated_table_field = isset($request->parent_is_in_the_selection_list_use_the_calculated_table_field) ? true : false;
+        $link->parent_is_use_selection_calculated_table_link_id_0 = isset($request->parent_is_use_selection_calculated_table_link_id_0) ? true : false;
+        $link->parent_is_use_selection_calculated_table_link_id_1 = isset($request->parent_is_use_selection_calculated_table_link_id_1) ? true : false;
         if ($link->parent_is_in_the_selection_list_use_the_calculated_table_field) {
             $link->parent_selection_calculated_table_set_id = $request->parent_selection_calculated_table_set_id;
         } else {
             $link->parent_selection_calculated_table_set_id = 0;
+            $link->parent_is_use_selection_calculated_table_link_id_0 = false;
+            $link->parent_is_use_selection_calculated_table_link_id_1 = false;
         }
         if ($link->parent_selection_calculated_table_set_id == 0) {
             $link->parent_is_in_the_selection_list_use_the_calculated_table_field = false;
             $link->parent_selection_calculated_table_set_id = 0;
         }
-        // В списке выбора использовать дополнительное связанное поле вычисляемой таблицы
-        $link->parent_is_use_selection_calculated_table_link_id_0 = isset($request->parent_is_use_selection_calculated_table_link_id_0) ? true : false;
+        // 1.1 В списке выбора использовать дополнительное связанное поле вычисляемой таблицы
         if ($link->parent_is_use_selection_calculated_table_link_id_0) {
             $link->parent_selection_calculated_table_link_id_0 = $request->parent_selection_calculated_table_link_id_0;
         } else {
@@ -205,8 +208,7 @@ class LinkController extends Controller
             $link->parent_is_use_selection_calculated_table_link_id_0 = false;
             $link->parent_selection_calculated_table_link_id_0 = 0;
         }
-        // В списке выбора использовать два дополнительных связанных поля вычисляемой таблицы
-        $link->parent_is_use_selection_calculated_table_link_id_1 = isset($request->parent_is_use_selection_calculated_table_link_id_1) ? true : false;
+        // 1.2 В списке выбора использовать два дополнительных связанных поля вычисляемой таблицы
         if ($link->parent_is_use_selection_calculated_table_link_id_1) {
             $link->parent_selection_calculated_table_link_id_1 = $request->parent_selection_calculated_table_link_id_1;
         } else {
@@ -386,17 +388,20 @@ class LinkController extends Controller
         }
         // 1.0 В списке выбора использовать поле вычисляемой таблицы
         $link->parent_is_in_the_selection_list_use_the_calculated_table_field = isset($request->parent_is_in_the_selection_list_use_the_calculated_table_field) ? true : false;
+        $link->parent_is_use_selection_calculated_table_link_id_0 = isset($request->parent_is_use_selection_calculated_table_link_id_0) ? true : false;
+        $link->parent_is_use_selection_calculated_table_link_id_1 = isset($request->parent_is_use_selection_calculated_table_link_id_1) ? true : false;
         if ($link->parent_is_in_the_selection_list_use_the_calculated_table_field) {
             $link->parent_selection_calculated_table_set_id = $request->parent_selection_calculated_table_set_id;
         } else {
             $link->parent_selection_calculated_table_set_id = 0;
+            $link->parent_is_use_selection_calculated_table_link_id_0 = false;
+            $link->parent_is_use_selection_calculated_table_link_id_1 = false;
         }
         if ($link->parent_selection_calculated_table_set_id == 0) {
             $link->parent_is_in_the_selection_list_use_the_calculated_table_field = false;
             $link->parent_selection_calculated_table_set_id = 0;
         }
         // 1.1 В списке выбора использовать дополнительное связанное поле вычисляемой таблицы
-        $link->parent_is_use_selection_calculated_table_link_id_0 = isset($request->parent_is_use_selection_calculated_table_link_id_0) ? true : false;
         if ($link->parent_is_use_selection_calculated_table_link_id_0) {
             $link->parent_selection_calculated_table_link_id_0 = $request->parent_selection_calculated_table_link_id_0;
         } else {
@@ -407,7 +412,6 @@ class LinkController extends Controller
             $link->parent_selection_calculated_table_link_id_0 = 0;
         }
         // 1.2 В списке выбора использовать два дополнительных связанных поля вычисляемой таблицы
-        $link->parent_is_use_selection_calculated_table_link_id_1 = isset($request->parent_is_use_selection_calculated_table_link_id_1) ? true : false;
         if ($link->parent_is_use_selection_calculated_table_link_id_1) {
             $link->parent_selection_calculated_table_link_id_1 = $request->parent_selection_calculated_table_link_id_1;
         } else {
@@ -568,7 +572,7 @@ class LinkController extends Controller
         if ($base != null) {
             $sets = Set::select(DB::Raw('sets.*, lt.child_base_id as to_child_base_id, lt.parent_base_id as to_parent_base_id'))
                 ->join('links as lf', 'sets.link_from_id', 'lf.id')
-                ->join('links as lt', 'sets.link_to_id',  'lt.id')
+                ->join('links as lt', 'sets.link_to_id', 'lt.id')
                 ->where('sets.is_group', true)
                 ->where('lf.child_base_id', $base->id)
                 ->orderBy('sets.serial_number')
@@ -596,7 +600,7 @@ class LinkController extends Controller
         if ($base != null) {
             $sets = Set::select(DB::Raw('sets.*, lt.child_base_id as to_child_base_id, lt.parent_base_id as to_parent_base_id'))
                 ->join('links as lf', 'sets.link_from_id', 'lf.id')
-                ->join('links as lt', 'sets.link_to_id',  'lt.id')
+                ->join('links as lt', 'sets.link_to_id', 'lt.id')
                 ->where('sets.is_update', true)
                 ->where('lf.child_base_id', $base->id)
                 ->orderBy('sets.serial_number')
@@ -693,7 +697,8 @@ class LinkController extends Controller
         ];
     }
 
-    // Выводить поле вычисляемой таблицы
+    // a) Выводить поле вычисляемой таблицы
+    // b) 1.0 В списке выбора использовать поле вычисляемой таблицы
     // Возвращает parent_base_id, parent_base_name
     static function get_parent_base_id_from_set_id(Set $set)
     {
@@ -706,6 +711,42 @@ class LinkController extends Controller
         return [
             'parent_base_id' => $parent_base_id,
             'parent_base_name' => $parent_base_name,
+        ];
+    }
+
+    // 1.1 В списке выбора использовать дополнительное связанное поле вычисляемой таблицы
+    // Возвращает links_options
+    static function get_links_from_set_id_link_from_parent_base($set_id)
+    {
+        $set = Set::find($set_id);
+        $links_options = '';
+        if ($set != null) {
+            $base = $set->link_from->parent_base;
+            // список links по выбранному base_id
+            // исключить вычисляемые и другие поля
+            $links = Link::all()
+                ->where('parent_is_parent_related', false)
+                ->where('child_base_id', $base->id)
+                ->sortBy('parent_base_number');
+            //$links = $links->get();  // не ставить - ошибку дает
+
+            // исключим уже существующие поля для фильтрования
+            // у одного поля для фильтрования - один маршрут д.б.
+//            foreach ($links as $link) {
+//                if ($link->parent_is_child_related == true) {
+//                    if ($link != $link_current) {
+//                        $links = $links->where('id', '!=', $link->parent_child_related_start_link_id);
+//                    }
+//                }
+//            }
+
+            foreach ($links as $link) {
+                $links_options = $links_options
+                    . "<option value='" . $link->id . "'>" . $link->parent_label() . "</option>";
+            }
+        }
+        return [
+            'links_options' => $links_options,
         ];
     }
 
