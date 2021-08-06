@@ -2916,7 +2916,7 @@ class ItemController extends Controller
         ];
     }
 
-    // Используется в e ext_edit.php при фильтрации данных
+    // Используется в ext_edit.php при фильтрации данных
     static function get_child_items_from_parent_item(Base $base_start, Item $item_start, Link $link_result)
     {
         $result_items = null;

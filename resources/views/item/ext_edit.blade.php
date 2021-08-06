@@ -1087,6 +1087,7 @@
             </script>
         @endif
 
+{{--        Выводится одно поле из вычисляемой таблицы--}}
         @if($link_calculated_table)
             <script>
                     @foreach($sets_group as $to_key => $to_value)
