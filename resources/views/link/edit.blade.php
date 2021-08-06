@@ -1067,10 +1067,6 @@
                             //     }
                             // }
                         }
-
-                        // "parent_is_use_selection_calculated_table_link_id_0_changeOption(false)" нужно
-                        parent_is_use_selection_calculated_table_link_id_0_changeOption(false);
-                        parent_is_use_selection_calculated_table_link_id_1_changeOption(false);
                         parent_selection_calculated_table_link_id_1_show_or_hide(parent_is_use_selection_calculated_table_link_id_1);
                     });
                 }
@@ -1148,7 +1144,6 @@
             parent_selection_calculated_table_link_id_1.disabled = !logval;  // "!logval" используется
             if (vis == "block") {
                 if(parent_selection_calculated_table_link_id_0.options[parent_selection_calculated_table_link_id_0.selectedIndex].value != 0) {
-                    alert(parent_selection_calculated_table_link_id_0.options[parent_selection_calculated_table_link_id_0.selectedIndex].value);
                     axios.get('/link/get_links_from_link_id_parent_base/'
                         + parent_selection_calculated_table_link_id_0.options[parent_selection_calculated_table_link_id_0.selectedIndex].value
                     ).then(function (res) {
