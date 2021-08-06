@@ -509,7 +509,8 @@
             <select class="form-control"
                     name="parent_selection_calculated_table_link_id_0"
                     id="parent_selection_calculated_table_link_id_0"
-                    class="form-control @error('parent_selection_calculated_table_link_id_0') is-invalid @enderror">
+                    class="form-control @error('parent_selection_calculated_table_link_id_0') is-invalid @enderror"
+                    onchange="parent_selection_calculated_table_link_id_0_changeOption(false)">
                 <option value="0">0</option>
             </select>
             @error('parent_selection_calculated_table_link_id_0')
@@ -542,7 +543,8 @@
             <select class="form-control"
                     name="parent_selection_calculated_table_link_id_1"
                     id="parent_selection_calculated_table_link_id_1"
-                    class="form-control @error('parent_selection_calculated_table_link_id_1') is-invalid @enderror">
+                    class="form-control @error('parent_selection_calculated_table_link_id_1') is-invalid @enderror"
+                    onchange="parent_selection_calculated_table_link_id_1_changeOption(false)">
                 <option value="0">0</option>
             </select>
             @error('parent_selection_calculated_table_link_id_1')
@@ -782,7 +784,6 @@
                 parent_selection_calculated_table_show_or_hide(parent_is_in_the_selection_list_use_the_calculated_table_field);
                 parent_selection_calculated_table_set_id_changeOption(first);
                 parent_selection_calculated_table_link_id_0_show_or_hide(parent_is_use_selection_calculated_table_link_id_0);
-                //parent_is_use_selection_calculated_table_link_id_1_changeOption(first);
                 parent_selection_calculated_table_link_id_1_show_or_hide(parent_is_use_selection_calculated_table_link_id_1);
             });
             // Выводить связанное поле
@@ -1031,6 +1032,11 @@
             parent_base_id.disabled = logval;
             parent_selection_calculated_table_link_id_0_form_group.style.display = vis;
             parent_selection_calculated_table_link_id_0.disabled = !logval;  // "!logval" используется
+
+            parent_is_use_selection_calculated_table_link_id_1_form_group.style.display = vis;
+            parent_is_use_selection_calculated_table_link_id_1.disabled = !logval;  // "!logval" используется
+            parent_selection_calculated_table_link_id_1_form_group.style.display = vis;
+            parent_selection_calculated_table_link_id_1.disabled = !logval;  // "!logval" используется
             if (vis == "block") {
                 if(parent_selection_calculated_table_set_id.options[parent_selection_calculated_table_set_id.selectedIndex].value != 0) {
                     axios.get('/link/get_links_from_set_id_link_from_parent_base/'
@@ -1044,7 +1050,7 @@
                         }
                         // только если запуск функции при загрузке страницы
                         // if (first == true) {
-                        if (true == true) {
+                        // if (true == true) {
                             // нужно чтобы при первом вызове формы корректировки записи значения полей соответствовали значениям из базы данных
                             @if ($update)  // при корректировке записи
                             // child
@@ -1056,27 +1062,26 @@
                                 }
                             }
                             @endif
-                        } else {
-                            // нужно чтобы после обновления списка сохранить текущий выбор если соответствующий(child/parent) base не поменялся (при добавлении/корректировке записи)
-                            // child
-                            // for (let i = 0; i < parent_selection_calculated_table_set_id.length; i++) {
-                            //     // если элемент списка = предыдущему(текущему) значению из базы данных
-                            //     if (parent_selection_calculated_table_set_id[i].value == parent_selection_calculated_table_set_id_value) {
-                            //         // установить selected на true
-                            //         parent_selection_calculated_table_set_id[i].selected = true;
-                            //     }
-                            // }
-                        }
+                        // } else {
+                        //     // нужно чтобы после обновления списка сохранить текущий выбор если соответствующий(child/parent) base не поменялся (при добавлении/корректировке записи)
+                        //     // child
+                        //     // for (let i = 0; i < parent_selection_calculated_table_set_id.length; i++) {
+                        //     //     // если элемент списка = предыдущему(текущему) значению из базы данных
+                        //     //     if (parent_selection_calculated_table_set_id[i].value == parent_selection_calculated_table_set_id_value) {
+                        //     //         // установить selected на true
+                        //     //         parent_selection_calculated_table_set_id[i].selected = true;
+                        //     //     }
+                        //     // }
+                        // }
                         parent_selection_calculated_table_link_id_1_show_or_hide(parent_is_use_selection_calculated_table_link_id_1);
                     });
                 }
-
             }
         }
 
-        function parent_is_use_selection_calculated_table_link_id_0_changeOption(first) {
+        function parent_selection_calculated_table_link_id_0_changeOption(first) {
             axios.get('/link/get_parent_base_id_from_link_id/'
-                + parent_is_use_selection_calculated_table_link_id_0.options[parent_is_use_selection_calculated_table_link_id_0.selectedIndex].value
+                + parent_selection_calculated_table_link_id_0.options[parent_selection_calculated_table_link_id_0.selectedIndex].value
             ).then(function (res) {
                 // если запуск функции не при загрузке страницы
                 if (first != true) {
@@ -1155,7 +1160,7 @@
                         }
                         // только если запуск функции при загрузке страницы
                         // if (first == true) {
-                        if (true == true) {
+                        // if (true == true) {
                             // нужно чтобы при первом вызове формы корректировки записи значения полей соответствовали значениям из базы данных
                             @if ($update)  // при корректировке записи
                             // child
@@ -1167,28 +1172,27 @@
                                 }
                             }
                             @endif
-                        } else {
-                            // нужно чтобы после обновления списка сохранить текущий выбор если соответствующий(child/parent) base не поменялся (при добавлении/корректировке записи)
-                            // child
-                            // for (let i = 0; i < parent_selection_calculated_table_set_id.length; i++) {
-                            //     // если элемент списка = предыдущему(текущему) значению из базы данных
-                            //     if (parent_selection_calculated_table_set_id[i].value == parent_selection_calculated_table_set_id_value) {
-                            //         // установить selected на true
-                            //         parent_selection_calculated_table_set_id[i].selected = true;
-                            //     }
-                            // }
-                        }
-
-                        // "parent_is_use_selection_calculated_table_link_id_1_changeOption(false)" нужно
-                        parent_is_use_selection_calculated_table_link_id_1_changeOption(false);
+                        // } else {
+                        //     // нужно чтобы после обновления списка сохранить текущий выбор если соответствующий(child/parent) base не поменялся (при добавлении/корректировке записи)
+                        //     // child
+                        //     // for (let i = 0; i < parent_selection_calculated_table_set_id.length; i++) {
+                        //     //     // если элемент списка = предыдущему(текущему) значению из базы данных
+                        //     //     if (parent_selection_calculated_table_set_id[i].value == parent_selection_calculated_table_set_id_value) {
+                        //     //         // установить selected на true
+                        //     //         parent_selection_calculated_table_set_id[i].selected = true;
+                        //     //     }
+                        //     // }
+                        // }
+                        // "parent_selection_calculated_table_link_id_1_changeOption(false)" нужно
+                        parent_selection_calculated_table_link_id_1_changeOption(false);
                     });
                 }
             }
         }
 
-        function parent_is_use_selection_calculated_table_link_id_1_changeOption(first) {
+        function parent_selection_calculated_table_link_id_1_changeOption(first) {
             axios.get('/link/get_parent_base_id_from_link_id/'
-                + parent_is_use_selection_calculated_table_link_id_1.options[parent_is_use_selection_calculated_table_link_id_1.selectedIndex].value
+                + parent_selection_calculated_table_link_id_1.options[parent_selection_calculated_table_link_id_1.selectedIndex].value
             ).then(function (res) {
                 // если запуск функции не при загрузке страницы
                 if (first != true) {
@@ -1548,10 +1552,9 @@
 
         child_base_id.addEventListener("change", child_base_id_changeOption);
         parent_selection_calculated_table_set_id.addEventListener("change", parent_selection_calculated_table_set_id_changeOption);
-        parent_is_use_selection_calculated_table_link_id_0.addEventListener("change", parent_is_use_selection_calculated_table_link_id_0_changeOption);
         //parent_selection_calculated_table_link_id_0.addEventListener("change", parent_selection_calculated_table_link_id_1_show_or_hide(parent_is_use_selection_calculated_table_link_id_1));
         parent_selection_calculated_table_link_id_0.addEventListener("change", parent_selection_calculated_table_link_id_1_show_or_hide_change);
-        parent_is_use_selection_calculated_table_link_id_1.addEventListener("change", parent_is_use_selection_calculated_table_link_id_1_changeOption);
+        // parent_is_use_selection_calculated_table_link_id_1.addEventListener("change", parent_selection_calculated_table_link_id_1_changeOption);
         parent_parent_related_start_link_id.addEventListener("change", parent_parent_related_start_link_id_changeOption);
         parent_parent_related_result_link_id.addEventListener("change", parent_parent_related_result_link_id_changeOption);
         parent_output_calculated_table_set_id.addEventListener("change", parent_output_calculated_table_set_id_changeOption);
