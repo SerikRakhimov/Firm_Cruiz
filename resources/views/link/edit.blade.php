@@ -1029,7 +1029,8 @@
                 vis = "none";
                 logval = false;
             }
-            parent_base_id.disabled = logval;
+            // parent_base_id.disabled = logval;
+            parent_base_id.disabled = true;
             parent_selection_calculated_table_link_id_0_form_group.style.display = vis;
             parent_selection_calculated_table_link_id_0.disabled = !logval;  // "!logval" используется
 
@@ -1144,7 +1145,8 @@
                 vis = "none";
                 logval = false;
             }
-            parent_base_id.disabled = logval;
+            //parent_base_id.disabled = logval;
+            parent_base_id.disabled = true;
             parent_selection_calculated_table_link_id_1_form_group.style.display = vis;
             parent_selection_calculated_table_link_id_1.disabled = !logval;  // "!logval" используется
             if (vis == "block") {
