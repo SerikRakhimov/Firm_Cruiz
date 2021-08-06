@@ -281,6 +281,7 @@
                 @continue
             @endif
             <?php
+//                Загружаются данные для списков выбора
             $result = ItemController::get_items_for_link($link, $project, $role);
             //$result = ItemController::get_items_ext_edit_for_link($link, $project, $role);
             $items = $result['result_parent_base_items'];
@@ -1207,7 +1208,6 @@
                 var nc_parameter_{{$prefix}}{{$link->id}} = document.getElementById('link{{$link->id}}');
             </script>
         @endif
-
 
     @endforeach
 

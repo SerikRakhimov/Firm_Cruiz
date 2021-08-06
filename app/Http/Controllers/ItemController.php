@@ -1443,6 +1443,7 @@ class ItemController extends Controller
         return $sets_group;
     }
 
+    // $item0 - $item4  - это поля, по которым проводит связь Set между основами
     static function get_parent_item_from_output_calculated_table(Base $base, Link $link, Item $item0, Item $item1 = null, Item $item2 = null, Item $item3 = null, Item $item4 = null)
     {
         $result = trans('main.no_information') . '!';
@@ -1484,7 +1485,7 @@ class ItemController extends Controller
                         break;
                 }
 
-                if($item_seek == null){
+                if ($item_seek == null) {
                     break;
                 }
 
@@ -1500,6 +1501,7 @@ class ItemController extends Controller
             if ($count == 1) {
                 $item_first = $items->first();
                 if ($item_first) {
+                    // Функция возвращает одну запись
                     $result = MainController::get_parent_item_from_main($item_first->id, $set->link_to_id)->name();
                 }
             }
@@ -2812,17 +2814,51 @@ class ItemController extends Controller
 
                 // список items по выбранному parent_base_id
                 $base_right = GlobalController::base_right($link->parent_base, $role);
-                // В списке выбора использовать поле вычисляемой таблицы
-                if ($link->parent_is_in_the_selection_list_use_the_calculated_table_field == true){
+
+                // 1.0 В списке выбора использовать поле вычисляемой таблицы
+                if ($link->parent_is_in_the_selection_list_use_the_calculated_table_field == true) {
                     $set = Set::findOrFail($link->parent_selection_calculated_table_set_id);
                     $set_link = $set->link_to;
+
                     $result_parent_base_items = Item::select(DB::Raw('items.*'))
                         ->join('mains', 'items.id', '=', 'mains.parent_item_id')
                         ->where('items.project_id', $project->id)
                         ->where('mains.link_id', '=', $set_link->id)
-                    ->orderBy('items.' . $name);
-                // Загрузить список $items
-                }else {
+                        ->orderBy('items.' . $name);
+
+//                    1.1 В списке выбора использовать дополнительное связанное поле вычисляемой таблицы
+                    if ($link->parent_is_use_selection_calculated_table_link_id_0 == true) {
+                        $link_id = $link->parent_selection_calculated_table_link_id_0;
+
+                        $result_parent_base_items = Item::select(DB::Raw('items.*'))
+                            ->join('mains', 'items.id', '=', 'mains.parent_item_id')
+                            ->joinSub($result_parent_base_items, 'items_start', function ($join) {
+                                $join->on('mains.child_item_id', '=', 'items_start.id');
+                            })
+                            ->where('items.project_id', $project->id)
+                            ->where('mains.link_id', '=', $link_id)
+                            ->distinct()
+                            ->orderBy('items.' . $name);
+
+//                        1.2 В списке выбора использовать два дополнительных связанных поля вычисляемой таблицы
+                        if ($link->parent_is_use_selection_calculated_table_link_id_1 == true) {
+                            $link_id = $link->parent_selection_calculated_table_link_id_1;
+
+                            $result_parent_base_items = Item::select(DB::Raw('items.*'))
+                                ->join('mains', 'items.id', '=', 'mains.parent_item_id')
+                                ->joinSub($result_parent_base_items, 'items_start', function ($join) {
+                                    $join->on('mains.child_item_id', '=', 'items_start.id');
+                                })
+                                ->where('items.project_id', $project->id)
+                                ->where('mains.link_id', '=', $link_id)
+                                ->distinct()
+                                ->orderBy('items.' . $name);
+
+                        }
+                    }
+
+                    // Загрузить список $items
+                } else {
                     $result_parent_base_items = Item::select(['id', 'base_id', 'name_lang_0', 'name_lang_1', 'name_lang_2', 'name_lang_3', 'created_user_id'])->where('base_id', $link->parent_base_id)->where('project_id', $project->id)->orderBy($name);
                 }
                 // Такая же проверка и в GlobalController (function items_right()),
