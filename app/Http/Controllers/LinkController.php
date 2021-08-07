@@ -244,10 +244,31 @@ class LinkController extends Controller
             $link->parent_output_calculated_table_set_id = 0;
         }
         // Фильтровать поля
+        $sel_error = null;
         $link->parent_is_child_related = isset($request->parent_is_child_related) ? true : false;
         if ($link->parent_is_child_related) {
             $link->parent_child_related_start_link_id = $request->parent_child_related_start_link_id;
             $link->parent_child_related_result_link_id = $request->parent_child_related_result_link_id;
+            // Проверка допустимого случая, если 'Фильтровать поля == true' и '1.0 В списке выбора использовать поле вычисляемой таблицы == true'
+            $link_start = Link::findOrFail($link->parent_child_related_start_link_id);
+            $link_result = Link::findOrFail($link->parent_child_related_result_link_id);
+            // 1.0 В списке выбора использовать поле вычисляемой таблицы
+            // 1.1 В списке выбора использовать дополнительное связанное поле вычисляемой таблицы
+            if ($link->parent_is_in_the_selection_list_use_the_calculated_table_field) {
+                $sel_error = true;
+                if ($link->parent_is_use_selection_calculated_table_link_id_0) {
+                    $set = Set::findOrFail($link->parent_selection_calculated_table_set_id);
+                    $link_sel_0 = Link::findOrFail($link->parent_selection_calculated_table_link_id_0);
+                    // 1.1 В списке выбора использовать дополнительное связанное поле вычисляемой таблицы
+                    if ($link->parent_is_use_selection_calculated_table_link_id_1 == false) {
+                        $sel_error = !(($set->link_to->parent_base_id == $link_start->parent_base_id) && ($link_sel_0->parent_base_id == $link_result->parent_base_id));
+                    } //                Т.е. '$link->parent_is_use_selection_calculated_table_link_id_1 == true'
+                    else {
+                        $link_sel_1 = Link::findOrFail($link->parent_selection_calculated_table_link_id_1);
+                        $sel_error = !(($link_sel_0->parent_base_id == $link_start->parent_base_id) && ($link_sel_1->parent_base_id == $link_result->parent_base_id));
+                    }
+                }
+            }
         } else {
             $link->parent_child_related_start_link_id = 0;
             $link->parent_child_related_result_link_id = 0;
@@ -256,6 +277,15 @@ class LinkController extends Controller
             $link->parent_is_child_related = false;
             $link->parent_child_related_start_link_id = 0;
             $link->parent_child_related_result_link_id = 0;
+        }
+        // Обнулить при ошибке
+        if ($sel_error) {
+            $link->parent_is_in_the_selection_list_use_the_calculated_table_field = false;
+            $link->parent_selection_calculated_table_set_id = 0;
+            $link->parent_is_use_selection_calculated_table_link_id_0 = false;
+            $link->parent_selection_calculated_table_link_id_0 = 0;
+            $link->parent_is_use_selection_calculated_table_link_id_1 = false;
+            $link->parent_selection_calculated_table_link_id_1 = 0;
         }
 
         if ($link->parent_base->type_is_number == false) {
@@ -447,10 +477,31 @@ class LinkController extends Controller
             $link->parent_output_calculated_table_set_id = 0;
         }
         // Фильтровать поля
+        $sel_error = null;
         $link->parent_is_child_related = isset($request->parent_is_child_related) ? true : false;
         if ($link->parent_is_child_related) {
             $link->parent_child_related_start_link_id = $request->parent_child_related_start_link_id;
             $link->parent_child_related_result_link_id = $request->parent_child_related_result_link_id;
+            // Проверка допустимого случая, если 'Фильтровать поля == true' и '1.0 В списке выбора использовать поле вычисляемой таблицы == true'
+            $link_start = Link::findOrFail($link->parent_child_related_start_link_id);
+            $link_result = Link::findOrFail($link->parent_child_related_result_link_id);
+            // 1.0 В списке выбора использовать поле вычисляемой таблицы
+            // 1.1 В списке выбора использовать дополнительное связанное поле вычисляемой таблицы
+            if ($link->parent_is_in_the_selection_list_use_the_calculated_table_field) {
+                $sel_error = true;
+                if ($link->parent_is_use_selection_calculated_table_link_id_0) {
+                    $set = Set::findOrFail($link->parent_selection_calculated_table_set_id);
+                    $link_sel_0 = Link::findOrFail($link->parent_selection_calculated_table_link_id_0);
+                    // 1.1 В списке выбора использовать дополнительное связанное поле вычисляемой таблицы
+                    if ($link->parent_is_use_selection_calculated_table_link_id_1 == false) {
+                        $sel_error = !(($set->link_to->parent_base_id == $link_start->parent_base_id) && ($link_sel_0->parent_base_id == $link_result->parent_base_id));
+                    } //                Т.е. '$link->parent_is_use_selection_calculated_table_link_id_1 == true'
+                    else {
+                        $link_sel_1 = Link::findOrFail($link->parent_selection_calculated_table_link_id_1);
+                        $sel_error = !(($link_sel_0->parent_base_id == $link_start->parent_base_id) && ($link_sel_1->parent_base_id == $link_result->parent_base_id));
+                    }
+                }
+            }
         } else {
             $link->parent_child_related_start_link_id = 0;
             $link->parent_child_related_result_link_id = 0;
@@ -459,6 +510,15 @@ class LinkController extends Controller
             $link->parent_is_child_related = false;
             $link->parent_child_related_start_link_id = 0;
             $link->parent_child_related_result_link_id = 0;
+        }
+        // Обнулить при ошибке
+        if ($sel_error) {
+            $link->parent_is_in_the_selection_list_use_the_calculated_table_field = false;
+            $link->parent_selection_calculated_table_set_id = 0;
+            $link->parent_is_use_selection_calculated_table_link_id_0 = false;
+            $link->parent_selection_calculated_table_link_id_0 = 0;
+            $link->parent_is_use_selection_calculated_table_link_id_1 = false;
+            $link->parent_selection_calculated_table_link_id_1 = 0;
         }
 
         if ($link->parent_base->type_is_number == false) {
@@ -520,6 +580,27 @@ class LinkController extends Controller
 
         $link->delete();
         return redirect()->route('link.base_index', ['base' => $link->child_base, 'links' => Link::where('child_base_id', $link->child_base_id)->orderBy('parent_base_number')->get()]);
+    }
+
+    // 1.0 В списке выбора использовать поле вычисляемой таблицы
+    // Возвращает какой $link_id_result главный в зависимости от основного $link_main
+    static function get_link_id_selection_calc(Link $link_main)
+    {
+        $link_id_result = null;
+        // 1.0 В списке выбора использовать поле вычисляемой таблицы
+        if ($link_main->parent_is_in_the_selection_list_use_the_calculated_table_field == true) {
+            $set = Set::findOrFail($link_main->parent_selection_calculated_table_set_id);
+            $link_id_result = $set->link_to;
+            //                    1.1 В списке выбора использовать дополнительное связанное поле вычисляемой таблицы
+            if ($link_main->parent_is_use_selection_calculated_table_link_id_0 == true) {
+                $link_id_result = $link_main->parent_selection_calculated_table_link_id_0;
+            }
+            //                        1.2 В списке выбора использовать два дополнительных связанных поля вычисляемой таблицы
+            if ($link_main->parent_is_use_selection_calculated_table_link_id_1 == true) {
+                $link_id_result = $link_main->parent_selection_calculated_table_link_id_1;
+            }
+        }
+        return $link_id_result;
     }
 
     // Возвращает список для выбора в parent_parent_related_start_link_id

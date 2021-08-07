@@ -2916,7 +2916,80 @@ class ItemController extends Controller
         ];
     }
 
-    // Используется в ext_edit.php при фильтрации данных
+    // Используется в ext_edit.php при фильтрации данных, данные из вычисляемых таблиц
+    static function get_selection_child_items_from_parent_item(Base $base_start, Item $item_start, Link $link_result)
+    {
+        $result_items = null;
+        $result_items_name_options = null;
+        $cn = 0;
+        $error = false;
+        $link = null;
+        $mains = null;
+        $items_parent = null;
+        $items_child = null;
+        // список links - маршрутов до поиска нужного объекта
+        $links = BaseController::get_array_bases_tree_routes($base_start->id, $link_result->id, false);
+        if ($links) {
+            $items_parent = array();
+            // добавление элемента в конец массива
+            array_unshift($items_parent, $item_start->id);
+            $cn = 0;
+            $error = false;
+            foreach ($links as $link_value) {
+                $cn = $cn + 1;
+                $link = Link::find($link_value);
+                if (!$link) {
+                    $error = true;
+                    break;
+                }
+                // обнуление массива $items_child
+                $items_child = array();
+                foreach ($items_parent as $item_id) {
+                    // $item используется в цикле
+                    $mains = Main::select(['child_item_id'])
+                        ->where('parent_item_id', $item_id)->where('link_id', $link->id)->get();
+                    if (!$mains) {
+                        $error = true;
+                        break;
+                    }
+                    foreach ($mains as $main) {
+                        // добавление элемента в конец массива
+                        array_unshift($items_child, $main->child_item_id);
+                    }
+                }
+                $items_parent = $items_child;
+            }
+        }
+        if (!$error) {
+            // проверки "цикл прошел по всем элементам до конца";
+            if (count($links) == $cn) {
+                $result_items = $items_child;
+                if ($items_child) {
+                    $result_items_name_options = "";
+                    $selected = false;
+                    foreach ($items_child as $item_id) {
+                        $item = Item::find($item_id);
+                        if ($item) {
+//                            $result_items_name_options = $result_items_name_options . "<option value='" . $item_id . "'>" . $item->name() . "</option>";
+                            $result_items_name_options = $result_items_name_options . "<option value='" . $item_id;
+                            if ($selected) {
+                                $result_items_name_options = $result_items_name_options . " selected ";
+                            }
+                            $result_items_name_options = $result_items_name_options . "'>" . $item->name() . "</option>";
+                        }
+                    }
+                    //$result_items_name_options = $result_items_name_options . "<option value='0'>" . trans('main.no_information') . "!</option>";
+                } else {
+                    $result_items_name_options = "<option value='0'>" . trans('main.no_information') . "!</option>";
+                }
+            }
+        }
+        // }
+        return ['result_items' => $result_items,
+            'result_items_name_options' => $result_items_name_options];
+    }
+
+    // Используется в ext_edit.php при обычной фильтрации данных
     static function get_child_items_from_parent_item(Base $base_start, Item $item_start, Link $link_result)
     {
         $result_items = null;

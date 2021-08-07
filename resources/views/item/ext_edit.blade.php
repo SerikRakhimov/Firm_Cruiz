@@ -281,7 +281,7 @@
                 @continue
             @endif
             <?php
-//                Загружаются данные для списков выбора
+            //                Загружаются данные для списков выбора
             $result = ItemController::get_items_for_link($link, $project, $role);
             //$result = ItemController::get_items_ext_edit_for_link($link, $project, $role);
             $items = $result['result_parent_base_items'];
@@ -851,6 +851,8 @@
         @endif
         <?php
         // похожие строки ниже
+        $link_selection_table = null;
+        $link_id_selection_calc = null;
         $const_link_id_start = null;
         $const_link_start = null;
         $link_start_child = null;
@@ -862,6 +864,11 @@
         $link_calculated_table = null;
         //$link = Link::find($key);
         if ($link) {
+//            1.0 В списке выбора использовать поле вычисляемой таблицы
+            if ($link->parent_is_in_the_selection_list_use_the_calculated_table_field == true) {
+                $link_selection_table = true;
+                $link_id_selection_calc = LinkController::get_link_id_selection_calc($link);
+            }
             // эта проверка не нужна
             //if (!array_key_exists($key, $array_disabled)) {
             //          Проверка на фильтруемые поля
@@ -891,11 +898,13 @@
         }
         ?>
         @if($link_start_child && $link_result_child)
-
             <script>
                 var child_base_id{{$prefix}}{{$link->id}} = document.getElementById('link{{$link_start_child->id}}');
                 var parent_base_id{{$prefix}}{{$link->id}} = document.getElementById('link{{$link->id}}');
-
+                {{--// 1.0 В списке выбора использовать поле вычисляемой таблицы--}}
+                {{--    @if($link_selection_table)--}}
+                {{--var selection_base_id{{$prefix}}{{$link_id_selection_calc}} = document.getElementById('link{{$link_id_selection_calc}}');--}}
+                {{--@endif--}}
                 <?php
                 $functions[count($functions)] = "link_id_changeOption_" . $prefix . $link->id;
                 ?>
@@ -905,11 +914,15 @@
                         child_base_id{{$prefix}}{{$link->id}}.innerHTML = "<option value='0'>{{trans('main.no_information') . '!'}}</option>";
                         document.getElementById('link{{$link_start_child->id}}').dispatchEvent(new Event('change'));
                     } else {
-                        await axios.get('/item/get_child_items_from_parent_item/'
+                        // 1.0 В списке выбора использовать поле вычисляемой таблицы
+                        @if($link_selection_table)
+
+                            await axios.get('/item/get_selection_child_items_from_parent_item/'
                             + '{{$link_start_child->parent_base_id}}'
                             + '/' + parent_base_id{{$prefix}}{{$link->id}}.options[parent_base_id{{$prefix}}{{$link->id}}.selectedIndex].value
                             + '/{{$link_result_child->id}}'
                         ).then(function (res) {
+
                                 child_base_id{{$prefix}}{{$link->id}}.innerHTML = res.data['result_items_name_options'];
                                 for (let i = 0; i < child_base_id{{$prefix}}{{$link->id}}.length; i++) {
                                     if (child_base_id{{$prefix}}{{$link->id}}[i].value ==
@@ -921,6 +934,26 @@
                                 }
                             }
                         );
+                        // Обычное разделение на фильтруемые поля
+                        @else
+                            await axios.get('/item/get_child_items_from_parent_item/'
+                            + '{{$link_start_child->parent_base_id}}'
+                            + '/' + parent_base_id{{$prefix}}{{$link->id}}.options[parent_base_id{{$prefix}}{{$link->id}}.selectedIndex].value
+                            + '/{{$link_result_child->id}}'
+                        ).then(function (res) {
+
+                                child_base_id{{$prefix}}{{$link->id}}.innerHTML = res.data['result_items_name_options'];
+                                for (let i = 0; i < child_base_id{{$prefix}}{{$link->id}}.length; i++) {
+                                    if (child_base_id{{$prefix}}{{$link->id}}[i].value ==
+                                        {{old($link_start_child->id) ?? (($array_calc[$link_start_child->id] != null) ? $array_calc[$link_start_child->id] : 0)}}) {
+                                        // установить selected на true
+                                        child_base_id{{$prefix}}{{$link->id}}[i].selected = true;
+                                    }
+
+                                }
+                            }
+                        );
+                        @endif
                     }
                     // http://javascript.ru/forum/events/76761-programmno-vyzvat-sobytie-change.html#post503465
                     // вызываем состояние "элемент изменился", в связи с этим запустятся функции - обработчики "change"
@@ -1087,7 +1120,7 @@
             </script>
         @endif
 
-{{--        Выводится одно поле из вычисляемой таблицы--}}
+        {{--        Выводится одно поле из вычисляемой таблицы--}}
         @if($link_calculated_table)
             <script>
                     @foreach($sets_group as $to_key => $to_value)
@@ -1110,7 +1143,7 @@
                         + '/' + child_base_id{{$prefix}}{{$link->id}}_{{$to_value->id}}.options[child_base_id{{$prefix}}{{$link->id}}_{{$to_value->id}}.selectedIndex].value
                         @endforeach
                         ).then(function (res) {
-                            parent_base_id{{$prefix}}{{$link->id}}.innerHTML = res.data;
+                                parent_base_id{{$prefix}}{{$link->id}}.innerHTML = res.data;
                             }
                         );
                     // }
