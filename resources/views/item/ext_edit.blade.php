@@ -918,11 +918,9 @@
                         @if($link_selection_table)
 
                             await axios.get('/item/get_selection_child_items_from_parent_item/'
-                            + '{{$link_start_child->parent_base_id}}'
+                            + '{{$link->id}}'
                             + '/' + parent_base_id{{$prefix}}{{$link->id}}.options[parent_base_id{{$prefix}}{{$link->id}}.selectedIndex].value
-                            + '/{{$link_result_child->id}}'
                         ).then(function (res) {
-
                                 child_base_id{{$prefix}}{{$link->id}}.innerHTML = res.data['result_items_name_options'];
                                 for (let i = 0; i < child_base_id{{$prefix}}{{$link->id}}.length; i++) {
                                     if (child_base_id{{$prefix}}{{$link->id}}[i].value ==

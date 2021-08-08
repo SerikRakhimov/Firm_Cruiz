@@ -249,6 +249,8 @@ class LinkController extends Controller
         if ($link->parent_is_child_related) {
             $link->parent_child_related_start_link_id = $request->parent_child_related_start_link_id;
             $link->parent_child_related_result_link_id = $request->parent_child_related_result_link_id;
+
+            // Похожие строки есть в LinkController store()/update() и в ItemController get_selection_child_items_from_parent_item()
             // Проверка допустимого случая, если 'Фильтровать поля == true' и '1.0 В списке выбора использовать поле вычисляемой таблицы == true'
             $link_start = Link::findOrFail($link->parent_child_related_start_link_id);
             $link_result = Link::findOrFail($link->parent_child_related_result_link_id);
@@ -269,6 +271,7 @@ class LinkController extends Controller
                     }
                 }
             }
+
         } else {
             $link->parent_child_related_start_link_id = 0;
             $link->parent_child_related_result_link_id = 0;
@@ -482,6 +485,8 @@ class LinkController extends Controller
         if ($link->parent_is_child_related) {
             $link->parent_child_related_start_link_id = $request->parent_child_related_start_link_id;
             $link->parent_child_related_result_link_id = $request->parent_child_related_result_link_id;
+
+            // Похожие строки есть в LinkController store()/update() и в ItemController get_selection_child_items_from_parent_item()
             // Проверка допустимого случая, если 'Фильтровать поля == true' и '1.0 В списке выбора использовать поле вычисляемой таблицы == true'
             $link_start = Link::findOrFail($link->parent_child_related_start_link_id);
             $link_result = Link::findOrFail($link->parent_child_related_result_link_id);
@@ -502,6 +507,7 @@ class LinkController extends Controller
                     }
                 }
             }
+
         } else {
             $link->parent_child_related_start_link_id = 0;
             $link->parent_child_related_result_link_id = 0;
