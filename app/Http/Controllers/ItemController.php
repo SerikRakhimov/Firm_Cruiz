@@ -1065,11 +1065,11 @@ class ItemController extends Controller
         $itpv = Item::findOrFail($item->id);
         $mains = $itpv->child_mains()->get();
         $inputs_reverse = array();
-        $invals = array();
         foreach ($mains as $key => $main) {
             $inputs_reverse[$main->link_id] = $main->parent_item_id;
         }
 
+        $invals = array();
         foreach ($inputs_reverse as $key => $value) {
             $item_work = Item::findOrFail($value);
             $var = $item_work->numval();
