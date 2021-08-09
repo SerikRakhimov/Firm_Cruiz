@@ -2966,7 +2966,7 @@ class ItemController extends Controller
                         // Связь с вычисляемой таблицей - 'joinSub($result_parent_base_items, 'items_start', function ($join) {
                         //                                $join->on('mains.child_item_id', '=', 'items_start.id')'
                         //  Нужно '->join('mains', 'items.id', '=', 'mains.child_item_id')'
-                        $result_parent_base_items = Item::select(DB::Raw('items.*'))
+                        $result_child_base_items = Item::select(DB::Raw('items.*'))
                             ->join('mains', 'items.id', '=', 'mains.child_item_id')
                             ->joinSub($result_parent_base_items, 'items_start', function ($join) {
                                 $join->on('mains.child_item_id', '=', 'items_start.id');
@@ -3010,24 +3010,13 @@ class ItemController extends Controller
                         //                                $join->on('mains.child_item_id', '=', 'items_start.id')'
                         //  Нужно '->join('mains', 'items.id', '=', 'mains.child_item_id')'
 
-//                        $result_child_base_items = Item::select(DB::Raw('items.*'))
-//                            ->join('mains', 'items.id', '=', 'mains.child_item_id')
-//                            ->joinSub($result_parent_base_items, 'items_start', function ($join) {
-//                                $join->on('mains.child_item_id', '=', 'items_start.id');
-//                            })
-//                            ->where('mains.link_id', '=', $link_id)
-//                            ->where('mains.parent_item_id', '=', $item_select->id)
-//                            ->distinct()
-//                            ->orderBy('items.' . $name);
-
-                        $result_parent_base_items = Item::select(DB::Raw('items.*'))
+                        $result_child_base_items = Item::select(DB::Raw('items.*'))
                             ->join('mains', 'items.id', '=', 'mains.child_item_id')
                             ->joinSub($result_parent_base_items, 'items_start', function ($join) {
                                 $join->on('mains.child_item_id', '=', 'items_start.id');
                             })
                             ->where('mains.link_id', '=', $link_id)
                             ->where('mains.parent_item_id', '=', $item_select->id)
-                            ->where('mains.child_item_id','<',3)
                             ->distinct()
                             ->orderBy('items.' . $name);
 
@@ -3037,7 +3026,7 @@ class ItemController extends Controller
         }
 
         // '->get()' нужно
-        $result_items = $result_parent_base_items->get();
+        $result_items = $result_child_base_items->get();
 
         if ($result_items) {
             $result_items_name_options = "";

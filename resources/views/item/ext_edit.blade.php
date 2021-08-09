@@ -916,7 +916,6 @@
                     } else {
                         // 1.0 В списке выбора использовать поле вычисляемой таблицы
                         @if($link_selection_table)
-
                             await axios.get('/item/get_selection_child_items_from_parent_item/'
                             + '{{$link->id}}'
                             + '/' + parent_base_id{{$prefix}}{{$link->id}}.options[parent_base_id{{$prefix}}{{$link->id}}.selectedIndex].value
