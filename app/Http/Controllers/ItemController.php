@@ -919,10 +919,20 @@ class ItemController extends Controller
         try {
             // начало транзакции
             DB::transaction(function ($r) use ($item, $it_texts, $keys, $values, $strings_inputs) {
-
+                // При добавлении записи
                 // Эта команда "$item->save();" нужна, чтобы при сохранении записи стало известно значение $item->id.
                 // оно нужно в функции save_main() (для команды "$main->child_item_id = $item->id;");
                 $item->save();
+
+                // Присвоение $item->id при $link->parent_is_base_link и при добавлении записи
+                foreach ($keys as $index => $value) {
+                    $link = Link::findOrFail($value);
+                    // Проверка Показывать Связь с признаком "Ссылка на основу"
+                    if ($link->parent_is_base_link == true) {
+                        $values[$index] = $item->id;
+                    }
+                }
+
                 // тип - текст
                 if ($it_texts) {
                     if ($item->base->type_is_text()) {

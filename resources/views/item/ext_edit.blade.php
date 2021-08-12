@@ -291,8 +291,18 @@
                 $code_find = $item_find->code;
             }
             ?>
-            {{--                            проверка для вычисляемых полей--}}
-            @if($link->parent_is_parent_related == true)
+
+            {{--                        проверка Показывать Связь с признаком "Ссылка на основу"--}}
+            @if($link->parent_is_base_link == true)
+                <input type="hidden" name="{{$key}}" id="link{{$key}}"
+                       @if ($update)
+                       value="{{$item->id}}"
+                       @else
+                       value="0"
+                    @endif
+                >
+                {{--                            проверка для вычисляемых полей--}}
+            @elseif($link->parent_is_parent_related == true)
                 <div class="form-group row"
                      {{--                     проверка скрывать поле или нет--}}
                      @if($link->parent_is_hidden_field == true)
