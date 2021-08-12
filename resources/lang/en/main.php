@@ -350,4 +350,5 @@ return [
     'parent_is_use_selection_calculated_table_link_id_1'=>'In the selection list, use two additional related fields of the calculated table',
     'parent_selection_calculated_table_link_id_0'=>'Additional_related_calculated_table_field_0',
     'parent_selection_calculated_table_link_id_1'=>'Additional_related_calculated_table_field_1',
+    'parent_is_base_link'=>'Link to the base',
 ];

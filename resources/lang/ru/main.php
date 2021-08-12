@@ -350,4 +350,5 @@ return [
     'parent_is_use_selection_calculated_table_link_id_1'=>'В списке выбора использовать два дополнительных связанных поля вычисляемой таблицы',
     'parent_selection_calculated_table_link_id_0'=>'Дополнительное связанное поле вычисляемой таблицы_0',
     'parent_selection_calculated_table_link_id_1'=>'Дополнительное связанное поле вычисляемой таблицы_1',
+    'parent_is_base_link'=>'Ссылка на основу',
 ];

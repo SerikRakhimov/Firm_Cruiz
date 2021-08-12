@@ -350,4 +350,5 @@ return [
     'parent_is_use_selection_calculated_table_link_id_1'=>'Таңдау тізімінде есептелетін кестенің байланысты екі өрісін пайдалану',
     'parent_selection_calculated_table_link_id_0'=>'Есептелетін кестенің қосымша байланған өрісі_0',
     'parent_selection_calculated_table_link_id_1'=>'Есептелетін кестенің қосымша байланған өрісі_1',
+    'parent_is_base_link'=>'Негізге сілтеме',
 ];

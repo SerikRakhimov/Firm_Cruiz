@@ -124,6 +124,7 @@ class LinkController extends Controller
         $link->parent_label_lang_1 = isset($request->parent_label_lang_1) ? $request->parent_label_lang_1 : "";
         $link->parent_label_lang_2 = isset($request->parent_label_lang_2) ? $request->parent_label_lang_2 : "";
         $link->parent_label_lang_3 = isset($request->parent_label_lang_3) ? $request->parent_label_lang_3 : "";
+        $link->parent_is_base_link = isset($request->parent_is_base_link) ? true : false;
         $link->parent_is_enter_refer = isset($request->parent_is_enter_refer) ? true : false;
         $link->parent_is_calcname = isset($request->parent_is_calcname) ? true : false;
         $link->parent_is_left_calcname = isset($request->parent_is_left_calcname) ? true : false;
@@ -182,6 +183,14 @@ class LinkController extends Controller
         }
         if ($link->parent_label_lang_3 == "") {
             $link->parent_label_lang_3 = $link->parent_base->name_lang_3;
+        }
+        if ($link->child_base_id == $link->parent_base_id ){
+            $link->parent_is_base_link = true;
+        }
+        if ($link->parent_is_base_link == true) {
+            if ($link->child_base_id != $link->parent_base_id ){
+                $link->parent_is_base_link = false;
+            }
         }
         // 1.0 В списке выбора использовать поле вычисляемой таблицы
         $link->parent_is_in_the_selection_list_use_the_calculated_table_field = isset($request->parent_is_in_the_selection_list_use_the_calculated_table_field) ? true : false;
@@ -360,6 +369,7 @@ class LinkController extends Controller
         $link->parent_label_lang_1 = isset($request->parent_label_lang_1) ? $request->parent_label_lang_1 : "";
         $link->parent_label_lang_2 = isset($request->parent_label_lang_2) ? $request->parent_label_lang_2 : "";
         $link->parent_label_lang_3 = isset($request->parent_label_lang_3) ? $request->parent_label_lang_3 : "";
+        $link->parent_is_base_link = isset($request->parent_is_base_link) ? true : false;
         $link->parent_is_enter_refer = isset($request->parent_is_enter_refer) ? true : false;
         $link->parent_is_calcname = isset($request->parent_is_calcname) ? true : false;
         $link->parent_is_left_calcname = isset($request->parent_is_left_calcname) ? true : false;
@@ -418,6 +428,14 @@ class LinkController extends Controller
         }
         if ($link->parent_label_lang_3 == "") {
             $link->parent_label_lang_3 = $link->parent_base->name_lang_3;
+        }
+        if ($link->child_base_id == $link->parent_base_id ){
+            $link->parent_is_base_link = true;
+        }
+        if ($link->parent_is_base_link == true) {
+            if ($link->child_base_id != $link->parent_base_id ){
+                $link->parent_is_base_link = false;
+            }
         }
         // 1.0 В списке выбора использовать поле вычисляемой таблицы
         $link->parent_is_in_the_selection_list_use_the_calculated_table_field = isset($request->parent_is_in_the_selection_list_use_the_calculated_table_field) ? true : false;

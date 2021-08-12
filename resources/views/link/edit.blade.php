@@ -273,6 +273,20 @@
             </div>
         @endforeach
 
+        <div class="form-group" id="parent_is_base_link_form_group">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" name="parent_is_base_link"
+                       id="parent_is_base_link"
+                       {{--            "(int) 0" нужно--}}
+                       @if ((old('parent_is_base_link') ?? ($link->parent_is_base_link ?? false)) ==  true)
+                       checked
+                    @endif
+                >
+                <label class="form-check-label"
+                       for="parent_is_base_link">{{trans('main.parent_is_base_link')}}</label>
+            </div>
+        </div>
+
         <div class="form-group" id="parent_is_enter_refer_form_group">
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="checkbox" name="parent_is_enter_refer"
