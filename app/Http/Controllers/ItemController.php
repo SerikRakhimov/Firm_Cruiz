@@ -1035,7 +1035,7 @@ class ItemController extends Controller
                 }
                 // В ext_store() вызывается один раз, т.к. запись создается
                 // При reverse = false передаем null
-                $this->save_sets($item, $keys, $values, $valits, null, false);
+                $this->save_sets($item, $keys, $values, $valits, false);
 
                 $item->save();
 
@@ -1079,17 +1079,17 @@ class ItemController extends Controller
         foreach ($mains as $key => $main) {
             $inputs_reverse[$main->link_id] = $main->parent_item_id;
         }
-
-        $valits_previous = null;
-        if ($reverse == true) {
-            $item_previous = Item::where('base_id', $itpv->base_id)->where('base_id', $itpv->base_id)->first();
-            $mains = $itpv->child_mains()->get();
-            $inputs_previous = array();
-            foreach ($mains as $key => $main) {
-                $inputs_previous[$main->link_id] = $main->parent_item_id;
-            }
-            $valits_previous = array_values($inputs_previous);
-        }
+//
+//        $valits_previous = null;
+//        if ($reverse == true) {
+//            $item_previous = Item::where('base_id', $itpv->base_id)->where('base_id', $itpv->base_id)->first();
+//            $mains = $itpv->child_mains()->get();
+//            $inputs_previous = array();
+//            foreach ($mains as $key => $main) {
+//                $inputs_previous[$main->link_id] = $main->parent_item_id;
+//            }
+//            $valits_previous = array_values($inputs_previous);
+//        }
 
         $invals = array();
         foreach ($inputs_reverse as $key => $value) {
@@ -1105,7 +1105,7 @@ class ItemController extends Controller
         $keys_reverse = array_keys($inputs_reverse);
         $values_reverse = array_values($invals);
         $valits_reverse = array_values($inputs_reverse);
-        $this->save_sets($itpv, $keys_reverse, $values_reverse, $valits_reverse, $valits_previous, $reverse);
+        $this->save_sets($itpv, $keys_reverse, $values_reverse, $valits_reverse, $reverse);
     }
 
     // Проверка на возможность выполнения присваиваний для переданного $item
@@ -1137,7 +1137,7 @@ class ItemController extends Controller
     // Обрабатывает присваивания
     // $valits_previous - предыщения значения $valits при $reverse = true и обновлении данных = замена
     private
-    function save_sets(Item $item, $keys, $values, $valits, $valits_previous, bool $reverse)
+    function save_sets(Item $item, $keys, $values, $valits, bool $reverse)
     {
 //        $table1 = Set::select(DB::Raw('sets.*'))
 //            ->join('links', 'sets.link_from_id', '=', 'links.id')
@@ -2605,7 +2605,7 @@ class ItemController extends Controller
                 }
                 // ext_update()
                 // При reverse = false передаем null
-                $this->save_sets($item, $keys, $values, $valits, null, false);
+                $this->save_sets($item, $keys, $values, $valits,false);
 
                 $item->save();
 
