@@ -198,6 +198,7 @@ return [
     'is_list_base_delete' => 'Delete the Bases from the list',
     'is_list_base_used_delete' => 'Delete if the Base is used in other Bases',
     'is_list_base_byuser' => 'Filter by user in the list',
+    'is_list_link_baselink' => 'Show Link "Link to the base"',
     'is_edit_base_read' => 'Reading Bases in the form',
     'is_edit_base_update' => 'Update the Bases in the form',
     'is_list_base_enable' => 'Show Base in list',

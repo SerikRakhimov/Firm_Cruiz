@@ -281,6 +281,14 @@ class GlobalController extends Controller
         $is_edit_email_question_base_update = $base_right['is_edit_email_question_base_update'];
         $is_show_email_base_delete = $base_right['is_show_email_base_delete'];
         $is_show_email_question_base_delete = $base_right['is_show_email_question_base_delete'];
+        //  Проверка Показывать Связь с признаком "Ссылка на основу"
+        if ($role->is_list_link_baselink == false && $link->parent_is_base_link == true) {
+            $is_list_link_enable = false;
+            $is_show_link_enable = false;
+            $is_edit_link_read = false;
+            $is_hier_base_enable = false;
+            $is_hier_link_enable = false;
+        }
         //  Проверка скрывать поле или нет
         if ($link->parent_is_hidden_field == true) {
             $is_list_link_enable = false;
