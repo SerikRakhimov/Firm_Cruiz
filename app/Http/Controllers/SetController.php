@@ -237,6 +237,8 @@ class SetController extends Controller
 
         $set->is_group = false;
         $set->is_update = false;
+        $set->is_calcsort = false;
+        $set->is_onlylink = false;
         $set->is_upd_plus = false;
         $set->is_upd_minus = false;
         $set->is_upd_replace = false;
@@ -250,16 +252,44 @@ class SetController extends Controller
             case 0:
                 $set->is_group = true;
                 $set->is_update = false;
+                $set->is_calcsort = false;
+                $set->is_onlylink = false;
                 $set->is_upd_plus = false;
                 $set->is_upd_minus = false;
                 $set->is_upd_replace = false;
                 $set->is_upd_delete_record_with_zero_value = false;
                 break;
-            // Обновление
+            // Поля сортировки (для первый(), последний())
             case 1:
                 $set->is_group = false;
+                $set->is_update = false;
+                $set->is_calcsort = true;
+                $set->is_onlylink = false;
+                $set->is_upd_plus = false;
+                $set->is_upd_minus = false;
+                $set->is_upd_replace = false;
+                $set->is_upd_delete_record_with_zero_value = false;
+                break;
+            // Только связь (для вывода поля из вычисляемой Основы)
+            case 2:
+                $set->is_group = false;
+                $set->is_update = false;
+                $set->is_calcsort = false;
+                $set->is_onlylink = true;
+                $set->is_upd_plus = false;
+                $set->is_upd_minus = false;
+                $set->is_upd_replace = false;
+                $set->is_upd_delete_record_with_zero_value = false;
+                $set->is_savesets_enabled = false;
+                break;
+            // Обновление
+            case 3:
+                $set->is_group = false;
                 $set->is_update = true;
+                $set->is_calcsort = false;
+                $set->is_onlylink = false;
                 $set->is_upd_delete_record_with_zero_value = isset($request->is_upd_delete_record_with_zero_value) ? true : false;
+                $set->is_savesets_enabled = true;
                 switch ($request->updaction) {
                     // Добавить
                     case 0:

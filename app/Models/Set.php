@@ -30,16 +30,9 @@ class Set extends Model
     {
         return array(
             "0" => trans('main.fw_group'),
-            "1" => trans('main.fw_update'),
-        );
-    }
-
-    static function get_updactions()
-    {
-        return array(
-            "0" => trans('main.ua_plus'),
-            "1" => trans('main.ua_minus'),
-            "2" => trans('main.ua_replace'),
+            "1" => trans('main.fw_calcsort'),
+            "2" => trans('main.fw_onlylink'),
+            "3" => trans('main.fw_update'),
         );
     }
 
@@ -49,8 +42,12 @@ class Set extends Model
         $result = -1;
         if ($this->is_group == true) {
             $result = 0;
-        } else if ($this->is_update == true) {
+        } else if ($this->is_calcsort == true) {
             $result = 1;
+        } else if ($this->is_onlylink == true) {
+            $result = 2;
+        } else if ($this->is_update == true) {
+            $result = 3;
         }
         return $result;
     }
@@ -63,10 +60,25 @@ class Set extends Model
                 $result = trans('main.fw_group');
                 break;
             case 1:
+                $result = trans('main.fw_calcsort');
+                break;
+            case 2:
+                $result = trans('main.fw_onlylink');
+                break;
+            case 3:
                 $result = trans('main.fw_update');
                 break;
         }
         return $result;
+    }
+
+    static function get_updactions()
+    {
+        return array(
+            "0" => trans('main.ua_plus'),
+            "1" => trans('main.ua_minus'),
+            "2" => trans('main.ua_replace'),
+        );
     }
 
     function updaction()

@@ -101,30 +101,6 @@
             </div>
         </div>
 
-        <div class="form-group row" id="is_savesets_enabled_form_group">
-            <div class="col-sm-3 text-right">
-                <label class="form-label"
-                       for="is_savesets_enabled">{{trans('main.is_savesets_enabled')}}</label>
-            </div>
-            <div class="col-sm-7">
-                <input class="@error('is_savesets_enabled') is-invalid @enderror"
-                       type="checkbox"
-                       name="is_savesets_enabled"
-                       placeholder=""
-                       @if ((old('is_savesets_enabled') ?? ($set->is_savesets_enabled ?? true)) ==  true)
-                       checked
-                    @endif
-                >
-                @error('is_savesets_enabled')
-                <div class="invalid-feedback">
-                    {{$message}}
-                </div>
-                @enderror
-            </div>
-            <div class="col-sm-2">
-            </div>
-        </div>
-
         <div class="form-group row">
             <div class="col-sm-3 text-right">
                 <label for="forwhat" class="col-form-label">{{trans('main.forwhat')}}<span
@@ -148,6 +124,30 @@
                 </select>
                 @error('forwhat')
                 <div class="text-danger">
+                    {{$message}}
+                </div>
+                @enderror
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div>
+
+        <div class="form-group row" id="is_savesets_enabled_form_group">
+            <div class="col-sm-3 text-right">
+                <label class="form-label"
+                       for="is_savesets_enabled">{{trans('main.is_savesets_enabled')}}</label>
+            </div>
+            <div class="col-sm-7">
+                <input class="@error('is_savesets_enabled') is-invalid @enderror"
+                       type="checkbox"
+                       name="is_savesets_enabled"
+                       placeholder=""
+                       @if ((old('is_savesets_enabled') ?? ($set->is_savesets_enabled ?? true)) ==  true)
+                       checked
+                    @endif
+                >
+                @error('is_savesets_enabled')
+                <div class="invalid-feedback">
                     {{$message}}
                 </div>
                 @enderror
@@ -244,6 +244,7 @@
         var forwhat = document.getElementById('forwhat');
         var updaction_fg = document.getElementById('updaction_form_group');
         var upd_delwithzero_fg = document.getElementById('is_upd_delete_record_with_zero_value_form_group');
+        var savesets_fg = document.getElementById('is_savesets_enabled_form_group');
         var forwhat_value = null;
 
         function forwhat_changeOption(first) {
@@ -254,18 +255,28 @@
             }
 
             val_updaction = "hidden";
+            val_savesets = "hidden";
 
             switch (forwhat.options[forwhat.selectedIndex].value) {
                 // Группировка
-                // case "0":
-                    // break;
-                // Обновление
+                 case "0":
+                     val_savesets = "visible";
+                 break;
+                // Поля сортировки (для первый(), последний())
                 case "1":
+                    val_savesets = "visible";
+                    break;
+                // Только связь (для вывода поля из вычисляемой Основы)
+                //case "2":
+                //    break;
+                // Обновление
+                case "3":
                     val_updaction = "visible";
                     break;
             }
             updaction_fg.style.visibility = val_updaction;
             upd_delwithzero_fg.style.visibility = val_updaction;
+            savesets_fg.style.visibility = val_savesets;
 
         }
 

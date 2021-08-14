@@ -248,14 +248,18 @@ class MainController extends Controller
         $item = null;
         $item_find = Item::find($child_item_id);
         $link_find = Link::find($link_id);
+        //
         if ($item_find && $link_find) {
+            // Выводить связанное поле
             if ($link_find->parent_is_parent_related == true) {
                 $link_related_result = Link::find($link_find->parent_parent_related_result_link_id);
                 if ($link_related_result) {
                     $item = ItemController::get_parent_item_from_calc_child_item($item_find, $link_find, true)['result_item'];
                 }
+            // Выводить поле вычисляемой таблицы
             } elseif ($link_find->parent_is_output_calculated_table_field== true) {
                 $item = ItemController::get_item_from_parent_output_calculated_table($item_find, $link_find);
+            // Иначе - обычный вывод поля по $child_item_id, $link_id
             } else {
                 $item = self::get_parent_item_from_main($child_item_id, $link_id);
             }

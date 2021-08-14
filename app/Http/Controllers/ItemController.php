@@ -1423,7 +1423,8 @@ class ItemController extends Controller
             }
         }
     }
-
+    // вызывается из MainController.php - view_info()
+    // Выводит поле вычисляемой таблицы
     static function get_item_from_parent_output_calculated_table(Item $item, Link $link)
     {
         $result_item = null;
@@ -1431,12 +1432,11 @@ class ItemController extends Controller
         if ($set) {
             // base_id вычисляемой таблицы
             $calc_table_base_id = $set->link_to->child_base_id;
-
+            // Не нужно 'where('sets.is_savesets_enabled', '=', false)'
             $sets_group = Set::select(DB::Raw('sets.*'))
                 ->join('links as lf', 'sets.link_from_id', '=', 'lf.id')
                 ->join('links as lt', 'sets.link_to_id', '=', 'lt.id')
                 ->where('lf.child_base_id', '=', $item->base_id)
-                ->where('sets.is_savesets_enabled', '=', true)
                 ->where('is_group', true)
                 ->where('serial_number', '=', $set->serial_number)
                 ->orderBy('sets.serial_number')
@@ -1468,13 +1468,13 @@ class ItemController extends Controller
     // "->where('bs.type_is_list', '=', true)" нужно, т.к. запрос функции идет с ext_edit.php
     static function get_sets_group(Base $base, Link $link)
     {
+        //->where('sets.is_savesets_enabled', '=', true)
         $set = Set::find($link->parent_output_calculated_table_set_id);
         $sets_group = Set::select(DB::Raw('sets.*'))
             ->join('links as lf', 'sets.link_from_id', '=', 'lf.id')
             ->join('links as lt', 'sets.link_to_id', '=', 'lt.id')
             ->join('bases as bs', 'lf.parent_base_id', '=', 'bs.id')
             ->where('lf.child_base_id', '=', $base->id)
-            ->where('sets.is_savesets_enabled', '=', true)
             ->where('is_group', true)
             ->where('bs.type_is_list', '=', true)
             ->where('sets.serial_number', '=', $set->serial_number)
@@ -1485,6 +1485,7 @@ class ItemController extends Controller
         return $sets_group;
     }
 
+    // вызывается из ext_edit.php
     // $item0 - $item4  - это поля, по которым проводит связь Set между основами
     static function get_parent_item_from_output_calculated_table(Base $base, Link $link, Item $item0, Item $item1 = null, Item $item2 = null, Item $item3 = null, Item $item4 = null)
     {

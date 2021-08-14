@@ -292,7 +292,8 @@
             }
             ?>
 
-            {{--                        проверка Показывать Связь с признаком "Ссылка на основу"--}}
+            {{-- Проверка Показывать Связь с признаком "Ссылка на основу"--}}
+            {{-- Ниже по тексту тоже используется "parent_is_base_link"--}}
             @if($link->parent_is_base_link == true)
                 <input type="hidden" name="{{$key}}" id="link{{$key}}"
                        @if ($update)
@@ -1130,9 +1131,9 @@
         {{--        Выводится одно поле из вычисляемой таблицы--}}
         @if($link_calculated_table)
             <script>
-                    @foreach($sets_group as $to_key => $to_value)
-                var child_base_id{{$prefix}}{{$link->id}}_{{$to_value->id}} = document.getElementById('link{{$to_value->link_from_id}}');
-                    @endforeach
+                @foreach($sets_group as $to_key => $to_value)
+                    var child_base_id{{$prefix}}{{$link->id}}_{{$to_value->id}} = document.getElementById('link{{$to_value->link_from_id}}');
+                @endforeach
 
                 var parent_base_id{{$prefix}}{{$link->id}} = document.getElementById('link{{$link->id}}');
 
@@ -1147,7 +1148,13 @@
                         + '/{{$base->id}}'
                         + '/{{$link->id}}'
                         @foreach($sets_group as $to_key => $to_value)
-                        + '/' + child_base_id{{$prefix}}{{$link->id}}_{{$to_value->id}}.options[child_base_id{{$prefix}}{{$link->id}}_{{$to_value->id}}.selectedIndex].value
+                        {{-- Если $to_value->link_from->Ссылка на основу = true --}}
+                        {{-- Выше по тексту тоже используется "parent_is_base_link"--}}
+                        @if($to_value->link_from->parent_is_base_link == true)
+                                + '/' + child_base_id{{$prefix}}{{$link->id}}_{{$to_value->id}}.value
+                            @else
+                                + '/' + child_base_id{{$prefix}}{{$link->id}}_{{$to_value->id}}.options[child_base_id{{$prefix}}{{$link->id}}_{{$to_value->id}}.selectedIndex].value
+                            @endif
                         @endforeach
                         ).then(function (res) {
                                 parent_base_id{{$prefix}}{{$link->id}}.innerHTML = res.data;
