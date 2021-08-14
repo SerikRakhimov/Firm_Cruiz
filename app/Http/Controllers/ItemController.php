@@ -1116,6 +1116,7 @@ class ItemController extends Controller
             ->join('links as lf', 'sets.link_from_id', '=', 'lf.id')
             ->join('links as lt', 'sets.link_to_id', '=', 'lt.id')
             ->where('lf.child_base_id', '=', $item->base_id)
+            ->where('sets.is_savesets_enabled', '=', true)
             ->orderBy('sets.serial_number')
             ->orderBy('sets.link_from_id')
             ->orderBy('sets.link_to_id')->get();
@@ -1149,6 +1150,7 @@ class ItemController extends Controller
             ->join('links as lf', 'sets.link_from_id', '=', 'lf.id')
             ->join('links as lt', 'sets.link_to_id', '=', 'lt.id')
             ->where('lf.child_base_id', '=', $item->base_id)
+            ->where('sets.is_savesets_enabled', '=', true)
             ->orderBy('sets.serial_number')
             ->orderBy('sets.link_from_id')
             ->orderBy('sets.link_to_id')->get();
@@ -1434,6 +1436,7 @@ class ItemController extends Controller
                 ->join('links as lf', 'sets.link_from_id', '=', 'lf.id')
                 ->join('links as lt', 'sets.link_to_id', '=', 'lt.id')
                 ->where('lf.child_base_id', '=', $item->base_id)
+                ->where('sets.is_savesets_enabled', '=', true)
                 ->where('is_group', true)
                 ->where('serial_number', '=', $set->serial_number)
                 ->orderBy('sets.serial_number')
@@ -1471,6 +1474,7 @@ class ItemController extends Controller
             ->join('links as lt', 'sets.link_to_id', '=', 'lt.id')
             ->join('bases as bs', 'lf.parent_base_id', '=', 'bs.id')
             ->where('lf.child_base_id', '=', $base->id)
+            ->where('sets.is_savesets_enabled', '=', true)
             ->where('is_group', true)
             ->where('bs.type_is_list', '=', true)
             ->where('sets.serial_number', '=', $set->serial_number)

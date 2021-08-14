@@ -219,6 +219,9 @@ class SetController extends Controller
         $set->serial_number = $request->serial_number;
         $set->link_from_id = $request->link_from_id;
         $set->link_to_id = $request->link_to_id;
+        // Если $set->is_savesetsenabled = false,
+        // то стандартные обновления ItemController:save_sets() (и подобные функции) не проводятся
+        $set->is_savesets_enabled = isset($request->is_savesets_enabled) ? true : false;
 
         $set->is_group = false;
         $set->is_update = false;

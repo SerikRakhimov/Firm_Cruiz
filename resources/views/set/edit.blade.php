@@ -101,6 +101,30 @@
             </div>
         </div>
 
+        <div class="form-group row" id="is_savesets_enabled_form_group">
+            <div class="col-sm-3 text-right">
+                <label class="form-label"
+                       for="is_savesets_enabled">{{trans('main.is_savesets_enabled')}}</label>
+            </div>
+            <div class="col-sm-7">
+                <input class="@error('is_savesets_enabled') is-invalid @enderror"
+                       type="checkbox"
+                       name="is_savesets_enabled"
+                       placeholder=""
+                       @if ((old('is_savesets_enabled') ?? ($set->is_savesets_enabled ?? true)) ==  true)
+                       checked
+                    @endif
+                >
+                @error('is_savesets_enabled')
+                <div class="invalid-feedback">
+                    {{$message}}
+                </div>
+                @enderror
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div>
+
         <div class="form-group row">
             <div class="col-sm-3 text-right">
                 <label for="forwhat" class="col-form-label">{{trans('main.forwhat')}}<span

@@ -31,6 +31,7 @@
             <th class="text-center align-top">{{trans('main.serial_number')}}</th>
             <th class="text-left align-top">{{trans('main.link_from')}}</th>
             <th class="text-left align-top">{{trans('main.link_to')}}</th>
+            <th class="text-center align-top">{{trans('main.is_savesets_enabled')}}</th>
             <th class="text-center align-top">{{trans('main.forwhat')}}</th>
             <th class="text-center align-top">{{trans('main.updaction')}}</th>
             <th class="text-center align-top">{{trans('main.is_upd_delete_record_with_zero_value')}}</th>
@@ -62,6 +63,11 @@
                 <td class="text-left">
                     <a href="{{route('set.show',$set)}}" title="{{trans('main.show')}}">
                         {{$set->link_to->name()}}
+                    </a>
+                </td>
+                <td class="text-center">
+                    <a href="{{route('set.show',$set)}}" title="{{trans('main.show')}}">
+                        {{GlobalController::name_is_boolean($set->is_savesets_enabled)}}
                     </a>
                 </td>
                 <td class="text-center">
