@@ -264,6 +264,7 @@ return [
     'parent_bases_must_be_the_same' => 'Родительские основы должны быть одинаковыми',
     'parent_bases_must_be_number' => 'Родительские основы должны быть Число',
     'childrens_bases_must_be_with_the_characteristic_calculated_name' => 'Детские Основы должны быть с признаком "Вычисляемое наименование"',
+    'childrens_base_must_be_with_the_characteristic_is_calculated' => 'Детская Основа должна быть с признаком "Вычисляемое"',
     'and' => 'И',
     'image_is_missing' => 'Изображение отсутствует',
     'enter_one_word_without_spaces' => 'Введите одно слово без пробелов',

@@ -264,6 +264,7 @@ return [
     'parent_bases_must_be_the_same' => 'Parent bases must be the same',
     'parent_bases_must_be_number' => 'Parent bases must be Number',
     'childrens_bases_must_be_with_the_characteristic_calculated_name' => 'Children\'s Bases must be with the characteristic "Calculated name"',
+    'childrens_base_must_be_with_the_characteristic_is_calculated' => 'Children\'s Base must be with the characteristic "Calculated"',
     'and' => 'And',
     'image_is_missing' => 'Image is missing',
     'enter_one_word_without_spaces' => 'Enter one word without spaces',

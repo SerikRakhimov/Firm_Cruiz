@@ -264,6 +264,7 @@ return [
     'parent_bases_must_be_the_same'=>'Ата-ананың негіздері бірдей болуы тиіс',
     'parent_bases_must_be_number'=>'Тектік негіздер Нөмір болуы тиіс',
     'childrens_bases_must_be_with_the_characteristic_calculated_name'=>'Балалар негіздері «Есептелетін атауы» белгісімен болуы тиіс',
+    'childrens_base_must_be_with_the_characteristic_is_calculated' => 'Балалар негізі «Есептелетін» белгісімен болуы тиіс',
     'and'=>'Және',
     'image_is_missing'=>'Сурет жоқ',
     'enter_one_word_without_spaces'=>'Бос сөз жоқ бір сөзді енгізіңіз',

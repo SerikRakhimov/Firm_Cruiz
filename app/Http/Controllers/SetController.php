@@ -196,6 +196,18 @@ class SetController extends Controller
                 }
             }
         }
+        // Детская Основа должна быть с признаком "Вычисляемое"
+        if ($link_from) {
+            if ($link_to) {
+                if ($link_to->child_base->is_calculated_lst == false) {
+                    $message = trans('main.childrens_base_must_be_with_the_characteristic_is_calculated')
+                        . ' ("' . $link_to->child_base->name() . '")!';;
+                    $array_mess['link_from_id'] = "";
+                    $array_mess['link_to_id'] = $message;
+                    return;
+                }
+            }
+        }
         //Родительские основы должны быть Число
         // Обновление
         if ($request->forwhat == 1) {
