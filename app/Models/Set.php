@@ -75,9 +75,13 @@ class Set extends Model
     static function get_updactions()
     {
         return array(
-            "0" => trans('main.ua_plus'),
-            "1" => trans('main.ua_minus'),
-            "2" => trans('main.ua_replace'),
+            "0" => trans('main.ua_pluscount'),
+            "1" => trans('main.ua_minuscount'),
+            "2" => trans('main.ua_plussum'),
+            "3" => trans('main.ua_minussum'),
+            "4" => trans('main.ua_replace'),
+            "5" => trans('main.ua_calcfirst'),
+            "6" => trans('main.ua_calclast'),
         );
     }
 
@@ -85,12 +89,20 @@ class Set extends Model
     {
         // нужно
         $result = -1;
-        if ($this->is_upd_plus == true) {
+        if ($this->is_upd_pluscount == true) {
             $result = 0;
-        } else if ($this->is_upd_minus == true) {
+        } else if ($this->is_upd_minuscount == true) {
             $result = 1;
-        } else if ($this->is_upd_replace == true) {
+        } else if ($this->is_upd_plussum == true) {
             $result = 2;
+        } else if ($this->is_upd_minussum == true) {
+            $result = 3;
+        } else if ($this->is_upd_replace == true) {
+            $result = 4;
+        } else if ($this->is_upd_calcfirst == true) {
+            $result = 5;
+        } else if ($this->is_upd_calclast == true) {
+            $result = 6;
         }
         return $result;
     }
@@ -100,13 +112,25 @@ class Set extends Model
         $result = "";
         switch ($this->updaction()) {
             case 0:
-                $result = trans('main.ua_plus');
+                $result = trans('main.ua_pluscount');
                 break;
             case 1:
-                $result = trans('main.ua_minus');
+                $result = trans('main.ua_minuscount');
                 break;
             case 2:
+                $result = trans('main.ua_plussum');
+                break;
+            case 3:
+                $result = trans('main.ua_minussum');
+                break;
+            case 4:
                 $result = trans('main.ua_replace');
+                break;
+            case 5:
+                $result = trans('main.ua_calcfirst');
+                break;
+            case 6:
+                $result = trans('main.ua_calclast');
                 break;
         }
         return $result;

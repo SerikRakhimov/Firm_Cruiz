@@ -186,13 +186,17 @@ class SetController extends Controller
         // Родительские основы должны быть одинаковыми
         if ($link_from) {
             if ($link_to) {
-                if ($link_from->parent_base_id != $link_to->parent_base_id) {
-                    $message = trans('main.parent_bases_must_be_the_same')
-                        . ' ("' . $link_from->parent_base->name() . '" ' . mb_strtolower(trans('main.and')) .
-                        ' "' . $link_to->parent_base->name() . '")!';;
-                    $array_mess['link_from_id'] = $message;
-                    $array_mess['link_to_id'] = $message;
-                    return;
+                // Проверка "Ссылка на Основу" = false
+                // Для расчета количества нужна эта проверка
+                if ($link_from->parent_is_base_link == false) {
+                    if ($link_from->parent_base_id != $link_to->parent_base_id) {
+                        $message = trans('main.parent_bases_must_be_the_same')
+                            . ' ("' . $link_from->parent_base->name() . '" ' . mb_strtolower(trans('main.and')) .
+                            ' "' . $link_to->parent_base->name() . '")!';;
+                        $array_mess['link_from_id'] = $message;
+                        $array_mess['link_to_id'] = $message;
+                        return;
+                    }
                 }
             }
         }
@@ -239,9 +243,13 @@ class SetController extends Controller
         $set->is_update = false;
         $set->is_calcsort = false;
         $set->is_onlylink = false;
-        $set->is_upd_plus = false;
-        $set->is_upd_minus = false;
+        $set->is_upd_pluscount = false;
+        $set->is_upd_minuscount = false;
+        $set->is_upd_plussum = false;
+        $set->is_upd_minussum = false;
         $set->is_upd_replace = false;
+        $set->is_upd_calcfirst = false;
+        $set->is_upd_calclast = false;
         $set->is_upd_delete_record_with_zero_value = false;
 
         // Похожие строки в SetController.php (functions: store(), edit(), check())
@@ -254,9 +262,13 @@ class SetController extends Controller
                 $set->is_update = false;
                 $set->is_calcsort = false;
                 $set->is_onlylink = false;
-                $set->is_upd_plus = false;
-                $set->is_upd_minus = false;
+                $set->is_upd_pluscount = false;
+                $set->is_upd_minuscount = false;
+                $set->is_upd_plussum = false;
+                $set->is_upd_minussum = false;
                 $set->is_upd_replace = false;
+                $set->is_upd_calcfirst = false;
+                $set->is_upd_calclast = false;
                 $set->is_upd_delete_record_with_zero_value = false;
                 break;
             // Поля сортировки (для первый(), последний())
@@ -265,9 +277,13 @@ class SetController extends Controller
                 $set->is_update = false;
                 $set->is_calcsort = true;
                 $set->is_onlylink = false;
-                $set->is_upd_plus = false;
-                $set->is_upd_minus = false;
+                $set->is_upd_pluscount = false;
+                $set->is_upd_minuscount = false;
+                $set->is_upd_plussum = false;
+                $set->is_upd_minussum = false;
                 $set->is_upd_replace = false;
+                $set->is_upd_calcfirst = false;
+                $set->is_upd_calclast = false;
                 $set->is_upd_delete_record_with_zero_value = false;
                 break;
             // Только связь (для вывода поля из вычисляемой Основы)
@@ -276,9 +292,13 @@ class SetController extends Controller
                 $set->is_update = false;
                 $set->is_calcsort = false;
                 $set->is_onlylink = true;
-                $set->is_upd_plus = false;
-                $set->is_upd_minus = false;
+                $set->is_upd_pluscount = false;
+                $set->is_upd_minuscount = false;
+                $set->is_upd_plussum = false;
+                $set->is_upd_minussum = false;
                 $set->is_upd_replace = false;
+                $set->is_upd_calcfirst = false;
+                $set->is_upd_calclast = false;
                 $set->is_upd_delete_record_with_zero_value = false;
                 $set->is_savesets_enabled = false;
                 break;
@@ -291,23 +311,75 @@ class SetController extends Controller
                 $set->is_upd_delete_record_with_zero_value = isset($request->is_upd_delete_record_with_zero_value) ? true : false;
                 $set->is_savesets_enabled = true;
                 switch ($request->updaction) {
-                    // Добавить
+                    // Прибавить Количество
                     case 0:
-                        $set->is_upd_plus = true;
-                        $set->is_upd_minus = false;
+                        $set->is_upd_pluscount = true;
+                        $set->is_upd_minuscount = false;
+                        $set->is_upd_plussum = false;
+                        $set->is_upd_minussum = false;
                         $set->is_upd_replace = false;
+                        $set->is_upd_calcfirst = false;
+                        $set->is_upd_calclast = false;
                         break;
-                    // Отнять
+                    // Отнять Количество
                     case 1:
-                        $set->is_upd_plus = false;
-                        $set->is_upd_minus = true;
+                        $set->is_upd_pluscount = false;
+                        $set->is_upd_minuscount = true;
+                        $set->is_upd_plussum = false;
+                        $set->is_upd_minussum = false;
                         $set->is_upd_replace = false;
+                        $set->is_upd_calcfirst = false;
+                        $set->is_upd_calclast = false;
+                        break;
+                    // Прибавить Сумму
+                    case 2:
+                        $set->is_upd_pluscount = false;
+                        $set->is_upd_minuscount = false;
+                        $set->is_upd_plussum = true;
+                        $set->is_upd_minussum = false;
+                        $set->is_upd_replace = false;
+                        $set->is_upd_calcfirst = false;
+                        $set->is_upd_calclast = false;
+                        break;
+                    // Отнять Сумму
+                    case 3:
+                        $set->is_upd_pluscount = false;
+                        $set->is_upd_minuscount = false;
+                        $set->is_upd_plussum = false;
+                        $set->is_upd_minussum = true;
+                        $set->is_upd_replace = false;
+                        $set->is_upd_calcfirst = false;
+                        $set->is_upd_calclast = false;
                         break;
                     // Заменить
-                    case 2:
-                        $set->is_upd_plus = false;
-                        $set->is_upd_minus = false;
+                    case 4:
+                        $set->is_upd_pluscount = false;
+                        $set->is_upd_minuscount = false;
+                        $set->is_upd_plussum = false;
+                        $set->is_upd_minussum = false;
                         $set->is_upd_replace = true;
+                        $set->is_upd_calcfirst = false;
+                        $set->is_upd_calclast = false;
+                        break;
+                    // Расчет Первый()
+                    case 5:
+                        $set->is_upd_pluscount = false;
+                        $set->is_upd_minuscount = false;
+                        $set->is_upd_plussum = false;
+                        $set->is_upd_minussum = false;
+                        $set->is_upd_replace = false;
+                        $set->is_upd_calcfirst = true;
+                        $set->is_upd_calclast = false;
+                        break;
+                    // Расчет Последний()
+                    case 6:
+                        $set->is_upd_pluscount = false;
+                        $set->is_upd_minuscount = false;
+                        $set->is_upd_plussum = false;
+                        $set->is_upd_minussum = false;
+                        $set->is_upd_replace = false;
+                        $set->is_upd_calcfirst = false;
+                        $set->is_upd_calclast = true;
                         break;
                 }
                 break;

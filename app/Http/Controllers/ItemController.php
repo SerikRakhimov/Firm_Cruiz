@@ -1326,7 +1326,11 @@ class ItemController extends Controller
                                 if ($value->is_group == true) {
                                     $main->parent_item_id = $valits[$nk];
                                 } elseif ($value->is_update == true) {
-                                    if ($value->is_upd_plus == true) {
+                                    if ($value->is_upd_plussum == true || $value->is_upd_pluscount == true) {
+                                        // Учет Количества
+                                        if($value->is_upd_pluscount == true){
+                                            $ch = 1;
+                                        }
                                         $seek_item = true;
                                         $seek_value = $vl + $kf * $ch;
                                         // Удалить запись с нулевым значением при обновлении
@@ -1335,7 +1339,11 @@ class ItemController extends Controller
                                                 $valnull = true;
                                             }
                                         }
-                                    } elseif ($value->is_upd_minus == true) {
+                                    } elseif ($value->is_upd_minussum == true || $value->is_upd_minuscount == true) {
+                                        // Учет Количества
+                                        if($value->is_upd_minuscount == true){
+                                            $ch = 1;
+                                        }
                                         $seek_item = true;
                                         $seek_value = $vl - $kf * $ch;
                                         // Удалить запись с нулевым значением при обновлении
@@ -2610,7 +2618,7 @@ class ItemController extends Controller
                 }
                 // ext_update()
                 // При reverse = false передаем null
-                $this->save_sets($item, $keys, $values, $valits,false);
+                $this->save_sets($item, $keys, $values, $valits, false);
 
                 $item->save();
 

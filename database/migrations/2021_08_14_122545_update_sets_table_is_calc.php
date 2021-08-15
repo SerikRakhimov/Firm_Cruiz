@@ -16,10 +16,6 @@ class UpdateSetsTableIsCalc extends Migration
         Schema::table('sets', function (Blueprint $table) {
             $table->boolean('is_calcsort')->default(false);
             $table->boolean('is_onlylink')->default(false);
-            $table->boolean('is_upd_count')->default(false);
-            $table->boolean('is_upd_sum')->default(true);
-            $table->boolean('is_upd_first')->default(false);
-            $table->boolean('is_upd_last')->default(false);
         });
     }
 
