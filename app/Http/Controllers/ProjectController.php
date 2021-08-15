@@ -263,7 +263,7 @@ class ProjectController extends Controller
                 ->where('user_id', GlobalController::glo_user_id())
                 ->whereHas('role', function ($query) {
                     $query->where('is_author', true)
-                    ->orderBy('serial_number');
+                        ->orderBy('serial_number');
                 })
                 ->where('is_subscription_request', true)
                 ->where('is_access_allowed', false)
@@ -278,7 +278,7 @@ class ProjectController extends Controller
                 ->where('user_id', GlobalController::glo_user_id())
                 ->whereHas('role', function ($query) {
                     $query->where('is_author', true)
-                    ->orderBy('serial_number');
+                        ->orderBy('serial_number');
                 })
                 ->where('is_subscription_request', false)
                 ->where('is_access_allowed', false)
@@ -296,7 +296,7 @@ class ProjectController extends Controller
                     ->where('user_id', GlobalController::glo_user_id())
                     ->whereHas('role', function ($query) {
                         $query->where('is_author', false)
-                        ->orderBy('serial_number');
+                            ->orderBy('serial_number');
                     })->get();
                 foreach ($accesses as $access) {
                     $role = $access->role;
@@ -308,7 +308,7 @@ class ProjectController extends Controller
                     ->where('user_id', GlobalController::glo_user_id())
                     ->whereHas('role', function ($query) {
                         $query->where('is_author', false)
-                        ->orderBy('serial_number');
+                            ->orderBy('serial_number');
                     })
                     ->where('is_subscription_request', true)
                     ->where('is_access_allowed', false)
@@ -323,7 +323,7 @@ class ProjectController extends Controller
                     ->where('user_id', GlobalController::glo_user_id())
                     ->whereHas('role', function ($query) {
                         $query->where('is_author', false)
-                        ->orderBy('serial_number');
+                            ->orderBy('serial_number');
                     })
                     ->where('is_subscription_request', false)
                     ->where('is_access_allowed', false)
@@ -338,7 +338,7 @@ class ProjectController extends Controller
                     ->where('user_id', GlobalController::glo_user_id())
                     ->whereHas('role', function ($query) {
                         $query->where('is_author', false)
-                        ->orderBy('serial_number');
+                            ->orderBy('serial_number');
                     })
                     ->where('is_subscription_request', true)
                     ->where('is_access_allowed', true)
@@ -1062,11 +1062,12 @@ class ProjectController extends Controller
         try {
             // начало транзакции
             DB::transaction(function ($r) use ($project) {
-
+                // Нужно "->where('sets.is_savesets_enabled', '=', true)"
                 $bases_to = Set::select(DB::Raw('links.child_base_id as base_id'))
                     ->join('links', 'sets.link_to_id', '=', 'links.id')
                     ->join('bases', 'links.child_base_id', '=', 'bases.id')
                     ->where('bases.template_id', $project->template_id)
+                    ->where('sets.is_savesets_enabled', '=', true)
                     ->distinct()
                     ->orderBy('links.child_base_id')
                     ->get();
@@ -1079,6 +1080,7 @@ class ProjectController extends Controller
 //                    ->orderBy('links.child_base_id')
 //                    ->get();
 
+                // Нужно "->where('sets.is_savesets_enabled', '=', true)"
                 // Это условие 'where('bf.is_calculated_lst', '=', false)->where('bt.is_calculated_lst', '=', true)' означает
                 // исключить sets, когда link_from->child_base и link_to->child_base являются вычисляемыми (base->is_calculated_lst=true)
                 $bases_from = Set::select(DB::Raw('lf.child_base_id as base_id'))

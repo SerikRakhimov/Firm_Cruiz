@@ -1328,7 +1328,7 @@ class ItemController extends Controller
                                 } elseif ($value->is_update == true) {
                                     if ($value->is_upd_plussum == true || $value->is_upd_pluscount == true) {
                                         // Учет Количества
-                                        if($value->is_upd_pluscount == true){
+                                        if ($value->is_upd_pluscount == true) {
                                             $ch = 1;
                                         }
                                         $seek_item = true;
@@ -1341,7 +1341,7 @@ class ItemController extends Controller
                                         }
                                     } elseif ($value->is_upd_minussum == true || $value->is_upd_minuscount == true) {
                                         // Учет Количества
-                                        if($value->is_upd_minuscount == true){
+                                        if ($value->is_upd_minuscount == true) {
                                             $ch = 1;
                                         }
                                         $seek_item = true;
@@ -1367,7 +1367,6 @@ class ItemController extends Controller
                                             }
                                         } else {
                                             $delete_main = true;
-                                            $main->delete();
                                             // Используем $valits_previous[$nk]
 //                                            $main->parent_item_id = $valits_previous[$nk];
                                             // Удалить запись с нулевым значением при обновлении
@@ -1375,10 +1374,31 @@ class ItemController extends Controller
                                                 $valnull = true;
                                             }
                                         }
-
                                     }
+                                    // При $reverse == false
+                                    // и при корректировке записи(если подкорректировано поле группировки)
+                                    // и при удалении записи
+                                    // работает некорректно
+                                    // При $reverse == true работает корректно
+//                                    elseif ($value->is_upd_calcfirst == true || $value->is_upd_calclast == true) {
+//                                        $calc = "";
+//                                        if ($value->is_upd_calcfirst == true) {
+//                                            $calc = "first";
+//                                        } elseif ($value->is_upd_calclast == true) {
+//                                            $calc = "last";
+//                                        }
+//                                        // Расчет Первый(), Последний()
+//                                        $item_calc = self::get_item_from_parent_output_calculated_firstlast_table($item, $value, $calc);
+//                                        if ($item_calc) {
+//                                            $main->parent_item_id = $item_calc->id;
+//                                        } else {
+//                                            $delete_main = true;
+//                                        }
+//                                    }
                                 }
-                                if ($delete_main == false) {
+                                if ($delete_main == true) {
+                                    $main->delete();
+                                } else {
                                     //  Добавление числа в базу данных
                                     if ($seek_item == true) {
                                         $item_find = Item::where('base_id', $value->link_to->parent_base_id)->where('project_id', $item->project_id)
@@ -1431,7 +1451,56 @@ class ItemController extends Controller
             }
         }
     }
-    // вызывается из MainController.php - view_info()
+
+
+//    // Вызывается из save_sets()
+//    // Вычисление first(), last()
+//    static function get_item_from_parent_output_calculated_firstlast_table(Item $item, Set $set, $calc)
+//    {
+//        $result_item = null;
+//        //$set = Set::find($link->parent_output_calculated_table_set_id);
+//        if ($set) {
+//            // base_id вычисляемой таблицы
+//            $calc_table_base_id = $set->link_to->child_base_id;
+//            // Не нужно 'where('sets.is_savesets_enabled', '=', false)'
+//            $sets_group = Set::select(DB::Raw('sets.*'))
+//                ->join('links as lf', 'sets.link_from_id', '=', 'lf.id')
+//                ->join('links as lt', 'sets.link_to_id', '=', 'lt.id')
+//                ->where('is_group', true)
+//                ->where('lf.child_base_id', '=', $item->base_id)
+//                ->where('serial_number', '=', $set->serial_number)
+//                ->orderBy('sets.serial_number')
+//                ->orderBy('sets.link_from_id')
+//                ->orderBy('sets.link_to_id')
+//                ->get();
+//
+//            $items = Item::where('base_id', $item->base_id)->where('project_id', $item->project_id);
+//
+//            // Цикл по записям, в каждой итерации цикла свой to_child_base_id в переменной $to_key
+//            foreach ($sets_group as $to_key => $to_value) {
+//                $item_seek = MainController::get_parent_item_from_main($item->id, $to_value->link_from_id);
+//                //dd($item_seek);
+//                if ($item_seek) {
+//                    $items = $items->whereHas('child_mains', function ($query) use ($to_value, $item_seek) {
+//                        $query->where('link_id', $to_value->link_from_id)->where('parent_item_id', $item_seek->id);
+//                    });
+//                }
+//            }
+//            $item_calc = null;
+//            if ($calc == "first") {
+//                $item_calc = $items->first();
+//            } elseif ($calc == "last") {
+//                $item_calc = $items->last();
+//            }
+//            if ($item_calc) {
+//                $result_item = MainController::get_parent_item_from_main($item_calc->id, $set->link_from_id);
+//            }
+//
+//        }
+//        return $result_item;
+//    }
+
+    // Вызывается из MainController.php - view_info()
     // Выводит поле вычисляемой таблицы
     static function get_item_from_parent_output_calculated_table(Item $item, Link $link)
     {
@@ -1440,33 +1509,55 @@ class ItemController extends Controller
         if ($set) {
             // base_id вычисляемой таблицы
             $calc_table_base_id = $set->link_to->child_base_id;
+
+            $items = Item::where('base_id', $calc_table_base_id)->where('project_id', $item->project_id);
+
             // Не нужно 'where('sets.is_savesets_enabled', '=', false)'
             $sets_group = Set::select(DB::Raw('sets.*'))
                 ->join('links as lf', 'sets.link_from_id', '=', 'lf.id')
                 ->join('links as lt', 'sets.link_to_id', '=', 'lt.id')
-                ->where('lf.child_base_id', '=', $item->base_id)
                 ->where('is_group', true)
+                ->where('lf.child_base_id', '=', $item->base_id)
                 ->where('serial_number', '=', $set->serial_number)
                 ->orderBy('sets.serial_number')
                 ->orderBy('sets.link_from_id')
-                ->orderBy('sets.link_to_id')->get();
-
-            $items = Item::where('base_id', $calc_table_base_id)->where('project_id', $item->project_id);
+                ->orderBy('sets.link_to_id')
+                ->get();
 
             // Цикл по записям, в каждой итерации цикла свой to_child_base_id в переменной $to_key
             foreach ($sets_group as $to_key => $to_value) {
                 $item_seek = MainController::get_parent_item_from_main($item->id, $to_value->link_from_id);
-                $items = $items->whereHas('child_mains', function ($query) use ($to_value, $item_seek) {
-                    $query->where('link_id', $to_value->link_to_id)->where('parent_item_id', $item_seek->id);
-                });
-
-            }
-            $count = $items->count();
-            if ($count == 1) {
-                $item_first = $items->first();
-                if ($item_first) {
-                    $result_item = MainController::get_parent_item_from_main($item_first->id, $set->link_to_id);
+                if ($item_seek) {
+                    $items = $items->whereHas('child_mains', function ($query) use ($to_value, $item_seek) {
+                        $query->where('link_id', $to_value->link_to_id)->where('parent_item_id', $item_seek->id);
+                    });
                 }
+            }
+            dd($items->get());
+//            $count = $items->count();
+//            if ($count == 1) {
+//                $item_first = $items->first();
+//                if ($item_first) {
+//                    $result_item = MainController::get_parent_item_from_main($item_first->id, $set->link_to_id);
+//                }
+//            }
+
+            $item_calc = null;
+            if ($set->is_upd_calcfirst == true || $set->is_upd_calclast == true) {
+                if ($set->is_upd_calcfirst == true) {
+                    $item_calc = $items->first();
+                } elseif ($set->is_upd_calclast == true) {
+                    // Нужно '->get()'
+                    $item_calc = $items->get()->last();
+                }
+            } else {
+                $count = $items->count();
+                if ($count == 1) {
+                    $item_calc = $items->first();
+                }
+            }
+            if ($item_calc) {
+                $result_item = MainController::get_parent_item_from_main($item_calc->id, $set->link_to_id);
             }
         }
 

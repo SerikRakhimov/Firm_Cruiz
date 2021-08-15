@@ -157,6 +157,7 @@ class SetController extends Controller
 
         $link_from = Link::find($request->link_from_id);
         $link_to = Link::find($request->link_to_id);
+
         //Детские Основы должны быть с признаком "Вычисляемое наименование"
         if ($link_from) {
             if ($link_to) {
@@ -200,23 +201,25 @@ class SetController extends Controller
                 }
             }
         }
-        // Детская Основа должна быть с признаком "Вычисляемое"
-        if ($link_from) {
-            if ($link_to) {
-                if ($link_to->child_base->is_calculated_lst == false) {
-                    $message = trans('main.childrens_base_must_be_with_the_characteristic_is_calculated')
-                        . ' ("' . $link_to->child_base->name() . '")!';;
-                    $array_mess['link_from_id'] = "";
-                    $array_mess['link_to_id'] = $message;
-                    return;
+        if (1 == 2) {
+            // Детская Основа должна быть с признаком "Вычисляемое"
+            if ($link_from) {
+                if ($link_to) {
+                    if ($link_to->child_base->is_calculated_lst == false) {
+                        $message = trans('main.childrens_base_must_be_with_the_characteristic_is_calculated')
+                            . ' ("' . $link_to->child_base->name() . '")!';;
+                        $array_mess['link_from_id'] = "";
+                        $array_mess['link_to_id'] = $message;
+                        return;
+                    }
                 }
             }
         }
         //Родительские основы должны быть Число
         // Обновление
-        if ($request->forwhat == 1) {
+        if ($request->forwhat == 3) {
             // Добавить, Отнять
-            if (($request->updaction == 0) || ($request->updaction == 1)) {
+            if (($request->updaction >= 0) && ($request->updaction <= 3)) {
                 if (($link_from->parent_base->type_is_number() == false) || ($link_to->parent_base->type_is_number() == false)) {
                     $message = trans('main.parent_bases_must_be_number')
                         . ' ("' . $link_from->parent_base->name() . '" ' . mb_strtolower(trans('main.and')) .
@@ -309,10 +312,10 @@ class SetController extends Controller
                 $set->is_calcsort = false;
                 $set->is_onlylink = false;
                 $set->is_upd_delete_record_with_zero_value = isset($request->is_upd_delete_record_with_zero_value) ? true : false;
-                $set->is_savesets_enabled = true;
                 switch ($request->updaction) {
                     // Прибавить Количество
                     case 0:
+                        $set->is_savesets_enabled = true;
                         $set->is_upd_pluscount = true;
                         $set->is_upd_minuscount = false;
                         $set->is_upd_plussum = false;
@@ -323,6 +326,7 @@ class SetController extends Controller
                         break;
                     // Отнять Количество
                     case 1:
+                        $set->is_savesets_enabled = true;
                         $set->is_upd_pluscount = false;
                         $set->is_upd_minuscount = true;
                         $set->is_upd_plussum = false;
@@ -333,6 +337,7 @@ class SetController extends Controller
                         break;
                     // Прибавить Сумму
                     case 2:
+                        $set->is_savesets_enabled = true;
                         $set->is_upd_pluscount = false;
                         $set->is_upd_minuscount = false;
                         $set->is_upd_plussum = true;
@@ -343,6 +348,7 @@ class SetController extends Controller
                         break;
                     // Отнять Сумму
                     case 3:
+                        $set->is_savesets_enabled = true;
                         $set->is_upd_pluscount = false;
                         $set->is_upd_minuscount = false;
                         $set->is_upd_plussum = false;
@@ -353,6 +359,7 @@ class SetController extends Controller
                         break;
                     // Заменить
                     case 4:
+                        $set->is_savesets_enabled = true;
                         $set->is_upd_pluscount = false;
                         $set->is_upd_minuscount = false;
                         $set->is_upd_plussum = false;
@@ -363,6 +370,7 @@ class SetController extends Controller
                         break;
                     // Расчет Первый()
                     case 5:
+                        $set->is_savesets_enabled = false;
                         $set->is_upd_pluscount = false;
                         $set->is_upd_minuscount = false;
                         $set->is_upd_plussum = false;
@@ -373,6 +381,7 @@ class SetController extends Controller
                         break;
                     // Расчет Последний()
                     case 6:
+                        $set->is_savesets_enabled = false;
                         $set->is_upd_pluscount = false;
                         $set->is_upd_minuscount = false;
                         $set->is_upd_plussum = false;

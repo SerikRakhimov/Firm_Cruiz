@@ -35,6 +35,7 @@
             <th class="text-center align-top">{{trans('main.forwhat')}}</th>
             <th class="text-center align-top">{{trans('main.updaction')}}</th>
             <th class="text-center align-top">{{trans('main.is_upd_delete_record_with_zero_value')}}</th>
+            <th class="text-center align-top">Id</th>
         </tr>
         </thead>
         <tbody>
@@ -83,6 +84,11 @@
                 <td class="text-center">
                     <a href="{{route('set.show',$set)}}" title="{{trans('main.show')}}">
                         {{$set->updaction_delete_record_with_zero_value()}}
+                    </a>
+                </td>
+                <td class="text-center">
+                    <a href="{{route('set.show',$set)}}" title="{{trans('main.show')}}">
+                        {{$set->id}}
                     </a>
                 </td>
             </tr>
