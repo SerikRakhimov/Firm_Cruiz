@@ -423,9 +423,12 @@ class GlobalController extends Controller
 //                ->distinct();
 
                         // Не попадают в список $links изображения/документы
+                        // и с признаком "Ссылка на Основу"
+                        //->where('links.parent_is_base_link', false)
                         $links = Link::select(DB::Raw('links.*'))
                             ->join('bases as pb', 'links.parent_base_id', '=', 'pb.id')
                             ->where('links.child_base_id', '=', $base->id)
+                            ->where('links.parent_is_base_link', false)
                             ->where('pb.type_is_image', false)
                             ->where('pb.type_is_document', false)
                             ->orderBy('links.parent_base_number')->get();
@@ -444,6 +447,7 @@ class GlobalController extends Controller
                                     } else {
                                         $str = $str . trim($item_find[$name]);
                                     }
+                                    $str = $str . "|";
 
                                 }
                             }
@@ -474,7 +478,6 @@ class GlobalController extends Controller
                         $ids = $collection->keys()->toArray();
                         $items = Item::whereIn('id', $ids)
                             ->orderBy(\DB::raw("FIELD(id, " . implode(',', $ids) . ")"));
-                        //dd($collection);
                     }
                 }
             }

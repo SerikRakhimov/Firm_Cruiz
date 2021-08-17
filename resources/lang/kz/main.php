@@ -163,6 +163,7 @@ return [
     'parent_is_nc_viewonly' => 'Тек есептелген мәнді көрсету',
     'parent_is_nc_parameter' => 'Есептелген өрістерге(полей) арналған параметр',
     'recalculation_codes' => 'Кодтарды қайта есептеу',
+    'verify_number_values' => 'Сандардың сақталуын тексеру',
     'verify_table_texts' => 'Мәтіндер кестесін тексеру',
     'sort_by_code' => 'Код бойынша сұрыптау',
     'sort_by_name' => 'Атауы бойынша сұрыптау',

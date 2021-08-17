@@ -163,6 +163,7 @@ return [
     'parent_is_nc_viewonly' => 'Расчитанное значение только показывать',
     'parent_is_nc_parameter' => 'Является параметром для расчитываемых полей',
     'recalculation_codes' => 'Перерасчет кодов',
+    'verify_number_values' => 'Проверка хранения чисел',
     'verify_table_texts' => 'Проверка таблицы Тексты',
     'sort_by_code' => 'Сортировка по коду',
     'sort_by_name' => 'Сортировка по наименованию',

@@ -827,6 +827,10 @@ Route::get('/item/recalculation_codes/{base}/{project}', 'ItemController@recalcu
     ->name('item.recalculation_codes')
     ->middleware('auth');
 
+Route::get('/item/verify_number_values', 'ItemController@verify_number_values')
+    ->name('item.verify_number_values')
+    ->middleware('auth');
+
 Route::get('/item/verify_table_texts', 'ItemController@verify_table_texts')
     ->name('item.verify_table_texts')
     ->middleware('auth');

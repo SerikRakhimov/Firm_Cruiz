@@ -163,6 +163,7 @@ return [
     'parent_is_nc_viewonly' => 'Calculated value only view',
     'parent_is_nc_parameter' => 'Parameter for calculated fields',
     'recalculation_codes' => 'Recalculation_codes',
+    'verify_number_values' => 'Checking the storage of numbers',
     'verify_table_texts' => 'Vefify table Texts',
     'sort_by_code' => 'Sort by code',
     'sort_by_name' => 'Sort by name',

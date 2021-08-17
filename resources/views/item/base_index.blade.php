@@ -55,10 +55,15 @@
                 @endif
                 @if (Auth::user()->isAdmin())
                     <div class="col-12 text-right">
-                        <a href="{{route('item.verify_table_texts')}}" title="{{trans('main.verify_table_texts')}}">
-                            {{trans('main.verify_table_texts')}}
+                        <a href="{{route('item.verify_number_values')}}" title="{{trans('main.verify_number_values')}}">
+                            {{trans('main.verify_number_values')}}
                         </a>
                     </div>
+                        <div class="col-12 text-right">
+                            <a href="{{route('item.verify_table_texts')}}" title="{{trans('main.verify_table_texts')}}">
+                                {{trans('main.verify_table_texts')}}
+                            </a>
+                        </div>
                 @endif
             @endauth
         @endif

@@ -1412,7 +1412,11 @@ class ItemController extends Controller
                                             $item_find->code = uniqid($item_find->base_id . '_', true);
                                             // присваивание полям наименование строкового значение числа
                                             foreach (config('app.locales') as $key => $value) {
-                                                $item_find['name_lang_' . $key] = $seek_value;
+                                                if ($item_find->base->type_is_number()) {
+                                                    $item_find['name_lang_' . $key] = GlobalController::save_number_to_item($item_find->base, $seek_value);
+                                                } else {
+                                                    $item_find['name_lang_' . $key] = $seek_value;
+                                                }
                                             }
                                             $item_find->project_id = $item->project_id;
                                             // при создании записи "$item->created_user_id" заполняется
@@ -3984,6 +3988,24 @@ class ItemController extends Controller
         return redirect()->back();
     }
 
+    function verify_number_values()
+    {
+        // Выбрать только числовые $items
+        // В базе данных должно храниться с нулем впереди для правильной сортировки
+        $items = Item::whereHas('base', function ($query) {
+            $query->where('type_is_number', true);
+        })->get();
+        foreach ($items as $item) {
+            foreach (config('app.locales') as $key => $value) {
+                $value = GlobalController::restore_number_from_item($item->base, $item['name_lang_0']);
+                $item['name_lang_' . $key] = GlobalController::save_number_to_item($item->base, $value);
+            }
+            $item->save();
+        }
+        $result = trans('main.processed') . " " . count($items) . " " . mb_strtolower(trans('main.records')) . ".";
+        return view('message', ['message' => $result]);
+    }
+
     function verify_table_texts()
     {
         $result = trans('main.deleted') . ' text.ids: ';
@@ -4012,7 +4034,6 @@ class ItemController extends Controller
         }
         $result = $result . " - " . $i . " " . mb_strtolower(trans('main.recs_genitive_case')) . ".";
         return view('message', ['message' => $result]);
-        //return redirect()->back();
     }
 
     function item_from_base_code(Base $base, Project $project, $code)
