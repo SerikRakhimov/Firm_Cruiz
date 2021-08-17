@@ -14,12 +14,11 @@ class UpdateSetsTableFunc extends Migration
     public function up()
     {
         Schema::table('sets', function (Blueprint $table) {
-            $table->boolean('is_upd_calc')->default(false);
-            $table->boolean('is_upd_minuscount')->default(false);
-            $table->boolean('is_upd_plussum')->default(false);
-            $table->boolean('is_upd_minussum')->default(true);
-            $table->boolean('is_upd_calcfirst')->default(false);
-            $table->boolean('is_upd_calclast')->default(false);
+            $table->boolean('is_upd_cl_fn_min')->default(true);
+            $table->boolean('is_upd_cl_fn_max')->default(false);
+            $table->boolean('is_upd_cl_fn_avg')->default(false);
+            $table->boolean('is_upd_cl_fn_count')->default(false);
+            $table->boolean('is_upd_cl_fn_sum')->default(false);
             // Удалить эти поля
             // $set->is_upd_plus;
             // $set->is_upd_minus;

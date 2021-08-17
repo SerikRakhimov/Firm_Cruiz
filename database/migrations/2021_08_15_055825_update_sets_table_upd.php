@@ -18,8 +18,8 @@ class UpdateSetsTableUpd extends Migration
             $table->boolean('is_upd_minuscount')->default(false);
             $table->boolean('is_upd_plussum')->default(false);
             $table->boolean('is_upd_minussum')->default(true);
-            $table->boolean('is_upd_calcfirst')->default(false);
-            $table->boolean('is_upd_calclast')->default(false);
+            $table->boolean('is_upd_cl_gr_first')->default(false);
+            $table->boolean('is_upd_cl_gr_last')->default(false);
             // Удалить эти поля
             // $set->is_upd_plus;
             // $set->is_upd_minus;

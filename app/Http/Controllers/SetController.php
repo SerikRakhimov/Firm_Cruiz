@@ -263,9 +263,19 @@ class SetController extends Controller
         $set->is_upd_plussum = false;
         $set->is_upd_minussum = false;
         $set->is_upd_replace = false;
-        $set->is_upd_calcfirst = false;
-        $set->is_upd_calclast = false;
+        $set->is_upd_cl_gr_first = false;
+        $set->is_upd_cl_gr_last = false;
         $set->is_upd_delete_record_with_zero_value = false;
+
+
+//        $table->boolean('is_upd_calc')->default(false);
+//        $table->boolean('is_upd_cl_group')->default(false);
+//        $table->boolean('is_upd_cl_func')->default(false);
+//        $table->boolean('is_upd_cl_fn_min')->default(true);
+//        $table->boolean('is_upd_cl_fn_max')->default(false);
+//        $table->boolean('is_upd_cl_fn_avg')->default(false);
+//        $table->boolean('is_upd_cl_fn_count')->default(false);
+//        $table->boolean('is_upd_cl_fn_sum')->default(false);
 
         // Похожие строки в SetController.php (functions: store(), edit(), check())
         // и в Set.php (functions: get_types(), type(), type_name())
@@ -282,8 +292,8 @@ class SetController extends Controller
                 $set->is_upd_plussum = false;
                 $set->is_upd_minussum = false;
                 $set->is_upd_replace = false;
-                $set->is_upd_calcfirst = false;
-                $set->is_upd_calclast = false;
+                $set->is_upd_cl_gr_first = false;
+                $set->is_upd_cl_gr_last = false;
                 $set->is_upd_delete_record_with_zero_value = false;
                 break;
             // Поля сортировки (для первый(), последний())
@@ -297,8 +307,8 @@ class SetController extends Controller
                 $set->is_upd_plussum = false;
                 $set->is_upd_minussum = false;
                 $set->is_upd_replace = false;
-                $set->is_upd_calcfirst = false;
-                $set->is_upd_calclast = false;
+                $set->is_upd_cl_gr_first = false;
+                $set->is_upd_cl_gr_last = false;
                 $set->is_upd_delete_record_with_zero_value = false;
                 break;
             // Только связь (для вывода поля из вычисляемой Основы)
@@ -312,8 +322,8 @@ class SetController extends Controller
                 $set->is_upd_plussum = false;
                 $set->is_upd_minussum = false;
                 $set->is_upd_replace = false;
-                $set->is_upd_calcfirst = false;
-                $set->is_upd_calclast = false;
+                $set->is_upd_cl_gr_first = false;
+                $set->is_upd_cl_gr_last = false;
                 $set->is_upd_delete_record_with_zero_value = false;
                 $set->is_savesets_enabled = false;
                 break;
@@ -333,8 +343,8 @@ class SetController extends Controller
                         $set->is_upd_plussum = false;
                         $set->is_upd_minussum = false;
                         $set->is_upd_replace = false;
-                        $set->is_upd_calcfirst = false;
-                        $set->is_upd_calclast = false;
+                        $set->is_upd_cl_gr_first = false;
+                        $set->is_upd_cl_gr_last = false;
                         break;
                     // Отнять Количество
                     case 1:
@@ -344,8 +354,8 @@ class SetController extends Controller
                         $set->is_upd_plussum = false;
                         $set->is_upd_minussum = false;
                         $set->is_upd_replace = false;
-                        $set->is_upd_calcfirst = false;
-                        $set->is_upd_calclast = false;
+                        $set->is_upd_cl_gr_first = false;
+                        $set->is_upd_cl_gr_last = false;
                         break;
                     // Прибавить Сумму
                     case 2:
@@ -355,8 +365,8 @@ class SetController extends Controller
                         $set->is_upd_plussum = true;
                         $set->is_upd_minussum = false;
                         $set->is_upd_replace = false;
-                        $set->is_upd_calcfirst = false;
-                        $set->is_upd_calclast = false;
+                        $set->is_upd_cl_gr_first = false;
+                        $set->is_upd_cl_gr_last = false;
                         break;
                     // Отнять Сумму
                     case 3:
@@ -366,8 +376,8 @@ class SetController extends Controller
                         $set->is_upd_plussum = false;
                         $set->is_upd_minussum = true;
                         $set->is_upd_replace = false;
-                        $set->is_upd_calcfirst = false;
-                        $set->is_upd_calclast = false;
+                        $set->is_upd_cl_gr_first = false;
+                        $set->is_upd_cl_gr_last = false;
                         break;
                     // Заменить
                     case 4:
@@ -377,8 +387,8 @@ class SetController extends Controller
                         $set->is_upd_plussum = false;
                         $set->is_upd_minussum = false;
                         $set->is_upd_replace = true;
-                        $set->is_upd_calcfirst = false;
-                        $set->is_upd_calclast = false;
+                        $set->is_upd_cl_gr_first = false;
+                        $set->is_upd_cl_gr_last = false;
                         break;
                     // Расчет Первый()
                     case 5:
@@ -388,8 +398,8 @@ class SetController extends Controller
                         $set->is_upd_plussum = false;
                         $set->is_upd_minussum = false;
                         $set->is_upd_replace = false;
-                        $set->is_upd_calcfirst = true;
-                        $set->is_upd_calclast = false;
+                        $set->is_upd_cl_gr_first = true;
+                        $set->is_upd_cl_gr_last = false;
                         break;
                     // Расчет Последний()
                     case 6:
@@ -399,8 +409,8 @@ class SetController extends Controller
                         $set->is_upd_plussum = false;
                         $set->is_upd_minussum = false;
                         $set->is_upd_replace = false;
-                        $set->is_upd_calcfirst = false;
-                        $set->is_upd_calclast = true;
+                        $set->is_upd_cl_gr_first = false;
+                        $set->is_upd_cl_gr_last = true;
                         break;
                 }
                 break;

@@ -1380,11 +1380,11 @@ class ItemController extends Controller
                                     // и при удалении записи
                                     // работает некорректно
                                     // При $reverse == true работает корректно
-//                                    elseif ($value->is_upd_calcfirst == true || $value->is_upd_calclast == true) {
+//                                    elseif ($value->is_upd_cl_gr_first == true || $value->is_upd_cl_gr_last == true) {
 //                                        $calc = "";
-//                                        if ($value->is_upd_calcfirst == true) {
+//                                        if ($value->is_upd_cl_gr_first == true) {
 //                                            $calc = "first";
-//                                        } elseif ($value->is_upd_calclast == true) {
+//                                        } elseif ($value->is_upd_cl_gr_last == true) {
 //                                            $calc = "last";
 //                                        }
 //                                        // Расчет Первый(), Последний()
@@ -1402,7 +1402,8 @@ class ItemController extends Controller
                                     //  Добавление числа в базу данных
                                     if ($seek_item == true) {
                                         $item_find = Item::where('base_id', $value->link_to->parent_base_id)->where('project_id', $item->project_id)
-                                            ->where('name_lang_0', $seek_value)->first();
+                                            ->where('name_lang_0', GlobalController::save_number_to_item($value->link_to->parent_base, $seek_value))
+                                            ->first();
                                         // если не найдено
                                         if (!$item_find) {
                                             // создание новой записи в items
@@ -1560,7 +1561,7 @@ class ItemController extends Controller
 
             // Обработка сортировки
             // Эти проверки нужны
-            if (($set->is_upd_calcfirst == true || $set->is_upd_calclast == true)
+            if (($set->is_upd_cl_gr_first == true || $set->is_upd_cl_gr_last == true)
                 && ($sets_calcsort) && ($items->count() > 0)) {
                 $name = "";  // нужно, не удалять
                 $index = array_search(App::getLocale(), config('app.locales'));
@@ -1600,10 +1601,10 @@ class ItemController extends Controller
             }
 
             $item_calc = null;
-            if ($set->is_upd_calcfirst == true || $set->is_upd_calclast == true) {
-                if ($set->is_upd_calcfirst == true) {
+            if ($set->is_upd_cl_gr_first == true || $set->is_upd_cl_gr_last == true) {
+                if ($set->is_upd_cl_gr_first == true) {
                     $item_calc = $items->first();
-                } elseif ($set->is_upd_calclast == true) {
+                } elseif ($set->is_upd_cl_gr_last == true) {
                     // Нужно '->get()'
                     $item_calc = $items->get()->last();
                 }
