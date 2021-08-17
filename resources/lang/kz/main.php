@@ -57,6 +57,7 @@ return [
     'transaction_not_completed' => 'Деректер жоқ',
     'another_attitude' => 'Тағы бір көзқарас',
     'serial_number' => 'Нөмір',
+    'line_number' => 'Жол нөмірі',
     'login' => 'Кіру',
     'logout' => 'Шығу',
     'register' => 'Тіркеу',

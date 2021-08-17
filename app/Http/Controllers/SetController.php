@@ -39,11 +39,16 @@ class SetController extends Controller
 //            $sets = $sets->orderBy($name);
 //        }
 
+        // Сортировка такая одинаковая:
+        // ItemController::get_item_from_parent_output_calculated_table()
+        // и SetController::index()
+        // влияет на обработку сортировки
         $sets = Set::select(DB::Raw('sets.*'))
             ->join('links as lf', 'sets.link_from_id', '=', 'lf.id')
             ->join('links as lt', 'sets.link_to_id', '=', 'lt.id')
             ->where('sets.template_id', $template->id)
             ->orderBy('sets.serial_number')
+            ->orderBy('sets.line_number')
             ->orderBy('lf.child_base_id')
             ->orderBy('lt.child_base_id')
             ->orderBy('lf.parent_base_number')
@@ -145,14 +150,17 @@ class SetController extends Controller
     function check(Request $request, &$array_mess)
     {
         //base_id  д.б. список
-        // Одинаковые значения недопустимы
-        if ($request->link_from_id == $request->link_to_id) {
-            $message = trans('main.the_same_values_are_not_valid')
-                . ' ("' . trans('main.link_from') . '" ' . mb_strtolower(trans('main.and')) .
-                ' "' . trans('main.link_to') . '")!';;
-            $array_mess['link_from_id'] = $message;
-            $array_mess['link_to_id'] = $message;
-            return;
+        // Не равен "Сортировка"
+        if ($request->forwhat != 1) {
+            // Одинаковые значения недопустимы
+            if ($request->link_from_id == $request->link_to_id) {
+                $message = trans('main.the_same_values_are_not_valid')
+                    . ' ("' . trans('main.link_from') . '" ' . mb_strtolower(trans('main.and')) .
+                    ' "' . trans('main.link_to') . '")!';;
+                $array_mess['link_from_id'] = $message;
+                $array_mess['link_to_id'] = $message;
+                return;
+            }
         }
 
         $link_from = Link::find($request->link_from_id);
@@ -171,16 +179,19 @@ class SetController extends Controller
                 }
             }
         }
-        // Детские основы не должны быть одинаковыми
-        if ($link_from) {
-            if ($link_to) {
-                if ($link_from->child_base_id == $link_to->child_base_id) {
-                    $message = trans('main.child_bases_should_not_be_the_same')
-                        . ' ("' . $link_from->child_base->name() . '" ' . mb_strtolower(trans('main.and')) .
-                        ' "' . $link_to->child_base->name() . '")!';;
-                    $array_mess['link_from_id'] = $message;
-                    $array_mess['link_to_id'] = $message;
-                    return;
+        // Не равен "Сортировка"
+        if ($request->forwhat != 1) {
+            // Детские основы не должны быть одинаковыми
+            if ($link_from) {
+                if ($link_to) {
+                    if ($link_from->child_base_id == $link_to->child_base_id) {
+                        $message = trans('main.child_bases_should_not_be_the_same')
+                            . ' ("' . $link_from->child_base->name() . '" ' . mb_strtolower(trans('main.and')) .
+                            ' "' . $link_to->child_base->name() . '")!';;
+                        $array_mess['link_from_id'] = $message;
+                        $array_mess['link_to_id'] = $message;
+                        return;
+                    }
                 }
             }
         }
@@ -236,6 +247,7 @@ class SetController extends Controller
     {
         $set->template_id = $request->template_id;
         $set->serial_number = $request->serial_number;
+        $set->line_number = $request->line_number;
         $set->link_from_id = $request->link_from_id;
         $set->link_to_id = $request->link_to_id;
         // Если $set->is_savesetsenabled = false,

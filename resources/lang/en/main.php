@@ -57,6 +57,7 @@ return [
     'transaction_not_completed' => 'Transaction not completed',
     'another_attitude' => 'Another Attitude',
     'serial_number' => 'Number',
+    'line_number' => 'Line number',
     'login' => 'Login',
     'logout' => 'Logout',
     'register' => 'Register',

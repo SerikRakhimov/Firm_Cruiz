@@ -57,6 +57,7 @@ return [
     'transaction_not_completed' => 'Транзакция не завершена',
     'another_attitude' => 'Другое отношение',
     'serial_number' => 'Номер',
+    'line_number' => 'Номер строки',
     'login' => 'Вход',
     'logout' => 'Выход',
     'register' => 'Регистрация',

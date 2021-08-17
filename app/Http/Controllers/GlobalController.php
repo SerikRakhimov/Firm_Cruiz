@@ -474,6 +474,7 @@ class GlobalController extends Controller
                         $ids = $collection->keys()->toArray();
                         $items = Item::whereIn('id', $ids)
                             ->orderBy(\DB::raw("FIELD(id, " . implode(',', $ids) . ")"));
+                        //dd($collection);
                     }
                 }
             }

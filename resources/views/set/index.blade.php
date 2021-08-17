@@ -29,6 +29,7 @@
         <tr>
             <th class="text-center align-top">#</th>
             <th class="text-center align-top">{{trans('main.serial_number')}}</th>
+            <th class="text-center align-top">{{trans('main.line_number')}}</th>
             <th class="text-left align-top">{{trans('main.link_from')}}</th>
             <th class="text-left align-top">{{trans('main.link_to')}}</th>
             <th class="text-center align-top">{{trans('main.is_savesets_enabled')}}</th>
@@ -54,6 +55,11 @@
                 <td class="text-center">
                     <a href="{{route('set.show',$set)}}" title="{{trans('main.show')}}">
                         {{$set->serial_number}}
+                    </a>
+                </td>
+                <td class="text-center">
+                    <a href="{{route('set.show',$set)}}" title="{{trans('main.show')}}">
+                        {{$set->line_number}}
                     </a>
                 </td>
                 <td class="text-left">

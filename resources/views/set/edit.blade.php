@@ -41,6 +41,28 @@
             </div>
         </div>
 
+        <div class="form-group row" id="line_number_form_group">
+            <div class="col-sm-3 text-right">
+                <label for="line_number">{{trans('main.line_number')}}<span
+                        class="text-danger">*</span></label>
+            </div>
+            <div class="col-sm-2">
+                <input type="number"
+                       name="line_number"
+                       id="line_number"
+                       class="form-control @error('line_number') is-invalid @enderror"
+                       placeholder=""
+                       value="{{ old('line_number') ?? ($set['line_number'] ?? '0') }}">
+                @error('line_number')
+                <div class="text-danger">
+                    {{$message}}
+                </div>
+                @enderror
+            </div>
+            <div class="col-sm-7">
+            </div>
+        </div>
+
         <div class="form-group row">
             <div class="col-sm-3 text-right">
                 <label for="link_from_id" class="col-form-label">{{trans('main.link_from')}}<span
