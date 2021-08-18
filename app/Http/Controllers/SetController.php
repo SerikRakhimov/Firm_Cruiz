@@ -265,17 +265,12 @@ class SetController extends Controller
         $set->is_upd_replace = false;
         $set->is_upd_cl_gr_first = false;
         $set->is_upd_cl_gr_last = false;
+        $set->is_upd_cl_fn_min = false;
+        $set->is_upd_cl_fn_max = false;
+        $set->is_upd_cl_fn_avg = false;
+        $set->is_upd_cl_fn_count = false;
+        $set->is_upd_cl_fn_sum = false;
         $set->is_upd_delete_record_with_zero_value = false;
-
-
-//        $table->boolean('is_upd_calc')->default(false);
-//        $table->boolean('is_upd_cl_group')->default(false);
-//        $table->boolean('is_upd_cl_func')->default(false);
-//        $table->boolean('is_upd_cl_fn_min')->default(true);
-//        $table->boolean('is_upd_cl_fn_max')->default(false);
-//        $table->boolean('is_upd_cl_fn_avg')->default(false);
-//        $table->boolean('is_upd_cl_fn_count')->default(false);
-//        $table->boolean('is_upd_cl_fn_sum')->default(false);
 
         // Похожие строки в SetController.php (functions: store(), edit(), check())
         // и в Set.php (functions: get_types(), type(), type_name())
@@ -284,9 +279,9 @@ class SetController extends Controller
             // Группировка
             case 0:
                 $set->is_group = true;
-                $set->is_update = false;
                 $set->is_calcsort = false;
                 $set->is_onlylink = false;
+                $set->is_update = false;
                 $set->is_upd_pluscount = false;
                 $set->is_upd_minuscount = false;
                 $set->is_upd_plussum = false;
@@ -294,14 +289,19 @@ class SetController extends Controller
                 $set->is_upd_replace = false;
                 $set->is_upd_cl_gr_first = false;
                 $set->is_upd_cl_gr_last = false;
+                $set->is_upd_cl_fn_min = false;
+                $set->is_upd_cl_fn_max = false;
+                $set->is_upd_cl_fn_avg = false;
+                $set->is_upd_cl_fn_count = false;
+                $set->is_upd_cl_fn_sum = false;
                 $set->is_upd_delete_record_with_zero_value = false;
                 break;
             // Поля сортировки (для первый(), последний())
             case 1:
                 $set->is_group = false;
-                $set->is_update = false;
                 $set->is_calcsort = true;
                 $set->is_onlylink = false;
+                $set->is_update = false;
                 $set->is_upd_pluscount = false;
                 $set->is_upd_minuscount = false;
                 $set->is_upd_plussum = false;
@@ -309,14 +309,19 @@ class SetController extends Controller
                 $set->is_upd_replace = false;
                 $set->is_upd_cl_gr_first = false;
                 $set->is_upd_cl_gr_last = false;
+                $set->is_upd_cl_fn_min = false;
+                $set->is_upd_cl_fn_max = false;
+                $set->is_upd_cl_fn_avg = false;
+                $set->is_upd_cl_fn_count = false;
+                $set->is_upd_cl_fn_sum = false;
                 $set->is_upd_delete_record_with_zero_value = false;
                 break;
             // Только связь (для вывода поля из вычисляемой Основы)
             case 2:
                 $set->is_group = false;
-                $set->is_update = false;
                 $set->is_calcsort = false;
                 $set->is_onlylink = true;
+                $set->is_update = false;
                 $set->is_upd_pluscount = false;
                 $set->is_upd_minuscount = false;
                 $set->is_upd_plussum = false;
@@ -324,93 +329,86 @@ class SetController extends Controller
                 $set->is_upd_replace = false;
                 $set->is_upd_cl_gr_first = false;
                 $set->is_upd_cl_gr_last = false;
+                $set->is_upd_cl_fn_min = false;
+                $set->is_upd_cl_fn_max = false;
+                $set->is_upd_cl_fn_avg = false;
+                $set->is_upd_cl_fn_count = false;
+                $set->is_upd_cl_fn_sum = false;
                 $set->is_upd_delete_record_with_zero_value = false;
                 $set->is_savesets_enabled = false;
                 break;
             // Обновление
             case 3:
                 $set->is_group = false;
-                $set->is_update = true;
                 $set->is_calcsort = false;
                 $set->is_onlylink = false;
+                $set->is_update = true;
+                $set->is_upd_cl_fn_min = false;
+                $set->is_upd_cl_fn_max = false;
+                $set->is_upd_cl_fn_avg = false;
+                $set->is_upd_cl_fn_count = false;
+                $set->is_upd_cl_fn_sum = false;
                 $set->is_upd_delete_record_with_zero_value = isset($request->is_upd_delete_record_with_zero_value) ? true : false;
                 switch ($request->updaction) {
                     // Прибавить Количество
                     case 0:
                         $set->is_savesets_enabled = true;
                         $set->is_upd_pluscount = true;
-                        $set->is_upd_minuscount = false;
-                        $set->is_upd_plussum = false;
-                        $set->is_upd_minussum = false;
-                        $set->is_upd_replace = false;
-                        $set->is_upd_cl_gr_first = false;
-                        $set->is_upd_cl_gr_last = false;
                         break;
                     // Отнять Количество
                     case 1:
                         $set->is_savesets_enabled = true;
-                        $set->is_upd_pluscount = false;
                         $set->is_upd_minuscount = true;
-                        $set->is_upd_plussum = false;
-                        $set->is_upd_minussum = false;
-                        $set->is_upd_replace = false;
-                        $set->is_upd_cl_gr_first = false;
-                        $set->is_upd_cl_gr_last = false;
                         break;
                     // Прибавить Сумму
                     case 2:
                         $set->is_savesets_enabled = true;
-                        $set->is_upd_pluscount = false;
-                        $set->is_upd_minuscount = false;
                         $set->is_upd_plussum = true;
-                        $set->is_upd_minussum = false;
-                        $set->is_upd_replace = false;
-                        $set->is_upd_cl_gr_first = false;
-                        $set->is_upd_cl_gr_last = false;
                         break;
                     // Отнять Сумму
                     case 3:
                         $set->is_savesets_enabled = true;
-                        $set->is_upd_pluscount = false;
-                        $set->is_upd_minuscount = false;
-                        $set->is_upd_plussum = false;
                         $set->is_upd_minussum = true;
-                        $set->is_upd_replace = false;
-                        $set->is_upd_cl_gr_first = false;
-                        $set->is_upd_cl_gr_last = false;
                         break;
                     // Заменить
                     case 4:
                         $set->is_savesets_enabled = true;
-                        $set->is_upd_pluscount = false;
-                        $set->is_upd_minuscount = false;
-                        $set->is_upd_plussum = false;
-                        $set->is_upd_minussum = false;
                         $set->is_upd_replace = true;
-                        $set->is_upd_cl_gr_first = false;
-                        $set->is_upd_cl_gr_last = false;
                         break;
                     // Расчет Первый()
                     case 5:
                         $set->is_savesets_enabled = false;
-                        $set->is_upd_pluscount = false;
-                        $set->is_upd_minuscount = false;
-                        $set->is_upd_plussum = false;
-                        $set->is_upd_minussum = false;
-                        $set->is_upd_replace = false;
                         $set->is_upd_cl_gr_first = true;
-                        $set->is_upd_cl_gr_last = false;
                         break;
                     // Расчет Последний()
                     case 6:
                         $set->is_savesets_enabled = false;
-                        $set->is_upd_pluscount = false;
-                        $set->is_upd_minuscount = false;
-                        $set->is_upd_plussum = false;
-                        $set->is_upd_minussum = false;
-                        $set->is_upd_replace = false;
-                        $set->is_upd_cl_gr_first = false;
                         $set->is_upd_cl_gr_last = true;
+                        break;
+                    // Расчет Минимальный()
+                    case 7:
+                        $set->is_savesets_enabled = false;
+                        $set->is_upd_cl_fn_min = true;
+                        break;
+                    // Расчет Максимальный()
+                    case 8:
+                        $set->is_savesets_enabled = false;
+                        $set->is_upd_cl_fn_max = true;
+                        break;
+                    // Расчет Средний()
+                    case 9:
+                        $set->is_savesets_enabled = false;
+                        $set->is_upd_cl_fn_avg = true;
+                        break;
+                    // Расчет Количество()
+                    case 10:
+                        $set->is_savesets_enabled = false;
+                        $set->is_upd_cl_fn_count = true;
+                        break;
+                    // Расчет Сумма()
+                    case 11:
+                        $set->is_savesets_enabled = false;
+                        $set->is_upd_cl_fn_sum = true;
                         break;
                 }
                 break;

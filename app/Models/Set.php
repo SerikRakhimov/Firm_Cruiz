@@ -169,6 +169,38 @@ class Set extends Model
         return $result;
     }
 
+    function is_upd_cl_group()
+    {
+        $result = false;
+        if ($this->is_upd_cl_gr_first == true
+            && $this->is_upd_cl_gr_last == true) {
+            $result = true;
+        }
+        return $result;
+    }
+
+    function is_upd_cl_func()
+    {
+        $result = false;
+        if ($this->is_upd_cl_fn_min == true
+            && $this->is_upd_cl_fn_max == true
+            && $this->is_upd_cl_fn_avg == true
+            && $this->is_upd_cl_fn_count == true
+            && $this->is_upd_cl_fn_sum == true) {
+            $result = true;
+        }
+        return $result;
+    }
+
+    function is_upd_calc()
+    {
+        $result = false;
+        if (self::is_upd_cl_group() || self::is_upd_cl_func()) {
+            $result = true;
+        }
+        return $result;
+    }
+
     function updaction_delete_record_with_zero_value()
     {
         // Нужно

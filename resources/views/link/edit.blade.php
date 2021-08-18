@@ -763,12 +763,12 @@
                 }
 
                 if (res.data['result_parent_selection_calculated_table_set_id_options'] == "") {
-                    parent_is_parent_related.disabled = true;
-                    parent_is_parent_related_form_group.style.display = "none";
+                    parent_is_in_the_selection_list_use_the_calculated_table_field.disabled = true;
+                    parent_is_in_the_selection_list_use_the_calculated_table_field_form_group.style.display = "none";
                     parent_selection_calculated_table_set_id.innerHTML = '<option value = "0">{{trans('main.no_information_on')}} "' + child_base_id.options[child_base_id.selectedIndex].text + '"!</option>';
                 } else {
-                    parent_is_parent_related.disabled = false;
-                    parent_is_parent_related_form_group.style.display = "block";
+                    parent_is_in_the_selection_list_use_the_calculated_table_field.disabled = false;
+                    parent_is_in_the_selection_list_use_the_calculated_table_field_form_group.style.display = "block";
                     parent_selection_calculated_table_set_id.innerHTML = res.data['result_parent_selection_calculated_table_set_id_options'];
                 }
                 // только если запуск функции при загрузке страницы
@@ -814,7 +814,6 @@
                     var parent_parent_related_start_link_id_value =
                         parent_parent_related_start_link_id.options[parent_parent_related_start_link_id.selectedIndex].value;
                 }
-
                 if (res.data['result_parent_parent_related_start_link_id_options'] == "") {
                     parent_is_parent_related.disabled = true;
                     parent_is_parent_related_form_group.style.display = "none";
@@ -863,12 +862,12 @@
                 }
 
                 if (res.data['result_parent_output_calculated_table_set_id_options'] == "") {
-                    parent_is_parent_related.disabled = true;
-                    parent_is_parent_related_form_group.style.display = "none";
+                    parent_is_output_calculated_table_field.disabled = true;
+                    parent_is_output_calculated_table_field_form_group.style.display = "none";
                     parent_output_calculated_table_set_id.innerHTML = '<option value = "0">{{trans('main.no_information_on')}} "' + child_base_id.options[child_base_id.selectedIndex].text + '"!</option>';
                 } else {
-                    parent_is_parent_related.disabled = false;
-                    parent_is_parent_related_form_group.style.display = "block";
+                    parent_is_output_calculated_table_field.disabled = false;
+                    parent_is_output_calculated_table_field_form_group.style.display = "block";
                     parent_output_calculated_table_set_id.innerHTML = res.data['result_parent_output_calculated_table_set_id_options'];
                 }
                 // только если запуск функции при загрузке страницы
