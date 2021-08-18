@@ -872,6 +872,7 @@
         $lres = null;
         $set = null;
         $sets_group = null;
+        $sets_calcsort = null;
         $link_calculated_table = null;
         //$link = Link::find($key);
         if ($link) {
@@ -903,6 +904,7 @@
             // Выводить поле вычисляемой таблицы
             if ($link->parent_is_output_calculated_table_field == true) {
                 $sets_group = ItemController::get_sets_group($base, $link);
+                $sets_calcsort = ItemController::get_sets_calcsort($base, $link);
                 $link_calculated_table = true;
                 $prefix = '7_';
             }
@@ -1131,9 +1133,12 @@
         {{--        Выводится одно поле из вычисляемой таблицы--}}
         @if($link_calculated_table)
             <script>
-                @foreach($sets_group as $to_key => $to_value)
-                    var child_base_id{{$prefix}}{{$link->id}}_{{$to_value->id}} = document.getElementById('link{{$to_value->link_from_id}}');
-                @endforeach
+                    @foreach($sets_group as $to_key => $to_value)
+                var child_base_id{{$prefix}}{{$link->id}}_{{$to_value->id}}_group = document.getElementById('link{{$to_value->link_from_id}}');
+                    @endforeach
+                    @foreach($sets_calcsort as $to_key => $to_value)
+                var child_base_id{{$prefix}}{{$link->id}}_{{$to_value->id}}_calcsort = document.getElementById('link{{$to_value->link_from_id}}');
+                    @endforeach
 
                 var parent_base_id{{$prefix}}{{$link->id}} = document.getElementById('link{{$link->id}}');
 
@@ -1144,17 +1149,32 @@
                     {{--if (child_base_id{{$prefix}}{{$link->id}}.options[child_base_id{{$prefix}}{{$link->id}}.selectedIndex].value == 0) {--}}
                     {{--    parent_base_id{{$prefix}}{{$link->id}}.innerHTML = "{{trans('main.no_information') . '!'}}";--}}
                     {{--} else {--}}
-                    axios.get('/item/get_parent_item_from_output_calculated_table'
-                        + '/{{$base->id}}'
-                        + '/{{$link->id}}'
+                    axios.get('/item/get_parent_item_from_output_calculated_table?'
+                        {{--+ '/{{$base->id}}'--}}
+                        {{--+ '/{{$link->id}}'--}}
+                        + 'base_id={{$base->id}}'
+                        + '&link_id={{$link->id}}'
                         @foreach($sets_group as $to_key => $to_value)
                         {{-- Если $to_value->link_from->Ссылка на основу = true --}}
                         {{-- Выше по тексту тоже используется "parent_is_base_link"--}}
                         @if($to_value->link_from->parent_is_base_link == true)
-                                + '/' + child_base_id{{$prefix}}{{$link->id}}_{{$to_value->id}}.value
-                            @else
-                                + '/' + child_base_id{{$prefix}}{{$link->id}}_{{$to_value->id}}.options[child_base_id{{$prefix}}{{$link->id}}_{{$to_value->id}}.selectedIndex].value
-                            @endif
+                        {{--+ '/' + child_base_id{{$prefix}}{{$link->id}}_{{$to_value->id}}.value--}}
+                        + '&items_id_group[]=' + child_base_id{{$prefix}}{{$link->id}}_{{$to_value->id}}_group.value
+                        @else
+                        {{--+ '/' + child_base_id{{$prefix}}{{$link->id}}_{{$to_value->id}}.options[child_base_id{{$prefix}}{{$link->id}}_{{$to_value->id}}.selectedIndex].value--}}
+                        + '&items_id_group[]=' + child_base_id{{$prefix}}{{$link->id}}_{{$to_value->id}}_group.options[child_base_id{{$prefix}}{{$link->id}}_{{$to_value->id}}_group.selectedIndex].value
+                        @endif
+                        @endforeach
+                        @foreach($sets_calcsort as $to_key => $to_value)
+                        {{-- Если $to_value->link_from->Ссылка на основу = true --}}
+                        {{-- Выше по тексту тоже используется "parent_is_base_link"--}}
+                        @if($to_value->link_from->parent_is_base_link == true)
+                        {{--+ '/' + child_base_id{{$prefix}}{{$link->id}}_{{$to_value->id}}.value--}}
+                        + '&items_id_calcsort[]=' + child_base_id{{$prefix}}{{$link->id}}_{{$to_value->id}}_calcsort.value
+                        @else
+                        {{--+ '/' + child_base_id{{$prefix}}{{$link->id}}_{{$to_value->id}}.options[child_base_id{{$prefix}}{{$link->id}}_{{$to_value->id}}.selectedIndex].value--}}
+                        + '&items_id_calcsort[]=' + child_base_id{{$prefix}}{{$link->id}}_{{$to_value->id}}_calcsort.options[child_base_id{{$prefix}}{{$link->id}}_{{$to_value->id}}_calcsort.selectedIndex].value
+                        @endif
                         @endforeach
                         ).then(function (res) {
                                 parent_base_id{{$prefix}}{{$link->id}}.innerHTML = res.data;
@@ -1164,7 +1184,10 @@
                 }
 
                 @foreach($sets_group as $to_key => $to_value)
-                child_base_id{{$prefix}}{{$link->id}}_{{$to_value->id}}.addEventListener("change", link_id_changeOption_{{$prefix}}{{$link->id}});
+                child_base_id{{$prefix}}{{$link->id}}_{{$to_value->id}}_group.addEventListener("change", link_id_changeOption_{{$prefix}}{{$link->id}});
+                @endforeach
+                @foreach($sets_calcsort as $to_key => $to_value)
+                child_base_id{{$prefix}}{{$link->id}}_{{$to_value->id}}_calcsort.addEventListener("change", link_id_changeOption_{{$prefix}}{{$link->id}});
                 @endforeach
 
             </script>
