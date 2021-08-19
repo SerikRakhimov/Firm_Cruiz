@@ -29,7 +29,7 @@ class CreateSetsTable extends Migration
             $table->index('serial_number');
             $table->index('link_from_id');
             $table->index('link_to_id');
-            $table->unique(['serial_number', 'link_from_id', 'link_to_id']);
+            //$table->unique(['serial_number', 'link_from_id', 'link_to_id']);
             $table->foreign('template_id')->references('id')->on('templates')->onDelete('cascade');
             $table->foreign('link_from_id')->references('id')->on('links')->onDelete('cascade');
             $table->foreign('link_to_id')->references('id')->on('links')->onDelete('cascade');

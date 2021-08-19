@@ -229,8 +229,8 @@ class SetController extends Controller
         //Родительские основы должны быть Число
         // Обновление
         if ($request->forwhat == 3) {
-            // Добавить, Отнять
-            if (($request->updaction >= 0) && ($request->updaction <= 3)) {
+            // Добавить, Отнять, Расчет Средний(), Расчет Сумма()
+            if ((($request->updaction >= 0) && ($request->updaction <= 3)) ||($request->updaction == 7) || ($request->updaction == 9)) {
                 if (($link_from->parent_base->type_is_number() == false) || ($link_to->parent_base->type_is_number() == false)) {
                     $message = trans('main.parent_bases_must_be_number')
                         . ' ("' . $link_from->parent_base->name() . '" ' . mb_strtolower(trans('main.and')) .
@@ -265,8 +265,6 @@ class SetController extends Controller
         $set->is_upd_replace = false;
         $set->is_upd_cl_gr_first = false;
         $set->is_upd_cl_gr_last = false;
-        $set->is_upd_cl_fn_min = false;
-        $set->is_upd_cl_fn_max = false;
         $set->is_upd_cl_fn_avg = false;
         $set->is_upd_cl_fn_count = false;
         $set->is_upd_cl_fn_sum = false;
@@ -289,8 +287,6 @@ class SetController extends Controller
                 $set->is_upd_replace = false;
                 $set->is_upd_cl_gr_first = false;
                 $set->is_upd_cl_gr_last = false;
-                $set->is_upd_cl_fn_min = false;
-                $set->is_upd_cl_fn_max = false;
                 $set->is_upd_cl_fn_avg = false;
                 $set->is_upd_cl_fn_count = false;
                 $set->is_upd_cl_fn_sum = false;
@@ -309,8 +305,6 @@ class SetController extends Controller
                 $set->is_upd_replace = false;
                 $set->is_upd_cl_gr_first = false;
                 $set->is_upd_cl_gr_last = false;
-                $set->is_upd_cl_fn_min = false;
-                $set->is_upd_cl_fn_max = false;
                 $set->is_upd_cl_fn_avg = false;
                 $set->is_upd_cl_fn_count = false;
                 $set->is_upd_cl_fn_sum = false;
@@ -329,8 +323,6 @@ class SetController extends Controller
                 $set->is_upd_replace = false;
                 $set->is_upd_cl_gr_first = false;
                 $set->is_upd_cl_gr_last = false;
-                $set->is_upd_cl_fn_min = false;
-                $set->is_upd_cl_fn_max = false;
                 $set->is_upd_cl_fn_avg = false;
                 $set->is_upd_cl_fn_count = false;
                 $set->is_upd_cl_fn_sum = false;
@@ -343,8 +335,6 @@ class SetController extends Controller
                 $set->is_calcsort = false;
                 $set->is_onlylink = false;
                 $set->is_update = true;
-                $set->is_upd_cl_fn_min = false;
-                $set->is_upd_cl_fn_max = false;
                 $set->is_upd_cl_fn_avg = false;
                 $set->is_upd_cl_fn_count = false;
                 $set->is_upd_cl_fn_sum = false;
@@ -385,28 +375,18 @@ class SetController extends Controller
                         $set->is_savesets_enabled = false;
                         $set->is_upd_cl_gr_last = true;
                         break;
-                    // Расчет Минимальный()
-                    case 7:
-                        $set->is_savesets_enabled = false;
-                        $set->is_upd_cl_fn_min = true;
-                        break;
-                    // Расчет Максимальный()
-                    case 8:
-                        $set->is_savesets_enabled = false;
-                        $set->is_upd_cl_fn_max = true;
-                        break;
                     // Расчет Средний()
-                    case 9:
+                    case 7:
                         $set->is_savesets_enabled = false;
                         $set->is_upd_cl_fn_avg = true;
                         break;
                     // Расчет Количество()
-                    case 10:
+                    case 8:
                         $set->is_savesets_enabled = false;
                         $set->is_upd_cl_fn_count = true;
                         break;
                     // Расчет Сумма()
-                    case 11:
+                    case 9:
                         $set->is_savesets_enabled = false;
                         $set->is_upd_cl_fn_sum = true;
                         break;

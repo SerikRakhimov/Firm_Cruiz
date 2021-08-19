@@ -72,6 +72,7 @@ class Set extends Model
         return $result;
     }
 
+    // При корректировке номеров менять и в SetController.php (check() и др.функции)
     static function get_updactions()
     {
         return array(
@@ -82,11 +83,9 @@ class Set extends Model
             "4" => trans('main.ua_replace'),
             "5" => trans('main.ua_cl_gr_first'),
             "6" => trans('main.ua_cl_gr_last'),
-            "7" => trans('main.ua_cl_fn_min'),
-            "8" => trans('main.ua_cl_fn_max'),
-            "9" => trans('main.ua_cl_fn_avg'),
-            "10" => trans('main.ua_cl_fn_count'),
-            "11" => trans('main.ua_cl_fn_sum')
+            "7" => trans('main.ua_cl_fn_avg'),
+            "8" => trans('main.ua_cl_fn_count'),
+            "9" => trans('main.ua_cl_fn_sum')
         );
     }
 
@@ -108,23 +107,16 @@ class Set extends Model
             $result = 5;
         } else if ($this->is_upd_cl_gr_last == true) {
             $result = 6;
-        } else if ($this->is_upd_cl_fn_min == true) {
-            $result = 7;
-        } else if ($this->is_upd_cl_fn_max == true) {
-            $result = 8;
         } else if ($this->is_upd_cl_fn_avg == true) {
-            $result = 9;
+            $result = 7;
         } else if ($this->is_upd_cl_fn_count == true) {
-            $result = 10;
+            $result = 8;
         } else if ($this->is_upd_cl_fn_sum == true) {
-            $result = 11;
+            $result = 9;
         }
         return $result;
     }
 
-//$table->boolean('is_upd_calc')->default(false);
-//$table->boolean('is_upd_cl_group')->default(false);
-//$table->boolean('is_upd_cl_func')->default(false);
     function updaction_name()
     {
         $result = "";
@@ -151,18 +143,12 @@ class Set extends Model
                 $result = trans('main.ua_cl_gr_last');
                 break;
             case 7:
-                $result = trans('main.ua_cl_fn_min');
-                break;
-            case 8:
-                $result = trans('main.ua_cl_fn_max');
-                break;
-            case 9:
                 $result = trans('main.ua_cl_fn_avg');
                 break;
-            case 10:
+            case 8:
                 $result = trans('main.ua_cl_fn_count');
                 break;
-            case 11:
+            case 9:
                 $result = trans('main.ua_cl_fn_sum');
                 break;
         }
@@ -182,9 +168,7 @@ class Set extends Model
     function is_upd_cl_func()
     {
         $result = false;
-        if ($this->is_upd_cl_fn_min == true
-            && $this->is_upd_cl_fn_max == true
-            && $this->is_upd_cl_fn_avg == true
+        if ($this->is_upd_cl_fn_avg == true
             && $this->is_upd_cl_fn_count == true
             && $this->is_upd_cl_fn_sum == true) {
             $result = true;

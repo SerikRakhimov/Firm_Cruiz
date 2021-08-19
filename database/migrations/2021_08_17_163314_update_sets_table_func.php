@@ -14,8 +14,6 @@ class UpdateSetsTableFunc extends Migration
     public function up()
     {
         Schema::table('sets', function (Blueprint $table) {
-            $table->boolean('is_upd_cl_fn_min')->default(false);
-            $table->boolean('is_upd_cl_fn_max')->default(false);
             $table->boolean('is_upd_cl_fn_avg')->default(false);
             $table->boolean('is_upd_cl_fn_count')->default(false);
             $table->boolean('is_upd_cl_fn_sum')->default(false);

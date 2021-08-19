@@ -28,8 +28,9 @@ class IsUniqueSet implements Rule
     public function passes($attribute, $value)
     {
         return !Set::where('serial_number', $this->request->serial_number)->
-                where('link_from_id', $this->request->link_from_id)->
-                where('link_to_id', $this->request->link_to_id)->exists();
+        where('line_number', $this->request->line_number)->
+        where('link_from_id', $this->request->link_from_id)->
+        where('link_to_id', $this->request->link_to_id)->exists();
     }
 
     /**
@@ -40,7 +41,9 @@ class IsUniqueSet implements Rule
     public function message()
     {
         return trans('main.uniqueness_of_fields_violated') .
-            ': ' . trans('main.serial_number').
+            ': ' . trans('main.serial_number') .
+            ', ' . trans('main.line_number') .
             ', ' . trans('main.link_from') .
             ',  ' . trans('main.link_to') . '.';
-    }}
+    }
+}

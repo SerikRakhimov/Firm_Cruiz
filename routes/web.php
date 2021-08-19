@@ -808,11 +808,6 @@ Route::get('/item/get_parent_item_from_calc_child_item/{item_start}/{link_result
     ->name('item.get_parent_item_from_calc_child_item')
     ->middleware('auth');
 
-//Route::get('/item/get_parent_item_from_output_calculated_table/{base}/{link}/{item0}/{item1?}/{item2?}/{item3?}/{item4?}',
-//    'ItemController@get_parent_item_from_output_calculated_table')
-//    ->name('item.get_parent_item_from_output_calculated_table')
-//    ->middleware('auth');
-
 Route::get('/item/get_parent_item_from_output_calculated_table',
     'ItemController@get_parent_item_from_output_calculated_table')
     ->name('item.get_parent_item_from_output_calculated_table')

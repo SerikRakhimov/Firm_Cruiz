@@ -266,8 +266,6 @@ return [
     'ua_replace' => 'Replace',
     'ua_cl_gr_first' => 'Calculation First()',
     'ua_cl_gr_last' => 'Calculation Last()',
-    'ua_cl_fn_min' => 'Calculation Min()',
-    'ua_cl_fn_max' => 'Calculation Max()',
     'ua_cl_fn_avg' => 'Calculation Avg()',
     'ua_cl_fn_count' => 'Calculation Count()',
     'ua_cl_fn_sum' => 'Calculation Sum()',

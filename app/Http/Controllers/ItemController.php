@@ -1313,6 +1313,7 @@ class ItemController extends Controller
                                 $main->updated_user_id = Auth::user()->id;
 
                                 // "$seek_item = false" нужно
+                                // "$seek_value = 0" нужно
                                 $seek_item = false;
                                 $seek_value = 0;
                                 $delete_main = false;
@@ -1401,30 +1402,7 @@ class ItemController extends Controller
                                 } else {
                                     //  Добавление числа в базу данных
                                     if ($seek_item == true) {
-                                        $item_find = Item::where('base_id', $value->link_to->parent_base_id)->where('project_id', $item->project_id)
-                                            ->where('name_lang_0', GlobalController::save_number_to_item($value->link_to->parent_base, $seek_value))
-                                            ->first();
-                                        // если не найдено
-                                        if (!$item_find) {
-                                            // создание новой записи в items
-                                            $item_find = new Item();
-                                            $item_find->base_id = $value->link_to->parent_base_id;
-                                            // Похожие строки вверху
-                                            $item_find->code = uniqid($item_find->base_id . '_', true);
-                                            // присваивание полям наименование строкового значение числа
-                                            foreach (config('app.locales') as $key => $value) {
-                                                if ($item_find->base->type_is_number()) {
-                                                    $item_find['name_lang_' . $key] = GlobalController::save_number_to_item($item_find->base, $seek_value);
-                                                } else {
-                                                    $item_find['name_lang_' . $key] = $seek_value;
-                                                }
-                                            }
-                                            $item_find->project_id = $item->project_id;
-                                            // при создании записи "$item->created_user_id" заполняется
-                                            $item_find->created_user_id = Auth::user()->id;
-                                            $item_find->updated_user_id = Auth::user()->id;
-                                            $item_find->save();
-                                        }
+                                        $item_find = self::find_save_number($value->link_to->parent_base_id, $item->project_id, $seek_value);
                                         $main->parent_item_id = $item_find->id;
                                     }
                                     $main->save();
@@ -1457,7 +1435,39 @@ class ItemController extends Controller
         }
     }
 
+    static function find_save_number($base_id, $project_id, $seek_value)
+    {
+        $item_find = null;
+        $base = Base::find($base_id);
+        if ($base) {
+            $item_find = Item::where('base_id', $base_id)->where('project_id', $project_id)
+                ->where('name_lang_0', GlobalController::save_number_to_item($base, $seek_value))
+                ->first();
+            // если не найдено
+            if (!$item_find) {
+                // создание новой записи в items
+                $item_find = new Item();
+                $item_find->base_id = $base_id;
+                // Похожие строки вверху
+                $item_find->code = uniqid($item_find->base_id . '_', true);
+                // присваивание полям наименование строкового значение числа
+                foreach (config('app.locales') as $key => $value) {
+                    if ($item_find->base->type_is_number()) {
+                        $item_find['name_lang_' . $key] = GlobalController::save_number_to_item($item_find->base, $seek_value);
+                    } else {
+                        $item_find['name_lang_' . $key] = $seek_value;
+                    }
+                }
+                $item_find->project_id = $project_id;
+                // при создании записи "$item->created_user_id" заполняется
+                $item_find->created_user_id = Auth::user()->id;
+                $item_find->updated_user_id = Auth::user()->id;
+                $item_find->save();
 
+            }
+        }
+        return $item_find;
+    }
 //    // Вызывается из save_sets()
 //    // Вычисление first(), last()
 //    static function get_item_from_parent_output_calculated_firstlast_table(Item $item, Set $set, $calc)
@@ -1505,112 +1515,10 @@ class ItemController extends Controller
 //        return $result_item;
 //    }
 
-    // Вызывается из MainController.php - view_info()
-    // Выводит поле вычисляемой таблицы
-    static function get_item_from_parent_output_calculated_table(Item $item, Link $link)
-    {
-        $result_item = null;
-        $set = Set::find($link->parent_output_calculated_table_set_id);
-        if ($set) {
-            // base_id вычисляемой таблицы
-            $calc_table_base_id = $set->link_to->child_base_id;
-
-            $items = Item::where('base_id', $calc_table_base_id)->where('project_id', $item->project_id);
-
-            $sets_group = self::get_sets_group($item->base, $link);
-
-            $sets_calcsort = self::get_sets_calcsort($item->base, $link);
-
-            // Фильтрация/поиск
-            // Цикл по записям, в каждой итерации цикла свой to_child_base_id в переменной $to_key
-            foreach ($sets_group as $to_key => $to_value) {
-                $item_seek = MainController::get_parent_item_from_main($item->id, $to_value->link_from_id);
-                if ($item_seek) {
-                    $items = $items->whereHas('child_mains', function ($query) use ($to_value, $item_seek) {
-                        $query->where('link_id', $to_value->link_to_id)->where('parent_item_id', $item_seek->id);
-                    });
-                }
-            }
-
-            // Обработка сортировки
-            // Эти проверки нужны
-            // 'link_from_id' не используется при обработке сортировки
-            // 'link_to_id' используется при обработке сортировки
-            if (($set->is_upd_cl_gr_first == true || $set->is_upd_cl_gr_last == true)
-                && ($sets_calcsort) && ($items->count() > 0)) {
-                $name = "";  // нужно, не удалять
-                $index = array_search(App::getLocale(), config('app.locales'));
-                if ($index !== false) {   // '!==' использовать, '!=' не использовать
-                    $name = 'name_lang_' . $index;
-                }
-
-                $collection = collect();
-                $items_calcsort = $items->orderBy($name)->get();
-                $str = "";
-                foreach ($items_calcsort as $item) {
-                    $str = "";
-                    foreach ($sets_calcsort as $set_value) {
-                        $item_find = MainController::view_info($item->id, $set_value->link_to_id);
-                        if ($item_find) {
-                            // Формирование вычисляемой строки для сортировки
-                            // Для строковых данных для сортировки берутся первые 50 символов
-                            if ($item_find->base->type_is_list() || $item_find->base->type_is_string()) {
-                                $str = $str . str_pad(trim($item_find[$name]), 50);
-                            } else {
-                                $str = $str . trim($item_find[$name]);
-                            }
-
-                        }
-                    }
-                    // В $collection сохраняется в key - $item->id
-                    $collection[$item->id] = $str;
-                }
-                //            Сортировка коллекции по значению
-                $collection = $collection->sort();
-
-                $ids = $collection->keys()->toArray();
-
-                $items = Item::whereIn('id', $ids)
-                    ->orderBy(\DB::raw("FIELD(id, " . implode(',', $ids) . ")"));
-
-            }
-
-            $item_calc = null;
-            if ($set->is_upd_cl_gr_first == true || $set->is_upd_cl_gr_last == true) {
-                if ($set->is_upd_cl_gr_first == true) {
-                    $item_calc = $items->first();
-                } elseif ($set->is_upd_cl_gr_last == true) {
-                    // Нужно '->get()'
-                    $item_calc = $items->get()->last();
-                }
-            } else {
-                $count = $items->count();
-                if ($count == 1) {
-                    $item_calc = $items->first();
-                }
-            }
-            if ($item_calc) {
-                $result_item = MainController::get_parent_item_from_main($item_calc->id, $set->link_to_id);
-            }
-        }
-
-        return $result_item;
-    }
 
     // "->where('bs.type_is_list', '=', true)" нужно, т.к. запрос функции идет с ext_edit.php
     static function get_sets_group(Base $base, Link $link)
     {
-//        $sets_group = Set::select(DB::Raw('sets.*'))
-//            ->join('links as lf', 'sets.link_from_id', '=', 'lf.id')
-//            ->join('links as lt', 'sets.link_to_id', '=', 'lt.id')
-//            ->where('is_group', true)
-//            ->where('lf.child_base_id', '=', $base->id)
-//            ->where('serial_number', '=', $set->serial_number)
-//            ->orderBy('sets.serial_number')
-//            ->orderBy('sets.link_from_id')
-//            ->orderBy('sets.link_to_id')
-//            ->get();
-
         // "->where('bs.type_is_list', '=', true)" нужно, т.к. запрос функции идет с ext_edit.php
         //->where('sets.is_savesets_enabled', '=', true)
         $set = Set::find($link->parent_output_calculated_table_set_id);
@@ -1655,9 +1563,44 @@ class ItemController extends Controller
         return $sets_calcsort;
     }
 
-    // вызывается из ext_edit.php
-    // $item0 - $item4  - это поля, по которым проводит связь Set между основами
-    //static function get_parent_item_from_output_calculated_table(Base $base, Link $link, Item $item0, Item $item1 = null, Item $item2 = null, Item $item3 = null, Item $item4 = null)
+    // Функции get_item_from_parent_output_calculated_table() и get_parent_item_from_output_calculated_table() похожи,
+    // выполняют одинаковую функцию: Выводят/считают поле из таблицы
+    // Первая вызывается из из MainController.php - view_info(), вторая из ext_edit.php,
+    // Первая возвращает $item, вторая $item->name()
+
+    // Вызывается из MainController.php - view_info()
+    // Выводит поле вычисляемой таблицы
+    static function get_item_from_parent_output_calculated_table(Item $item_main, Link $link)
+    {
+        $result_item = null;
+        $set = Set::find($link->parent_output_calculated_table_set_id);
+        if ($set) {
+            // base_id вычисляемой таблицы
+            $calc_table_base_id = $set->link_to->child_base_id;
+
+            $items = Item::where('base_id', $calc_table_base_id)->where('project_id', $item_main->project_id);
+
+            $sets_group = self::get_sets_group($item_main->base, $link);
+
+            // Фильтрация/поиск
+            // Цикл по записям, в каждой итерации цикла свой to_child_base_id в переменной $to_key
+            foreach ($sets_group as $to_key => $to_value) {
+                $item_seek = MainController::get_parent_item_from_main($item_main->id, $to_value->link_from_id);
+                if ($item_seek) {
+                    $items = $items->whereHas('child_mains', function ($query) use ($to_value, $item_seek) {
+                        $query->where('link_id', $to_value->link_to_id)->where('parent_item_id', $item_seek->id);
+                    });
+                }
+            }
+
+            $result_item = self::output_calculated_table_dop($item_main->base, $link, $set, $item_main->project, $items);
+
+        }
+
+        return $result_item;
+    }
+
+    // Вызывается из ext_edit.php
     static function get_parent_item_from_output_calculated_table(Request $request)
     {
         $params = $request->query();
@@ -1676,145 +1619,177 @@ class ItemController extends Controller
                 $items_id_group = $params['items_id_group'];
             }
         }
-        $items_id_calcsort = null;
-        if (array_key_exists('items_id_calcsort', $params)) {
-            if (is_array($params['items_id_calcsort'])) {
-                $items_id_calcsort = $params['items_id_calcsort'];
-            }
-        }
         //  '&& $items_id_group' не нужно, т.к. группировки может не быть
         if ($base && $link) {
-                $result_item = null;
-                $set = Set::find($link->parent_output_calculated_table_set_id);
-                $sets_group = self::get_sets_group($base, $link);
-                $sets_calcsort = self::get_sets_calcsort($base, $link);
+            $result_item = null;
+            $set = Set::find($link->parent_output_calculated_table_set_id);
+            $sets_group = self::get_sets_group($base, $link);
 
-                // Проверка не нужна, т.к. может быть информация без группировки
-                //if ($sets_group) {
-                // base_id вычисляемой таблицы
-                $calc_table_base_id = $set->link_to->child_base_id;
+            // base_id вычисляемой таблицы
+            $calc_table_base_id = $set->link_to->child_base_id;
 
-                $item_seek0 = null;
-                if (isset($items_id_group[0])) {
-                    $item_seek0 = Item::find($items_id_group[0]);
-                }
-                if ($item_seek0) {
-                    $items = Item::where('base_id', $calc_table_base_id)->where('project_id', $item_seek0->project_id);
+            $item_seek0 = null;
+            if (isset($items_id_group[0])) {
+                $item_seek0 = Item::find($items_id_group[0]);
+            }
+            if ($item_seek0) {
+                $items = Item::where('base_id', $calc_table_base_id)->where('project_id', $item_seek0->project_id);
 
-                    $i = 0;
-                    // Фильтрация/поиск
-                    // Цикл по записям, в каждой итерации цикла свой to_child_base_id в переменной $to_key
-                    foreach ($sets_group as $to_key => $to_value) {
-                        $item_seek = null;
-                        if (isset($items_id_group[$i])) {
-                            $item_seek = Item::find($items_id_group[$i]);
-                        }
-                        if ($item_seek == null) {
-                            break;
-                        }
-
-                        $items = $items->whereHas('child_mains', function ($query) use ($to_value, $item_seek) {
-                            $query->where('link_id', $to_value->link_to_id)->where('parent_item_id', $item_seek->id);
-                        });
-
-                        $i = $i + 1;
-
+                $i = 0;
+                // Фильтрация/поиск
+                // Цикл по записям, в каждой итерации цикла свой to_child_base_id в переменной $to_key
+                foreach ($sets_group as $to_key => $to_value) {
+                    $item_seek = null;
+                    if (isset($items_id_group[$i])) {
+                        $item_seek = Item::find($items_id_group[$i]);
                     }
-
-                    // Обработка сортировки
-                    // Эти проверки нужны
-                    // 'link_from_id' не используется при обработке сортировки
-                    // 'link_to_id' используется при обработке сортировки
-                    if (($set->is_upd_cl_gr_first == true || $set->is_upd_cl_gr_last == true)
-                        && ($sets_calcsort) && ($items->count() > 0)) {
-                        $name = "";  // нужно, не удалять
-                        $index = array_search(App::getLocale(), config('app.locales'));
-                        if ($index !== false) {   // '!==' использовать, '!=' не использовать
-                            $name = 'name_lang_' . $index;
-                        }
-
-                        $collection = collect();
-                        $items_calcsort = $items->orderBy($name)->get();
-                        $str = "";
-//                    foreach ($items_calcsort as $item) {
-//                        $str = "";
-//                        $i = 0;
-//                        foreach ($sets_calcsort as $set_value) {
-//                            $item_find = null;
-//                            if (isset($items_id_calcsort[$i])) {
-//                                $item_find = Item::find($items_id_calcsort[$i]);
-//                            }
-//                            if ($item_find) {
-//                                // Формирование вычисляемой строки для сортировки
-//                                // Для строковых данных для сортировки берутся первые 50 символов
-//                                if ($item_find->base->type_is_list() || $item_find->base->type_is_string()) {
-//                                    $str = $str . str_pad(trim($item_find[$name]), 50);
-//                                } else {
-//                                    $str = $str . trim($item_find[$name]);
-//                                }
-//
-//                            }
-//                            $i = $i + 1;
-//                        }
-//                        // В $collection сохраняется в key - $item->id
-//                        $collection[$item->id] = $str;
-//                    }
-                        foreach ($items_calcsort as $item) {
-                            $str = "";
-                            foreach ($sets_calcsort as $set_value) {
-                                $item_find = MainController::view_info($item->id, $set_value->link_to_id);
-                                if ($item_find) {
-                                    // Формирование вычисляемой строки для сортировки
-                                    // Для строковых данных для сортировки берутся первые 50 символов
-                                    if ($item_find->base->type_is_list() || $item_find->base->type_is_string()) {
-                                        $str = $str . str_pad(trim($item_find[$name]), 50);
-                                    } else {
-                                        $str = $str . trim($item_find[$name]);
-                                    }
-
-                                }
-                            }
-                            // В $collection сохраняется в key - $item->id
-                            $collection[$item->id] = $str;
-                        }
-
-                        //            Сортировка коллекции по значению
-                        $collection = $collection->sort();
-                        $ids = $collection->keys()->toArray();
-
-                        $items = Item::whereIn('id', $ids)
-                            ->orderBy(\DB::raw("FIELD(id, " . implode(',', $ids) . ")"));
+                    if ($item_seek == null) {
+                        break;
                     }
-
-                    $item_calc = null;
-                    if ($set->is_upd_cl_gr_first == true || $set->is_upd_cl_gr_last == true) {
-                        if ($set->is_upd_cl_gr_first == true) {
-                            $item_calc = $items->first();
-                        } elseif ($set->is_upd_cl_gr_last == true) {
-                            // Нужно '->get()'
-                            $item_calc = $items->get()->last();
-                        }
-                    } else {
-                        $count = $items->count();
-                        if ($count == 1) {
-                            $item_calc = $items->first();
-                        }
-                    }
-                    if ($item_calc) {
-                        $result_item = MainController::get_parent_item_from_main($item_calc->id, $set->link_to_id);
-                    }
+                    $items = $items->whereHas('child_mains', function ($query) use ($to_value, $item_seek) {
+                        $query->where('link_id', $to_value->link_to_id)->where('parent_item_id', $item_seek->id);
+                    });
+                    $i = $i + 1;
 
                 }
-                if ($result_item) {
-                    $result = $result_item->name();
-                }
-                //}
+
+                $result_item = self::output_calculated_table_dop($base, $link, $set, $item_seek0->project, $items);
+
+            }
+            if ($result_item) {
+                $result = $result_item->name();
+            }
         }
-
         return $result;
-
     }
 
+    // Вызывается из get_item_from_parent_output_calculated_table() и get_parent_item_from_output_calculated_table()
+    static function output_calculated_table_dop(Base $base, Link $link, Set $set, Project $project, $items)
+    {
+        $result_item = null;
+        $sets_calcsort = self::get_sets_calcsort($base, $link);
+
+        // Обработка сортировки
+        // Эти проверки нужны
+        // 'link_from_id' не используется при обработке сортировки
+        // 'link_to_id' используется при обработке сортировки
+        if (($set->is_upd_cl_gr_first == true || $set->is_upd_cl_gr_last == true)
+            && ($sets_calcsort) && ($items->count() > 0)) {
+            $name = "";  // нужно, не удалять
+            $index = array_search(App::getLocale(), config('app.locales'));
+            if ($index !== false) {   // '!==' использовать, '!=' не использовать
+                $name = 'name_lang_' . $index;
+            }
+            $collection = collect();
+            $items_calcsort = $items->orderBy($name)->get();
+            $str = "";
+            foreach ($items_calcsort as $item) {
+                $str = "";
+                foreach ($sets_calcsort as $set_value) {
+                    $item_find = MainController::view_info($item->id, $set_value->link_to_id);
+                    if ($item_find) {
+                        // Формирование вычисляемой строки для сортировки
+                        // Для строковых данных для сортировки берутся первые 50 символов
+                        if ($item_find->base->type_is_list() || $item_find->base->type_is_string()) {
+                            $str = $str . str_pad(trim($item_find[$name]), 50);
+                        } else {
+                            $str = $str . trim($item_find[$name]);
+                        }
+
+                    }
+                }
+                // В $collection сохраняется в key - $item->id
+                $collection[$item->id] = $str;
+            }
+
+            //            Сортировка коллекции по значению
+            $collection = $collection->sort();
+            $ids = $collection->keys()->toArray();
+
+            $items = Item::whereIn('id', $ids)
+                ->orderBy(\DB::raw("FIELD(id, " . implode(',', $ids) . ")"));
+        }
+
+        $item_calc = null;
+        // '$is_func = false;' нужно
+        $is_func = false;
+        $count = 0;
+        $sum = 0;
+        // Первый(), Последний()
+        if ($set->is_upd_cl_gr_first == true || $set->is_upd_cl_gr_last == true) {
+            if ($set->is_upd_cl_gr_first == true) {
+                $item_calc = $items->first();
+            } elseif ($set->is_upd_cl_gr_last == true) {
+                // Нужно '->get()'
+                $item_calc = $items->get()->last();
+            }
+
+            // Расчет Средний(), Количество(), Сумма()
+        } elseif ($set->is_upd_cl_fn_count == true || $set->is_upd_cl_fn_avg == true || $set->is_upd_cl_fn_sum == true) {
+            $is_func = true;
+            $items_list = $items->get();
+            // "$seek_value = 0" нужно
+            $seek_value = 0;
+
+            // Расчет Количество()
+            if ($set->is_upd_cl_fn_count == true) {
+                foreach ($items_list as $item) {
+                    $str = "";
+                    $item_find = MainController::view_info($item->id, $set->link_to_id);
+                    if ($item_find) {
+                        $seek_value = $seek_value + 1;
+                    }
+                }
+                $seek_item = $seek_value > 0;
+
+                // Расчет Средний(), Сумма()
+            } elseif ($set->is_upd_cl_fn_avg == true || $set->is_upd_cl_fn_sum == true) {
+                $count = 0;
+                $sum = 0;
+                foreach ($items_list as $item) {
+                    $str = "";
+                    $item_find = MainController::view_info($item->id, $set->link_to_id);
+                    if ($item_find) {
+                        $count = $count + 1;
+                        $sum = $sum + $item_find->numval()['value'];
+                    }
+                }
+                // Расчет Средний()
+                if ($set->is_upd_cl_fn_avg == true) {
+                    // Если деление на ноль
+                    if ($count == 0) {
+                        $seek_value = 0;
+                    } else {
+                        $seek_value = $sum / $count;
+                    }
+                    // Расчет Сумма()
+                } elseif ($set->is_upd_cl_fn_sum == true) {
+                    $seek_value = $sum;
+                }
+                $seek_item = $count > 0;
+            }
+
+            // Если есть данные для расчета
+            if ($seek_item) {
+                $item_calc = self::find_save_number($set->link_to->parent_base_id, $project->id, $seek_value);
+            }
+
+        } else {
+            $count = $items->count();
+            if ($count == 1) {
+                $item_calc = $items->first();
+            }
+        }
+        if ($item_calc) {
+            // Если данные ($item_calc) уже найдены и посчитаны
+            if ($is_func) {
+                $result_item = $item_calc;
+            } else {
+                $result_item = MainController::get_parent_item_from_main($item_calc->id, $set->link_to_id);
+            }
+        }
+        return $result_item;
+    }
 
     private
     function save_main(Main $main, $item, $keys, $values, &$valits, $index, $strings_inputs)
