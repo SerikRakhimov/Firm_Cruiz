@@ -817,8 +817,10 @@ class LinkController extends Controller
         $parent_base_id = '';
         $parent_base_name = '';
         if ($set != null) {
-            $parent_base_id = $set->link_to->parent_base_id;
-            $parent_base_name = $set->link_to->parent_base->name();
+            // $parent_base_id = $set->link_to->parent_base_id;
+            // $parent_base_name = $set->link_to->parent_base->name();
+            $parent_base_id = $set->link_from->parent_base_id;
+            $parent_base_name = $set->link_from->parent_base->name();
         }
         return [
             'parent_base_id' => $parent_base_id,

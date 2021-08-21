@@ -60,13 +60,13 @@ use \App\Http\Controllers\MainController;
                 {{trans('main.sort_by')}}:
             </div>
             <div class="col text-center {{$sort_by_code == true?'font-italic' : ''}}">
-                <a href="{{route('item.browser',['base_id'=>$base->id, 'project_id'=>$project->id, 'role_id'=>$role->id, 'sort_by_code'=>1, 'save_by_code'=>$save_by_code==true?"1":"0", 'search'=>$search])}}"
+                <a href="{{route('item.browser',['link_id'=>$link->id, 'base_id'=>$base->id, 'project_id'=>$project->id, 'role_id'=>$role->id, 'sort_by_code'=>1, 'save_by_code'=>$save_by_code==true?"1":"0", 'search'=>$search])}}"
                    title="{{trans('main.sort_by_code')}}">
                     {{trans('main.code')}}
                 </a>
             </div>
             <div class="col text-center {{$sort_by_code == false?'font-italic' : ''}}">
-                <a href="{{route('item.browser',['base_id'=>$base->id, 'project_id'=>$project->id, 'role_id'=>$role->id, 'sort_by_code'=>0, 'save_by_code'=>$save_by_code==true?"1":"0", 'search'=>$search])}}"
+                <a href="{{route('item.browser',['link_id'=>$link->id, 'base_id'=>$base->id, 'project_id'=>$project->id, 'role_id'=>$role->id, 'sort_by_code'=>0, 'save_by_code'=>$save_by_code==true?"1":"0", 'search'=>$search])}}"
                    title="{{trans('main.sort_by_name')}}">{{trans('main.name')}}</a>
             </div>
         </div>
@@ -152,12 +152,12 @@ use \App\Http\Controllers\MainController;
             <caption>{{trans('main.select_record_for_work')}}</caption>
             <thead>
             <th class="text-center {{$sort_by_code == true?'font-italic' : ''}}">
-                <a href="{{route('item.browser',['base_id'=>$base->id, 'project_id'=>$project->id, 'role_id'=>$role->id, 'sort_by_code'=>1, 'save_by_code'=>$save_by_code==true?"1":"0", 'search'=>$search])}}"
+                <a href="{{route('item.browser',['link_id'=>$link->id, 'base_id'=>$base->id, 'project_id'=>$project->id, 'role_id'=>$role->id, 'sort_by_code'=>1, 'save_by_code'=>$save_by_code==true?"1":"0", 'search'=>$search])}}"
                    title="{{trans('main.sort_by_code')}}">
                     {{trans('main.code')}}
                 </a></th>
             <th class="text-center {{$sort_by_code == false?'font-italic' : ''}}">
-                <a href="{{route('item.browser',['base_id'=>$base->id, 'project_id'=>$project->id, 'role_id'=>$role->id, 'sort_by_code'=>0, 'save_by_code'=>$save_by_code==true?"1":"0", 'search'=>$search])}}"
+                <a href="{{route('item.browser',['link_id'=>$link->id, 'base_id'=>$base->id, 'project_id'=>$project->id, 'role_id'=>$role->id, 'sort_by_code'=>0, 'save_by_code'=>$save_by_code==true?"1":"0", 'search'=>$search])}}"
                    title="{{trans('main.sort_by_name')}}">{{trans('main.name')}}</a></th>
             </tr>
             </thead>
@@ -181,7 +181,7 @@ use \App\Http\Controllers\MainController;
     function seach_click() {
         param = '/{{$sort_by_code == true?"1":"0"}}';
         // " + param + param" правильно
-        open('{{route('item.browser', '')}}' + '/' + {{$base->id}} +'/' + {{$project->id}} +'/' + {{$role->id}} +param + param
+        open('{{route('item.browser', '')}}' + '/' + {{$link->id}} + '/' + {{$base->id}} +'/' + {{$project->id}} +'/' + {{$role->id}} +param + param
             + '/' + document.getElementById('search').value, '_self', 'width=800, height=800');
     };
 

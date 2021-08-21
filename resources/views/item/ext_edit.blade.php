@@ -20,13 +20,13 @@
     }
     ?>
     <script>
-        function browse(base_id, project_id, role_id, link_id) {
+        function browse(link_id, base_id, project_id, role_id) {
             // Нужно, используется в browser.blade.php
             //alert(base_id + " " + link_id);
             window.item_id = document.getElementById(link_id);
             window.item_code = document.getElementById('code' + link_id);
             window.item_name = document.getElementById('name' + link_id);
-            open('{{route('item.browser', '')}}' + '/' + base_id + '/' + project_id + '/' + role_id + '/1/1', 'browse', 'width=800, height=800');
+            open('{{route('item.browser', '')}}' + '/' + link_id + '/' + base_id + '/' + project_id + '/' + role_id + '/1/1', 'browse', 'width=800, height=800');
 
         };
     </script>
@@ -391,9 +391,9 @@
                                 @endif
                                 @endif
                             >
-                            @error($key)
-                            <div class="invalid-feedback">
-                                {{--                            <div class="text-danger">--}}
+                            @error("code" . $key)
+                            {{--                            <div class="invalid-feedback">--}}
+                            <div class="text-danger">
                                 {{$message}}
                             </div>
                             @enderror
@@ -411,8 +411,9 @@
                             {{--                                   disabled--}}
                             {{--                                @endif--}}
                             {{--                            >--}}
+                            {{--                                    onclick="browse('{{$link->id}}', '{{$link->parent_base_id}}', '{{$project->id}}', '{{$role->id}}', '{{$key}}')"--}}
                             <button type="button" title="{{trans('main.select_from_refer')}}"
-                                    onclick="browse('{{$link->parent_base_id}}','{{$project->id}}','{{$role->id}}','{{$key}}')"
+                                    onclick="browse('{{$link->id}}', '{{$link->parent_base_id}}', '{{$project->id}}', '{{$role->id}}')"
                                     class="text-label"
                                     @if($base_link_right['is_edit_link_read'] == true)
                                     disabled
@@ -1133,12 +1134,20 @@
         @if($link_calculated_table)
             <script>
                     @foreach($sets_group as $to_key => $to_value)
+                var code_needed_child_base_id{{$prefix}}{{$link->id}}_{{$to_value->id}} = {{$to_value->link_from->parent_base->is_code_needed}};
+
+                    @if($to_value->link_from->parent_base->is_code_needed==true && $to_value->link_from->parent_is_enter_refer==true)
+                var child_base_id{{$prefix}}{{$link->id}}_{{$to_value->id}} = document.getElementById('{{$to_value->link_from_id}}');
+                var code_child_base_id{{$prefix}}{{$link->id}}_{{$to_value->id}} = document.getElementById('code{{$to_value->link_from_id}}');
+                    @else
                 var child_base_id{{$prefix}}{{$link->id}}_{{$to_value->id}} = document.getElementById('link{{$to_value->link_from_id}}');
+                    @endif
                     @endforeach
 
                 var parent_base_id{{$prefix}}{{$link->id}} = document.getElementById('link{{$link->id}}');
 
                 <?php
+                $functs_parent_refer[count($functs_parent_refer)] = "link_id_changeOption_" . $prefix . $link->id;
                 $functions[count($functions)] = "link_id_changeOption_" . $prefix . $link->id;
                 ?>
                 function link_id_changeOption_{{$prefix}}{{$link->id}}(first = false) {
@@ -1151,7 +1160,7 @@
                         @foreach($sets_group as $to_key => $to_value)
                         {{-- Если $to_value->link_from->Ссылка на основу = true --}}
                         {{-- Выше по тексту тоже используется "parent_is_base_link"--}}
-                        @if($to_value->link_from->parent_is_base_link == true)
+                        @if(($to_value->link_from->parent_is_base_link == true) || ($to_value->link_from->parent_base->is_code_needed==true && $to_value->link_from->parent_is_enter_refer==true))
                         {{--+ '/' + child_base_id{{$prefix}}{{$link->id}}_{{$to_value->id}}.value--}}
                         + '&items_id_group[]=' + child_base_id{{$prefix}}{{$link->id}}_{{$to_value->id}}.value
                         @else
@@ -1167,7 +1176,11 @@
                 }
 
                 @foreach($sets_group as $to_key => $to_value)
+                @if($to_value->link_from->parent_base->is_code_needed==true && $to_value->link_from->parent_is_enter_refer==true)
+                code_child_base_id{{$prefix}}{{$link->id}}_{{$to_value->id}}.addEventListener("change", link_id_changeOption_{{$prefix}}{{$link->id}});
+                @else
                 child_base_id{{$prefix}}{{$link->id}}_{{$to_value->id}}.addEventListener("change", link_id_changeOption_{{$prefix}}{{$link->id}});
+                @endif
                 @endforeach
 
             </script>
@@ -1241,7 +1254,6 @@
                 }
 
                 {{--code_{{$prefix}}{{$link->id}}.addEventListener("input", code_input_{{$prefix}}{{$link->id}});--}}
-                //code_{{$prefix}}{{$link->id}}.addEventListener("change", code_input_{{$prefix}}{{$link->id}});
 
                 code_{{$prefix}}{{$link->id}}.addEventListener("change", code_input_{{$prefix}}{{$link->id}});
 

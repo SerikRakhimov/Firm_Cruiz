@@ -813,10 +813,10 @@ Route::get('/item/get_parent_item_from_output_calculated_table',
     ->name('item.get_parent_item_from_output_calculated_table')
     ->middleware('auth');
 
-// Использовать знак вопроса "/{project_id?}" (web.php)
-//              равенство null "$project_id = null" (ItemController.php),
+// Использовать знак вопроса "/{base_id?}" (web.php)
+//              равенство null "$base_id = null" (ItemController.php),
 // иначе ошибка в function seach_click() - open('{{route('item.browser', '')}}' ...
-Route::get('/item/browser/{base_id}/{project_id?}/{role_id?}/{sort_by_code?}/{save_by_code?}/{search?}', 'ItemController@browser')
+Route::get('/item/browser/{link_id}/{base_id?}/{project_id?}/{role_id?}/{sort_by_code?}/{save_by_code?}/{search?}', 'ItemController@browser')
     ->name('item.browser')
     ->middleware('auth');
 

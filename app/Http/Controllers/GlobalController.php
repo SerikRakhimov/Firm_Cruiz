@@ -653,7 +653,8 @@ class GlobalController extends Controller
 // На выходе это же число в виде строки
 // Нужно для правильного отображения чисел
 // $numcat = true/false - вывод числовых полей с разрядом тысячи/миллионы/миллиарды
-    static function restore_number_from_item(Base $base, $str, $numcat = false)
+// $rightnull = true/false - у вещественных чисел убрать правые нули после запятой
+    static function restore_number_from_item(Base $base, $str, $numcat = false, $rightnull = true)
     {
         // Максимальное количество разрядов для числа
         $result = "";
@@ -689,6 +690,9 @@ class GlobalController extends Controller
                     $result = $first_char . number_format($float_value, $digits_num, '.', ' ');
                 } else {
                     $result = $first_char . sprintf("%1." . $digits_num . "f", floatval($float_value));
+                }
+                if ($rightnull == true){
+                    $result = rtrim(rtrim($result, '0'), '.');
                 }
             }
         }

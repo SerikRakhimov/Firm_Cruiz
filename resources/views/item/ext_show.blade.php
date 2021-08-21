@@ -126,7 +126,7 @@
                             {{--                                            $numcat = true - вывод числовых полей с разрядом тысячи/миллионы/миллиарды--}}
 {{--                            <span class="text-related">--}}
                         <b>
-                                {{$item_find->name(false, true)}}
+                                {{$item_find->name(false, true, true)}}
                         </b>
 {{--                            </span>--}}
                         @endif

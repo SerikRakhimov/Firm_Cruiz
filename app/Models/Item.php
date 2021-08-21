@@ -74,8 +74,10 @@ class Item extends Model
     }
 
     // name() используется для отображения значений полей
+    // $fullname = true/false - вывод полной строки (более 255 символов)
     // $numcat = true/false - вывод числовых полей с разрядом тысячи/миллионы/миллиарды
-    function name_start($fullname = false, $numcat = false)
+    // $rightnull = true/false - у вещественных чисел убрать правые нули после запятой
+    function name_start($fullname = false, $numcat = false, $rightnull = false)
     {
         $result = "";  // нужно, не удалять
 
@@ -102,7 +104,7 @@ class Item extends Model
 //                    $result = date_create($this->name_lang_0)->Format('Y.m.d');
 
             } elseif ($base->type_is_number()) {
-                $result = GlobalController::restore_number_from_item($base, $this->name_lang_0, $numcat);
+                $result = GlobalController::restore_number_from_item($base, $this->name_lang_0, $numcat, $rightnull);
 
             } elseif ($base->type_is_boolean()) {
                 //    Похожие строки в Base.php
@@ -142,10 +144,12 @@ class Item extends Model
 
     // "\~" - символ перевода каретки (используется также в Item.php: функции name() nmbr())
     // "\~" - символ перевода каретки (используется также в ItemController.php: функция calc_value_func())
+    // $fullname = true/false - вывод полной строки (более 255 символов)
     // $numcat = true/false - вывод числовых полей с разрядом тысячи/миллионы/миллиарды
-    function name($fullname = false, $numcat = false)
+    // $rightnull = true/false - у вещественных чисел убрать правые нули после запятой
+    function name($fullname = false, $numcat = false, $rightnull = false)
     {
-        $result = self::name_start($fullname, $numcat);
+        $result = self::name_start($fullname, $numcat, $rightnull);
         $result = str_replace('\~', '', $result);
         return $result;
     }

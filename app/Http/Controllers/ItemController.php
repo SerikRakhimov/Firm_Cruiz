@@ -101,30 +101,38 @@ class ItemController extends Controller
     // для случая: когда установлен фильтр (неважно по коду или по наименованию):
     // можно нажимать на заголовки "Код"/"Наименование" - количество записей на экране то же оставаться должно,
     // меняется только сортировка
-    // Использовать знак вопроса "/{project_id?}" (web.php)
-    //              равенство null "$project_id = null" (ItemController.php),
+    // Использовать знак вопроса "/{base_id?}" (web.php)
+    //              равенство null "$base_id = null" (ItemController.php),
     // иначе ошибка в function seach_click() - open('{{route('item.browser', '')}}' ...
-    function browser($base_id, $project_id = null, $role_id = null, bool $sort_by_code = true, bool $save_by_code = true, $search = "")
+    function browser($link_id, $base_id = null, $project_id = null, $role_id = null, bool $sort_by_code = true, bool $save_by_code = true, $search = "")
     {
+        $link = Link::findOrFail($link_id);
         $base = Base::findOrFail($base_id);
         $project = Project::findOrFail($project_id);
         $role = Role::findOrFail($role_id);
         $base_right = GlobalController::base_right($base, $role);
         $name = BaseController::field_name();
-        $items = null;
+        $items = ItemController::get_items_for_link($link, $project, $role)['result_parent_base_items_no_get'];
         if ($sort_by_code == true) {
             if ($base->is_code_number == true) {
                 // Сортировка по коду числовому
-                $items = Item::selectRaw("*, code*1  AS code_value")
-                    ->where('base_id', $base_id)->where('project_id', $project->id)->orderBy('code_value');
+//                $items = Item::selectRaw("*, code*1  AS code_value")
+//                    ->where('base_id', $base_id)->where('project_id', $project->id)->orderBy('code_value');
+//                $items = $items->selectRaw("*, code*1  AS code_value")
+//                    ->where('base_id', $base_id)->where('project_id', $project->id)->orderBy('code_value');
+                $items = $items->where('base_id', $base_id)->where('project_id', $project->id)->orderBy('code');
             } else {
                 // Сортировка по коду строковому
-                $items = Item::where('base_id', $base_id)->where('project_id', $project->id)->orderByRaw(strval('code'));
+                //$items = Item::where('base_id', $base_id)->where('project_id', $project->id)->orderByRaw(strval('code'));
+                $items = $items->where('base_id', $base_id)->where('project_id', $project->id)->orderBy('code');
             }
+            //dd($items->get());
         } else {
             // Сортировка по наименованию
-            $items = Item::where('base_id', $base_id)->where('project_id', $project->id)->orderByRaw(strval($name));
+//            $items = Item::where('base_id', $base_id)->where('project_id', $project->id)->orderByRaw(strval($name));
+            $items = $items->where('base_id', $base_id)->where('project_id', $project->id)->orderBy($name);
         }
+
         if ($items != null) {
             // Такая же проверка и в GlobalController (function items_right()),
             // в ItemController (function browser(), get_items_for_link(), get_items_ext_edit_for_link())
@@ -139,7 +147,14 @@ class ItemController extends Controller
                 }
             }
         }
-        return view('item/browser', ['base' => $base, 'project' => $project, 'role' => $role, 'base_right' => $base_right, 'sort_by_code' => $sort_by_code, 'save_by_code' => $save_by_code,
+        //dd($items->paginate(30));
+        //dd($items->get());
+//        $ids = $collection->keys()->toArray();
+//
+//        $items = Item::whereIn('id', $ids)
+//            ->orderBy(\DB::raw("FIELD(id, " . implode(',', $ids) . ")"));
+
+        return view('item/browser', ['link' => $link, 'base' => $base, 'project' => $project, 'role' => $role, 'base_right' => $base_right, 'sort_by_code' => $sort_by_code, 'save_by_code' => $save_by_code,
             'items' => $items->paginate(30), 'search' => $search]);
     }
 
@@ -644,6 +659,21 @@ class ItemController extends Controller
             }
         }
 
+        // Проверка существования кода объекта
+        foreach ($inputs as $key => $value) {
+            $link = Link::findOrFail($key);
+            if ($link->parent_base->is_code_needed == true && $link->parent_is_enter_refer==true) {
+                $item_needed = Item::find($value);
+                if (!$item_needed) {
+                    $array_mess['code' . $key] = trans('main.code_not_found') . "!";
+                    // повторный вызов формы
+                    return redirect()->back()
+                        ->withInput()
+                        ->withErrors($array_mess);
+                }
+            }
+        }
+
         foreach ($inputs as $key => $value) {
             $link = Link::findOrFail($key);
             if ($link->parent_base->type_is_image() || $link->parent_base->type_is_document()) {
@@ -656,6 +686,7 @@ class ItemController extends Controller
                             $array_mess[$link->id] = self::filesize_message($fs, $mx);
                             $errors = true;
                         }
+
                         if ($errors) {
                             // повторный вызов формы
                             return redirect()->back()
@@ -667,10 +698,10 @@ class ItemController extends Controller
             }
         }
 
-        // обработка для логических полей
-        // если при вводе формы пометка checkbox не установлена, в $request записи про элемент checkbox вообще нет
-        // если при вводе формы пометка checkbox установлена, в $request есть запись со значеним "on"
-        // см. https://webformyself.com/kak-v-php-poluchit-znachenie-checkbox/
+// обработка для логических полей
+// если при вводе формы пометка checkbox не установлена, в $request записи про элемент checkbox вообще нет
+// если при вводе формы пометка checkbox установлена, в $request есть запись со значеним "on"
+// см. https://webformyself.com/kak-v-php-poluchit-znachenie-checkbox/
 //        foreach ($string_langs as $link) {
 //            // Проверка нужна
 //            $base_link_right = GlobalController::base_link_right($link, $role);
@@ -751,7 +782,7 @@ class ItemController extends Controller
         $keys = array_keys($inputs);
         $values = array_values($inputs);
 
-        // Проверка полей с типом "текст" на длину текста
+// Проверка полей с типом "текст" на длину текста
         $errors = false;
         foreach ($inputs as $key => $value) {
             $link = Link::findOrFail($key);
@@ -905,14 +936,14 @@ class ItemController extends Controller
                 ->withErrors($array_mess);
         }
 
-        // Одно значение у всех языков
+// Одно значение у всех языков
         if ($base->is_one_value_lst_str_txt == true) {
             $item->name_lang_1 = $item->name_lang_0;
             $item->name_lang_2 = $item->name_lang_0;
             $item->name_lang_3 = $item->name_lang_0;
         }
 
-        // при создании записи "$item->created_user_id" заполняется
+// при создании записи "$item->created_user_id" заполняется
         $item->created_user_id = Auth::user()->id;
         $item->updated_user_id = Auth::user()->id;
 
@@ -1068,9 +1099,9 @@ class ItemController extends Controller
 //return redirect()->route('item.base_index', ['base'=>$item->base, 'project'=>$item->project, 'role'=>$role]);
 
     }
-    // save_info_sets() выполняет все присваивания для $item с отниманием/прибавлением значений
-    // $reverse = true - отнимать, false - прибавлять
-    //private
+// save_info_sets() выполняет все присваивания для $item с отниманием/прибавлением значений
+// $reverse = true - отнимать, false - прибавлять
+//private
     function save_info_sets(Item $item, bool $reverse)
     {
         $itpv = Item::findOrFail($item->id);
@@ -1108,7 +1139,7 @@ class ItemController extends Controller
         $this->save_sets($itpv, $keys_reverse, $values_reverse, $valits_reverse, $reverse);
     }
 
-    // Проверка на возможность выполнения присваиваний для переданного $item
+// Проверка на возможность выполнения присваиваний для переданного $item
     private
     function is_save_sets(Item $item)
     {
@@ -1130,13 +1161,14 @@ class ItemController extends Controller
         return $result;
 
     }
-    //    Эти функции похожи:
-    //save_sets()
-    //get_item_from_parent_output_calculated_table()
-    //get_sets_group()
-    //get_parent_item_from_output_calculated_table()
-    // Обрабатывает присваивания
-    // $valits_previous - предыщения значения $valits при $reverse = true и обновлении данных = замена
+
+//    Эти функции похожи:
+//save_sets()
+//get_item_from_parent_output_calculated_table()
+//get_sets_group()
+//get_parent_item_from_output_calculated_table()
+// Обрабатывает присваивания
+// $valits_previous - предыщения значения $valits при $reverse = true и обновлении данных = замена
     private
     function save_sets(Item $item, $keys, $values, $valits, bool $reverse)
     {
@@ -1468,6 +1500,7 @@ class ItemController extends Controller
         }
         return $item_find;
     }
+
 //    // Вызывается из save_sets()
 //    // Вычисление first(), last()
 //    static function get_item_from_parent_output_calculated_firstlast_table(Item $item, Set $set, $calc)
@@ -1516,7 +1549,7 @@ class ItemController extends Controller
 //    }
 
 
-    // "->where('bs.type_is_list', '=', true)" нужно, т.к. запрос функции идет с ext_edit.php
+// "->where('bs.type_is_list', '=', true)" нужно, т.к. запрос функции идет с ext_edit.php
     static function get_sets_group(Base $base, Link $link)
     {
         // "->where('bs.type_is_list', '=', true)" нужно, т.к. запрос функции идет с ext_edit.php
@@ -1563,13 +1596,13 @@ class ItemController extends Controller
         return $sets_calcsort;
     }
 
-    // Функции get_item_from_parent_output_calculated_table() и get_parent_item_from_output_calculated_table() похожи,
-    // выполняют одинаковую функцию: Выводят/считают поле из таблицы
-    // Первая вызывается из из MainController.php - view_info(), вторая из ext_edit.php,
-    // Первая возвращает $item, вторая $item->name()
+// Функции get_item_from_parent_output_calculated_table() и get_parent_item_from_output_calculated_table() похожи,
+// выполняют одинаковую функцию: Выводят/считают поле из таблицы
+// Первая вызывается из из MainController.php - view_info(), вторая из ext_edit.php,
+// Первая возвращает $item, вторая $item->name()
 
-    // Вызывается из MainController.php - view_info()
-    // Выводит поле вычисляемой таблицы
+// Вызывается из MainController.php - view_info()
+// Выводит поле вычисляемой таблицы
     static function get_item_from_parent_output_calculated_table(Item $item_main, Link $link)
     {
         $result_item = null;
@@ -1600,7 +1633,7 @@ class ItemController extends Controller
         return $result_item;
     }
 
-    // Вызывается из ext_edit.php
+// Вызывается из ext_edit.php
     static function get_parent_item_from_output_calculated_table(Request $request)
     {
         $params = $request->query();
@@ -1657,13 +1690,13 @@ class ItemController extends Controller
 
             }
             if ($result_item) {
-                $result = $result_item->name();
+                $result = $result_item->name(false, true, true);
             }
         }
         return $result;
     }
 
-    // Вызывается из get_item_from_parent_output_calculated_table() и get_parent_item_from_output_calculated_table()
+// Вызывается из get_item_from_parent_output_calculated_table() и get_parent_item_from_output_calculated_table()
     static function output_calculated_table_dop(Base $base, Link $link, Set $set, Project $project, $items)
     {
         $result_item = null;
@@ -1735,6 +1768,7 @@ class ItemController extends Controller
             if ($set->is_upd_cl_fn_count == true) {
                 foreach ($items_list as $item) {
                     $str = "";
+                    // Находим в исходной таблице объект, по которуму считается Количество()
                     $item_find = MainController::view_info($item->id, $set->link_to_id);
                     if ($item_find) {
                         $seek_value = $seek_value + 1;
@@ -1748,6 +1782,7 @@ class ItemController extends Controller
                 $sum = 0;
                 foreach ($items_list as $item) {
                     $str = "";
+                    // Находим в исходной таблице объект, по которуму считается Средний(), Сумма()
                     $item_find = MainController::view_info($item->id, $set->link_to_id);
                     if ($item_find) {
                         $count = $count + 1;
@@ -1771,7 +1806,7 @@ class ItemController extends Controller
 
             // Если есть данные для расчета
             if ($seek_item) {
-                $item_calc = self::find_save_number($set->link_to->parent_base_id, $project->id, $seek_value);
+                $item_calc = self::find_save_number($set->link_from->parent_base_id, $project->id, $seek_value);
             }
 
         } else {
@@ -2463,6 +2498,21 @@ class ItemController extends Controller
 
         }
 
+        // Проверка существования кода объекта
+        foreach ($inputs as $key => $value) {
+            $link = Link::findOrFail($key);
+            if ($link->parent_base->is_code_needed == true && $link->parent_is_enter_refer==true) {
+                $item_needed = Item::find($value);
+                if (!$item_needed) {
+                    $array_mess['code' . $key] = trans('main.code_not_found') . "!";
+                    // повторный вызов формы
+                    return redirect()->back()
+                        ->withInput()
+                        ->withErrors($array_mess);
+                }
+            }
+        }
+
         foreach ($inputs as $key => $value) {
             $link = Link::findOrFail($key);
             if ($link->parent_base->type_is_image() || $link->parent_base->type_is_document()) {
@@ -3059,14 +3109,15 @@ class ItemController extends Controller
         return Main::where('parent_item_id', $item->id)->exists();
     }
 
-    // Функции get_items_for_link() и get_items_ext_edit_for_link()
-    // в целом похожи в части возвращаемых 'result_parent_label', 'result_parent_base_name', 'result_parent_base_items'
+// Функции get_items_for_link() и get_items_ext_edit_for_link()
+// в целом похожи в части возвращаемых 'result_parent_label', 'result_parent_base_name', 'result_parent_base_items'
     static function get_items_for_link(Link $link, Project $project, Role $role)
     {
         $result_parent_label = '';
         $result_child_base_name = '';
         $result_parent_base_name = '';
         $result_child_base_items = [];
+        $result_parent_base_items_no_get = [];
         $result_parent_base_items = [];
         $result_child_base_items_options = '';
         $result_parent_base_items_options = '';
@@ -3086,7 +3137,9 @@ class ItemController extends Controller
                 }
 
                 // список items по выбранному child_base_id
-                $result_child_base_items = Item::select(['id', 'base_id', 'name_lang_0', 'name_lang_1', 'name_lang_2', 'name_lang_3'])->where('base_id', $link->child_base_id)->where('project_id', $project->id)->orderBy($name)->get();
+                $result_child_base_items = Item::select(['id', 'base_id', 'name_lang_0', 'name_lang_1', 'name_lang_2', 'name_lang_3'])
+                    ->where('base_id', $link->child_base_id)->where('project_id', $project->id)->orderBy($name)
+                    ->get();
                 foreach ($result_child_base_items as $item) {
                     //$item->name() - для быстрого получения $item->name()
                     $result_child_base_items_options = $result_child_base_items_options . "<option value='" . $item->id . "'>" . $item->name() . "</option>";
@@ -3102,8 +3155,10 @@ class ItemController extends Controller
                     // Получаем список из вычисляемой таблицы
                     $result_parent_base_items = Item::select(DB::Raw('items.*'))
                         ->join('mains', 'items.id', '=', 'mains.parent_item_id')
-                        ->where('mains.link_id', '=', $set_link->id)
-                        ->orderBy('items.' . $name);
+                        ->where('mains.link_id', '=', $set_link->id);
+
+                    //->orderBy('items.' . $name);
+
                     //                             ->where('items.project_id', $project->id)
 
 //                    1.1 В списке выбора использовать дополнительное связанное поле вычисляемой таблицы
@@ -3145,13 +3200,15 @@ class ItemController extends Controller
                     }
                     // Загрузить список $items
                 } else {
-                    $result_parent_base_items = Item::select(['id', 'base_id', 'name_lang_0', 'name_lang_1', 'name_lang_2', 'name_lang_3', 'created_user_id'])->where('base_id', $link->parent_base_id)->where('project_id', $project->id)->orderBy($name);
+                    $result_parent_base_items = Item::select(['id', 'code', 'base_id', 'name_lang_0', 'name_lang_1', 'name_lang_2', 'name_lang_3', 'created_user_id'])->where('base_id', $link->parent_base_id)->where('project_id', $project->id);
+//                        ->orderBy($name);
                 }
                 // Такая же проверка и в GlobalController (function items_right()),
                 // в ItemController (function browser(), get_items_for_link(), get_items_ext_edit_for_link())
                 if ($base_right['is_list_base_byuser'] == true) {
                     $result_parent_base_items = $result_parent_base_items->where('created_user_id', GlobalController::glo_user_id());
                 }
+                $result_parent_base_items_no_get = $result_parent_base_items;
                 // '->get()' нужно
                 $result_parent_base_items = $result_parent_base_items->get();
                 foreach ($result_parent_base_items as $item) {
@@ -3164,14 +3221,15 @@ class ItemController extends Controller
             'result_child_base_name' => $result_child_base_name,
             'result_parent_base_name' => $result_parent_base_name,
             'result_child_base_items' => $result_child_base_items,
+            'result_parent_base_items_no_get' => $result_parent_base_items_no_get,
             'result_parent_base_items' => $result_parent_base_items,
             'result_child_base_items_options' => $result_child_base_items_options,
             'result_parent_base_items_options' => $result_parent_base_items_options,
         ];
     }
 
-    // Функции get_items_for_link() и get_items_ext_edit_for_link()
-    // в целом похожи в части возвращаемых 'result_parent_label', 'result_parent_base_name', 'result_parent_base_items'
+// Функции get_items_for_link() и get_items_ext_edit_for_link()
+// в целом похожи в части возвращаемых 'result_parent_label', 'result_parent_base_name', 'result_parent_base_items'
     static function get_items_ext_edit_for_link(Link $link, Project $project, Role $role)
     {
         // наименование
@@ -3203,8 +3261,8 @@ class ItemController extends Controller
         ];
     }
 
-    // Используется в ext_edit.php при фильтрации данных + данные из вычисляемых таблиц
-    // $item_select - выбранное значение
+// Используется в ext_edit.php при фильтрации данных + данные из вычисляемых таблиц
+// $item_select - выбранное значение
     static function get_selection_child_items_from_parent_item(Link $link, Item $item_select)
     {
         $result_parent_base_items = null;
@@ -3321,7 +3379,7 @@ class ItemController extends Controller
             'result_items_name_options' => $result_items_name_options];
     }
 
-    // Используется в ext_edit.php при обычной фильтрации данных
+// Используется в ext_edit.php при обычной фильтрации данных
     static function get_child_items_from_parent_item(Base $base_start, Item $item_start, Link $link_result)
     {
         $result_items = null;
@@ -3645,8 +3703,8 @@ class ItemController extends Controller
         return $result;
     }
 
-    // $level_one = true, т.е. получить простые родительские поля один первый уровень
-    // $level_one = false, т.е. получить связанные(со вложенными значениями) родительские поля один первый уровень, на остальных уровнях показать простые и связанные поля
+// $level_one = true, т.е. получить простые родительские поля один первый уровень
+// $level_one = false, т.е. получить связанные(со вложенными значениями) родительские поля один первый уровень, на остальных уровнях показать простые и связанные поля
     static function form_parent_deta_hier($item_id, $role, $level_one)
     {
         $item = Item::find($item_id);
