@@ -792,11 +792,15 @@ Route::delete('/item/ext_delete/{item}/{role}/{heading?}', 'ItemController@ext_d
 Route::post('/store_link_change', 'ItemController@store_link_change')
     ->name('item.store_link_change');
 
+Route::get('/item/get_items_main/{base}/{project}/{role}/{link?}/{item?}', 'ItemController@get_items_main')
+    ->name('item.get_items_main')
+    ->middleware('auth');
+
 Route::get('/item/get_items_for_link/{link}/{project}/{role}', 'ItemController@get_items_for_link')
     ->name('item.get_items_for_link')
     ->middleware('auth');
 
-Route::get('/item/get_child_items_from_parent_item/{base_start}/{item_start}/{link_result}', 'ItemController@get_child_items_from_parent_item')
+Route::get('/item/get_child_items_from_parent_item/{base_start}/{item_start}/{link}', 'ItemController@get_child_items_from_parent_item')
     ->name('item.get_child_items_from_parent_item')
     ->middleware('auth');
 
@@ -816,7 +820,15 @@ Route::get('/item/get_parent_item_from_output_calculated_table',
 // Использовать знак вопроса "/{base_id?}" (web.php)
 //              равенство null "$base_id = null" (ItemController.php),
 // иначе ошибка в function seach_click() - open('{{route('item.browser', '')}}' ...
-Route::get('/item/browser/{link_id}/{base_id?}/{project_id?}/{role_id?}/{sort_by_code?}/{save_by_code?}/{search?}', 'ItemController@browser')
+//Route::get('/item/browser/{link_id}/{base_id?}/{project_id?}/{role_id?}/{item_id?}/{sort_by_code?}/{save_by_code?}/{search?}', 'ItemController@browser')
+//    ->name('item.browser')
+//    ->middleware('auth');
+
+//Route::get('/item/browser/{link_id}/{project_id?}/{role_id?}/{item_id?}/{order_by?}/{filter_by?}/{search?}', 'ItemController@browser')
+//    ->name('item.browser')
+//    ->middleware('auth');
+
+Route::get('/item/browser/{link_id}/{project_id?}/{role_id?}/{item_id?}/{order_by?}/{filter_by?}/{search?}', 'ItemController@browser')
     ->name('item.browser')
     ->middleware('auth');
 

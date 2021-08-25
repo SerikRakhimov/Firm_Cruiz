@@ -20,14 +20,12 @@
     }
     ?>
     <script>
-        function browse(link_id, base_id, project_id, role_id) {
+        function browse(link_id, project_id, role_id, item_id) {
             // Нужно, используется в browser.blade.php
-            //alert(base_id + " " + link_id);
             window.item_id = document.getElementById(link_id);
             window.item_code = document.getElementById('code' + link_id);
             window.item_name = document.getElementById('name' + link_id);
-            open('{{route('item.browser', '')}}' + '/' + link_id + '/' + base_id + '/' + project_id + '/' + role_id + '/1/1', 'browse', 'width=800, height=800');
-
+            open('{{route('item.browser', '')}}' + '/' + link_id + '/' + base_id + '/' + project_id + '/' + role_id + '/' + item_id + '/1/1', 'browse', 'width=800, height=800');
         };
     </script>
 
@@ -291,7 +289,18 @@
                 $code_find = $item_find->code;
             }
             ?>
-
+            {{--            @if($link_start_child)--}}
+            {{--                @if(($link->parent_is_base_link == true) || ($link->parent_base->is_code_needed==true && $link->parent_is_enter_refer==true))--}}
+            {{--                    <script>--}}
+            {{--                        var child_base_start_id{{$link_start_child->id}} = document.getElementById('{{$link->id}}');--}}
+            {{--                    </script>--}}
+            {{--                @else--}}
+            {{--                    <script>--}}
+            {{--                        var child_base_start_id{{$link_start_child->id}} = document.getElementById('link{{$link->id}}');--}}
+            {{--                    </script>--}}
+            {{--                @endif--}}
+            {{--            @endif--}}
+            {{--                $link_start_child - {{$$link_start_child->id}}--}}
             {{-- Проверка Показывать Связь с признаком "Ссылка на основу"--}}
             {{-- Ниже по тексту тоже используется "parent_is_base_link"--}}
             @if($link->parent_is_base_link == true)
@@ -371,9 +380,7 @@
                                    id="code{{$key}}"
                                    class="form-control @error($key) is-invalid @enderror"
                                    placeholder=""
-
                                    {{--                                       value="{{old('code{{$key}}') ?? ($item->code ?? ($base->is_code_number == true?($update ?"0":$code_new):""))}}"--}}
-
                                    value="{{old('code'.$key) ?? $code_find??''}}"
 
                                    {{--                                   value="{{(old('code'.$key)) ?? (($value != null) ? Item::find($value)->code: '0')}}"--}}
@@ -412,9 +419,18 @@
                             {{--                                @endif--}}
                             {{--                            >--}}
                             {{--                                    onclick="browse('{{$link->id}}', '{{$link->parent_base_id}}', '{{$project->id}}', '{{$role->id}}', '{{$key}}')"--}}
-                            <button type="button" title="{{trans('main.select_from_refer')}}"
-                                    onclick="browse('{{$link->id}}', '{{$link->parent_base_id}}', '{{$project->id}}', '{{$role->id}}')"
-                                    class="text-label"
+                            {{--                            onclick="browse('{{$link->id}}', '{{$link->parent_base_id}}', '{{$project->id}}', '{{$role->id}}',child_base_start_id{{$link->id}}.options[child_base_start_id{{$link->id}}.selectedIndex].value)"--}}
+                            <button type="button" title="{{trans('main.select_from_refer')}}" class="text-label"
+                                    id="buttonbrow{{$link->id}}"
+                                    name="buttonbrow{{$link->id}}"
+                                    {{--                                    onclick="browse('{{$link->id}}', '{{$project->id}}', '{{$role->id}}',child_base_start_id{{$link->id}})"--}}
+                                    {{--                                    @if(($link_start_child->parent_is_base_link == true) || ($link_start_child->parent_base->is_code_needed==true && $link_start_child->parent_is_enter_refer==true))--}}
+                                    {{--                                        child_base_start_id{{$link->id}}--}}
+                                    {{--                                    @else--}}
+                                    {{--                                        child_base_start_id{{$link->id}}.options[child_base_start_id{{$link->id}}.selectedIndex].value--}}
+                                    {{--                                    @endif--}}
+                                    {{--                                          )"--}}
+
                                     @if($base_link_right['is_edit_link_read'] == true)
                                     disabled
                                 @endif
@@ -454,8 +470,8 @@
                                    class="form-control @error($key) is-invalid @enderror"
                                    placeholder=""
                                    value="{{(old($key)) ?? (($value != null) ? GlobalController::restore_number_from_item($link->parent_base, Item::find($value)->name()) :
-(($link->parent_num_bool_default_value!="")? $link->parent_num_bool_default_value:'0')
-)}}"
+                                    (($link->parent_num_bool_default_value!="")? $link->parent_num_bool_default_value:'0')
+                                    )}}"
                                    step="{{$link->parent_base->digits_num_format()}}"
 
                                    @if($base_link_right['is_edit_link_read'] == true)
@@ -574,8 +590,8 @@
                                    id="link{{$key}}"
                                    placeholder=""
                             @if ((boolean)(old($key) ?? (($value != null) ? Item::find($value)->name_lang_0 :
-(($link->parent_num_bool_default_value!="")? $link->parent_num_bool_default_value:'0'))
-)) == true)
+                                (($link->parent_num_bool_default_value!="")? $link->parent_num_bool_default_value:'0'))
+                                    )) == true)
                             checked
                             @endif
                             @if($base_link_right['is_edit_link_read'] == true)
@@ -863,6 +879,10 @@
         @endif
         <?php
         // похожие строки ниже
+        $prefix = '';
+        $link_enter_refer = null;
+        $link_refer_start = null;
+        $link_refer_main = null;
         $link_selection_table = null;
         $link_id_selection_calc = null;
         $const_link_id_start = null;
@@ -877,7 +897,15 @@
         $link_calculated_table = null;
         //$link = Link::find($key);
         if ($link) {
-//            1.0 В списке выбора использовать поле вычисляемой таблицы
+            // Проверка на ввод в виде справочника
+            if ($link->parent_base->is_code_needed == true && $link->parent_is_enter_refer == true) {
+                $link_enter_refer = true;
+                //          Проверка на фильтруемые поля
+                $link_refer_main = ItemController::get_link_refer_main($base, $link);
+                $prefix = 'r_';
+            }
+
+            //            1.0 В списке выбора использовать поле вычисляемой таблицы
             if ($link->parent_is_in_the_selection_list_use_the_calculated_table_field == true) {
                 $link_selection_table = true;
                 $link_id_selection_calc = LinkController::get_link_id_selection_calc($link);
@@ -891,6 +919,7 @@
                 $const_link_start = $lres['const_link_start'];
                 $link_start_child = Link::find($link->parent_child_related_start_link_id);
                 $link_result_child = Link::find($link->parent_child_related_result_link_id);
+                $link_selection_table = ItemController::get_link_refer_main($base, $link);
                 $prefix = '1_';
             }
             //}
@@ -910,7 +939,62 @@
             }
         }
         ?>
-        @if($link_start_child && $link_result_child)
+        {{--        Проверка на ввод в виде справочника с фильтрацией--}}
+        @if($link_enter_refer &&  $link_refer_main)
+            <script>
+                var child_base_id{{$prefix}}{{$link->id}} = document.getElementById('buttonbrow{{$link->id}}');
+                    {{--alert(child_base_id{{$prefix}}{{$link->id}}[0].tagName);--}}
+                var parent_base_id{{$prefix}}{{$link->id}} = document.getElementById('link{{$link_refer_main->id}}');
+                <?php
+                //$functions[count($functions)] = "link_id_changeOption_" . $prefix . $link->id;
+                ?>
+                // async - await нужно, https://tproger.ru/translations/understanding-async-await-in-javascript/
+                function link_id_changeOption_{{$prefix}}{{$link->id}}() {
+                    //alert(parent_base_id{{$prefix}}{{$link->id}}.options[parent_base_id{{$prefix}}{{$link->id}}.selectedIndex].value);
+                    // Нужно, используется в browser.blade.php
+                    window.item_id = document.getElementById({{$link->id}});
+                    window.item_code = document.getElementById('code{{$link->id}}');
+                    window.item_name = document.getElementById('name{{$link->id}}');
+                    if (parent_base_id{{$prefix}}{{$link->id}}.options[parent_base_id{{$prefix}}{{$link->id}}.selectedIndex].value == 0) {
+                        window.item_id.value = 0;
+                        window.item_code.value = "";
+                        window.item_name.innerHTML = "";
+                        alert("{{trans('main.select_a_field_to_filter') . '!'}}");
+                    } else {
+                        {{--+ parent_base_id{{$prefix}}{{$link->id}}.options[parent_base_id{{$prefix}}{{$link->id}}.selectedIndex].value--}}
+                        open('{{route('item.browser', '')}}' + '/' + {{$link->id}} +'/' + {{$project->id}} +'/' + {{$role->id}}
+                                +'/' + parent_base_id{{$prefix}}{{$link->id}}.options[parent_base_id{{$prefix}}{{$link->id}}.selectedIndex].value
+                            + '/code/code', 'browse', 'width=800, height=800');
+                        {{--    await axios.get('/item/get_selection_child_items_from_parent_item/'--}}
+                        {{--    + '{{$link->id}}'--}}
+                        {{--    @if(($link->parent_is_base_link == true) || ($link->parent_base->is_code_needed==true && $link->parent_is_enter_refer==true))--}}
+                        {{--    + '/' + parent_base_id{{$prefix}}{{$link->id}}.value--}}
+                        {{--    @else--}}
+                        {{--    + '/' + parent_base_id{{$prefix}}{{$link->id}}.options[parent_base_id{{$prefix}}{{$link->id}}.selectedIndex].value--}}
+                        {{--    @endif--}}
+                        {{--).then(function (res) {--}}
+                        {{--            child_base_id{{$prefix}}{{$link->id}}.innerHTML = res.data['result_items_name_options'];--}}
+                        {{--            for (let i = 0; i < child_base_id{{$prefix}}{{$link->id}}.length; i++) {--}}
+                        {{--                if (child_base_id{{$prefix}}{{$link->id}}[i].value ==--}}
+                        {{--                    {{old($link_start_child->id) ?? (($array_calc[$link_start_child->id] != null) ? $array_calc[$link_start_child->id] : 0)}}) {--}}
+                        {{--                    // установить selected на true--}}
+                        {{--                    child_base_id{{$prefix}}{{$link->id}}[i].selected = true;--}}
+                        {{--                }--}}
+
+                        {{--            }--}}
+                        {{--        }--}}
+                        {{--    );--}}
+                        // Обычное разделение на фильтруемые поля
+                    }
+                }
+
+                //document.getElementById('buttonbrow351').addEventListener("click", "browse3");
+                child_base_id{{$prefix}}{{$link->id}}.addEventListener("click", link_id_changeOption_{{$prefix}}{{$link->id}});
+            </script>
+
+            {{--        Проверка на фильтруемые поля--}}
+        @elseif($link_start_child && $link_result_child)
+            {{'Фильтр поля'}} link-id={{$link->id}}  link-parent_base_id={{$link->parent_base_id}}   project_id={{$project->id}}   role_id={{$role->id}} link_selection_table - {{$link_selection_table}}
             <script>
                 var child_base_id{{$prefix}}{{$link->id}} = document.getElementById('link{{$link_start_child->id}}');
                 var parent_base_id{{$prefix}}{{$link->id}} = document.getElementById('link{{$link->id}}');
@@ -921,8 +1005,10 @@
                 <?php
                 $functions[count($functions)] = "link_id_changeOption_" . $prefix . $link->id;
                 ?>
+
                 // async - await нужно, https://tproger.ru/translations/understanding-async-await-in-javascript/
                 async function link_id_changeOption_{{$prefix}}{{$link->id}}(first) {
+                    //alert(parent_base_id{{$prefix}}{{$link->id}}.value);
                     if (parent_base_id{{$prefix}}{{$link->id}}.options[parent_base_id{{$prefix}}{{$link->id}}.selectedIndex].value == 0) {
                         child_base_id{{$prefix}}{{$link->id}}.innerHTML = "<option value='0'>{{trans('main.no_information') . '!'}}</option>";
                         document.getElementById('link{{$link_start_child->id}}').dispatchEvent(new Event('change'));
@@ -930,28 +1016,40 @@
                         // 1.0 В списке выбора использовать поле вычисляемой таблицы
                         @if($link_selection_table)
                             await axios.get('/item/get_selection_child_items_from_parent_item/'
-                            + '{{$link->id}}'
+                            {{--+ '{{$link->id}}'--}}
+                            + '{{$link_start_child->id}}'
+                            @if(($link->parent_is_base_link == true) || ($link->parent_base->is_code_needed==true && $link->parent_is_enter_refer==true))
+                            + '/' + parent_base_id{{$prefix}}{{$link->id}}.value
+                            @else
                             + '/' + parent_base_id{{$prefix}}{{$link->id}}.options[parent_base_id{{$prefix}}{{$link->id}}.selectedIndex].value
+                            @endif
                         ).then(function (res) {
-                                child_base_id{{$prefix}}{{$link->id}}.innerHTML = res.data['result_items_name_options'];
-                                for (let i = 0; i < child_base_id{{$prefix}}{{$link->id}}.length; i++) {
-                                    if (child_base_id{{$prefix}}{{$link->id}}[i].value ==
-                                        {{old($link_start_child->id) ?? (($array_calc[$link_start_child->id] != null) ? $array_calc[$link_start_child->id] : 0)}}) {
-                                        // установить selected на true
-                                        child_base_id{{$prefix}}{{$link->id}}[i].selected = true;
-                                    }
+                                    child_base_id{{$prefix}}{{$link->id}}.innerHTML = res.data['result_items_name_options'];
+                                    for (let i = 0; i < child_base_id{{$prefix}}{{$link->id}}.length; i++) {
+                                        if (child_base_id{{$prefix}}{{$link->id}}[i].value ==
+                                            {{old($link_start_child->id) ?? (($array_calc[$link_start_child->id] != null) ? $array_calc[$link_start_child->id] : 0)}}) {
+                                            // установить selected на true
+                                            child_base_id{{$prefix}}{{$link->id}}[i].selected = true;
+                                        }
 
+                                    }
                                 }
-                            }
-                        );
+                            );
                         // Обычное разделение на фильтруемые поля
                         @else
+                            {{--await axios.get('/item/get_child_items_from_parent_item/'--}}
+                            {{--+ '{{$link_start_child->parent_base_id}}'--}}
+                            {{--+ '/' + parent_base_id{{$prefix}}{{$link->id}}.options[parent_base_id{{$prefix}}{{$link->id}}.selectedIndex].value--}}
+                            {{--+ '/{{$link_result_child->id}}'--}}
                             await axios.get('/item/get_child_items_from_parent_item/'
                             + '{{$link_start_child->parent_base_id}}'
+                            @if(($link->parent_is_base_link == true) || ($link->parent_base->is_code_needed==true && $link->parent_is_enter_refer==true))
+                            + '/' + parent_base_id{{$prefix}}{{$link->id}}.value
+                            @else
                             + '/' + parent_base_id{{$prefix}}{{$link->id}}.options[parent_base_id{{$prefix}}{{$link->id}}.selectedIndex].value
-                            + '/{{$link_result_child->id}}'
+                            @endif
+                            + '/{{$link->id}}'
                         ).then(function (res) {
-
                                 child_base_id{{$prefix}}{{$link->id}}.innerHTML = res.data['result_items_name_options'];
                                 for (let i = 0; i < child_base_id{{$prefix}}{{$link->id}}.length; i++) {
                                     if (child_base_id{{$prefix}}{{$link->id}}[i].value ==
@@ -1049,6 +1147,7 @@
         {{--                @endif--}}
         {{--            </script>--}}
         {{--        @endif--}}
+        {{--        Проверка на вычисляемые поля--}}
         @if($link_parent)
             <script>
                     @if($const_link_start->parent_base->is_code_needed==true && $const_link_start->parent_is_enter_refer==true)
@@ -1186,7 +1285,6 @@
             </script>
         @endif
 
-
         <?php
         $prefix = '3_';
         ?>
@@ -1198,10 +1296,11 @@
                 var name_{{$prefix}}{{$link->id}} = document.getElementById('name{{$link->id}}');
                 var key_{{$prefix}}{{$link->id}} = document.getElementById('{{$link->id}}');
 
-                {{--                @if($link->parent_base->is_code_needed == true  && $link->parent_base->is_code_number == true  && $link->parent_base->is_limit_sign_code == true--}}
-                {{--&& $link->parent_base->is_code_zeros == true  && $link->parent_base->significance_code > 0)--}}
-                @if($link->parent_base->is_code_needed == true  && $link->parent_base->is_code_number == true)
-                @if($link->parent_base->is_limit_sign_code == true && $link->parent_base->is_code_zeros == true  && $link->parent_base->significance_code > 0)
+                {{--                @if($link->parent_base->is_code_needed == true  && $link->parent_base->is_code_number == true)--}}
+                @if($link->parent_base->is_code_needed == true)
+
+                {{--@if($link->parent_base->is_limit_sign_code == true && $link->parent_base->is_code_zeros == true  && $link->parent_base->significance_code > 0)--}}
+                @if($link->parent_base->is_code_number == true && $link->parent_base->is_limit_sign_code == true && $link->parent_base->is_code_zeros == true  && $link->parent_base->significance_code > 0)
                 <?php
                 $functions[count($functions)] = "code_change_" . $prefix . $link->id;
                 ?>
@@ -1220,6 +1319,7 @@
                 code_{{$prefix}}{{$link->id}}.addEventListener("change", code_change_{{$prefix}}{{$link->id}});
 
                 @endif
+
                 <?php
                 $functions[count($functions)] = "code_input_" . $prefix . $link->id;
                 ?>
@@ -1245,7 +1345,6 @@
 
                     // Команда нужна!
                     //document.getElementById('code{{$link->id}}').dispatchEvent(new Event('change'));
-
 
                     //alert('code_input222_ code_{{$prefix}}{{$link->id}}.value = ' + code_{{$prefix}}{{$link->id}}.value);
                     {{-- http://javascript.ru/forum/events/76761-programmno-vyzvat-sobytie-change.html#post503465--}}

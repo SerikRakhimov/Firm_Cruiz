@@ -104,48 +104,97 @@ class ItemController extends Controller
     // Использовать знак вопроса "/{base_id?}" (web.php)
     //              равенство null "$base_id = null" (ItemController.php),
     // иначе ошибка в function seach_click() - open('{{route('item.browser', '')}}' ...
-    function browser($link_id, $base_id = null, $project_id = null, $role_id = null, bool $sort_by_code = true, bool $save_by_code = true, $search = "")
+    //function browser($link_id, $project_id = null, $role_id = null, $item_id = null, bool $sort_by_code = true, bool $save_by_code = true, $search = "")
+//    function browser($link_id, $project_id = null, $role_id = null, $item_id = null, $order_by = null, $filter_by = null, $search = "")
+    function browser($link_id, $project_id = null, $role_id = null, $item_id = null, $order_by = null, $filter_by = null, $search = "")
     {
         $link = Link::findOrFail($link_id);
+        $base_id = $link->parent_base_id;
         $base = Base::findOrFail($base_id);
         $project = Project::findOrFail($project_id);
         $role = Role::findOrFail($role_id);
+        $item = Item::findOrFail($item_id);
         $base_right = GlobalController::base_right($base, $role);
         $name = BaseController::field_name();
-        $items = ItemController::get_items_for_link($link, $project, $role)['result_parent_base_items_no_get'];
-        if ($sort_by_code == true) {
-            if ($base->is_code_number == true) {
-                // Сортировка по коду числовому
-//                $items = Item::selectRaw("*, code*1  AS code_value")
-//                    ->where('base_id', $base_id)->where('project_id', $project->id)->orderBy('code_value');
-//                $items = $items->selectRaw("*, code*1  AS code_value")
-//                    ->where('base_id', $base_id)->where('project_id', $project->id)->orderBy('code_value');
-                $items = $items->where('base_id', $base_id)->where('project_id', $project->id)->orderBy('code');
-            } else {
-                // Сортировка по коду строковому
-                //$items = Item::where('base_id', $base_id)->where('project_id', $project->id)->orderByRaw(strval('code'));
-                $items = $items->where('base_id', $base_id)->where('project_id', $project->id)->orderBy('code');
-            }
-            //dd($items->get());
-        } else {
-            // Сортировка по наименованию
-//            $items = Item::where('base_id', $base_id)->where('project_id', $project->id)->orderByRaw(strval($name));
-            $items = $items->where('base_id', $base_id)->where('project_id', $project->id)->orderBy($name);
+        $items = ItemController::get_items_main($base, $project, $role, $link, $item);
+        if($order_by == null){
+            $order_by = "code";
         }
-
+        if($order_by == ""){
+            $order_by = "code";
+        }
+        if($filter_by == null){
+            $filter_by = "code";
+        }
+        if($filter_by == ""){
+            $filter_by = "code";
+        }
+        //dd($item);
+        //dd($base);
+        //dd($project);
+        //dd($role);
+        //dd($items->get());
+        //$items = ItemController::get_items_for_link($link, $project, $role)['result_parent_base_items_no_get'];
+        //$items = ItemController::get_child_items_from_parent_item($base, $item, $link)['result_items'];
+        //$items = self::get_items_for_browse($base, $link, $project, $role, $item);
+        //dd($link);
         if ($items != null) {
-            // Такая же проверка и в GlobalController (function items_right()),
-            // в ItemController (function browser(), get_items_for_link(), get_items_ext_edit_for_link())
-            if ($base_right['is_list_base_byuser'] == true) {
-                $items = $items->where('created_user_id', GlobalController::glo_user_id());
-            }
-            if ($search != "") {
-                if ($save_by_code == true) {
-                    $items = $items->where('code', 'LIKE', '%' . $search . '%');
+            if ($order_by) {
+                if ($order_by == 'name') {
+                    $items = $items->orderBy($name);
                 } else {
-                    $items = $items->where($name, 'LIKE', '%' . $search . '%');
+                    $items = $items->orderBy($order_by);
                 }
             }
+            //dd($items->get());
+            //$search ='';
+            //$items = $items->where('items.code', 'LIKE', '%' . $search . '%');
+            //dd('search=' . $search);
+            if ($filter_by && $search != "") {
+                //dd("11111");
+                if ($filter_by != "") {
+                    if ($filter_by == 'name') {
+                        $items = $items->where('items.' . $name, 'LIKE', '%' . $search . '%');
+                    } else {
+                        $items = $items->where('items.' . $filter_by, 'LIKE', '%' . $search . '%');
+                    }
+                }
+            }
+//            if ($sort_by_code == true) {
+//                if ($base->is_code_number == true) {
+//                    // Сортировка по коду числовому
+////                $items = Item::selectRaw("*, code*1  AS code_value")
+////                    ->where('base_id', $base_id)->where('project_id', $project->id)->orderBy('code_value');
+////                $items = $items->selectRaw("*, code*1  AS code_value")
+////                    ->where('base_id', $base_id)->where('project_id', $project->id)->orderBy('code_value');
+//                    //$items = $items->where('base_id', $base_id)->where('project_id', $project->id)->orderBy('code');
+//                    $items = $items->orderBy('code');
+//                } else {
+//                    // Сортировка по коду строковому
+//                    //$items = Item::where('base_id', $base_id)->where('project_id', $project->id)->orderByRaw(strval('code'));
+//                    //$items = $items->where('base_id', $base_id)->where('project_id', $project->id)->orderBy('code');
+//                    $items = $items->orderBy('code');
+//                }
+//            } else {
+//                // Сортировка по наименованию
+////            $items = Item::where('base_id', $base_id)->where('project_id', $project->id)->orderByRaw(strval($name));
+// //               $items = $items->where('base_id', $base_id)->where('project_id', $project->id)->orderBy($name);
+//                $items = $items->orderBy($name);
+//            }
+//        }
+//        if ($items != null) {
+//            // Такая же проверка и в GlobalController (function items_right()),
+//            // в ItemController (function browser(), get_items_for_link(), get_items_ext_edit_for_link())
+//            if ($base_right['is_list_base_byuser'] == true) {
+//                $items = $items->where('created_user_id', GlobalController::glo_user_id());
+//            }
+//            if ($search != "") {
+//                if ($save_by_code == true) {
+//                    $items = $items->where('code', 'LIKE', '%' . $search . '%');
+//                } else {
+//                    $items = $items->where($name, 'LIKE', '%' . $search . '%');
+//                }
+//            }
         }
         //dd($items->paginate(30));
         //dd($items->get());
@@ -153,9 +202,30 @@ class ItemController extends Controller
 //
 //        $items = Item::whereIn('id', $ids)
 //            ->orderBy(\DB::raw("FIELD(id, " . implode(',', $ids) . ")"));
+        if ($items) {
+//            return view('item/browser', ['link' => $link, 'base' => $base, 'project' => $project, 'role' => $role, 'item' => $item, 'base_right' => $base_right, 'sort_by_code' => $sort_by_code, 'save_by_code' => $save_by_code,
+//                'items' => $items->paginate(30), 'search' => $search]);
+//            return view('item/browser', ['link' => $link, 'base' => $base, 'project' => $project, 'role' => $role, 'item' => $item, 'base_right' => $base_right, 'order_by' => $order_by, 'filter_by' => $filter_by,
+//                'items' => $items->paginate(30), 'search' => $search]);
+            return view('item/browser', ['link' => $link, 'base' => $base, 'project' => $project, 'role' => $role, 'item' => $item, 'base_right' => $base_right,
+                'order_by' => $order_by, 'filter_by' => $filter_by,
+                'items' => $items->paginate(30), 'search' => $search]);
+        } else {
+            return view('message', ['message' => trans('main.no_data')]);
+        }
+    }
 
-        return view('item/browser', ['link' => $link, 'base' => $base, 'project' => $project, 'role' => $role, 'base_right' => $base_right, 'sort_by_code' => $sort_by_code, 'save_by_code' => $save_by_code,
-            'items' => $items->paginate(30), 'search' => $search]);
+    static function get_items_for_browse(Base $base, Link $link, Project $project, Role $role, Item $item)
+    {
+        $items = null;
+        $item = null;
+        // Фильтрация данных
+        if ($item) {
+            $items = ItemController::get_child_items_from_parent_item($base, $item, $link)['result_items'];
+        } else {
+            $items = ItemController::get_items_for_link($link, $project, $role)['result_parent_base_items_no_get'];
+        }
+        return $items;
     }
 
 //    function index()
@@ -662,7 +732,7 @@ class ItemController extends Controller
         // Проверка существования кода объекта
         foreach ($inputs as $key => $value) {
             $link = Link::findOrFail($key);
-            if ($link->parent_base->is_code_needed == true && $link->parent_is_enter_refer==true) {
+            if ($link->parent_base->is_code_needed == true && $link->parent_is_enter_refer == true) {
                 $item_needed = Item::find($value);
                 if (!$item_needed) {
                     $array_mess['code' . $key] = trans('main.code_not_found') . "!";
@@ -2501,7 +2571,7 @@ class ItemController extends Controller
         // Проверка существования кода объекта
         foreach ($inputs as $key => $value) {
             $link = Link::findOrFail($key);
-            if ($link->parent_base->is_code_needed == true && $link->parent_is_enter_refer==true) {
+            if ($link->parent_base->is_code_needed == true && $link->parent_is_enter_refer == true) {
                 $item_needed = Item::find($value);
                 if (!$item_needed) {
                     $array_mess['code' . $key] = trans('main.code_not_found') . "!";
@@ -3121,52 +3191,78 @@ class ItemController extends Controller
         $result_parent_base_items = [];
         $result_child_base_items_options = '';
         $result_parent_base_items_options = '';
+
         if ($link != null) {
             // наименование
             $result_parent_label = $link->parent_label();
             // наименование child_base и parent_base
             $result_child_base_name = $link->child_base->name();
             $result_parent_base_name = $link->parent_base->name();
+//            // если это фильтрируемое поле - то, тогда загружать весь список не нужно
+//            $link_exists = Link::where('parent_is_child_related', true)->where('parent_child_related_start_link_id', $link->id)->exists();
+//            if ($link_exists == null) {
+            $name = "";  // нужно, не удалять
+            $index = array_search(App::getLocale(), config('app.locales'));
+            if ($index !== false) {   // '!==' использовать, '!=' не использовать
+                $name = 'name_lang_' . $index;
+            }
+
+            // список items по выбранному child_base_id
+            $result_child_base_items = Item::select(['id', 'base_id', 'name_lang_0', 'name_lang_1', 'name_lang_2', 'name_lang_3'])
+                ->where('base_id', $link->child_base_id)->where('project_id', $project->id)->orderBy($name)
+                ->get();
+            foreach ($result_child_base_items as $item) {
+                //$item->name() - для быстрого получения $item->name()
+                $result_child_base_items_options = $result_child_base_items_options . "<option value='" . $item->id . "'>" . $item->name() . "</option>";
+            }
+
+            // список items по выбранному parent_base_id
+            $base_right = GlobalController::base_right($link->parent_base, $role);
+
             // если это фильтрируемое поле - то, тогда загружать весь список не нужно
             $link_exists = Link::where('parent_is_child_related', true)->where('parent_child_related_start_link_id', $link->id)->exists();
-            if ($link_exists == null) {
-                $name = "";  // нужно, не удалять
-                $index = array_search(App::getLocale(), config('app.locales'));
-                if ($index !== false) {   // '!==' использовать, '!=' не использовать
-                    $name = 'name_lang_' . $index;
-                }
+            //dd($link_exists);
+            //if ($link_exists == false || $link_exists == null) {
+            //if ($link_exists == true) {
+            //dd($link->parent_is_in_the_selection_list_use_the_calculated_table_field);
+            // 1.0 В списке выбора использовать поле вычисляемой таблицы
+            //dd($link->parent_is_in_the_selection_list_use_the_calculated_table_field);
+            if ($link->parent_is_in_the_selection_list_use_the_calculated_table_field == true) {
+                $set = Set::findOrFail($link->parent_selection_calculated_table_set_id);
+                $set_link = $set->link_to;
+                // Получаем список из вычисляемой таблицы
+                $result_parent_base_items = Item::select(DB::Raw('items.*'))
+                    ->join('mains', 'items.id', '=', 'mains.parent_item_id')
+                    ->where('mains.link_id', '=', $set_link->id);
 
-                // список items по выбранному child_base_id
-                $result_child_base_items = Item::select(['id', 'base_id', 'name_lang_0', 'name_lang_1', 'name_lang_2', 'name_lang_3'])
-                    ->where('base_id', $link->child_base_id)->where('project_id', $project->id)->orderBy($name)
-                    ->get();
-                foreach ($result_child_base_items as $item) {
-                    //$item->name() - для быстрого получения $item->name()
-                    $result_child_base_items_options = $result_child_base_items_options . "<option value='" . $item->id . "'>" . $item->name() . "</option>";
-                }
+                //->orderBy('items.' . $name);
 
-                // список items по выбранному parent_base_id
-                $base_right = GlobalController::base_right($link->parent_base, $role);
+                //                             ->where('items.project_id', $project->id)
 
-                // 1.0 В списке выбора использовать поле вычисляемой таблицы
-                if ($link->parent_is_in_the_selection_list_use_the_calculated_table_field == true) {
-                    $set = Set::findOrFail($link->parent_selection_calculated_table_set_id);
-                    $set_link = $set->link_to;
-                    // Получаем список из вычисляемой таблицы
+//                    1.1 В списке выбора использовать дополнительное связанное поле вычисляемой таблицы
+                if ($link->parent_is_use_selection_calculated_table_link_id_0 == true) {
+                    $link_id = $link->parent_selection_calculated_table_link_id_0;
+                    // Получаем данные из обычной таблицы(невычисляемой) + фильтр проверки наличия в вычисляемой таблице
+                    // Список 'items.*' формируется из 'mains.parent_item_id'
+                    // Связь с вычисляемой таблицей - 'joinSub($result_parent_base_items, 'items_start', function ($join) {
+                    //                                $join->on('mains.child_item_id', '=', 'items_start.id')'
                     $result_parent_base_items = Item::select(DB::Raw('items.*'))
                         ->join('mains', 'items.id', '=', 'mains.parent_item_id')
-                        ->where('mains.link_id', '=', $set_link->id);
-
-                    //->orderBy('items.' . $name);
+                        ->joinSub($result_parent_base_items, 'items_start', function ($join) {
+                            $join->on('mains.child_item_id', '=', 'items_start.id');
+                        })
+                        ->where('mains.link_id', '=', $link_id)
+                        ->distinct()
+                        ->orderBy('items.' . $name);
 
                     //                             ->where('items.project_id', $project->id)
 
-//                    1.1 В списке выбора использовать дополнительное связанное поле вычисляемой таблицы
-                    if ($link->parent_is_use_selection_calculated_table_link_id_0 == true) {
-                        $link_id = $link->parent_selection_calculated_table_link_id_0;
+//                        1.2 В списке выбора использовать два дополнительных связанных поля вычисляемой таблицы
+                    if ($link->parent_is_use_selection_calculated_table_link_id_1 == true) {
+                        $link_id = $link->parent_selection_calculated_table_link_id_1;
                         // Получаем данные из обычной таблицы(невычисляемой) + фильтр проверки наличия в вычисляемой таблице
                         // Список 'items.*' формируется из 'mains.parent_item_id'
-                        // Связь с вычисляемой таблицей - 'joinSub($result_parent_base_items, 'items_start', function ($join) {
+                        // Связь с таблицей-результатом предыдущего запроса - 'joinSub($result_parent_base_items, 'items_start', function ($join) {
                         //                                $join->on('mains.child_item_id', '=', 'items_start.id')'
                         $result_parent_base_items = Item::select(DB::Raw('items.*'))
                             ->join('mains', 'items.id', '=', 'mains.parent_item_id')
@@ -3178,43 +3274,32 @@ class ItemController extends Controller
                             ->orderBy('items.' . $name);
 
                         //                             ->where('items.project_id', $project->id)
-
-//                        1.2 В списке выбора использовать два дополнительных связанных поля вычисляемой таблицы
-                        if ($link->parent_is_use_selection_calculated_table_link_id_1 == true) {
-                            $link_id = $link->parent_selection_calculated_table_link_id_1;
-                            // Получаем данные из обычной таблицы(невычисляемой) + фильтр проверки наличия в вычисляемой таблице
-                            // Список 'items.*' формируется из 'mains.parent_item_id'
-                            // Связь с таблицей-результатом предыдущего запроса - 'joinSub($result_parent_base_items, 'items_start', function ($join) {
-                            //                                $join->on('mains.child_item_id', '=', 'items_start.id')'
-                            $result_parent_base_items = Item::select(DB::Raw('items.*'))
-                                ->join('mains', 'items.id', '=', 'mains.parent_item_id')
-                                ->joinSub($result_parent_base_items, 'items_start', function ($join) {
-                                    $join->on('mains.child_item_id', '=', 'items_start.id');
-                                })
-                                ->where('mains.link_id', '=', $link_id)
-                                ->distinct()
-                                ->orderBy('items.' . $name);
-
-                            //                             ->where('items.project_id', $project->id)
-                        }
                     }
-                    // Загрузить список $items
-                } else {
-                    $result_parent_base_items = Item::select(['id', 'code', 'base_id', 'name_lang_0', 'name_lang_1', 'name_lang_2', 'name_lang_3', 'created_user_id'])->where('base_id', $link->parent_base_id)->where('project_id', $project->id);
+                }
+                // Загрузить список $items
+            } else {
+                $result_parent_base_items = Item::select(['id', 'code', 'base_id', 'name_lang_0', 'name_lang_1', 'name_lang_2', 'name_lang_3', 'created_user_id'])
+                    ->where('base_id', $link->parent_base_id)
+                    ->where('project_id', $project->id);
 //                        ->orderBy($name);
-                }
-                // Такая же проверка и в GlobalController (function items_right()),
-                // в ItemController (function browser(), get_items_for_link(), get_items_ext_edit_for_link())
-                if ($base_right['is_list_base_byuser'] == true) {
-                    $result_parent_base_items = $result_parent_base_items->where('created_user_id', GlobalController::glo_user_id());
-                }
-                $result_parent_base_items_no_get = $result_parent_base_items;
-                // '->get()' нужно
-                $result_parent_base_items = $result_parent_base_items->get();
-                foreach ($result_parent_base_items as $item) {
-                    $result_parent_base_items_options = $result_parent_base_items_options . "<option value='" . $item->id . "'>" . $item->name() . "</option>";
-                }
+                //dd($result_parent_base_items->get());
             }
+            // Такая же проверка и в GlobalController (function items_right()),
+            // в ItemController (function browser(), get_items_for_link(), get_items_ext_edit_for_link())
+            if ($base_right['is_list_base_byuser'] == true) {
+                $result_parent_base_items = $result_parent_base_items->where('created_user_id', GlobalController::glo_user_id());
+            }
+            $result_parent_base_items_no_get = $result_parent_base_items;
+            //dd($result_parent_base_items_no_get);
+            // '->get()' нужно
+            $result_parent_base_items = $result_parent_base_items->get();
+            //dd($result_parent_base_items);
+            foreach ($result_parent_base_items as $item) {
+                $result_parent_base_items_options = $result_parent_base_items_options . "<option value='" . $item->id . "'>" . $item->name() . "</option>";
+            }
+            //} else {
+
+            //}
         }
         return [
             'result_parent_label' => $result_parent_label,
@@ -3265,8 +3350,10 @@ class ItemController extends Controller
 // $item_select - выбранное значение
     static function get_selection_child_items_from_parent_item(Link $link, Item $item_select)
     {
-        $result_parent_base_items = null;
+        $result_items_no_get = null;
+        $result_items = null;
         $result_items_name_options = null;
+        $result_parent_base_items = null;
         $name = "";  // нужно, не удалять
         $index = array_search(App::getLocale(), config('app.locales'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
@@ -3286,7 +3373,6 @@ class ItemController extends Controller
                 ->join('mains', 'items.id', '=', 'mains.parent_item_id')
                 ->where('mains.link_id', '=', $set_link->id)
                 ->orderBy('items.' . $name);
-
             $sel_error = true;
             if ($link->parent_is_use_selection_calculated_table_link_id_0) {
                 $set = Set::findOrFail($link->parent_selection_calculated_table_set_id);
@@ -3363,6 +3449,7 @@ class ItemController extends Controller
             }
         }
 
+        $result_items_no_get = $result_child_base_items;
         // '->get()' нужно
         $result_items = $result_child_base_items->get();
 
@@ -3375,13 +3462,15 @@ class ItemController extends Controller
             $result_items_name_options = "<option value='0'>" . trans('main.no_information') . "!</option>";
         }
 
-        return ['result_items' => $result_items,
+        return ['result_items_no_get' => $result_items_no_get,
+            'result_items' => $result_items,
             'result_items_name_options' => $result_items_name_options];
     }
 
 // Используется в ext_edit.php при обычной фильтрации данных
-    static function get_child_items_from_parent_item(Base $base_start, Item $item_start, Link $link_result)
+    static function get_child_items_from_parent_item(Base $base_start, Item $item_start, Link $link)
     {
+        $link_result = Link::find($link->parent_child_related_result_link_id);
         $result_items = null;
         $result_items_name_options = null;
         $cn = 0;
@@ -4329,6 +4418,216 @@ class ItemController extends Controller
 
         return ['link_id_array' => $link_id_array, 'matrix' => $matrix,
             'rows' => $rows, 'cols' => $cols, 'error_message' => $error_message];
+    }
+
+    static function get_link_refer_main(Base $base, Link $link_refer_start)
+    {
+        $link = Link::where('parent_is_child_related', true)
+            ->where('child_base_id', $base->id)
+            ->where('parent_child_related_start_link_id', $link_refer_start->id)
+            ->first();
+        return $link;
+    }
+
+
+    static function get_items_main(Base $base, Project $project, Role $role, Link $link = null, Item $item = null)
+    {
+        // Фильтр данных
+        $is_filter = false;
+        // В списке использовать поля вычисляемой таблицы
+        $is_calcuse = false;
+        // Результат, no get()
+        $items = null;
+        $items_filter = null;
+        if ($link) {
+            if ($item) {
+                // Если это фильтрируемое поле (в связка ЕдинИзмерения-Материал - поле Материал является фильтрируемым полем)
+                $is_filter = Link::where('parent_is_child_related', true)->where('parent_child_related_start_link_id', $link->id)->exists();
+            }
+            // 1.0 В списке выбора использовать поле вычисляемой таблицы
+            $is_calcuse = $link->parent_is_in_the_selection_list_use_the_calculated_table_field;
+        }
+        // Права по base_id
+        $base_right = GlobalController::base_right($base, $role);
+        //dd($is_filter);
+        //dd($is_calcuse);
+        if (($is_filter) || ($is_calcuse)) {
+            //dd($is_calcuse);
+            if ($is_filter) {
+                $items_filter = self::get_items_filter_main($base, $project, $role, $link, $item);
+                $items = $items_filter;
+                //dd($items->get());
+            }
+            if ($is_calcuse) {
+                $items = self::get_items_calc_main($base, $project, $role, $link);
+                //dd($items->get());
+                if ($is_filter) {
+                    // Объединение двух запросов $items_filter и $items(вычисляемые)
+                    //$items = Item::select(DB::Raw('items.*'))
+                    $items = Item::select(DB::Raw('items.*'))
+                        ->joinSub($items, 'items_start', function ($join) {
+                            $join->on('items.id', '=', 'items_start.id');
+                        })
+                        ->joinSub($items_filter, 'items_second', function ($join) {
+                            $join->on('items.id', '=', 'items_second.id');
+                        });
+                    //dd($items->get());
+                }
+            }
+        } else {
+            $items = self::get_items_list_main($base, $project, $role);
+        }
+
+        // Такая же проверка и в GlobalController (function items_right()),
+        // в ItemController (function browser(), get_items_for_link(), get_items_ext_edit_for_link())
+        if ($base_right['is_list_base_byuser'] == true) {
+            $items = $items->where('created_user_id', GlobalController::glo_user_id());
+        }
+
+        //dd($items);
+        //dd($items->get());
+        return $items;
+    }
+
+    // Выборка данных без фильтра и вычисляемых
+    static function get_items_list_main(Base $base, Project $project, Role $role)
+    {
+        // Результат, no get()
+        $items = Item::select(DB::Raw('items.*'))
+            ->where('items.base_id', $base->id)
+            ->where('project_id', $project->id);
+        return $items;
+    }
+
+    // Выборка данных c вычисляемыми
+    static function get_items_calc_main(Base $base, Project $project, Role $role, Link $link)
+    {
+        // Результат, no get()
+        $items = null;
+
+        $set = Set::findOrFail($link->parent_selection_calculated_table_set_id);
+        $set_link = $set->link_to;
+        // Получаем список из вычисляемой таблицы
+        $items = Item::select(DB::Raw('items.*'))
+            ->join('mains', 'items.id', '=', 'mains.parent_item_id')
+            ->where('mains.link_id', '=', $set_link->id);
+
+        //->orderBy('items.' . $name);
+
+        //                             ->where('items.project_id', $project->id)
+
+//                    1.1 В списке выбора использовать дополнительное связанное поле вычисляемой таблицы
+        if ($link->parent_is_use_selection_calculated_table_link_id_0 == true) {
+            $link_id = $link->parent_selection_calculated_table_link_id_0;
+            // Получаем данные из обычной таблицы(невычисляемой) + фильтр проверки наличия в вычисляемой таблице
+            // Список 'items.*' формируется из 'mains.parent_item_id'
+            // Связь с вычисляемой таблицей - 'joinSub($items, 'items_start', function ($join) {
+            //                                $join->on('mains.child_item_id', '=', 'items_start.id')'
+            $items = Item::select(DB::Raw('items.*'))
+                ->join('mains', 'items.id', '=', 'mains.parent_item_id')
+                ->joinSub($items, 'items_start', function ($join) {
+                    $join->on('mains.child_item_id', '=', 'items_start.id');
+                })
+                ->where('mains.link_id', '=', $link_id)
+                ->distinct();
+            //->orderBy('items.' . $name);
+
+            //                             ->where('items.project_id', $project->id)
+
+//                        1.2 В списке выбора использовать два дополнительных связанных поля вычисляемой таблицы
+            if ($link->parent_is_use_selection_calculated_table_link_id_1 == true) {
+                $link_id = $link->parent_selection_calculated_table_link_id_1;
+                // Получаем данные из обычной таблицы(невычисляемой) + фильтр проверки наличия в вычисляемой таблице
+                // Список 'items.*' формируется из 'mains.parent_item_id'
+                // Связь с таблицей-результатом предыдущего запроса - 'joinSub($items, 'items_start', function ($join) {
+                //                                $join->on('mains.child_item_id', '=', 'items_start.id')'
+                $items = Item::select(DB::Raw('items.*'))
+                    ->join('mains', 'items.id', '=', 'mains.parent_item_id')
+                    ->joinSub($items, 'items_start', function ($join) {
+                        $join->on('mains.child_item_id', '=', 'items_start.id');
+                    })
+                    ->where('mains.link_id', '=', $link_id)
+                    ->distinct();
+                //->orderBy('items.' . $name);
+
+                //                             ->where('items.project_id', $project->id)
+            }
+        }
+
+        return $items;
+    }
+
+    // Выборка данных с фильтром
+    static function get_items_filter_main(Base $base, Project $project, Role $role, Link $link, Item $item)
+    {
+        // Результат, no get()
+        $items = null;
+
+        // Находим $link_find - (из примера) ЕдиницуИзмерения, $link передано в функцию как Материал
+        // Если это фильтрируемое поле (например: в связка ЕдинИзмерения-Материал - поле Материал является фильтрируемым полем)
+        $link_find = Link::where('parent_is_child_related', true)->where('parent_child_related_start_link_id', $link->id)->first();
+        if ($link_find) {
+            $link_result = Link::find($link_find->parent_child_related_result_link_id);
+            $result_items = null;
+            $result_items_name_options = null;
+            $cn = 0;
+            $error = false;
+            $link = null;
+            $mains = null;
+            $items_parent = null;
+            $items_child = null;
+
+            // список links - маршрутов до поиска нужного объекта
+            $links = BaseController::get_array_bases_tree_routes($base->id, $link_result->id, false);
+            if ($links) {
+                $items_parent = array();
+                // добавление элемента в конец массива
+                array_unshift($items_parent, $item->id);
+                $cn = 0;
+                $error = false;
+                foreach ($links as $link_value) {
+                    $cn = $cn + 1;
+                    $link = Link::find($link_value);
+                    if (!$link) {
+                        $error = true;
+                        break;
+                    }
+                    // обнуление массива $items_child
+                    $items_child = array();
+                    foreach ($items_parent as $item_id) {
+                        // $item используется в цикле
+                        $mains = Main::select(['child_item_id'])
+                            ->where('parent_item_id', $item_id)->where('link_id', $link->id)->get();
+                        if (!$mains) {
+                            $error = true;
+                            break;
+                        }
+                        foreach ($mains as $main) {
+                            // добавление элемента в конец массива
+                            array_unshift($items_child, $main->child_item_id);
+                        }
+                    }
+                    $items_parent = $items_child;
+                }
+            }
+            if (!$error) {
+                // проверки "цикл прошел по всем элементам до конца";
+                if (count($links) == $cn) {
+                    $items = $items_child;
+
+//                    $items = Item::whereIn('id', $items_child)
+//                        ->orderBy(\DB::raw("FIELD(id, " . implode(',', $items_child) . ")"));
+                    $items = Item::whereIn('id', $items_child);
+
+//                    $items = Item::select(DB::Raw('items.*'))
+//                        ->joinSub($items_child, 'items_start', function ($join) {
+//                            $join->on('items.id', '=', 'items_start');
+//                        });
+                }
+            }
+        }
+        //dd($items->get());
+        return $items;
     }
 
 }
