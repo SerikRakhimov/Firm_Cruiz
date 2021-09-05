@@ -796,6 +796,14 @@ Route::get('/item/get_items_main/{base}/{project}/{role}/{link?}/{item?}', 'Item
     ->name('item.get_items_main')
     ->middleware('auth');
 
+Route::get('/item/get_items_main_options/{base}/{project}/{role}/{link?}/{item?}', 'ItemController@get_items_main_options')
+    ->name('item.get_items_main_options')
+    ->middleware('auth');
+
+Route::get('/item/get_items_main_code/{code}/{base}/{project}/{role}/{link?}/{item?}', 'ItemController@get_items_main_code')
+    ->name('item.get_items_main_code')
+    ->middleware('auth');
+
 Route::get('/item/get_items_for_link/{link}/{project}/{role}', 'ItemController@get_items_for_link')
     ->name('item.get_items_for_link')
     ->middleware('auth');

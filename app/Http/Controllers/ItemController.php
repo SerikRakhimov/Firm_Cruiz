@@ -113,31 +113,25 @@ class ItemController extends Controller
         $base = Base::findOrFail($base_id);
         $project = Project::findOrFail($project_id);
         $role = Role::findOrFail($role_id);
-        $item = Item::findOrFail($item_id);
+        $item = null;
+        if ($item_id) {
+            $item = Item::findOrFail($item_id);
+        }
         $base_right = GlobalController::base_right($base, $role);
         $name = BaseController::field_name();
-        $items = ItemController::get_items_main($base, $project, $role, $link, $item);
-        if($order_by == null){
-            $order_by = "code";
+        $items = ItemController::get_items_main($base, $project, $role, $link, $item)['items_no_get'];
+        if ($order_by == null) {
+            $order_by = "name";
         }
-        if($order_by == ""){
-            $order_by = "code";
+        if ($order_by == "") {
+            $order_by = "name";
         }
-        if($filter_by == null){
-            $filter_by = "code";
+        if ($filter_by == null) {
+            $filter_by = "name";
         }
-        if($filter_by == ""){
-            $filter_by = "code";
+        if ($filter_by == "") {
+            $filter_by = "name";
         }
-        //dd($item);
-        //dd($base);
-        //dd($project);
-        //dd($role);
-        //dd($items->get());
-        //$items = ItemController::get_items_for_link($link, $project, $role)['result_parent_base_items_no_get'];
-        //$items = ItemController::get_child_items_from_parent_item($base, $item, $link)['result_items'];
-        //$items = self::get_items_for_browse($base, $link, $project, $role, $item);
-        //dd($link);
         if ($items != null) {
             if ($order_by) {
                 if ($order_by == 'name') {
@@ -146,12 +140,7 @@ class ItemController extends Controller
                     $items = $items->orderBy($order_by);
                 }
             }
-            //dd($items->get());
-            //$search ='';
-            //$items = $items->where('items.code', 'LIKE', '%' . $search . '%');
-            //dd('search=' . $search);
             if ($filter_by && $search != "") {
-                //dd("11111");
                 if ($filter_by != "") {
                     if ($filter_by == 'name') {
                         $items = $items->where('items.' . $name, 'LIKE', '%' . $search . '%');
@@ -213,19 +202,6 @@ class ItemController extends Controller
         } else {
             return view('message', ['message' => trans('main.no_data')]);
         }
-    }
-
-    static function get_items_for_browse(Base $base, Link $link, Project $project, Role $role, Item $item)
-    {
-        $items = null;
-        $item = null;
-        // Фильтрация данных
-        if ($item) {
-            $items = ItemController::get_child_items_from_parent_item($base, $item, $link)['result_items'];
-        } else {
-            $items = ItemController::get_items_for_link($link, $project, $role)['result_parent_base_items_no_get'];
-        }
-        return $items;
     }
 
 //    function index()
@@ -4429,7 +4405,7 @@ class ItemController extends Controller
         return $link;
     }
 
-
+    // Выборка данных в виде списка
     static function get_items_main(Base $base, Project $project, Role $role, Link $link = null, Item $item = null)
     {
         // Фильтр данных
@@ -4439,6 +4415,8 @@ class ItemController extends Controller
         // Результат, no get()
         $items = null;
         $items_filter = null;
+        $result_parent_label = $link->parent_label();
+        $result_parent_base_name = $link->parent_base->name();;
         if ($link) {
             if ($item) {
                 // Если это фильтрируемое поле (в связка ЕдинИзмерения-Материал - поле Материал является фильтрируемым полем)
@@ -4449,18 +4427,13 @@ class ItemController extends Controller
         }
         // Права по base_id
         $base_right = GlobalController::base_right($base, $role);
-        //dd($is_filter);
-        //dd($is_calcuse);
         if (($is_filter) || ($is_calcuse)) {
-            //dd($is_calcuse);
             if ($is_filter) {
                 $items_filter = self::get_items_filter_main($base, $project, $role, $link, $item);
                 $items = $items_filter;
-                //dd($items->get());
             }
             if ($is_calcuse) {
                 $items = self::get_items_calc_main($base, $project, $role, $link);
-                //dd($items->get());
                 if ($is_filter) {
                     // Объединение двух запросов $items_filter и $items(вычисляемые)
                     //$items = Item::select(DB::Raw('items.*'))
@@ -4471,7 +4444,6 @@ class ItemController extends Controller
                         ->joinSub($items_filter, 'items_second', function ($join) {
                             $join->on('items.id', '=', 'items_second.id');
                         });
-                    //dd($items->get());
                 }
             }
         } else {
@@ -4484,9 +4456,50 @@ class ItemController extends Controller
             $items = $items->where('created_user_id', GlobalController::glo_user_id());
         }
 
-        //dd($items);
-        //dd($items->get());
-        return $items;
+        return ['items_no_get' => $items,
+            'result_parent_label' => $result_parent_label,
+            'result_parent_base_name' => $result_parent_base_name];
+    }
+
+    // Выборка данных в виде списка
+    static function get_items_main_options(Base $base, Project $project, Role $role, Link $link = null, Item $item = null)
+    {
+        $items_main = self::get_items_main($base, $project, $role, $link, $item);
+        $items_no_get = $items_main['items_no_get'];
+        // '->get()' нужно
+        $result_items = $items_no_get->get();
+
+        $result_items_name_options = "";
+        if (count($result_items) > 0) {
+            $result_items_name_options = "";
+            foreach ($result_items as $it) {
+                $result_items_name_options = $result_items_name_options . "<option value='" . $it->id . "'>" . $it->name() . "</option>";
+            }
+        } else {
+            $result_items_name_options = "<option value='0'>" . trans('main.no_information') . "!</option>";
+        }
+
+        return ['items_no_get' => $items_no_get,
+            'result_parent_label' => $items_main['result_parent_label'],
+            'result_parent_base_name' => $items_main['result_parent_base_name'],
+            'result_items' => $result_items,
+            'result_items_name_options' => $result_items_name_options];
+
+    }
+
+    // Выборка данных в виде списка
+    static function get_items_main_code($code, Base $base, Project $project, Role $role, Link $link = null, Item $item = null)
+    {
+        $items_main = self::get_items_main($base, $project, $role, $link, $item);
+        $items_no_get = $items_main['items_no_get'];
+        $item_id = 0;
+        $item_name = trans('main.no_information') . '!';
+        $item = $items_no_get->where('items.code', $code)->first();
+        if ($item != null) {
+            $item_id = $item->id;
+            $item_name = $item->name();
+        }
+        return ['item_id' => $item_id, 'item_name' => $item_name];
     }
 
     // Выборка данных без фильтра и вычисляемых
@@ -4562,7 +4575,6 @@ class ItemController extends Controller
     {
         // Результат, no get()
         $items = null;
-
         // Находим $link_find - (из примера) ЕдиницуИзмерения, $link передано в функцию как Материал
         // Если это фильтрируемое поле (например: в связка ЕдинИзмерения-Материал - поле Материал является фильтрируемым полем)
         $link_find = Link::where('parent_is_child_related', true)->where('parent_child_related_start_link_id', $link->id)->first();
@@ -4626,7 +4638,6 @@ class ItemController extends Controller
                 }
             }
         }
-        //dd($items->get());
         return $items;
     }
 
