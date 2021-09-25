@@ -42,4 +42,5 @@ class IsOneWordUser implements Rule
     {
         return trans('main.enter_one_word_without_spaces'). '.';
     }
+
 }

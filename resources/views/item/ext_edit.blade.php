@@ -1055,21 +1055,21 @@
                                 );
                             @endif
                         }
-                        // http://javascript.ru/forum/events/76761-programmno-vyzvat-sobytie-change.html#post503465
-                        // Вызываем состояние "элемент изменился", в связи с этим запустятся функции - обработчики "change"
+                        {{-- http://javascript.ru/forum/events/76761-programmno-vyzvat-sobytie-change.html#post503465--}}
+                        {{-- Вызываем состояние "элемент изменился", в связи с этим запустятся функции - обработчики "change"--}}
                         @if($link_start_child->parent_base->is_code_needed==true && $link_start_child->parent_is_enter_refer==true)
                         document.getElementById('code{{$link_start_child->id}}').dispatchEvent(new Event('change'));
                         @else
                         document.getElementById('link{{$link_start_child->id}}').dispatchEvent(new Event('change'));
                         @endif
                     }
-                    // Событие на изменение значения
+                    {{-- Событие на изменение значения--}}
                     @if($link->parent_base->is_code_needed==true && $link->parent_is_enter_refer==true)
+                    {{--Не нужно--}}
                     {{--document.getElementById('code{{$link->id}}').addEventListener("change", link_id_changeOption_{{$prefix}}{{$link->id}});--}}
                     @else
                     document.getElementById('link{{$link->id}}').addEventListener("change", link_id_changeOption_{{$prefix}}{{$link->id}});
                 @endif
-                {{--parent_base_id{{$prefix}}{{$link->id}}.addEventListener("change", link_id_changeOption_{{$prefix}}{{$link->id}});--}}
 
             </script>
         @endif
@@ -1134,29 +1134,38 @@
                         ?>
                         {{-- async - await нужно, https://tproger.ru/translations/understanding-async-await-in-javascript/--}}
                         async function code_input_{{$prefix}}{{$link->id}}(first) {
-                            await axios.get('/item/get_items_main_code/'
-                                + code_{{$prefix}}{{$link->id}}.value
-                                + '/' + '{{$link->parent_base_id}}' + '/' + {{$project->id}} +'/' + {{$role->id}} +'/' + {{$link->id}}
-                                    @if(($link_refer_main->parent_is_base_link == true) || ($link_refer_main->parent_base->is_code_needed==true && $link_refer_main->parent_is_enter_refer==true))
-                                    +'/' + parent_base_id{{$prefix}}{{$link->id}}.value
-                                @else
-                                + '/' + parent_base_id{{$prefix}}{{$link->id}}.options[parent_base_id{{$prefix}}{{$link->id}}.selectedIndex].value
+                        @if(($link_refer_main->parent_is_base_link == true) || ($link_refer_main->parent_base->is_code_needed==true && $link_refer_main->parent_is_enter_refer==true))
+                        if (parent_base_id{{$prefix}}{{$link->id}}.value == 0) {
+                            @else
+                            if (parent_base_id{{$prefix}}{{$link->id}}.options[parent_base_id{{$prefix}}{{$link->id}}.selectedIndex].value == 0) {
                                 @endif
-                        ).then(function (res) {
+                                name_{{$prefix}}{{$link->id}}.innerHTML = "{{trans('main.no_information') . '!'}}";
+                                key_{{$prefix}}{{$link->id}}.value = 0;
+                            } else {
+                                await axios.get('/item/get_items_main_code/'
+                                    + code_{{$prefix}}{{$link->id}}.value + '/'
+                                    + '{{$link->parent_base_id}}' + '/' + {{$project->id}} +'/' + {{$role->id}} +'/' + {{$link->id}}
+                                        @if(($link_refer_main->parent_is_base_link == true) || ($link_refer_main->parent_base->is_code_needed==true && $link_refer_main->parent_is_enter_refer==true))
+                                        +'/' + parent_base_id{{$prefix}}{{$link->id}}.value
+                                    @else
+                                    + '/' + parent_base_id{{$prefix}}{{$link->id}}.options[parent_base_id{{$prefix}}{{$link->id}}.selectedIndex].value
+                                    @endif
+                                ).then(function (res) {
                                         name_{{$prefix}}{{$link->id}}.innerHTML = res.data['item_name'];
                                         key_{{$prefix}}{{$link->id}}.value = res.data['item_id'];
                                     }
                                 );
 
-                            {{--Команда "on_parent_refer();" нужна, для вызова функция обновления данных с зависимых таблиц--}}
-                            {{--Функция code_input_{{$prefix}}{{$link->id}}(first) выполняется не сразу--}}
-                            link_id_changeOption_{{$prefix_prev}}{{$link->id}}();
-                            on_parent_refer();
+                                {{--Команда "on_parent_refer();" нужна, для вызова функция обновления данных с зависимых таблиц--}}
+                                {{--Функция code_input_{{$prefix}}{{$link->id}}(first) выполняется не сразу--}}
+                                {{--on_parent_refer();--}}
 
-                            {{-- http://javascript.ru/forum/events/76761-programmno-vyzvat-sobytie-change.html#post503465--}}
-                            {{-- вызываем состояние "элемент изменился", в связи с этим запустятся функции - обработчики "change"--}}
+                                link_id_changeOption_{{$prefix_prev}}{{$link->id}}();
+
+                                {{-- http://javascript.ru/forum/events/76761-programmno-vyzvat-sobytie-change.html#post503465--}}
+                                {{-- вызываем состояние "элемент изменился", в связи с этим запустятся функции - обработчики "change"--}}
+                            }
                         }
-
                         code_{{$prefix}}{{$link->id}}.addEventListener("change", code_input_{{$prefix}}{{$link->id}});
                     {{--code_{{$prefix}}{{$link->id}}.addEventListener("change", link_id_changeOption_6_{{$link->id}});--}}
 
@@ -1169,7 +1178,7 @@
 
                     var child_base_id{{$prefix}}{{$link->id}} = document.getElementById('buttonbrow{{$link->id}}');
 
-                    // async - await нужно, https://tproger.ru/translations/understanding-async-await-in-javascript/
+                    {{--async - await нужно, https://tproger.ru/translations/understanding-async-await-in-javascript/--}}
                     function link_id_changeOption_{{$prefix}}{{$link->id}}() {
                         // Нужно, используется в browser.blade.php
                         window.item_id = document.getElementById({{$link->id}});
@@ -1179,9 +1188,8 @@
                             , 'browse', 'width=800, height=800');
                     }
 
-                    // Событие на кнопку "..."
+                    {{--Событие на кнопку "..."--}}
                     child_base_id{{$prefix}}{{$link->id}}.addEventListener("click", link_id_changeOption_{{$prefix}}{{$link->id}});
-                    //child_base_id{{$prefix}}{{$link->id}}.addEventListener("click", on_parent_refer);
 
                     <?php
                     $functions[count($functions)] = "code_input_" . $prefix . $link->id;
@@ -1195,14 +1203,16 @@
                             + '/' + '{{$project->id}}'
                             + '/' + code_{{$prefix}}{{$link->id}}.value
                         ).then(function (res) {
+                                code_{{$prefix}}{{$link->id}}.innerHTML = res.data['item_code'];
                                 name_{{$prefix}}{{$link->id}}.innerHTML = res.data['item_name'];
                                 key_{{$prefix}}{{$link->id}}.value = res.data['item_id'];
                             }
                         );
                         {{--Команда "on_parent_refer();" нужна, для вызова функция обновления данных с зависимых таблиц--}}
                         {{--Функция code_input_{{$prefix}}{{$link->id}}(first) выполняется не сразу--}}
+                        {{--on_parent_refer();--}}
+
                         link_id_changeOption_{{$prefix_prev}}{{$link->id}}();
-                        on_parent_refer();
 
                         {{-- http://javascript.ru/forum/events/76761-programmno-vyzvat-sobytie-change.html#post503465--}}
                         {{-- вызываем состояние "элемент изменился", в связи с этим запустятся функции - обработчики "change"--}}

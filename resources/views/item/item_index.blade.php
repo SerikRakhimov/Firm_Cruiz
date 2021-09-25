@@ -16,7 +16,8 @@
     ?>
     @include('layouts.project.show_project_role',['project'=>$project, 'role'=>$role])
     @if(count($links) !=0)
-        <table class="table table-sm table-borderless">
+{{--        <table class="table table-sm table-borderless">--}}
+            <table class="table table-sm table-bordered">
             <thead>
             <tr>
                 @foreach($links as $link)
@@ -50,19 +51,21 @@
                     </td>
                 @endforeach
             </tr>
-            <tr>
-                @foreach($links as $link)
-                    <td>
-                        &#8195; &#8195; &#8195; &#8595;
-                    </td>
-                @endforeach
-            </tr>
+{{--            <tr align="center">--}}
+{{--                @foreach($links as $link)--}}
+{{--                    <td>--}}
+{{--                        &#8195; &#8195; &#8195; &#8595;--}}
+{{--                        &#8595;--}}
+{{--                    </td>--}}
+{{--                @endforeach--}}
+{{--            </tr>--}}
             </tbody>
         </table>
         {{--    @endif--}}
         {{--    <hr align="center" width="100%" size="2" color="#ff0000"/>--}}
         {{--        &#8595;	&#8195; &#8595;	&#8195; &#8595;	&#8195; &#8595;	&#8195; &#8595;	&#8195; &#8595;	&#8195; &#8595;	&#8195; &#8595;	&#8195; &#8595;	&#8195; &#8595;	&#8195; &#8595;	&#8195;--}}
-        <hr>
+{{--        <hr>--}}
+{{--        <div class="text-center">&#8595;</div>--}}
     @endif
 
     <?php
@@ -140,33 +143,114 @@
     </div>
     </p>
     @if($link2)
-        <hr>
-        <div class="text-center">&#8595;</div>
-
+{{--        <hr>--}}
+<br>
+{{--        <div class="text-center">&#8595;</div>--}}
         <?php
         $mains = Main::all()->where('parent_item_id', $item->id)->where('link_id', $link2->id)->sortBy(function ($main) {
             return $main->link->child_base->name() . $main->child_item->name();
         });
         ?>
+        {{--        Не удалять--}}
+{{--        <p>--}}
+{{--        <div class="container-fluid">--}}
+{{--            <div class="row">--}}
+{{--                <div class="col text-left">--}}
+{{--                    <h3>--}}
+{{--                    </h3>--}}
+{{--                    <h3>--}}
+{{--                        <a href="{{route('item.base_index', ['base'=>$link2->child_base,--}}
+{{--                            'project'=>$project, 'role'=>$role])}}"--}}
+{{--                           title="{{$link2->child_base->names()}}">--}}
+{{--                            {{$link2->child_labels()}}--}}
+{{--                        </a>--}}
+{{--                        ({{$link2->parent_label()}} = {{$item->name()}}):--}}
+{{--                    </h3>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--        </p>--}}
 
-        <p>
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col text-left">
-                    <h3>
-                    </h3>
-                    <h3>
-                        <a href="{{route('item.base_index', ['base'=>$link2->child_base,
-                            'project'=>$project, 'role'=>$role])}}"
-                           title="{{$link2->child_base->names()}}">
-                            {{$link2->child_labels()}}
-                        </a>
-                        ({{$link2->parent_label()}} = {{$item->name()}}):
-                    </h3>
+
+        <?php
+
+        //      $next_links_plan = $item->base->parent_links->where('id', '!=', $link2->id);
+        // исключить вычисляемые поля
+        // Не удалять
+//        $next_links_plan = $item->base->parent_links->where('parent_is_parent_related', false)->where('id', '!=', $link2->id);
+//
+//        $next_links_fact = DB::table('mains')
+//            ->select('link_id')
+//            ->where('parent_item_id', $item->id)
+//            ->where('link_id', '!=', $link2->id)
+//            ->distinct()
+//            ->get()
+//            ->groupBy('link_id');
+
+        $next_links_plan = $item->base->parent_links->where('parent_is_parent_related', false);
+
+        $next_links_fact = DB::table('mains')
+            ->select('link_id')
+            ->where('parent_item_id', $item->id)
+            ->distinct()
+            ->get()
+            ->groupBy('link_id');
+
+        $array = objectToarray($next_links_fact);
+        ?>
+        @if (!count($next_links_plan) == 0)
+            <form action="{{route('item.store_link_change')}}" method="POST" enctype=multipart/form-data>
+                <div class="form-row">
+                    @csrf
+                    <input type="hidden" name="item_id" value="{{$item->id}}">
+                    <input type="hidden" name="role_id" value="{{$role->id}}">
+
+                    <div class="d-flex justify-content-end align-items-center mt-0">
+                        <div class="col-auto">
+{{--                            <label for="link_id">{{trans('main.another_attitude')}} = </label>--}}
+                            <label for="link_id">{{trans('main.link')}} = </label>
+                        </div>
+                        <div class="">
+                            <select class="form-control"
+                                    name="link_id"
+                                    id="link_id"
+                                    class="form-control @error('link_id') is-invalid @enderror">
+                                @foreach($next_links_plan as $key=>$value)
+                                    <option value="{{$value->id}}"
+                                        {{--                                                                                    @if(!isset($array["\x00*\x00items"][$value->id]))--}}
+                                        {{--                                                                                    disabled--}}
+                                        {{--                                                                                @endif--}}
+                                        @if($value->id == $link2->id)
+                                        selected
+                                        @endif
+                                    >
+                                        {{--                                                                                {{$value->parent_label()}} {{$main->child_item->name()}} ({{mb_strtolower(trans('main.on'))}} {{$value->child_labels()}})--}}
+{{--                                        {{$value->child_labels()}} ({{$value->parent_label()}})--}}
+                                        {{$value->child_labels()}}
+                                        @if($value->id == $link2->id)
+                                            &#10003;
+                                        @endif
+                                        @if(isset($array["\x00*\x00items"][$value->id]))
+                                            *
+                                        @endif
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('link_id')
+                            <div class="text-danger">
+                                {{$message}}
+                            </div>
+                            @enderror
+                        </div>
+                        <div class="col-2 ml-auto">
+                            <button type="submit" class="btn btn-dreamer"
+                            >{{trans('main.select')}}
+                            </button>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-        </p>
+            </form>
+        @endif
         <p>
         <div class="container-fluid">
             <div class="row">
@@ -192,8 +276,8 @@
                 <thead>
                 <tr>
                     <th class="text-center">#</th>
-                    <th class="text-left">{{$link2->child_label()}}</th>
-                    <th class="text-center"></th>
+{{--                    <th class="text-left">{{$link2->child_label()}}</th>--}}
+{{--                    <th class="text-center"></th>--}}
                     @foreach($links1 as $link1)
                         <th>
                             <a href="{{route('item.base_index', ['base'=>$link1->parent_base,
@@ -220,12 +304,12 @@
                     ?>
                     <tr>
                         <td class="text-center">{{$i}}</td>
-                        <td class="text-left">
-                            <a href="{{route('item.item_index', ['item'=>$item1, 'role'=>$role])}}">
-                                {{$item1->name()}}
-                            </a>
-                        </td>
-                        <td class="text-center">&#8594;</td>
+{{--                        <td class="text-left">--}}
+{{--                            <a href="{{route('item.item_index', ['item'=>$item1, 'role'=>$role])}}">--}}
+{{--                                {{$item1->name()}}--}}
+{{--                            </a>--}}
+{{--                        </td>--}}
+{{--                        <td class="text-center">&#8594;</td>--}}
                         @foreach($links1 as $link1)
                             <td>
                                 <?php
@@ -269,69 +353,6 @@
                 </tbody>
             </table>
         @endif
-        <hr>
-
-
-        <?php
-
-        //      $next_links_plan = $item->base->parent_links->where('id', '!=', $link2->id);
-        // исключить вычисляемые поля
-        $next_links_plan = $item->base->parent_links->where('parent_is_parent_related', false)->where('id', '!=', $link2->id);
-
-        $next_links_fact = DB::table('mains')
-            ->select('link_id')
-            ->where('parent_item_id', $item->id)
-            ->where('link_id', '!=', $link2->id)
-            ->distinct()
-            ->get()
-            ->groupBy('link_id');
-
-        $array = objectToarray($next_links_fact);
-        ?>
-        @if (!count($next_links_plan) == 0)
-            <form action="{{route('item.store_link_change')}}" method="POST" enctype=multipart/form-data>
-                <div class="form-row">
-                    @csrf
-                    <input type="hidden" name="item_id" value="{{$item->id}}">
-                    <input type="hidden" name="role_id" value="{{$role->id}}">
-
-                    <div class="d-flex justify-content-end align-items-center mt-5">
-                        <div class="col-auto">
-                            <label for="link_id">{{trans('main.another_attitude')}} = </label>
-                        </div>
-                        <div class="">
-                            <select class="form-control"
-                                    name="link_id"
-                                    id="link_id"
-                                    class="form-control @error('link_id') is-invalid @enderror">
-                                @foreach($next_links_plan as $key=>$value)
-                                    <option value="{{$value->id}}"
-                                        {{--                                                                                    @if(!isset($array["\x00*\x00items"][$value->id]))--}}
-                                        {{--                                                                                    disabled--}}
-                                        {{--                                                                                @endif--}}
-                                    >
-                                        {{--                                                                                {{$value->parent_label()}} {{$main->child_item->name()}} ({{mb_strtolower(trans('main.on'))}} {{$value->child_labels()}})--}}
-                                        {{$value->child_labels()}} ({{$value->parent_label()}})
-                                        @if(isset($array["\x00*\x00items"][$value->id]))
-                                            *
-                                        @endif
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('link_id')
-                            <div class="text-danger">
-                                {{$message}}
-                            </div>
-                            @enderror
-                        </div>
-                        <div class="col-2 ml-auto">
-                            <button type="submit" class="btn btn-primary"
-                            >{{trans('main.select')}}
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        @endif
+{{--        <hr>--}}
     @endif
 @endsection

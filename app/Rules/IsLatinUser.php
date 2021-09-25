@@ -40,4 +40,5 @@ class IsLatinUser implements Rule
     {
         return trans('main.only_latin_characters_numbers_and_special_characters_are_allowed') . '.';
     }
+
 }

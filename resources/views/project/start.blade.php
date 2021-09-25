@@ -85,9 +85,9 @@
                                 {{$base->names()}}
                                 {{--                            @auth--}}
                                 <span
-                                    class="text-muted text-related">
-                                    {{GlobalController::items_right($base, $project, $role)['view_count']}}
-                                </span>
+{{--                                    class="text-muted text-related">--}}
+{{--                                    {{GlobalController::items_right($base, $project, $role)['view_count']}}--}}
+{{--                                </span>--}}
                                 <span class="badge badge-related">{{$base->menu_type_name()}}</span>
                                 {{--                            @endauth--}}
                             </a>
@@ -193,11 +193,6 @@
                                 <span
                                     class="badge badge-related badge-pill">{{GlobalController::items_right($base, $project, $role)['view_count']}}</span>
                             </li>
-                            {{--                    <div class="card-footer text-center">--}}
-                            {{--                        <small class="text-muted">--}}
-                            {{--                            {{GlobalController::items_right($base, $project, $role)['view_count']}}--}}
-                            {{--                        </small>--}}
-                            {{--                    </div>--}}
                         @endif
                     @endforeach
                 </ul>

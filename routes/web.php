@@ -812,9 +812,9 @@ Route::get('/item/get_child_items_from_parent_item/{base_start}/{item_start}/{li
     ->name('item.get_child_items_from_parent_item')
     ->middleware('auth');
 
-Route::get('/item/get_selection_child_items_from_parent_item/{link}/{item_select}', 'ItemController@get_selection_child_items_from_parent_item')
-    ->name('item.get_selection_child_items_from_parent_item')
-    ->middleware('auth');
+//Route::get('/item/get_selection_child_items_from_parent_item/{link}/{item_select}', 'ItemController@get_selection_child_items_from_parent_item')
+//    ->name('item.get_selection_child_items_from_parent_item')
+//    ->middleware('auth');
 
 Route::get('/item/get_parent_item_from_calc_child_item/{item_start}/{link_result}/{item_calc}', 'ItemController@get_parent_item_from_calc_child_item')
     ->name('item.get_parent_item_from_calc_child_item')
@@ -846,6 +846,10 @@ Route::get('/item/calculate_names/{base}/{project}', 'ItemController@calculate_n
 
 Route::get('/item/recalculation_codes/{base}/{project}', 'ItemController@recalculation_codes')
     ->name('item.recalculation_codes')
+    ->middleware('auth');
+
+Route::get('/item/verify_baselink/{base}/{project}', 'ItemController@verify_baselink')
+    ->name('item.verify_baselink')
     ->middleware('auth');
 
 Route::get('/item/verify_number_values', 'ItemController@verify_number_values')

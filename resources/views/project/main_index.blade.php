@@ -65,8 +65,9 @@
                 {{--                <img class="card-img-top" src="{{Storage::url('background.png')}}" alt="Card image">--}}
                 <div class="card-header">
                     <div class="row">
-                        <div class="col-sm-6 text-left text-title">
-                            <small class="text-muted">Id = {{$project->id}}</small>
+{{--                        <div class="col-sm-6 text-left text-title">--}}
+                            <div class="col-sm-6 text-left text-label">
+                            {{$project->account}}
                         </div>
                         <div class="col-sm-6 text-right">
                             @include('layouts.project.show_icons',['project'=>$project])
@@ -85,7 +86,7 @@
                         </div>
                     @endif
                     <p>
-                    <h4 class="card-title mb-2">{{$project->name()}}</h4>
+                    <h4 class="mb-2">{{$project->name()}}</h4>
                     {{--                <p class="card-text">{{$project->desc()}}</p>--}}
                     <span class="card-text"><?php echo nl2br($project->dc_ext()); ?></span></p>
                     <br>
@@ -143,7 +144,14 @@
                     @endif
                 </div>
                 <div class="card-footer">
-                    <small class="text-muted">{{$project->user->name()}}</small>
+                    <div class="row">
+                        <div class="col-sm-4 text-left text-title">
+                            <small class="text-muted">Id: {{$project->id}}</small>
+                        </div>
+                        <div class="col-sm-8 text-right">
+                            <small class="text-muted">{{trans('main.author')}}: {{$project->user->name()}}</small>
+                        </div>
+                    </div>
                 </div>
             </div>
             {{--            @else--}}

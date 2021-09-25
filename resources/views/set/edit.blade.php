@@ -293,6 +293,7 @@
                 //    break;
                 // Обновление
                 case "3":
+                    val_savesets = "visible";
                     val_updaction = "visible";
                     break;
             }

@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Access;
 use App\Models\Base;
 use App\Models\Item;
+use App\Rules\IsLatinProject;
+use App\Rules\IsLowerProject;
+use App\Rules\IsOneWordProject;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use App\User;
@@ -25,6 +28,7 @@ class ProjectController extends Controller
     protected function rules()
     {
         return [
+            'account' => ['required', 'string', 'max:255', 'unique:projects', new IsOneWordProject(), new IsLatinProject(), new IsLowerProject()],
             'name_lang_0' => ['required', 'max:255'],
         ];
     }
@@ -714,7 +718,8 @@ class ProjectController extends Controller
         if (!Auth::user()->isAdmin()) {
             return redirect()->route('project.all_index');
         }
-        $projects = Project::where('template_id', $template->id)->orderBy('user_id');
+        //$projects = Project::where('template_id', $template->id)->orderBy('user_id');
+        $projects = Project::where('template_id', $template->id)->orderBy('account');
         $name = "";  // нужно, не удалять
         $index = array_search(App::getLocale(), config('app.locales'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
@@ -732,7 +737,8 @@ class ProjectController extends Controller
                 return redirect()->route('project.all_index');
             }
         }
-        $projects = Project::where('user_id', $user->id)->orderBy('template_id');
+        //$projects = Project::where('user_id', $user->id)->orderBy('template_id');
+        $projects = Project::where('user_id', $user->id)->orderBy('account');
         $name = "";  // нужно, не удалять
         $index = array_search(App::getLocale(), config('app.locales'));
         if ($index !== false) {   // '!==' использовать, '!=' не использовать
@@ -888,6 +894,7 @@ class ProjectController extends Controller
 
         $this->set($request, $project);
 
+        // Создать запись в основе/таблице accesses
         $role = Role::where('template_id', $project->template_id)->where('is_author', true)->first();
         if ($role) {
             $access = new Access();
@@ -920,7 +927,7 @@ class ProjectController extends Controller
                 return redirect()->route('project.all_index');
             }
         }
-        if (!($project->name_lang_0 == $request->name_lang_0)) {
+        if (($project->name_lang_0 != $request->name_lang_0) || ($project->account != $request->account)) {
             $request->validate($this->rules());
         }
 
@@ -979,6 +986,7 @@ class ProjectController extends Controller
     {
         $project->template_id = $request->template_id;
         $project->user_id = $request->user_id;
+        $project->account = $request->account;
 
         $project->name_lang_0 = $request->name_lang_0;
         $project->name_lang_1 = isset($request->name_lang_1) ? $request->name_lang_1 : "";
@@ -1109,10 +1117,11 @@ class ProjectController extends Controller
 
                 foreach ($bases_from as $base_from_id) {
                     $base = Base::findOrFail($base_from_id['base_id']);
-                    echo nl2br(trans('main.base') . ": " . $base->name() . " - ");
+                    echo nl2br(trans('main.base') . ": " . $base->name() . " - ". PHP_EOL);
                     $items = Item::where('project_id', $project->id)->where('base_id', $base->id)->get();
                     $count = $items->count();
                     foreach ($items as $item) {
+                        //echo nl2br(trans('main.processed') . " id = " . $item->id . " " . $item->name() . " ".$item->id. PHP_EOL);
                         // $reverse = true - отнимать, false - прибавлять
                         (new ItemController)->save_info_sets($item, false);
                     }

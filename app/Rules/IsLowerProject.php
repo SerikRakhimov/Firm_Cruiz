@@ -4,7 +4,7 @@ namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 
-class IsLowerUser implements Rule
+class IsLowerProject implements Rule
 {
     /**
      * Create a new rule instance.

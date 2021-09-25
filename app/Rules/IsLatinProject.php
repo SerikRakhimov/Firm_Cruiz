@@ -4,7 +4,7 @@ namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 
-class IsLowerUser implements Rule
+class IsLatinProject implements Rule
 {
     /**
      * Create a new rule instance.
@@ -26,7 +26,9 @@ class IsLowerUser implements Rule
     public function passes($attribute, $value)
     {
         //
-        return mb_strtolower($value) == $value;
+        $chr_ru = "A-Za-z0-9\s`~!@#$%^&*()_+-={}|:;<>?,.\/\"\'\\\[\]";
+
+        return (preg_match("/^[$chr_ru]+$/u", $value));
     }
 
     /**
@@ -36,7 +38,7 @@ class IsLowerUser implements Rule
      */
     public function message()
     {
-        return trans('main.all_letters_must_be_lowercase'). '.';
+        return trans('main.only_latin_characters_numbers_and_special_characters_are_allowed') . '.';
     }
 
 }

@@ -52,6 +52,13 @@
                             </a>
                         </div>
                     @endif
+                    <div class="col-12 text-right">
+                        <a href="{{route('item.verify_baselink',['base'=>$base, 'project'=>$project])}}"
+                           title="{{trans('main.verify_baselink')}}">
+                            <img src="{{Storage::url('recalculation_codes.png')}}" width="15" height="15"
+                                 alt="{{trans('main.verify_baselink')}}">
+                        </a>
+                    </div>
                 @endif
                 @if (Auth::user()->isAdmin())
                     <div class="col-12 text-right">
@@ -59,11 +66,11 @@
                             {{trans('main.verify_number_values')}}
                         </a>
                     </div>
-                        <div class="col-12 text-right">
-                            <a href="{{route('item.verify_table_texts')}}" title="{{trans('main.verify_table_texts')}}">
-                                {{trans('main.verify_table_texts')}}
-                            </a>
-                        </div>
+                    <div class="col-12 text-right">
+                        <a href="{{route('item.verify_table_texts')}}" title="{{trans('main.verify_table_texts')}}">
+                            {{trans('main.verify_table_texts')}}
+                        </a>
+                    </div>
                 @endif
             @endauth
         @endif

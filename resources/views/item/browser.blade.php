@@ -3,7 +3,7 @@
 <?php
 use \App\Http\Controllers\GlobalController;
 use \App\Http\Controllers\MainController;
-$item_id = null;
+$item_id = 0;
 if ($item){
     $item_id = $item->id;
 }

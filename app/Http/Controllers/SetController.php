@@ -370,12 +370,12 @@ class SetController extends Controller
                         break;
                     // Расчет Первый()
                     case 5:
-                        $set->is_savesets_enabled = false;
+                        $set->is_savesets_enabled = isset($request->is_savesets_enabled) ? true : false;
                         $set->is_upd_cl_gr_first = true;
                         break;
                     // Расчет Последний()
                     case 6:
-                        $set->is_savesets_enabled = false;
+                        $set->is_savesets_enabled = isset($request->is_savesets_enabled) ? true : false;
                         $set->is_upd_cl_gr_last = true;
                         break;
                     // Расчет Средний()
@@ -446,7 +446,6 @@ class SetController extends Controller
         return Link::select(DB::Raw('links.*'))
             ->join('bases', 'links.child_base_id', '=', 'bases.id')
             ->where('bases.template_id', $template->id)
-            ->where('links.parent_is_parent_related', false)
             ->orderBy('links.child_base_id')
             ->orderBy('links.parent_base_number')
             ->get();

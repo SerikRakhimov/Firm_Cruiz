@@ -29,6 +29,26 @@
         @if ($update)
             @method('PUT')
         @endif
+        <div class="form-group row">
+            <div class="col-3 text-right">
+                <label for="account" class="col-form-label">{{trans('main.account')}}
+                    <span
+                        class="text-danger">*</span></label>
+            </div>
+            <div class="col-7">
+                <input type="text"
+                       name="account"
+                       class="form-control @error('account') is-invalid @enderror"
+                       placeholder=""
+                       value="{{ old('account') ?? ($project->account ?? '') }}"
+                >
+            </div>
+            @error('account')
+            <div class="text-danger">
+                {{$message}}
+            </div>
+            @enderror
+        </div>
         @if($is_template)
             <input type="hidden" name="template_id" value="{{$template->id}}">
         @else

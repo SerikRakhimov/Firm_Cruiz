@@ -52,6 +52,7 @@
         <thead>
         <tr>
             <th class="text-center">#</th>
+            <th class="text-left">{{trans('main.account')}}</th>
             @if(!$is_template)
                 <th class="text-left">{{trans('main.template')}}</th>
             @endif
@@ -78,6 +79,11 @@
                 <td class="text-center">
                     <a href="{{route($project_show, $project)}}" title="{{trans('main.show')}}">
                         {{$i}}
+                    </a>
+                </td>
+                <td class="text-left">
+                    <a href="{{route($project_show, $project)}}" title="{{trans('main.show')}}">
+                        {{$project->account}}
                     </a>
                 </td>
                 @if(!$is_template)
