@@ -21,8 +21,8 @@ class CreateSetsTable extends Migration
             $table->unsignedBigInteger('link_to_id')->default(0);
             $table->boolean('is_group')->default(false);
             $table->boolean('is_update')->default(false);
-            $table->boolean('is_upd_plus')->default(false);
-            $table->boolean('is_upd_minus')->default(false);
+            //$table->boolean('is_upd_plus')->default(false);
+            //$table->boolean('is_upd_minus')->default(false);
             $table->boolean('is_upd_replace')->default(false);
             $table->timestamps();
             $table->index('template_id');

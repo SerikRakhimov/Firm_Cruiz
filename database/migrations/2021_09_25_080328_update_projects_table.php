@@ -14,8 +14,8 @@ class UpdateProjectsTable extends Migration
     public function up()
     {
         Schema::table('projects', function (Blueprint $table) {
-            //$table->string('account')->unique();
-            $table->string('account');
+            $table->string('account')->unique();
+            //$table->string('account');
         });
     }
 
