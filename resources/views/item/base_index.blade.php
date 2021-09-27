@@ -23,7 +23,7 @@
                 @if($message == "")
                     <button type="button" class="btn btn-dreamer" title="{{trans('main.add')}}"
                             onclick="document.location='{{route('item.ext_create', ['base'=>$base, 'project'=>$project, 'role'=>$role])}}'">
-                        <i class="fas fa-plus d-inline"></i>&nbsp;{{trans('main.add')}}
+                        <i class="fas fa-plus d-inline2"></i>&nbsp;{{trans('main.add')}}
                     </button>
                 @else
                     {{GlobalController::base_maxcount_message($base)}}
