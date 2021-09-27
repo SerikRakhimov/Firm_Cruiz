@@ -66,10 +66,10 @@
                 <div class="card-header">
                     <div class="row">
 {{--                        <div class="col-sm-6 text-left text-title">--}}
-                            <div class="col-sm-6 text-left text-label">
+                            <div class="col-sm-8 text-left text-label">
                             {{$project->account}}
                         </div>
-                        <div class="col-sm-6 text-right">
+                        <div class="col-sm-4 text-right">
                             @include('layouts.project.show_icons',['project'=>$project])
                         </div>
                     </div>
