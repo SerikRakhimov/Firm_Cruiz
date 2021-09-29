@@ -1206,7 +1206,6 @@
                                 code_{{$prefix}}{{$link->id}}.innerHTML = res.data['item_code'];
                                 name_{{$prefix}}{{$link->id}}.innerHTML = res.data['item_name'];
                                 key_{{$prefix}}{{$link->id}}.value = res.data['item_id'];
-                            alert('name = ' + name_{{$prefix}}{{$link->id}}.innerHTML);
                             }
                         );
                         {{--Команда "on_parent_refer();" нужна, для вызова функция обновления данных с зависимых таблиц--}}
