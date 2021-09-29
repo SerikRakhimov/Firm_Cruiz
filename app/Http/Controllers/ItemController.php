@@ -1518,6 +1518,7 @@ class ItemController extends Controller
                         }
                         $item_seek->save();
 
+                        echo nl2br(trans('main.calculation') . ":item_seek - " . $item_seek->base->name() . PHP_EOL);
                         // Вызов обработки присваиваний вложенных
                         // false - без реверса
                         // "$this->save_info_sets()" выполнять перед проверкой на удаление
