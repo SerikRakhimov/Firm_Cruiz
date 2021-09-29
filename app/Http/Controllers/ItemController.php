@@ -1317,7 +1317,6 @@ class ItemController extends Controller
                 }
                 // Если нет группировки
                 if (count($set_is_group) == 0) {
-                    echo nl2br(trans('main.calculation') . ":count(set_is_group) == 0 - " . $item->base->name() . PHP_EOL);
                     // похожие строки чуть выше
                     $item_seek = $items->first();
                     $error = false;
@@ -1328,11 +1327,9 @@ class ItemController extends Controller
                     }
                 }
                 if (!$error) {
-                    echo nl2br(trans('main.calculation') . ":(!error)" . PHP_EOL);
                     $create_item_seek = false;
 
                     if (!$found) {
-                        echo nl2br(trans('main.calculation') . ":(!found) " . PHP_EOL);
                         $create_item_seek = true;
 
                         // Эта проверка сделана, чтобы зря не создавать $item_seek
