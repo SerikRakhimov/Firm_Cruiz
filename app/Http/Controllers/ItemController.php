@@ -1316,7 +1316,7 @@ class ItemController extends Controller
                     }
                 }
                 // Если нет группировки
-                if (count($set_is_group->get()) == 0) {
+                if (count($set_is_group) == 0) {
                     // похожие строки чуть выше
                     $item_seek = $items->first();
                     $error = false;
