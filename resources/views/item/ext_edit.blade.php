@@ -25,9 +25,9 @@
             window.item_id = document.getElementById(link_id);
             window.item_code = document.getElementById('code' + link_id);
             window.item_name = document.getElementById('name' + link_id);
-            open('{{route('item.browser', '')}}' + '/' + link_id + '/' + base_id + '/' + project_id + '/' + role_id + '/' + item_id + '/1/1', 'browse', 'width=800, height=800');
             alert(window.item_code);
-        };
+            open('{{route('item.browser', '')}}' + '/' + link_id + '/' + base_id + '/' + project_id + '/' + role_id + '/' + item_id + '/1/1', 'browse', 'width=800, height=800');
+       };
     </script>
 
     @include('layouts.project.show_project_role',['project'=>$project, 'role'=>$role])
