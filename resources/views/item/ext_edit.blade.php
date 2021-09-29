@@ -1198,8 +1198,6 @@
 
                     {{--async - await нужно, https://tproger.ru/translations/understanding-async-await-in-javascript/--}}
                     async function code_input_{{$prefix}}{{$link->id}}(first) {
-
-                    alert('code = ' + code_{{$prefix}}{{$link->id}}.value);
                         await axios.get('/item/item_from_base_code/'
                             + '{{$link->parent_base_id}}'
                             + '/' + '{{$project->id}}'
@@ -1208,6 +1206,7 @@
                                 code_{{$prefix}}{{$link->id}}.innerHTML = res.data['item_code'];
                                 name_{{$prefix}}{{$link->id}}.innerHTML = res.data['item_name'];
                                 key_{{$prefix}}{{$link->id}}.value = res.data['item_id'];
+                            alert('name = ' + name_{{$prefix}}{{$link->id}}.innerHTML);
                             }
                         );
                         {{--Команда "on_parent_refer();" нужна, для вызова функция обновления данных с зависимых таблиц--}}
