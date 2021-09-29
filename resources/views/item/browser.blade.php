@@ -206,11 +206,13 @@ if ($item){
         opener.item_id.value = id;
         opener.item_code.value = code;
         opener.item_name.innerHTML = name;
-        alert(id);
-        alert(code);
-        alert(name);
+        // alert(opener.item_id.value);
+        // alert(opener.item_code.value);
+        // alert(opener.item_name.innerHTML);
+
         //opener.on_parent_refer();
-        opener.item_code.dispatchEvent(new Event('change'));
+
+        //opener.item_code.dispatchEvent(new Event('change'));
 
         close();
     }
