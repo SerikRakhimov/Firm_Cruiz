@@ -1098,7 +1098,7 @@
                     {{-- async - await нужно, https://tproger.ru/translations/understanding-async-await-in-javascript/--}}
                     function link_id_changeOption_{{$prefix}}{{$link->id}}() {
                         {{-- Нужно, используется в browser.blade.php--}}
-                            window.item_id = document.getElementById({{$link->id}});
+                            window.item_id = document.getElementById('{{$link->id}}');
                         window.item_code = document.getElementById('code{{$link->id}}');
                         window.item_name = document.getElementById('name{{$link->id}}');
 
@@ -1181,7 +1181,7 @@
                     {{--async - await нужно, https://tproger.ru/translations/understanding-async-await-in-javascript/--}}
                     function link_id_changeOption_{{$prefix}}{{$link->id}}() {
                         // Нужно, используется в browser.blade.php
-                        window.item_id = document.getElementById({{$link->id}});
+                        window.item_id = document.getElementById('{{$link->id}}');
                         window.item_code = document.getElementById('code{{$link->id}}');
                         window.item_name = document.getElementById('name{{$link->id}}');
                         open('{{route('item.browser', '')}}' + '/' + {{$link->id}} +'/' + {{$project->id}} +'/' + {{$role->id}}
