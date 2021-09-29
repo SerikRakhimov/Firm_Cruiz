@@ -1315,7 +1315,6 @@ class ItemController extends Controller
                         }
                     }
                 }
-                echo nl2br(trans('main.calculation') . ":000000000000000000000 " . PHP_EOL);
                 // Если нет группировки
                 if (count($set_is_group) == 0) {
                     echo nl2br(trans('main.calculation') . ":count($set_is_group) == 0" . PHP_EOL);
