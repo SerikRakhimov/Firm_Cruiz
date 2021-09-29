@@ -1248,6 +1248,8 @@
                         parent_base_id{{$prefix}}{{$link->id}}.innerHTML = "{{trans('main.no_information') . '!'}}";
                         //alert('---->'+"{{trans('main.no_information') . '!'}}")
                     } else {
+
+                    alert(child_base_id{{$prefix}}{{$link->id}}.value);
                         axios.get('/item/get_parent_item_from_calc_child_item/'
                             + child_base_id{{$prefix}}{{$link->id}}.value
                             + '/{{$link->id}}'
