@@ -31,7 +31,8 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-5 text-center">
-                <h3>{{trans('main.bases')}}</h3>
+{{--                <h3>{{trans('main.bases')}}</h3>--}}
+                <h3>{{trans('main.mainmenu')}}</h3>
             </div>
             <div class="col-2">
             </div>
