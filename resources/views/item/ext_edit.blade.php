@@ -1158,7 +1158,7 @@
 
                                 {{--Команда "on_parent_refer();" нужна, для вызова функция обновления данных с зависимых таблиц--}}
                                 {{--Функция code_input_{{$prefix}}{{$link->id}}(first) выполняется не сразу--}}
-                                {{--on_parent_refer();--}}
+                                on_parent_refer();
 
                                 link_id_changeOption_{{$prefix_prev}}{{$link->id}}();
 
@@ -1210,7 +1210,7 @@
                         );
                         {{--Команда "on_parent_refer();" нужна, для вызова функция обновления данных с зависимых таблиц--}}
                         {{--Функция code_input_{{$prefix}}{{$link->id}}(first) выполняется не сразу--}}
-                        {{--on_parent_refer();--}}
+                        on_parent_refer();
 
                         link_id_changeOption_{{$prefix_prev}}{{$link->id}}();
 
@@ -1272,7 +1272,7 @@
                 }
 
                 // Эта команда не нужна
-                //child_code_id{{$prefix}}{{$link->id}}.addEventListener("change", link_id_change_{{$prefix}}{{$link->id}});
+                    //child_code_id{{$prefix}}{{$link->id}}.addEventListener("change", link_id_change_{{$prefix}}{{$link->id}});
 
                     @elseif($const_link_start->parent_base->type_is_list())
                 var child_base_id{{$prefix}}{{$link->id}} = document.getElementById('link{{$const_link_id_start}}');
