@@ -212,7 +212,7 @@ if ($item){
 
         //opener.on_parent_refer();
 
-        //opener.item_code.dispatchEvent(new Event('change'));
+        opener.item_code.dispatchEvent(new Event('change'));
 
         close();
     }
