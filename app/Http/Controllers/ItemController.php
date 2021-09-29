@@ -1528,7 +1528,7 @@ class ItemController extends Controller
                             // Похожие строки выше
                             // Если в цикле не создано mains в цикле
                             if (!$item_seek->child_mains()->exists()) {
-                                $item_seek->delete();
+                                //$item_seek->delete();
                             }
                         }
                     }
