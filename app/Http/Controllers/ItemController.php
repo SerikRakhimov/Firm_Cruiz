@@ -1528,7 +1528,7 @@ class ItemController extends Controller
                             // Похожие строки выше
                             // Если в цикле не создано mains в цикле
                             if (!$item_seek->child_mains()->exists()) {
-                                //$item_seek->delete();
+                                $item_seek->delete();
                             }
                         }
                     }
@@ -4678,6 +4678,11 @@ class ItemController extends Controller
         // в ItemController (function browser(), get_items_for_link(), get_items_ext_edit_for_link())
         if ($base_right['is_list_base_byuser'] == true) {
             $items = $items->where('created_user_id', GlobalController::glo_user_id());
+        }
+        // По умолчанию, сортировка по наименованию
+        $index = array_search(App::getLocale(), config('app.locales'));
+        if ($index !== false) {   // '!==' использовать, '!=' не использовать
+            $items = $items->orderBy('name_lang_' . $index);
         }
 
         return ['items_no_get' => $items,
