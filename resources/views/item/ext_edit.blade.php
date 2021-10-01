@@ -1503,7 +1503,7 @@
 
             // Не нужно вызывать функцию on_numcalc(),
             // это связано с разрешенной корректировкой вычисляемых полей ($link->parent_is_nc_viewonly)
-            // on_numcalc();
+            on_numcalc();
             @foreach($array_disabled as $key=>$value)
                 parent_base_id_work = document.getElementById('link{{$key}}').disabled = true;
             document.getElementById('link{{$key}}').disabled = true;
