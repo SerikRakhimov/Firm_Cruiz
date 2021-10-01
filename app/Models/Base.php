@@ -278,14 +278,17 @@ class Base extends Model
 
     function menu_type_name()
     {
-        $result = "";
+        $text = "";
+        $icon = "";
         if ($this->is_calculated_lst == true) {
-            $result = $result . trans('main.is_calculated_lst');
+            $text = $text . trans('main.is_calculated_lst');
+            $icon = $icon . '<i class="fas fa-binoculars"></i>';
         }
         if ($this->is_setup_lst == true) {
-            $result = $result . trans('main.is_setup_lst');
+            $text = $text . trans('main.is_setup_lst');
+            $icon = $icon . '<i class="fas fa-tags"></i>';
         }
-        return $result;
+        return ['text' => $text, 'icon' => $icon];
     }
 
 }
