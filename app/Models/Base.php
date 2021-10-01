@@ -286,7 +286,7 @@ class Base extends Model
         }
         if ($this->is_setup_lst == true) {
             $text = $text . trans('main.is_setup_lst');
-            $icon = $icon . '<i class="fas fa-tags"></i>';
+            $icon = $icon . '<i class="fas fa-tag"></i>';
         }
         return ['text' => $text, 'icon' => $icon];
     }
