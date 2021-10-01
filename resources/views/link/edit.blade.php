@@ -85,6 +85,22 @@
         @endforeach
 
         <div class="form-group">
+            <label for="parent_base_number">{{trans('main.parent')}}_{{trans('main.serial_number')}}<span
+                    class="text-danger">*</span></label>
+            <input type="number"
+                   name="parent_base_number"
+                   id="parent_base_number"
+                   class="form-control @error('parent_base_number') is-invalid @enderror"
+                   placeholder=""
+                   value="{{ old('parent_base_number') ?? ($link['parent_base_number'] ?? '0') }}">
+            @error('parent_base_number')
+            <div class="text-danger">
+                {{$message}}
+            </div>
+            @enderror
+        </div>
+
+        <div class="form-group">
             <label for="parent_base_id">{{trans('main.parent')}}_{{trans('main.base')}}<span
                     class="text-danger">*</span></label>
             <select class="form-control"
@@ -101,22 +117,6 @@
                 @endforeach
             </select>
             @error('parent_base_id')
-            <div class="text-danger">
-                {{$message}}
-            </div>
-            @enderror
-        </div>
-
-        <div class="form-group">
-            <label for="parent_base_number">{{trans('main.parent')}}_{{trans('main.serial_number')}}<span
-                    class="text-danger">*</span></label>
-            <input type="number"
-                   name="parent_base_number"
-                   id="parent_base_number"
-                   class="form-control @error('parent_base_number') is-invalid @enderror"
-                   placeholder=""
-                   value="{{ old('parent_base_number') ?? ($link['parent_base_number'] ?? '0') }}">
-            @error('parent_base_number')
             <div class="text-danger">
                 {{$message}}
             </div>

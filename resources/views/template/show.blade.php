@@ -24,7 +24,7 @@
     @foreach (config('app.locales') as $key=>$value)
         {{--        <p>{{trans('main.desc')}} ({{trans('main.' . $value)}}): <b>{{$template['desc_lang_' . $key]}}</b></p>--}}
         <p>{{trans('main.desc')}} ({{trans('main.' . $value)}}):
-            <b><?php echo nl2br($template['desc_lang_' . $key]); ?></b></p>
+            <?php echo nl2br($template['desc_lang_' . $key]); ?></p>
     @endforeach
 
     @if ($type_form == 'show')
