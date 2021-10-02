@@ -437,7 +437,7 @@ class GlobalController extends Controller
                             $str = "";
                             foreach ($links as $link) {
                                 $base_link_right = self::base_link_right($link, $role);
-                                if ($base_right['is_list_link_enable'] == true) {
+                                if ($base_link_right['is_list_link_enable'] == true) {
                                     $item_find = MainController::view_info($item->id, $link->id);
                                     if ($item_find) {
                                         // Формирование вычисляемой строки для сортировки
