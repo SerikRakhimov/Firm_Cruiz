@@ -454,7 +454,6 @@ class GlobalController extends Controller
                         }
 //            Сортировка коллекции по значению
                         $collection = $collection->sort();
-                        dd($collection);
 //              Не удалять
 //            $mains = Main::select(DB::Raw('mains.child_item_id as item_id'))
 //                ->join('links as ln', 'mains.link_id', '=', 'ln.id')
