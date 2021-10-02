@@ -33,7 +33,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <h4 class="card-title mb-4">{{$template->name()}}</h4>
+                    <h4 class="card-title mb-1">{{$template->name()}}</h4>
                     <p class="card-text text-label">
                         <?php
                         echo nl2br($template->desc());
