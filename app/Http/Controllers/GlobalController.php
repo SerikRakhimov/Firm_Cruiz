@@ -437,6 +437,7 @@ class GlobalController extends Controller
                             $str = "";
                             foreach ($links as $link) {
                                 $base_link_right = self::base_link_right($link, $role);
+                                // Если 'Показывать Связь в списке' = true
                                 if ($base_link_right['is_list_link_enable'] == true) {
                                     $item_find = MainController::view_info($item->id, $link->id);
                                     if ($item_find) {
@@ -456,9 +457,8 @@ class GlobalController extends Controller
                             $collection[$item->id] = $str;
                         }
 //            Сортировка коллекции по значению
-                        dd($collection);
                         $collection = $collection->sort();
-//              Не удалять
+//            Не удалять
 //            $mains = Main::select(DB::Raw('mains.child_item_id as item_id'))
 //                ->join('links as ln', 'mains.link_id', '=', 'ln.id')
 //                ->join('items as ct', 'mains.child_item_id', '=', 'ct.id')

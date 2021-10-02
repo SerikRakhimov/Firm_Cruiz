@@ -187,6 +187,7 @@ class LinkController extends Controller
         if ($link->child_base_id == $link->parent_base_id) {
             $link->parent_is_base_link = true;
         }
+        // Не удалять эти строки
         if ($link->parent_is_base_link == true) {
             if ($link->child_base_id != $link->parent_base_id) {
                 $link->parent_is_base_link = false;
@@ -429,6 +430,7 @@ class LinkController extends Controller
         if ($link->child_base_id == $link->parent_base_id) {
             $link->parent_is_base_link = true;
         }
+        // Не удалять эти строки
         if ($link->parent_is_base_link == true) {
             if ($link->child_base_id != $link->parent_base_id) {
                 $link->parent_is_base_link = false;
