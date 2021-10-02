@@ -400,14 +400,13 @@ class GlobalController extends Controller
                     $collection = null;
                 }
             }
-
             if ($items != null) {
                 // Эта проверка нужна "if (count($items->get()) > 0)", иначе ошибка SQL
                 if (count($items->get()) > 0) {
                     // Сортировка по mains
                     // иначе Сортировка по наименованию
                     if (!GlobalController::is_base_calcname_check($base, $base_right)) {
-
+                        dd('123');
                         // Не попадают в список $mains изображения/документы,
                         // а также связанные поля (они в Mains не хранятся)
 //            $mains = Main::select(DB::Raw('mains.child_item_id as item_id'))
