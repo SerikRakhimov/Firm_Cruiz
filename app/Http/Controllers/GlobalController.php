@@ -406,7 +406,6 @@ class GlobalController extends Controller
                     // Сортировка по mains
                     // иначе Сортировка по наименованию
                     if (!GlobalController::is_base_calcname_check($base, $base_right)) {
-                        dd('123');
                         // Не попадают в список $mains изображения/документы,
                         // а также связанные поля (они в Mains не хранятся)
 //            $mains = Main::select(DB::Raw('mains.child_item_id as item_id'))
@@ -453,7 +452,7 @@ class GlobalController extends Controller
                             // В $collection сохраняется в key - $item->id
                             $collection[$item->id] = $str;
                         }
-
+dd($collection);
 //            Сортировка коллекции по значению
                         $collection = $collection->sort();
 
