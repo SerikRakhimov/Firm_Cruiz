@@ -456,6 +456,7 @@ class GlobalController extends Controller
                             $collection[$item->id] = $str;
                         }
 //            Сортировка коллекции по значению
+                        dd($collection);
                         $collection = $collection->sort();
 //              Не удалять
 //            $mains = Main::select(DB::Raw('mains.child_item_id as item_id'))
