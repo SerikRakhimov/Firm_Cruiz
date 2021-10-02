@@ -247,7 +247,9 @@ class ItemController extends Controller
 
         $items_right = GlobalController::items_right($base, $project, $role);
         $items = $items_right['items'];
-
+        if ($project->template_id == 8) {
+            dd($items->get());
+        }
         if ($items) {
             session(['base_index_previous_url' => ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/' . request()->path()]);
             return view('item/base_index', ['base_right' => $base_right, 'base' => $base, 'project' => $project, 'role' => $role,
