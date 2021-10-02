@@ -436,17 +436,20 @@ class GlobalController extends Controller
                         foreach ($items as $item) {
                             $str = "";
                             foreach ($links as $link) {
-                                $item_find = MainController::view_info($item->id, $link->id);
-                                if ($item_find) {
-                                    // Формирование вычисляемой строки для сортировки
-                                    // Для строковых данных для сортировки берутся первые 50 символов
-                                    if ($item_find->base->type_is_list() || $item_find->base->type_is_string()) {
-                                        $str = $str . str_pad(trim($item_find[$name]), 50);
-                                    } else {
-                                        $str = $str . trim($item_find[$name]);
-                                    }
-                                    $str = $str . "|";
+                                $base_link_right = self::base_link_right($link, $role);
+                                if ($base_right['is_list_link_enable'] == true) {
+                                    $item_find = MainController::view_info($item->id, $link->id);
+                                    if ($item_find) {
+                                        // Формирование вычисляемой строки для сортировки
+                                        // Для строковых данных для сортировки берутся первые 50 символов
+                                        if ($item_find->base->type_is_list() || $item_find->base->type_is_string()) {
+                                            $str = $str . str_pad(trim($item_find[$name]), 50);
+                                        } else {
+                                            $str = $str . trim($item_find[$name]);
+                                        }
+                                        $str = $str . "|";
 
+                                    }
                                 }
                             }
                             // В $collection сохраняется в key - $item->id
@@ -687,7 +690,7 @@ class GlobalController extends Controller
                 } else {
                     $result = $first_char . sprintf("%1." . $digits_num . "f", floatval($float_value));
                 }
-                if ($rightnull == true){
+                if ($rightnull == true) {
                     $result = rtrim(rtrim($result, '0'), '.');
                 }
             }

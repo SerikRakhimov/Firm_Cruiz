@@ -187,11 +187,11 @@ class LinkController extends Controller
         if ($link->child_base_id == $link->parent_base_id) {
             $link->parent_is_base_link = true;
         }
-//        if ($link->parent_is_base_link == true) {
-//            if ($link->child_base_id != $link->parent_base_id) {
-//                $link->parent_is_base_link = false;
-//            }
-//        }
+        if ($link->parent_is_base_link == true) {
+            if ($link->child_base_id != $link->parent_base_id) {
+                $link->parent_is_base_link = false;
+            }
+        }
         // 1.0 В списке выбора использовать поле вычисляемой таблицы
         $link->parent_is_in_the_selection_list_use_the_calculated_table_field = isset($request->parent_is_in_the_selection_list_use_the_calculated_table_field) ? true : false;
         $link->parent_is_use_selection_calculated_table_link_id_0 = isset($request->parent_is_use_selection_calculated_table_link_id_0) ? true : false;
@@ -429,11 +429,11 @@ class LinkController extends Controller
         if ($link->child_base_id == $link->parent_base_id) {
             $link->parent_is_base_link = true;
         }
-//        if ($link->parent_is_base_link == true) {
-//            if ($link->child_base_id != $link->parent_base_id) {
-//                $link->parent_is_base_link = false;
-//            }
-//        }
+        if ($link->parent_is_base_link == true) {
+            if ($link->child_base_id != $link->parent_base_id) {
+                $link->parent_is_base_link = false;
+            }
+        }
         // 1.0 В списке выбора использовать поле вычисляемой таблицы
         $link->parent_is_in_the_selection_list_use_the_calculated_table_field = isset($request->parent_is_in_the_selection_list_use_the_calculated_table_field) ? true : false;
         $link->parent_is_use_selection_calculated_table_link_id_0 = isset($request->parent_is_use_selection_calculated_table_link_id_0) ? true : false;
