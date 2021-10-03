@@ -4756,6 +4756,7 @@ class ItemController extends Controller
         // Получаем список из вычисляемой таблицы
         $items = Item::select(DB::Raw('items.*'))
             ->join('mains', 'items.id', '=', 'mains.parent_item_id')
+            ->where('project_id', $project->id)
             ->where('mains.link_id', '=', $set_link->id);
 
         //->orderBy('items.' . $name);
