@@ -1524,7 +1524,6 @@ class ItemController extends Controller
                         // "$this->save_info_sets()" выполнять перед проверкой на удаление
                         $this->save_info_sets($item_seek, false);
 
-
                         // Если links->"Удалить запись с нулевым значением при обновлении" == true и значение равно нулю,
                         // то удалить запись
                         $val_item_seek_delete = $this->val_item_seek_delete_func($item_seek);
@@ -1555,6 +1554,9 @@ class ItemController extends Controller
             ->get();
         if ($mains) {
             $valtotal = true;
+            // Цикл по записям
+            // links.parent_is_delete_child_base_record_with_zero_value = true может быть несколько у одной записи child
+            // проверка на равенство проверяется для всех записей одновременно в цикле
             foreach ($mains as $main) {
                 $item_numval = Item::findOrFail($main->parent_item_id);
                 $valnull = false;
