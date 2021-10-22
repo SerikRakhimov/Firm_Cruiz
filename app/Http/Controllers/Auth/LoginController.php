@@ -49,6 +49,7 @@ class LoginController extends Controller
         return url('/home');
     }
 
+    // https://laravel.ru/forum/viewtopic.php?id=2941
     public function logout(Request $request)
     {
         $this->guard()->logout();

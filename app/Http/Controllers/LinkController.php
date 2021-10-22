@@ -138,6 +138,7 @@ class LinkController extends Controller
         $link->parent_is_nc_parameter = isset($request->parent_is_nc_parameter) ? true : false;
         $link->parent_is_hidden_field = isset($request->parent_is_hidden_field) ? true : false;
         $link->parent_is_primary_image = isset($request->parent_is_primary_image) ? true : false;
+        $link->parent_is_delete_child_base_record_with_zero_value = isset($request->parent_is_delete_child_base_record_with_zero_value) ? true : false;
         $link->parent_is_small_calcname = isset($request->parent_is_small_calcname) ? true : false;
         $link->parent_is_setup_project_logo_img = isset($request->parent_is_setup_project_logo_img) ? true : false;
         $link->parent_is_setup_project_external_description_txt = isset($request->parent_is_setup_project_external_description_txt) ? true : false;
@@ -381,6 +382,7 @@ class LinkController extends Controller
         $link->parent_is_nc_parameter = isset($request->parent_is_nc_parameter) ? true : false;
         $link->parent_is_hidden_field = isset($request->parent_is_hidden_field) ? true : false;
         $link->parent_is_primary_image = isset($request->parent_is_primary_image) ? true : false;
+        $link->parent_is_delete_child_base_record_with_zero_value = isset($request->parent_is_delete_child_base_record_with_zero_value) ? true : false;
         $link->parent_is_small_calcname = isset($request->parent_is_small_calcname) ? true : false;
         $link->parent_is_setup_project_logo_img = isset($request->parent_is_setup_project_logo_img) ? true : false;
         $link->parent_is_setup_project_external_description_txt = isset($request->parent_is_setup_project_external_description_txt) ? true : false;

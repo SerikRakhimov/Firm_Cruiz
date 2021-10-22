@@ -425,6 +425,20 @@
             </div>
         </div>
 
+        <div class="form-group" id="parent_is_delete_child_base_record_with_zero_value_form_group">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" name="parent_is_delete_child_base_record_with_zero_value"
+                       id="parent_is_delete_child_base_record_with_zero_value"
+                       {{--            "false" - значение по умолчанию --}}
+                       @if ((old('parent_is_delete_child_base_record_with_zero_value') ?? ($link->parent_is_delete_child_base_record_with_zero_value ?? false)) ==  true)
+                       checked
+                    @endif
+                >
+                <label class="form-check-label"
+                       for="parent_is_delete_child_base_record_with_zero_value">{{trans('main.parent_is_delete_child_base_record_with_zero_value')}}</label>
+            </div>
+        </div>
+
         <div class="form-group" id="parent_is_setup_project_logo_img_form_group">
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="checkbox" name="parent_is_setup_project_logo_img"

@@ -248,7 +248,7 @@ class ItemController extends Controller
         $items_right = GlobalController::items_right($base, $project, $role);
         $items = $items_right['items'];
 //        if ($project->template_id == 8) {
-            //dd($items->get());
+        //dd($items->get());
 //        }
         if ($items) {
             session(['base_index_previous_url' => ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/' . request()->path()]);
@@ -1345,6 +1345,8 @@ class ItemController extends Controller
                                 }
                             }
                             if ($nk == -1) {
+                                // $item_seek не создано
+                                // Выход из цикла
                                 $create_item_seek = false;
                                 break;
                             }
@@ -1372,11 +1374,11 @@ class ItemController extends Controller
                         $this->save_info_sets($item_seek, true);
                     }
                     // Если нужно создавать $item
+                    // Если $item_seek создано
                     if ($create_item_seek == true) {
                         //$items = $items->get();
                         $error = true;
                         $found = false;
-                        $valnull = false;
 
                         // Фильтры 111 - похожие строки выше
                         foreach ($set_base_to as $key => $value) {
@@ -1428,12 +1430,12 @@ class ItemController extends Controller
                                         }
                                         $seek_item = true;
                                         $seek_value = $vl + $kf * $ch;
-                                        // Удалить запись с нулевым значением при обновлении
-                                        if ($value->is_upd_delete_record_with_zero_value == true) {
-                                            if ($seek_value == 0) {
-                                                $valnull = true;
-                                            }
-                                        }
+//                                        // Удалить запись с нулевым значением при обновлении
+//                                        if ($value->is_upd_delete_record_with_zero_value == true) {
+//                                            if ($seek_value == 0) {
+//                                                $valnull = true;
+//                                            }
+//                                        }
                                     } elseif ($value->is_upd_minussum == true || $value->is_upd_minuscount == true) {
                                         // Учет Количества
                                         if ($value->is_upd_minuscount == true) {
@@ -1441,33 +1443,33 @@ class ItemController extends Controller
                                         }
                                         $seek_item = true;
                                         $seek_value = $vl - $kf * $ch;
-                                        // Удалить запись с нулевым значением при обновлении
-                                        if ($value->is_upd_delete_record_with_zero_value == true) {
-                                            if ($seek_value == 0) {
-                                                $valnull = true;
-                                            }
-                                        }
+//                                        // Удалить запись с нулевым значением при обновлении
+//                                        if ($value->is_upd_delete_record_with_zero_value == true) {
+//                                            if ($seek_value == 0) {
+//                                                $valnull = true;
+//                                            }
+//                                        }
                                     } elseif ($value->is_upd_replace == true) {
                                         if ($reverse == false && $valits[$nk] != 0) {
                                             $main->parent_item_id = $valits[$nk];
-                                            // Удалить запись с нулевым значением при обновлении
-                                            if ($value->is_upd_delete_record_with_zero_value == true) {
-                                                $item_numval = Item::findOrFail($main->parent_item_id);
-                                                $numval = $item_numval->numval();
-                                                if ($numval["result"] == true) {
-                                                    if ($numval["value"] == 0) {
-                                                        $valnull = true;
-                                                    }
-                                                }
-                                            }
+//                                            // Удалить запись с нулевым значением при обновлении
+//                                            if ($value->is_upd_delete_record_with_zero_value == true) {
+//                                                $item_numval = Item::findOrFail($main->parent_item_id);
+//                                                $numval = $item_numval->numval();
+//                                                if ($numval["result"] == true) {
+//                                                    if ($numval["value"] == 0) {
+//                                                        $valnull = true;
+//                                                    }
+//                                                }
+//                                            }
                                         } else {
                                             $delete_main = true;
                                             // Используем $valits_previous[$nk]
 //                                            $main->parent_item_id = $valits_previous[$nk];
-                                            // Удалить запись с нулевым значением при обновлении
-                                            if ($value->is_upd_delete_record_with_zero_value == true) {
-                                                $valnull = true;
-                                            }
+//                                            // Удалить запись с нулевым значением при обновлении
+//                                            if ($value->is_upd_delete_record_with_zero_value == true) {
+//                                                $valnull = true;
+//                                            }
                                         }
                                     }
                                     // При $reverse == false
@@ -1522,9 +1524,11 @@ class ItemController extends Controller
                         // "$this->save_info_sets()" выполнять перед проверкой на удаление
                         $this->save_info_sets($item_seek, false);
 
-                        // Если "Удалить запись с нулевым значением при обновлении" == true и значение равно нулю,
+
+                        // Если links->"Удалить запись с нулевым значением при обновлении" == true и значение равно нулю,
                         // то удалить запись
-                        if ($valnull) {
+                        $val_item_seek_delete = $this->val_item_seek_delete_func($item_seek);
+                        if ($val_item_seek_delete) {
                             $item_seek->delete();
                         } else {
                             // Похожие строки выше
@@ -1537,6 +1541,41 @@ class ItemController extends Controller
                 }
             }
         }
+    }
+
+    static function val_item_seek_delete_func(Item $item)
+    {
+        $result = false;
+        $mains = Main::select(DB::Raw('mains.*'))
+            ->join('links', 'mains.link_id', '=', 'links.id')
+            ->join('bases', 'links.parent_base_id', '=', 'bases.id')
+            ->where('mains.child_item_id', $item->id)
+            ->where('links.parent_is_delete_child_base_record_with_zero_value', true)
+            ->where('bases.type_is_number', true)
+            ->get();
+        if ($mains) {
+            $valtotal = true;
+            foreach ($mains as $main) {
+                $item_numval = Item::findOrFail($main->parent_item_id);
+                $valnull = false;
+                if ($item_numval) {
+                    $numval = $item_numval->numval();
+                    if ($numval["result"] == true) {
+                        if ($numval["value"] == 0) {
+                            $valnull = true;
+                        }
+                    }
+                }
+                $valtotal = $valtotal && $valnull;
+                if ($valtotal == false) {
+                    break;
+                }
+            }
+            if ($valtotal) {
+                $result = true;
+            }
+        }
+        return $result;
     }
 
     static function find_save_number($base_id, $project_id, $seek_value)

@@ -371,4 +371,5 @@ return [
     'parent_selection_calculated_table_link_id_1'=>'Дополнительное связанное поле вычисляемой таблицы_1',
     'parent_is_base_link'=>'Ссылка на основу',
     'code_not_found'=>'Код не найден',
+    'parent_is_delete_child_base_record_with_zero_value'=>'Удалить запись Ребенок_Основа при равенству нулю (Ребенок_Основа-вычисляемое, для числовых полей)',
 ];

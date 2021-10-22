@@ -371,4 +371,5 @@ return [
     'parent_selection_calculated_table_link_id_1'=>'Additional_related_calculated_table_field_1',
     'parent_is_base_link'=>'Link to the base',
     'code_not_found'=>'Code not found',
+    'parent_is_delete_child_base_record_with_zero_value'=>'Delete Child_Base record when equal to zero (Child_Base-calculated, for numeric fields)',
 ];
