@@ -24,12 +24,12 @@ class StepController extends Controller
                         case "N":
                             $result = $result . "\ny = x;\n x =" . $step->first . ";";
                             break;
-                            // x - значение параметра
+                        // x - значение параметра
                         case "Z":
 //                            $result = $result . "\n alert(Number(nc_parameter_4_315.innerHTML));x = Number(nc_parameter_4_" . $step->first
 //                            . "." . $step->second == "V" ? "innerHTML" : "value" . ");";
                             $result = $result . "\ny = x; \n x = Number(nc_parameter_4_" . $step->first
-                            . "." . ($step->second == "V" ? "innerHTML" : "value") . ");";
+                                . "." . ($step->second == "V" ? "innerHTML" : "value") . ");";
                             break;
                         case "M":
                             // Математические операции над x и y
@@ -52,11 +52,20 @@ class StepController extends Controller
 
                             }
                             break;
-                            // Округление числа
+                        // Округление числа
                         case "R":
-                            $result = $result . "\n x = round(x," . $step->first . ");";
+                            // Округление числа по правилам математики
+                            $round_type = "0";
+                            // Округление числа в меньшую сторону
+                            if ($step->second == "-1") {
+                                $round_type = "-1";
+                                // Округление числа в большую сторону
+                            } elseif ($step->second == "1") {
+                                $round_type = "1";
+                            }
+                            $result = $result . "\n x = round(x, " . $step->first . ", " . $round_type . ");";
                             break;
-                            // Сдвиг по стеку
+                        // Сдвиг по стеку
                         case "U":
                             $result = $result . "\nz = y;\ny = x;\nx = z;\nz = 0;";
                             break;

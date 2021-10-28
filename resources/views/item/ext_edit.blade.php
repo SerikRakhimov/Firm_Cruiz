@@ -26,7 +26,7 @@
             window.item_code = document.getElementById('code' + link_id);
             window.item_name = document.getElementById('name' + link_id);
             open('{{route('item.browser', '')}}' + '/' + link_id + '/' + base_id + '/' + project_id + '/' + role_id + '/' + item_id + '/1/1', 'browse', 'width=800, height=800');
-       };
+        };
     </script>
 
     @include('layouts.project.show_project_role',['project'=>$project, 'role'=>$role])
@@ -1134,39 +1134,39 @@
                         ?>
                         {{-- async - await нужно, https://tproger.ru/translations/understanding-async-await-in-javascript/--}}
                         async function code_input_{{$prefix}}{{$link->id}}(first) {
-                        @if(($link_refer_main->parent_is_base_link == true) || ($link_refer_main->parent_base->is_code_needed==true && $link_refer_main->parent_is_enter_refer==true))
-                        if (parent_base_id{{$prefix}}{{$link->id}}.value == 0) {
-                            @else
-                            if (parent_base_id{{$prefix}}{{$link->id}}.options[parent_base_id{{$prefix}}{{$link->id}}.selectedIndex].value == 0) {
-                                @endif
-                                name_{{$prefix}}{{$link->id}}.innerHTML = "{{trans('main.no_information') . '!'}}";
-                                key_{{$prefix}}{{$link->id}}.value = 0;
-                            } else {
-                                await axios.get('/item/get_items_main_code/'
-                                    + code_{{$prefix}}{{$link->id}}.value + '/'
-                                    + '{{$link->parent_base_id}}' + '/' + {{$project->id}} +'/' + {{$role->id}} +'/' + {{$link->id}}
-                                        @if(($link_refer_main->parent_is_base_link == true) || ($link_refer_main->parent_base->is_code_needed==true && $link_refer_main->parent_is_enter_refer==true))
-                                        +'/' + parent_base_id{{$prefix}}{{$link->id}}.value
-                                    @else
-                                    + '/' + parent_base_id{{$prefix}}{{$link->id}}.options[parent_base_id{{$prefix}}{{$link->id}}.selectedIndex].value
+                            @if(($link_refer_main->parent_is_base_link == true) || ($link_refer_main->parent_base->is_code_needed==true && $link_refer_main->parent_is_enter_refer==true))
+                            if (parent_base_id{{$prefix}}{{$link->id}}.value == 0) {
+                                @else
+                                if (parent_base_id{{$prefix}}{{$link->id}}.options[parent_base_id{{$prefix}}{{$link->id}}.selectedIndex].value == 0) {
                                     @endif
-                                ).then(function (res) {
-                                        name_{{$prefix}}{{$link->id}}.innerHTML = res.data['item_name'];
-                                        key_{{$prefix}}{{$link->id}}.value = res.data['item_id'];
-                                    }
-                                );
+                                        name_{{$prefix}}{{$link->id}}.innerHTML = "{{trans('main.no_information') . '!'}}";
+                                    key_{{$prefix}}{{$link->id}}.value = 0;
+                                } else {
+                                    await axios.get('/item/get_items_main_code/'
+                                        + code_{{$prefix}}{{$link->id}}.value + '/'
+                                        + '{{$link->parent_base_id}}' + '/' + {{$project->id}} +'/' + {{$role->id}} +'/' + {{$link->id}}
+                                            @if(($link_refer_main->parent_is_base_link == true) || ($link_refer_main->parent_base->is_code_needed==true && $link_refer_main->parent_is_enter_refer==true))
+                                            +'/' + parent_base_id{{$prefix}}{{$link->id}}.value
+                                        @else
+                                        + '/' + parent_base_id{{$prefix}}{{$link->id}}.options[parent_base_id{{$prefix}}{{$link->id}}.selectedIndex].value
+                                        @endif
+                                    ).then(function (res) {
+                                                name_{{$prefix}}{{$link->id}}.innerHTML = res.data['item_name'];
+                                                key_{{$prefix}}{{$link->id}}.value = res.data['item_id'];
+                                            }
+                                        );
 
-                                {{--Команда "on_parent_refer();" нужна, для вызова функция обновления данных с зависимых таблиц--}}
-                                {{--Функция code_input_{{$prefix}}{{$link->id}}(first) выполняется не сразу--}}
-                                on_parent_refer();
+                                    {{--Команда "on_parent_refer();" нужна, для вызова функция обновления данных с зависимых таблиц--}}
+                                    {{--Функция code_input_{{$prefix}}{{$link->id}}(first) выполняется не сразу--}}
+                                    on_parent_refer();
 
-                                link_id_changeOption_{{$prefix_prev}}{{$link->id}}();
+                                    link_id_changeOption_{{$prefix_prev}}{{$link->id}}();
 
-                                {{-- http://javascript.ru/forum/events/76761-programmno-vyzvat-sobytie-change.html#post503465--}}
-                                {{-- вызываем состояние "элемент изменился", в связи с этим запустятся функции - обработчики "change"--}}
+                                    {{-- http://javascript.ru/forum/events/76761-programmno-vyzvat-sobytie-change.html#post503465--}}
+                                    {{-- вызываем состояние "элемент изменился", в связи с этим запустятся функции - обработчики "change"--}}
+                                }
                             }
-                        }
-                        code_{{$prefix}}{{$link->id}}.addEventListener("change", code_input_{{$prefix}}{{$link->id}});
+                            code_{{$prefix}}{{$link->id}}.addEventListener("change", code_input_{{$prefix}}{{$link->id}});
                     {{--code_{{$prefix}}{{$link->id}}.addEventListener("change", link_id_changeOption_6_{{$link->id}});--}}
 
                 </script>
@@ -1272,7 +1272,7 @@
                 }
 
                 // Эта команда не нужна
-                    //child_code_id{{$prefix}}{{$link->id}}.addEventListener("change", link_id_change_{{$prefix}}{{$link->id}});
+                //child_code_id{{$prefix}}{{$link->id}}.addEventListener("change", link_id_change_{{$prefix}}{{$link->id}});
 
                     @elseif($const_link_start->parent_base->type_is_list())
                 var child_base_id{{$prefix}}{{$link->id}} = document.getElementById('link{{$const_link_id_start}}');
@@ -1468,10 +1468,22 @@
 
         }
 
-        function round(a, b) {
-            return Math.round(a * Math.pow(10, b)) / Math.pow(10, b);
+        function round(a, b, c) {
+            r = 0;
+            p = Math.pow(10, b);
+            switch (c) {
+                case 0:
+                    r = Math.round(a * p) / p;
+                    break;
+                case -1:
+                    r = Math.floor(a * p) / p;
+                    break;
+                case 1:
+                    r = Math.ceil(a * p) / p;
+                    break;
+            }
+            return r;
         }
-
 
             @foreach($array_calc as $key=>$value)
             <?php
