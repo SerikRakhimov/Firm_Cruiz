@@ -1117,7 +1117,7 @@ class ProjectController extends Controller
 
                 foreach ($bases_from as $base_from_id) {
                     $base = Base::findOrFail($base_from_id['base_id']);
-                    echo nl2br(trans('main.base') . ": " . $base->name() . " - ". PHP_EOL);
+                    echo nl2br(trans('main.base') . ": " . $base->name() . " - ");
                     $items = Item::where('project_id', $project->id)->where('base_id', $base->id)->get();
                     $count = $items->count();
                     foreach ($items as $item) {

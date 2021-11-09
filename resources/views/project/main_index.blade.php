@@ -13,7 +13,7 @@
     <?php
     $i = $projects->firstItem() - 1;
     ?>
-    <div class="card-columns">
+<div class="card-columns">
         @foreach($projects as $project)
             <?php
             $i++;

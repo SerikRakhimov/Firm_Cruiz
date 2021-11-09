@@ -1208,7 +1208,9 @@ class ItemController extends Controller
             ->orderBy('sets.link_from_id')
             ->orderBy('sets.link_to_id')->get();
         $result = null;
+        // Эта проверка нужна
         if ($set_main) {
+            // Эта проверка нужна
             if (count($set_main) > 0) {
                 $result = true;
             }
@@ -1552,29 +1554,33 @@ class ItemController extends Controller
             ->where('links.parent_is_delete_child_base_record_with_zero_value', true)
             ->where('bases.type_is_number', true)
             ->get();
+        // Эта проверка нужна
         if ($mains) {
-            $valtotal = true;
-            // Цикл по записям
-            // links.parent_is_delete_child_base_record_with_zero_value = true может быть несколько у одной записи child
-            // проверка на равенство проверяется для всех записей одновременно в цикле
-            foreach ($mains as $main) {
-                $item_numval = Item::findOrFail($main->parent_item_id);
-                $valnull = false;
-                if ($item_numval) {
-                    $numval = $item_numval->numval();
-                    if ($numval["result"] == true) {
-                        if ($numval["value"] == 0) {
-                            $valnull = true;
+            // Эта проверка нужна
+            if (count($mains) > 0) {
+                $valtotal = true;
+                // Цикл по записям
+                // links.parent_is_delete_child_base_record_with_zero_value = true может быть несколько у одной записи child
+                // проверка на равенство проверяется для всех записей одновременно в цикле
+                foreach ($mains as $main) {
+                    $item_numval = Item::findOrFail($main->parent_item_id);
+                    $valnull = false;
+                    if ($item_numval) {
+                        $numval = $item_numval->numval();
+                        if ($numval["result"] == true) {
+                            if ($numval["value"] == 0) {
+                                $valnull = true;
+                            }
                         }
                     }
+                    $valtotal = $valtotal && $valnull;
+                    if ($valtotal == false) {
+                        break;
+                    }
                 }
-                $valtotal = $valtotal && $valnull;
-                if ($valtotal == false) {
-                    break;
+                if ($valtotal) {
+                    $result = true;
                 }
-            }
-            if ($valtotal) {
-                $result = true;
             }
         }
         return $result;
